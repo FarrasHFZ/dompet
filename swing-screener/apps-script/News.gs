@@ -8,6 +8,8 @@ const NEWS_HEADERS = ['Published', 'Source', 'Title', 'Link', 'Category', 'Ticke
 const CATEGORY_RULES = [
   // Order matters: first match wins as the primary category.
   ['RISK', /suspen|\buma\b|\bfca\b|pkpu|pailit|sanksi|denda|tersangka|korupsi|gagal bayar|delisting|going private|ojk (blokir|cabut)/i],
+  // Foreign buy/sell chatter is market flow, not a company event: park it as OTHER before the corporate-action rule sees 'lepas saham'.
+  ['OTHER', /asing (lepas|jual|beli|borong)|dilepas asing|diburu asing|net (buy|sell)/i],
   ['CORP_ACTION', /dividen|buyback|stock split|rights? issue|pmhmetd|divestasi|lepas saham|private placement|akuisisi|tender offer|\bmtn\b|obligasi|\bipo\b/i],
   ['INSIDER', /(presdir|direktur|komisaris|dirut|pengendali)[^]*(belanjakan|beli saham|borong|tambah kepemilikan)|insider/i],
   ['COMMISSIONER', /komisaris|direksi|direktur utama|\bdirut\b|\bceo\b|masa jabatan|reshuffle|pengurus/i],

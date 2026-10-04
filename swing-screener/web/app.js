@@ -12,6 +12,8 @@
   const ago = iso => { const h = (Date.now() - new Date(iso)) / 36e5; return h < 1 ? 'now' : h < 24 ? Math.round(h) + 'h ago' : Math.round(h / 24) + 'd ago'; };
   const arrow = s => (s > 0 ? '<span class="up">▲ supports</span>' : s < 0 ? '<span class="down">▼ risk</span>' : '<span class="mute">• neutral</span>');
 
+  const MQ = window.matchMedia('(max-width: 760px)');
+  MQ.addEventListener('change', () => { if (DATA) renderPicks(); });
   let DATA = null, FILTER = 'ACT', OPEN = null, NEWSCAT = 'ALL', NEWSQ = '', HIDEWRAP = true;
 
   async function load() {
@@ -58,20 +60,41 @@
     const cnt = a => P.filter(p => p.action === a).length;
     const list = FILTER === 'ALL' ? P : P.filter(p => p.action === FILTER);
     const sel = P.find(x => x.ticker === OPEN);
+    const detail = s => `<div class="card pad detailcard" id="dcard"><div class="dhead"><b class="tk">${esc(s.ticker)}</b> <span class="muted">${esc(s.name)} · ${esc(s.sector)}</span><button class="ghost" id="dclose">Close</button></div>${detailHtml(s)}</div>`;
+    const empty = '<div class="card empty">Nothing in this filter today.</div>';
+    const body = MQ.matches
+      ? `<div class="cards">${list.length ? list.map(p => cardHtml(p) + (p.ticker === OPEN ? detail(p) : '')).join('') : empty}</div>`
+      : `${sel ? detail(sel) : ''}<div class="card scroll"><table>
+        <thead><tr><th>Ticker</th><th>Action</th><th>Score</th><th>Setup</th><th class="n">Close</th><th class="n">Live</th><th class="n">1D</th><th class="n">5D</th><th class="n">RSI</th><th class="n">vs SMA20</th><th class="n">Stop</th><th class="n">Target</th><th class="n">R/R</th><th>News</th><th>Top headline</th></tr></thead>
+        <tbody>${list.length ? list.map(rowHtml).join('') : '<tr><td colspan="15" class="empty">Nothing in this filter today.</td></tr>'}</tbody>
+      </table></div>`;
     el.innerHTML = `
       <div class="chips" role="group" aria-label="Filter">
         ${[['ACT', `ACT (${cnt('ACT')})`], ['WATCH', `Watch (${cnt('WATCH')})`], ['SKIP', `Skip (${cnt('SKIP')})`], ['ALL', `All (${P.length})`]]
           .map(([v, l]) => `<button class="chip" data-f="${v}" aria-pressed="${FILTER === v}">${l}</button>`).join('')}
-        <span class="muted">ACT = oversold-bounce score ≥ ${DATA.meta.actScore}. Few days have any; "none today" is a valid answer.</span>
       </div>
-      ${sel ? `<div class="card pad detailcard" id="dcard"><div class="dhead"><b class="tk">${esc(sel.ticker)}</b> <span class="muted">${esc(sel.name)} · ${esc(sel.sector)}</span><button class="ghost" id="dclose">Close</button></div>${detailHtml(sel)}</div>` : ''}
-      <div class="card scroll"><table>
-        <thead><tr><th>Ticker</th><th>Action</th><th>Score</th><th>Setup</th><th class="n">Close</th><th class="n">Live</th><th class="n">1D</th><th class="n">5D</th><th class="n">RSI</th><th class="n">vs SMA20</th><th class="n">Stop</th><th class="n">Target</th><th class="n">R/R</th><th>News</th><th>Top headline</th></tr></thead>
-        <tbody>${list.length ? list.map(rowHtml).join('') : '<tr><td colspan="15" class="empty">Nothing in this filter today.</td></tr>'}</tbody>
-      </table></div>`;
+      <p class="muted hint">ACT = oversold-bounce score ≥ ${DATA.meta.actScore}. Few days have any; "none today" is a valid answer.</p>
+      ${body}`;
+    const toggle = t => { OPEN = OPEN === t ? null : t; renderPicks(); const d = $('#dcard'); if (OPEN && d) d.scrollIntoView({ block: MQ.matches ? 'nearest' : 'start', behavior: 'smooth' }); };
     el.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { FILTER = b.dataset.f; OPEN = null; renderPicks(); });
-    el.querySelectorAll('tr.row').forEach(tr => tr.onclick = e => { if (e.target.closest('a')) return; OPEN = OPEN === tr.dataset.t ? null : tr.dataset.t; renderPicks(); if (OPEN) $('#dcard').scrollIntoView({ block: 'start', behavior: 'smooth' }); });
+    el.querySelectorAll('tr.row, .pcard').forEach(n => n.onclick = e => { if (e.target.closest('a')) return; toggle(n.dataset.t); });
     const dc = $('#dclose', el); if (dc) dc.onclick = () => { OPEN = null; renderPicks(); };
+  }
+
+  // Phone layout: one card per stock instead of a 15-column table.
+  function cardHtml(p) {
+    const h = p.headlines[0];
+    return `<article class="pcard ${OPEN === p.ticker ? 'open' : ''}" data-t="${esc(p.ticker)}">
+      <div class="ptop"><div><b class="tk">${esc(p.ticker)}</b> <span class="act ${p.action}">${p.action}</span>
+        <div class="nm">${esc(p.name)}${p.ownership ? ' · ' + esc(p.ownership.control) : ''}</div></div>
+        <div class="pscore"><b>${p.score}</b><small>score</small></div></div>
+      <div class="pmid">
+        <div><small>${p.live ? 'Live' : 'Close'}</small><b>${f0(p.live ? p.live.price : p.close)}</b> ${p.live ? pc(p.live.chg) : pc(p.chg1d)}</div>
+        <div><small>RSI · vs SMA20</small><b>${p.rsi == null ? '–' : p.rsi.toFixed(0)}</b> <span class="muted">${p.dist20Atr.toFixed(1)} ATR</span></div>
+        <div><small>Stop → Target</small><b>${f0(p.stop)} → ${f0(p.target)}</b></div>
+      </div>
+      <div class="phl">${arrow(p.newsScore)} ${h ? `<a href="${safeUrl(h.link)}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a>` : '<span class="mute">no recent news</span>'}</div>
+    </article>`;
   }
 
   function rowHtml(p) {
@@ -185,6 +208,7 @@
       <p class="muted">${esc(bt.params.source)}, ${esc(bt.params.from)} to ${esc(bt.params.to)}. Each day the score uses only data up to that day; outcome = next 15 trading days with the plan's stop and +${bt.params.targetPct}% target.</p>
       <div class="two"><div class="card"><div class="pad"><b>Out-of-sample (2024-10 →)</b></div>${bucketTable(bt.outOfSample)}</div>
       <div class="card"><div class="pad"><b>In-sample (before 2024-10)</b></div>${bucketTable(bt.inSample)}</div></div>
+      ${DATA.backtestHoldout ? `<h2>Stocks it was NOT designed on</h2><div class="card"><div class="pad"><b>${DATA.backtestHoldout.params.tickers} other IDX stocks</b>, same rules, no re-tuning</div>${bucketTable(DATA.backtestHoldout.all)}</div><p class="muted">The edge replicates but is smaller, and after stops and fees the average trade is about zero. Treat ACT as a shortlist, not a signal to buy blindly.</p>` : ''}
       <div class="note"><b>Read it honestly.</b> The v1 score (trend, momentum, breakout chasing) scored <i>negative</i> in this test, so it was replaced by an oversold-bounce score. The new score ranks better, but a +1% average 15-day move is small: after fees, stops and slippage the edge is thin, and it concentrates in broad market selloffs (many names oversold at once) rather than lone stocks. ${bt.caveats.map(esc).join(' ')}</div>
       <h2>Live forward test (the real check)</h2>
       <div class="card pad">${fw && fw.resolved ? `${fw.resolved} picks resolved over ${fw.days} logged days. ACT picks: n=${fw.act.n}, hit ${fw.act.hit == null ? '–' : Math.round(fw.act.hit * 100) + '%'}, avg net return ${fw.act.avgNetRet == null ? '–' : (fw.act.avgNetRet * 100).toFixed(2) + '%'} (after 0.4% fees). All picks: n=${fw.all.n}.` : `Logging started: ${fw ? fw.days : 0} day(s) recorded. Each run saves its picks; after ${DATA.meta.params.horizon} trading days they are scored against what actually happened and shown here. Expect a meaningful sample only after a few months.`}</div>
@@ -218,6 +242,8 @@
     document.querySelectorAll('.tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
     document.querySelectorAll('.panel').forEach(p => { p.hidden = p.id !== 'tab-' + b.dataset.tab; });
   });
+  $('#refreshBtn').onclick = () => load().catch(() => {});
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => { /* optional */ });
   const dlg = $('#settings');
   $('#settingsBtn').onclick = () => { $('#sheetUrl').value = LS.get('sheetUrl') || ''; $('#sheetToken').value = LS.get('sheetToken') || ''; dlg.showModal(); };
   dlg.addEventListener('close', () => {

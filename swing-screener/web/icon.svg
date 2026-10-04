@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="IDX Swing Screener">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e293b"/><stop offset="1" stop-color="#0b1020"/></linearGradient>
+    <linearGradient id="ln" gradientUnits="userSpaceOnUse" x1="90" y1="0" x2="420" y2="0"><stop offset="0" stop-color="#fb7185"/><stop offset="0.42" stop-color="#fbbf24"/><stop offset="1" stop-color="#34d399"/></linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <line x1="84" y1="392" x2="428" y2="392" stroke="#94a3b8" stroke-width="10" stroke-linecap="round" stroke-dasharray="4 26" opacity=".7"/>
+  <path d="M92 142 L178 262 Q226 332 262 292 L330 206 L408 128" fill="none" stroke="url(#ln)" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="408" cy="128" r="30" fill="#34d399"/>
+  <circle cx="408" cy="128" r="48" fill="none" stroke="#34d399" stroke-width="8" opacity=".35"/>
+</svg>

@@ -58,7 +58,7 @@ export async function fetchNewsRows(api, uni, { days = 7 } = {}) {
 export async function fetchNewsWithCache(api, uni, cacheFile) {
   const fresh = await fetchNewsRows(api, uni);
   let cached = [];
-  try { cached = JSON.parse(fs.readFileSync(cacheFile, 'utf8')).rows.map(r => [new Date(r[0]), ...r.slice(1)]); } catch { /* no cache yet */ }
+  try { cached = JSON.parse(fs.readFileSync(cacheFile, 'utf8')).rows.map(r => { const cl = api.classify_(r[2]); return [new Date(r[0]), r[1], r[2], r[3], cl.category, r[5], r[6], cl.sentiment, r[8]]; }); } catch { /* no cache yet */ } // saved headlines are re-classified so rule fixes apply to them too
   const seen = new Set(fresh.map(r => api.normTitle_(r[2])));
   const cutoff = Date.now() - 14 * 86400000;
   const merged = fresh.concat(cached.filter(r => !seen.has(api.normTitle_(r[2])) && new Date(r[0]) >= cutoff))

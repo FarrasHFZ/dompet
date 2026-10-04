@@ -6,6 +6,7 @@ import { loadEngine, universe, loadPrices, ROOT } from './lib.mjs';
 import { fetchNewsWithCache } from './news.mjs';
 import { buildOwnership } from './ownership.mjs';
 import { fetchFundamentals } from './fundamentals.mjs';
+import { runAlerts } from './alerts.mjs';
 
 const cfg = { targetPct: +(process.env.TARGET || 8), horizon: +(process.env.HORIZON || 15), stopMult: +(process.env.STOPMULT || 2.5), minValueB: 5 };
 const api = loadEngine();
@@ -110,8 +111,12 @@ const out = {
     params: cfg, universe: uni.length, ranked: picks.length, skipped, newsCount: newsRows.length, newsStatus, sample: false,
     sources: { prices: 'Yahoo Finance daily bars (.JK)', news: 'Google News RSS (Indonesian)', ownership: ownership ? `${ownership.source} (as of ${ownership.asOf})` : null, fundamentals: 'Yahoo Finance fundamentals-timeseries (unofficial, last ~5 quarters)' },
   },
+  backtestHoldout: fs.existsSync(path.join(ROOT, 'data', 'backtest-holdout.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'backtest-holdout.json'), 'utf8')) : null,
   newsAccuracy: fs.existsSync(na) ? JSON.parse(fs.readFileSync(na, 'utf8')) : null, market, picks, news: newsOut, ownership: ownership ? { asOf: ownership.asOf, note: ownership.note } : null, backtest: bt, forward: forwardStats(),
 };
 fs.writeFileSync(path.join(OUT, 'latest.json'), JSON.stringify(out));
 console.log(`snapshot ${asOf}: ${picks.length} ranked (${picks.filter(p => p.action === 'ACT').length} ACT), ${skipped.length} skipped, ${newsRows.length} headlines, ${Math.round(fs.statSync(path.join(OUT, 'latest.json')).size / 1024)} KB`);
 picks.slice(0, 8).forEach(p => console.log(`${p.ticker} ${p.score} ${p.action} ${p.setup} rsi ${p.rsi && p.rsi.toFixed(0)} news ${p.newsScore}`));
+
+// Telegram digest (no-op unless TG_TOKEN / TG_CHAT_ID are set, or DRY_ALERTS=1). Never lets a failure break the build.
+if (!process.env.FAKE_NOW) { try { await runAlerts({ api, picks, newsRows, meta: out.meta, market }); } catch (e) { console.error('alerts failed', e.message); } }

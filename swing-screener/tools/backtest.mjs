@@ -7,7 +7,8 @@ import path from 'node:path';
 import { loadEngine, universe, loadPrices, ROOT } from './lib.mjs';
 
 const api = loadEngine();
-const uni = universe(api);
+const HOLD = process.env.HOLDOUT === '1'; // stocks NOT used when the score was designed
+const uni = HOLD ? JSON.parse(fs.readFileSync(path.join(ROOT, 'tools', 'holdout-universe.json'), 'utf8')).filter(t => !universe(api).some(u => u.ticker === t)).map(t => ({ ticker: t })) : universe(api);
 const cfg = { targetPct: +(process.env.TARGET || 8), stopMult: +(process.env.STOPMULT || 2.5), horizon: +(process.env.HORIZON || 15) };
 const STEP = 2, WARM = 250, WINDOW = 270, SPLIT = new Date('2024-10-01');
 const px = await loadPrices(uni.map(u => u.ticker + '.JK').concat(['^JKSE']));
@@ -94,7 +95,7 @@ report('ALL', samples);
 report('IN-SAMPLE (before 2024-10)', train);
 report('OUT-OF-SAMPLE (2024-10 onward)', test);
 
-fs.writeFileSync(path.join(ROOT, 'data', 'cache', 'backtest_samples.json'), JSON.stringify(samples.map(s => ({ ...s, date: s.date.toISOString().slice(0, 10) }))));
+if (!HOLD) fs.writeFileSync(path.join(ROOT, 'data', 'cache', 'backtest_samples.json'), JSON.stringify(samples.map(s => ({ ...s, date: s.date.toISOString().slice(0, 10) }))));
 
 // Compact summary for the web app's Scorecard tab.
 function summarize(S) {
@@ -115,4 +116,4 @@ const summary = {
   all: summarize(samples), inSample: summarize(train), outOfSample: summarize(test),
   caveats: ['News is excluded (no historical news archive); it is the only unvalidated score component.', 'Weights and cut-offs were chosen after looking at this same history; only the 2024-10+ half is a fair test of the rules chosen on the earlier half, and even that was seen during design.', '27 liquid large caps, one market regime: do not extrapolate to small caps.'],
 };
-fs.writeFileSync(path.join(ROOT, 'data', 'backtest-summary.json'), JSON.stringify(summary, null, 1));
+fs.writeFileSync(path.join(ROOT, 'data', HOLD ? 'backtest-holdout.json' : 'backtest-summary.json'), JSON.stringify(summary, null, 1));

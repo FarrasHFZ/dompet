@@ -70,3 +70,20 @@ Known limits: `IDX:COMPOSITE` for IHSG in GOOGLEFINANCE is unverified; GOOGLEFIN
     node tools/serve.mjs               # preview web/ on :5174
 
 Not financial advice.
+
+## Telegram alerts
+What you get (one digest per run, only new items, never repeated): new risk / commissioner or director / insider-buying / government-investment / corporate-action / contract / earnings headlines about today's ACT picks and `data/watchlist.json`, sector-wide government or risk news for those picks' sectors, and once per signal day which stocks entered or left ACT.
+
+1. Telegram → **@BotFather** → `/newbot` → copy the token.
+2. Open your new bot and press **Start**.
+3. `TG_TOKEN=<token> node tools/telegram-setup.mjs` (PowerShell: `$env:TG_TOKEN='<token>'; node tools/telegram-setup.mjs`) prints your chat id and sends a test message.
+4. `gh secret set TG_TOKEN` and `gh secret set TG_CHAT_ID` (each prompts for the value).
+5. Next workflow run sends a "connected" message and starts alerting. Add tickers to `data/watchlist.json`, e.g. `["BBCA","TLKM"]`.
+
+`node tools/alerts-test.mjs` shows what would be sent, without sending anything.
+
+## On your phone
+Open https://farrashfz.github.io/dompet/screener/ and install it: iPhone Safari → Share → *Add to Home Screen*; Android Chrome → menu → *Install app*. It opens full-screen with its own icon, a bottom tab bar and one card per stock, and shows the last data when offline. This is a web app (PWA), not an App Store app.
+
+## Out-of-sample check
+`HOLDOUT=1 node tools/backtest.mjs` runs the same score on 40 IDX stocks that were not used to design it (`tools/holdout-universe.json`). The edge replicates but smaller (top bucket +0.9% vs 0.0% baseline, IC 0.08), and expectancy after stops and fees is about zero.
