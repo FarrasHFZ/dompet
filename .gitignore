@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+.clasprc.json
+data/
+*.csv
+building-with-ai-personal-starter.md
+.claude/
+apps-script/.clasp.json
