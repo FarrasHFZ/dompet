@@ -1,8 +1,12 @@
 node_modules/
 .DS_Store
 .clasprc.json
-data/
+/data/
 *.csv
 building-with-ai-personal-starter.md
 .claude/
 apps-script/.clasp.json
+
+# swing-screener: raw price/news caches are rebuilt on demand; history/ and ownership.json are committed
+swing-screener/data/cache/
+swing-screener/apps-script/.clasp.json

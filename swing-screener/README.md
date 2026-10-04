@@ -1,0 +1,67 @@
+# IDX Swing Screener
+
+Personal swing-trade screener for IDX stocks. Live: https://farrashfz.github.io/dompet/screener/ (after the first Pages deploy).
+
+## How the pieces connect
+
+```
+                      ┌───────────────────────── GitHub (this repo) ─────────────────────────┐
+ Yahoo Finance ──┐    │  Action, weekdays 17:30 WIB                                           │
+ Google News RSS ┼──► │  tools/build-snapshot.mjs ── runs apps-script/*.gs engine in Node ──► │ web/data/latest.json ─► GitHub Pages ─► web app
+ KSEI ≥1% holders┘    │  + logs picks to data/history (forward test)                          │                                      ▲
+                      └───────────────────────────────────────────────────────────────────────┘                                      │ optional "Source"
+ GOOGLEFINANCE ──► Google Sheet ──► Apps Script (same engine) ──► Screener/News tabs + doGet JSON ───────────────────────────────────┘
+                   (Universe, Themes, Config = your control panel; journal)
+```
+
+| Piece | Role |
+|---|---|
+| `apps-script/Indicators.gs` | The engine: indicators, support/resistance, score, narrative. Pure JS. **Single source of truth**: Node loads this very file (`tools/lib.mjs`). |
+| `apps-script/News.gs` | Headline classifier (category, direction, roundup detection) and per-stock news score. |
+| `apps-script/Code.gs` | Sheet glue: menu, GOOGLEFINANCE fetch, Screener tab, Telegram digest, `doGet` JSON API. |
+| Google Sheet | Control panel (Universe, Themes, Config) + readable output + your notes. |
+| `tools/` | Node scripts: snapshot build, backtest, news scoring, ownership. |
+| `web/` | Static web app (no build step). Reads `data/latest.json`, or your Sheet's `doGet` URL. |
+
+Without the Sheet, everything still runs from GitHub. The Sheet is worth keeping as the place you edit the universe and news themes, and as a notebook. Both paths emit the same JSON shape.
+
+## What the measurements say (tools/backtest.mjs, tools/news-score.mjs)
+
+27 liquid IDX stocks, 5 years of daily bars, walk-forward (score uses only past data), outcome = next 15 trading days.
+
+- The first score (trend + momentum + breakout) had **no, slightly negative** predictive value. Trend/breakout chasing lost; short-term reversals worked. It was replaced.
+- The v2 oversold-bounce score: top bucket (65+) hit +8%-before-stop **30%** vs 23.5% baseline, avg 15-day move **+1.1%** vs -0.2%; monthly rank-IC +0.09 (t≈4.8). Holds in the later half of the data (IC 0.13).
+- It is a weak edge, not a money machine: with the plan's stop and 0.4% fees, expectancy per trade is roughly zero to +0.5%, and tight stops erase it (so the default stop is 2.5 ATR).
+- The edge sits in **market-wide capitulation** (many names oversold at once); a lone oversold stock showed ~none. The app shows breadth for that reason. The number of independent episodes is small (about 18 months), so treat this as a hypothesis the forward test must confirm.
+- News: not backtestable (no historical archive). Classifier accuracy on a fresh hand-labelled holdout: ~90% category, ~71% direction precision, ~52% recall. Relevance fix: a stock is tagged only if the headline names it; market wraps are down-weighted.
+- Live forward test: every run appends picks to `data/history/`; after 15 trading days they are scored and shown on the Scorecard tab.
+
+## Data you can add
+
+| Data | Source | Status |
+|---|---|---|
+| Shareholders ≥1% | KSEI via IDX, monthly PDF (since Feb 2026). `tools/ownership.mjs` reads a community CSV conversion; direct route = parse IDX's PDF with pdfplumber in a monthly Action. | In app (context only: monthly, gaps for some state stakes) |
+| Broker summary / foreign flow | IDX shows it on its site but has no public API and returns 403 to scripts. Vendors (Index Alpha, Invezgo, Sectors, GoAPI…) sell it. Cheapest plan found is about Rp200k/month; test any free tier first. | Not added. Add only after a backtest shows it helps |
+| Fundamentals | Vendors above, or IDX XBRL filings | Not added |
+
+## Deploy the Sheet side
+Uses the `personal` clasp profile (separate from Dompet's script):
+
+    cd swing-screener/apps-script
+    clasp create --type sheets --title "IDX Swing Screener" --user personal
+    clasp push --user personal
+
+Open the Sheet, reload, menu **IDX Screener**: 1. Setup sheets, 2. Refresh news, 3. Run screener, Install daily triggers.
+To serve JSON to the web app: Project Settings → Script Properties → `API_TOKEN`; Deploy → Web app (execute as you, anyone). Optional Telegram digest: `TG_TOKEN`, `TG_CHAT`.
+
+Known limits: `IDX:COMPOSITE` for IHSG in GOOGLEFINANCE is unverified; GOOGLEFINANCE lags; Apps Script caps a run at 6 minutes (about 30-40 tickers). The Sheet path was smoke-tested against an in-memory fake (`tools/mock-sheet-test.mjs`), not yet inside Google.
+
+## Commands
+    node tools/build-snapshot.mjs      # rebuild web/data/latest.json
+    node tools/backtest.mjs            # walk-forward test of the score
+    node tools/news-score.mjs          # classifier accuracy vs hand labels
+    node tools/ownership.mjs           # refresh data/ownership.json
+    node tools/mock-sheet-test.mjs     # smoke-test the Apps Script entry points
+    node tools/serve.mjs               # preview web/ on :5174
+
+Not financial advice.

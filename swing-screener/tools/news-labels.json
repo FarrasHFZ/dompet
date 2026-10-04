@@ -1,0 +1,974 @@
+{
+ "_note": "Hand labels by one rater (Claude) on a random sample taken 2026-10-04. [title, true category, true sentiment toward the tagged stock/sector (-1/0/+1), is_roundup (stock only mentioned in a market wrap/list), kind (T=ticker-tagged, S=sector theme)]",
+ "set1": [
+  [
+   "Harga Saham BBCA Hari Ini (IDX: BBCA) — Grafik & Level",
+   "OTHER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Pelemahan IHSG Menyusut Tersisa 0,21%, Berkat Saham BBRI",
+   "OTHER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "IHSG Akhir September 2026 Melemah 0,83% Dipicu 360 Saham Melemah, DEWA, TINS, AMMN dan ANTM Malah Naik",
+   "OTHER",
+   0,
+   true,
+   "T"
+  ],
+  [
+   "IHSG Berpotensi Lanjutkan Koreksi Ke Level 6.050, Cermati Saham AMRT, BBRI, BRMS, dan DSNG",
+   "OTHER",
+   0,
+   true,
+   "T"
+  ],
+  [
+   "Bank Mandiri Bagi Dividen Interim Rp 6,16 T",
+   "CORP_ACTION",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "RUPSLB Indosat Setujui Perpanjangan Masa Jabatan Vikram Sinha, Perkuat Agenda AI",
+   "COMMISSIONER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Telkom- ISAT Lepas Landas Menuju Transformasi Jangka Panjang",
+   "OTHER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Astra International Salurkan Dividen Interim Rp 3,89 Triliun",
+   "CORP_ACTION",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "Laba AMMN Meroket 111 Persen, Target Saham Dipatok Segini",
+   "EARNINGS",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "Indosat Rombak Kursi Komisaris dan Perpanjang Masa Jabatan Dirut",
+   "COMMISSIONER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Rupiah Rp17.898: AADI Naik 66%, KLBF Anjlok 40% Saat Bahlil Rangkap Jabatan",
+   "OTHER",
+   -1,
+   true,
+   "T"
+  ],
+  [
+   "Astra International Bagikan Dividen Interim Rp3,89 Triliun",
+   "CORP_ACTION",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "Harga di Bawah Rp50, GoTo Ungkap Fundamental & Strategi Korporasi",
+   "OTHER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "IHSG Ditutup Rontok 1,51%, Saham BBCA, BMRI, BBRI hingga TLKM Ramai Diburu",
+   "OTHER",
+   0,
+   true,
+   "T"
+  ],
+  [
+   "Saham GOTO Anjlok 12,5 Persen Mentok ARB Aksi Jual Asing Capai Rp 62,7 Miliar",
+   "OTHER",
+   -1,
+   false,
+   "T"
+  ],
+  [
+   "Foto : Harga Minyak dan Emas Naik, Bagaimana Prospek Saham RATU dan ANTM? Halaman 1",
+   "OTHER",
+   0,
+   true,
+   "T"
+  ],
+  [
+   "RUPSLB Setujui Perpanjangan Masa Jabatan CEO, Indosat Lanjutkan Transformasi AI - Portal Jogja",
+   "COMMISSIONER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Dividen Jumbo Bank Mandiri (BMRI) Dinilai Masih Menarik di Tengah Ekspansi Kredit",
+   "CORP_ACTION",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "BBRI Diburu Asing Dua Hari Beruntun, Net Buy Tembus Rp102 Miliar",
+   "OTHER",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "BSI Siapkan Rights Issue Rp 3,4 Triliun untuk Perkuat Modal dan Ekspansi",
+   "CORP_ACTION",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "PTBA Kantongi Fasilitas Kredit Rp 6 Triliun dari 2 Bank",
+   "OTHER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Rekomendasi Saham Hari Ini: UNTR, MEDC, dan INET di Tengah Neraca Dagang Surplus",
+   "OTHER",
+   0,
+   true,
+   "T"
+  ],
+  [
+   "Saham GOTO Terus Jatuh, Kapan Bisa Berhenti? Simak Proyeksi Citi",
+   "OTHER",
+   -1,
+   false,
+   "T"
+  ],
+  [
+   "BRIS Rencanakan Rights Issue di Q1 2027, Restu Ada di RUPSLB",
+   "CORP_ACTION",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Japfa Comfeed (JPFA) Divestasi Vaksindo Rp 1,8 Triliun, Neraca Bakal Makin Sehat",
+   "CORP_ACTION",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "Saham GOTO Anjlok ke Rp 43, Begini Kata Manajemen GoTo Gojek Tokopedia",
+   "OTHER",
+   -1,
+   false,
+   "T"
+  ],
+  [
+   "PTBA, ASII, BMRI, WIFI Masuk: Ada Perombakan - Halaman 2",
+   "OTHER",
+   0,
+   true,
+   "T"
+  ],
+  [
+   "Vikram Sinha Kembali Dipercaya Pimpin Indosat, Target 200 MW AI Dikebut",
+   "COMMISSIONER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Japfa Comfeed Lepas Saham Vaksindo Senilai Rp1,8 Triliun",
+   "CORP_ACTION",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Dividen Jumbo BMRI Bikin Investor Ngiler, Sahamnya Masih Murah?",
+   "CORP_ACTION",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "Rekomendasi Saham Hari Ini: Aturan Saham Rp1 Mulai Berlaku, Intip TLKM, AKRA, MBMA",
+   "OTHER",
+   0,
+   true,
+   "T"
+  ],
+  [
+   "Saham GOTO Turun Tajam Namun Catat Volume Transaksi Melonjak",
+   "OTHER",
+   -1,
+   false,
+   "T"
+  ],
+  [
+   "Mitos September di IHSG, Tapi PTBA Malah Naik 22%: Stockpick AI Oktober Rilis!",
+   "OTHER",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "Begini Tanggapan GoTo Usai Gembok Saham Resmi Dibuka",
+   "OTHER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Astra International (ASII) Tebar Dividen Interim Rp 3,89 Triliun, Catat Tanggal Pentingnya",
+   "CORP_ACTION",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "9 Emiten Tebar Dividen Rp 8,72 Triliun, BMRI dan BSSR Paling Besar",
+   "CORP_ACTION",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "BRIS Siapkan PMHMETD II, Terbitkan 6,8 Miliar Saham Baru Buat Ekspansi Pembiayaan",
+   "CORP_ACTION",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Merdeka Copper Gold Terbitkan Obligasi Rp4,12 Triliun",
+   "CORP_ACTION",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "BSI (BRIS) Bakal Right Issue 6,8 Miliar Saham, Bersiap Tambah Free Float?",
+   "CORP_ACTION",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "RUPSLB Indosat (ISAT) Setujui Perpanjangan Masa Jabatan Vikram Sinha",
+   "COMMISSIONER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Investor Asing Lepas Saham BBCA Rp 138,73 Miliar Saat Harga Terkoreksi",
+   "OTHER",
+   -1,
+   false,
+   "T"
+  ],
+  [
+   "Harga Saham PT Bank Rakyat Indonesia (Persero) Tbk (BBRI) Hari Ini, 01 October 2026",
+   "OTHER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "IHSG Diprediksi Melemah Hari Ini, Analis Jagokan Saham AMRT, TLKM hingga UNTR",
+   "OTHER",
+   0,
+   true,
+   "T"
+  ],
+  [
+   "PTBA Raih Kredit Rp 6 Triliun dari BRI dan Bank Mandiri, Beri Agunan DHE SDA",
+   "OTHER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Bank Mandiri Bagi Dividen Interim Rp6,16 Triliun, Pemegang Saham Dapat Bagian Segini",
+   "CORP_ACTION",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "Kontrak WIKA Tembus Rp40 Triliun, Tapi Beban Bunga Masih Menghimpit",
+   "CONTRACT",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Gubernur BI: Tiap Kenaikan 25 Bps BI Rate, Pertumbuhan Ekonomi Berkurang 0,1%",
+   "MACRO",
+   -1,
+   false,
+   "S"
+  ],
+  [
+   "Bahlil Ditunjuk Jadi Menko Hilirisasi Dan Transisi Energi, Ini Pandangan Akademisi",
+   "GOV_INVEST",
+   1,
+   false,
+   "S"
+  ],
+  [
+   "Sejumlah Negara Asia Diramal Kerek Suku Bunga di Akhir 2026, Termasuk RI?",
+   "MACRO",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Bank Indonesia: Kenaikan BI Rate 25 Bps Bakal Pangkas Pertumbuhan Ekonomi 0,1%",
+   "MACRO",
+   -1,
+   false,
+   "S"
+  ],
+  [
+   "Insentif SPPG MBG Berubah! Kini Rp2.000 per Porsi Mulai 5 Oktober",
+   "GOV_INVEST",
+   1,
+   false,
+   "S"
+  ],
+  [
+   "BPJN Aceh Percepat PSN Beutong, Jalan dan Tanggul Ditarget Rampung 27 Desember 2026",
+   "GOV_INVEST",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "PLN Indonesia Power Kembangkan Pembangkit Fleksibel Hadapi Energi Terbarukan",
+   "OTHER",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Pemerintah Siapkan Paket Stimulus Ekonomi Rp 31 Triliun",
+   "GOV_INVEST",
+   1,
+   false,
+   "S"
+  ],
+  [
+   "Pemerintah Siapkan Program Perlindungan dan Stimulus Ekonomi 2027",
+   "GOV_INVEST",
+   1,
+   false,
+   "S"
+  ],
+  [
+   "PLN Batam pastikan keandalan listrik dukung pertumbuhan data center",
+   "OTHER",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "BI Wanti-Wanti Suku Bunga The Fed Naik Lagi pada Kuartal IV/2026",
+   "MACRO",
+   -1,
+   false,
+   "S"
+  ],
+  [
+   "Insentif PPh 21 Bergaji di Bawah Rp 10 Juta Diperluas ke Seluruh Sektor pada 2027",
+   "GOV_INVEST",
+   1,
+   false,
+   "S"
+  ],
+  [
+   "Danantara dan Pemegang Saham Publik: Menyeimbangkan Sentralisasi dengan Perlindungan Pemegang Saham Publik di BUMN Terbuka",
+   "GOV_INVEST",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Danantara Perbaiki Pengelolaan Dana Pensiun BUMN untuk Atasi Kekurangan",
+   "GOV_INVEST",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Danantara Targetkan Merger BUMN Asuransi dan Karya Rampung 2026",
+   "GOV_INVEST",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Waskita (WSKT) Kantongi Kontrak Baru Rp5,6 Triliun hingga Agustus 2026",
+   "CONTRACT",
+   1,
+   false,
+   "S"
+  ],
+  [
+   "Kejagung Ungkap Kerugian Negara Korupsi MBG Era Dadan Cs Rp10 Triliun!",
+   "RISK",
+   -1,
+   false,
+   "S"
+  ],
+  [
+   "BI: Kenaikan BI Rate 25 Bps, Turunkan Pertumbuhan Ekonomi 0,1% - Market",
+   "MACRO",
+   -1,
+   false,
+   "S"
+  ],
+  [
+   "🤑 Pemerintah Lanjutkan Stimulus Ekonomi, Kaji Kenaikan Batas Penghasilan Bebas Pajak",
+   "GOV_INVEST",
+   1,
+   false,
+   "S"
+  ],
+  [
+   "WIKA Capai Progres 77,75% pada Pembangunan Patimban Access Toll Road Package 4",
+   "CONTRACT",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "WIKA Tangani 71 Proyek Berjalan Senilai Rp 40 Triliun",
+   "CONTRACT",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Ikuti BI Rate, LPS Pertahankan Tingkat Bunga Penjaminan di 3,75%",
+   "MACRO",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Danantara lanjutkan konsolidasi asuransi syariah BUMN hingga akhir 2026",
+   "GOV_INVEST",
+   0,
+   false,
+   "S"
+  ]
+ ],
+ "set2": [
+  [
+   "Proyeksi IHSG Senin 5 Oktober 2026 dan Rekomendasi Saham, Ada GGRM dan ISAT",
+   "OTHER",
+   0,
+   true,
+   "T"
+  ],
+  [
+   "IHSG Hari Ini Diprediksi Menguat, Pantau Saham AMRT, BBRI hingga DSNG",
+   "OTHER",
+   0,
+   true,
+   "T"
+  ],
+  [
+   "Astra International (ASII) Bagi Dividen Interim Rp98 per Saham, Total Rp3,89 Triliun",
+   "CORP_ACTION",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "Indosat Rombak Kursi Komisaris dan Perpanjang Masa Jabatan Dirut",
+   "COMMISSIONER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "IHSG Hari Ini Berbalik Arah Menghijau ke 6.036, Saham SMGR Melesat 3,79%",
+   "OTHER",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "BSI Siapkan Rights Issue Rp 3,4 Triliun untuk Perkuat Modal dan Ekspansi",
+   "CORP_ACTION",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "GOTO Diproyeksikan Eksekusi Buyback Usai Tekanan Jual Berakhir",
+   "CORP_ACTION",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "Kepmen ESDM Tuntun Adaro Andalan Indonesia ke Titik Kritis: Saham Tergerus, Pasar Menilai Risiko Baru",
+   "RISK",
+   -1,
+   false,
+   "T"
+  ],
+  [
+   "Saham GOTO Diramal Longsor ke Sini",
+   "OTHER",
+   -1,
+   false,
+   "T"
+  ],
+  [
+   "Saham GOTO Menguat Setelah Bursa Efek Hapus Batas Harga Bawah",
+   "OTHER",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "BRIS bidik suntikan modal lewat rights issue, risiko dilusi 20,38%",
+   "CORP_ACTION",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "IHSG Ditutup Melemah 0,97 Persen, Terbebani Saham ANTM, MDKA, hingga BRMS",
+   "OTHER",
+   0,
+   true,
+   "T"
+  ],
+  [
+   "Japfa Divestasi 100 Persen Saham Vaksindo senilai Rp 1,8 Triliun",
+   "CORP_ACTION",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "IHSG Akhirnya Ditutup Menguat 0,46%, Berkat Lesatan Saham GOTO",
+   "OTHER",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "IHSG Melemah Rekomendasi Saham AMMN INDF BBRI Diproyeksikan Rebound",
+   "OTHER",
+   0,
+   true,
+   "T"
+  ],
+  [
+   "Ada BBCA hingga ASII, BEI Umumkan 5 Saham Short Selling Bulan Oktober",
+   "OTHER",
+   0,
+   true,
+   "T"
+  ],
+  [
+   "Saham GOTO Anjlok 13,95 Persen Setelah Kebijakan Harga Minimum Rp1",
+   "OTHER",
+   -1,
+   false,
+   "T"
+  ],
+  [
+   "Saham GOTO Anjlok 12,50 Persen di Bursa Efek Indonesia",
+   "OTHER",
+   -1,
+   false,
+   "T"
+  ],
+  [
+   "IHSG Berpotensi Lanjut Koreksi, Intip 6 Saham Pilihan BNI Sekuritas Hari Ini! Ada ELSA dan ASII",
+   "OTHER",
+   0,
+   true,
+   "T"
+  ],
+  [
+   "Indosat (ISAT) Rombak Transaksi Fiber Optik, Ada Cuan Rp1,64 Triliun",
+   "OTHER",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "IHSG Anjlok Investor Asing Lepas Saham BMRI Hingga Rp957 Miliar",
+   "OTHER",
+   -1,
+   false,
+   "T"
+  ],
+  [
+   "Saham Cuan & Boncos IDX30 September 2026: UNTR-ANTM Menguat, GOTO-EMTK Tertekan",
+   "OTHER",
+   0,
+   true,
+   "T"
+  ],
+  [
+   "ARB Terhenti, Saham GOTO Rebound dengan Transaksi Jumbo Rp2 Triliun",
+   "OTHER",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "BBRI Diburu Asing Dua Hari Beruntun, Net Buy Tembus Rp102 Miliar",
+   "OTHER",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "Bos GOTO Bicara yang Sebenarnya soal Saham Perseroan",
+   "OTHER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Setelah 5 Hari Tertekan, Saham GOTO Rebound ke Rp30, Ini Kata Analis",
+   "OTHER",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "IHSG Diproyeksi Lanjut Bearish, BRI Danareksa Pilih PTBA, UVCR, dan AMRT",
+   "OTHER",
+   0,
+   true,
+   "T"
+  ],
+  [
+   "Rekomendasi Saham Hari Ini: ADRO, ASII, BBNI & LPPF, IHSG Berpotensi Rebound",
+   "OTHER",
+   0,
+   true,
+   "T"
+  ],
+  [
+   "IHSG Melemah ke Level 6.147 Saham GOTO Tekan Bursa",
+   "OTHER",
+   -1,
+   false,
+   "T"
+  ],
+  [
+   "Banjir Dividen Rp8,72 Triliun: Bank Mandiri dan BSSR Pimpin Guyuran Kas ke Investor",
+   "CORP_ACTION",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "Harga Buyback Emas Antam (ANTM) Logam Mulia Rabu Naik, Emas Dunia (XAUUSD) Melejit! - Sinar Harapan",
+   "OTHER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Direksi Telkom Dirombak, Nanang Hendarno Gantikan Dian Siswarini sebagai Dirut",
+   "COMMISSIONER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Investasi Pribadi Presdir Rudy di Saham ASII, Belanjakan Rp20,2 Miliar",
+   "OTHER",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "Rincian Harga Emas Antam Senin 28 September 2026, Ukuran 0,5 sampai 1000 Gram",
+   "OTHER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "RUPSLB Indosat Setujui Perpanjangan Masa Jabatan Vikram Sinha, Perkuat Agenda AI",
+   "COMMISSIONER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Saham GOTO Ramai Diperdagangkan, Analis Menyoroti Valuasi dan Buyback",
+   "CORP_ACTION",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "Asing Pilih BBRI, BMRI Dilepas Rp115 Miliar: Intip Teknikalnya Hingga Akhir Sesi",
+   "OTHER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Sah! Nanang Hendarno Jadi Dirut Telkom (TLKM), Gantikan Dian Siswarini",
+   "COMMISSIONER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Saham AADI, ADRO Hingga PTBA Tertekan, Aturan Baru Anak Usaha Tambang Jadi Sorotan Investor",
+   "RISK",
+   -1,
+   false,
+   "T"
+  ],
+  [
+   "Grup Astra Dominasi Pembagian Dividen pada Oktober 2026, Ada ASII hingga ASGR",
+   "CORP_ACTION",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "Saham GOTO Melonjak 7 Persen Usai Investor Domestik Lakukan Net Buy",
+   "OTHER",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "Harga Saham BMRI Hari Ini 30 September 2026: Menguat ke Rp4.090",
+   "OTHER",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "Telkom Gelar RUPSLB Hari Ini, Salah Satunya Perubahan Pengurus",
+   "COMMISSIONER",
+   0,
+   false,
+   "T"
+  ],
+  [
+   "Astra International Bagikan Dividen Interim Rp98 per Saham, Ini Jadwalnya",
+   "CORP_ACTION",
+   1,
+   false,
+   "T"
+  ],
+  [
+   "Terseret Kasus Korupsi Nikel, AMMAN Nonaktifkan Komisaris Teguh Pamuji",
+   "RISK",
+   -1,
+   false,
+   "T"
+  ],
+  [
+   "Indonesia Targetkan PLTS 100 GWp pada 2029 dengan Investasi Rp1.306 Triliun",
+   "GOV_INVEST",
+   1,
+   false,
+   "S"
+  ],
+  [
+   "Inflasi Terjaga di Target 2,5% plus minus 1%, Gubernur BI Ungkap Alasan Ditahannya Suku Bunga BI Rate",
+   "MACRO",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Tembus 84 Km dan 48 Stasiun! MRT Jalur Cikarang–Balaraja Siap Bangkitkan Aksesibilitas Jabodetabek",
+   "OTHER",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Bagaimana Pemerintah Mendorong Pembangunan Nasional?",
+   "OTHER",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "BI Wanti-Wanti Suku Bunga The Fed Naik Lagi pada Kuartal IV/2026",
+   "MACRO",
+   -1,
+   false,
+   "S"
+  ],
+  [
+   "IHSG Rebound 20% Investor Asing Masih Net Sell Rekor",
+   "OTHER",
+   0,
+   true,
+   "S"
+  ],
+  [
+   "Target 100 GWp Surya Butuh Sinkronisasi Rencana dan Kebijakan Ketenagalistrikan",
+   "OTHER",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "WIKA Masih Tunggu Kejelasan Divestasi Whoosh, Harap Neraca Membaik",
+   "CORP_ACTION",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "BPJN Aceh Kebut PSN Beutong, Jalan dan Tanggul Ditarget Rampung 27 Desember",
+   "GOV_INVEST",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "PT Bank Rakyat Indonesia Persiapkan Aksi Korporasi Dukung Danantara",
+   "GOV_INVEST",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Proses Konsolidasi Perasuransian BUMN di Bawah Danantara Masih Terus Berjalan",
+   "GOV_INVEST",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Badan Penutupan BUMN Layak Dipertimbangkan",
+   "GOV_INVEST",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "BI Ungkap Alasan Tahan BI Rate 5,75 Persen, Kenaikan 25 Bps Bisa Tekan Ekonomi",
+   "MACRO",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Di Depan DPR, BI Ungkap Alasan Tahan Suku Bunga Acuan di 5,75%",
+   "MACRO",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Prabowo Lanjutkan Program Ketenagakerjaan-Insentif Ekonomi 2027: Gaji di Bawah Rp10 Juta Bebas Pajak!",
+   "GOV_INVEST",
+   1,
+   false,
+   "S"
+  ],
+  [
+   "Ikuti BI-Rate, LPS Tahan Tingkat Bunga Penjaminan 3,75%",
+   "MACRO",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Proyek Sampah Jadi Listrik, WALHI Sebut Bebani PLN dan APBN",
+   "GOV_INVEST",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Waskita Karya Raih Kontrak Baru Rp5,6 Triliun Hingga Agustus 2026",
+   "CONTRACT",
+   1,
+   false,
+   "S"
+  ],
+  [
+   "Enlit Asia dan MKI Electricity Connect 2026 Catat 11.000 Peserta, Investasi Hijau Rp3,3 Triliun - Trust Banten",
+   "OTHER",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Pemerintah Tanggung PPh 21 Pekerja Gaji di Bawah Rp10 Juta Mulai 2027",
+   "GOV_INVEST",
+   1,
+   false,
+   "S"
+  ],
+  [
+   "Ditargetkan Rampung Tahun Ini, OJK Ungkap Merger Asuransi BUMN Belum Ada Perkembangan",
+   "GOV_INVEST",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Danantara Targetkan Merger BUMN Asuransi Rampung Akhir 2026",
+   "GOV_INVEST",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "PLN dan Kementerian ESDM pacu perluasan listrik Desa demi pemerataan energi di Sulteng",
+   "GOV_INVEST",
+   0,
+   false,
+   "S"
+  ],
+  [
+   "Investasi Hilirisasi Rp300,1 Triliun, Mampukah Energi Mengimbanginya?",
+   "GOV_INVEST",
+   0,
+   false,
+   "S"
+  ]
+ ],
+ "_note2": "set2: holdout sample (seed 7) labelled AFTER set1-driven rule tuning, BEFORE any set2-driven change; the first score printed for set2 is the honest holdout number."
+}

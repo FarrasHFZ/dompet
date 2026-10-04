@@ -1,0 +1,8 @@
+{
+  "rows": [
+    { "rules": "v1 (first draft)", "sample": "69 hand-labelled headlines (holdout)", "cat": 80, "prec": 55, "rec": 62 },
+    { "rules": "v2, measured before tuning on it", "sample": "69 fresh headlines (true holdout)", "cat": 90, "prec": 71, "rec": 52 },
+    { "rules": "v2 after tuning (optimistic)", "sample": "same 138 headlines it was tuned on", "cat": 95, "prec": 88, "rec": 87 }
+  ],
+  "note": "One rater (Claude), 138 headlines, labels in tools/news-labels.json, scored by tools/news-score.mjs. 'Direction precision' = when the tool calls a headline good/bad for the tagged stock, how often that matches the label; 'recall' = how many truly directional headlines it caught. The honest figure is the holdout row; expect roughly 90% right on category and 70% on direction, so treat the arrow as a hint. Whether news actually predicts returns is NOT tested yet (no historical news archive): the forward test will tell."
+}

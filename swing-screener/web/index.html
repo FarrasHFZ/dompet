@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<meta name="robots" content="noindex">
+<title>IDX Swing Screener</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap bar">
+    <div>
+      <h1>IDX Swing Screener</h1>
+      <div class="sub" id="sub">Loading…</div>
+    </div>
+    <div class="right">
+      <span class="pill" id="srcPill"></span>
+      <button class="ghost" id="settingsBtn" aria-haspopup="dialog">Source</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="market" class="market"></section>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="picks" aria-selected="true">Picks</button>
+    <button role="tab" data-tab="news" aria-selected="false">News radar</button>
+    <button role="tab" data-tab="score" aria-selected="false">Scorecard</button>
+    <button role="tab" data-tab="how" aria-selected="false">How it works</button>
+  </nav>
+
+  <section id="tab-picks" class="panel"></section>
+  <section id="tab-news" class="panel" hidden></section>
+  <section id="tab-score" class="panel" hidden></section>
+  <section id="tab-how" class="panel" hidden></section>
+
+  <p class="foot">Personal research tool, not financial advice. Prices from Yahoo Finance or Google Finance can be delayed or wrong; headlines are machine-classified and can be misread. Read the source before acting.</p>
+</main>
+
+<dialog id="settings">
+  <form method="dialog">
+    <h2>Data source</h2>
+    <p class="muted">Default is the snapshot GitHub rebuilds every weekday. To read your own Google Sheet instead, paste its Apps Script web-app URL and API token (kept only in this browser).</p>
+    <label>Apps Script web-app URL <input id="sheetUrl" type="url" placeholder="https://script.google.com/macros/s/…/exec"></label>
+    <label>API token <input id="sheetToken" type="password" autocomplete="off"></label>
+    <div class="row">
+      <button value="save" id="saveSrc">Use my Sheet</button>
+      <button value="reset" id="resetSrc" class="ghost">Back to GitHub snapshot</button>
+      <button value="cancel" class="ghost">Close</button>
+    </div>
+    <p class="muted" id="srcMsg"></p>
+  </form>
+</dialog>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

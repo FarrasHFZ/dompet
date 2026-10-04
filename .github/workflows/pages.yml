@@ -2,15 +2,26 @@ name: Deploy web to GitHub Pages
 on:
   push:
     branches: [main]
-    paths: ['web/**', '.github/workflows/pages.yml']
+    paths:
+      - 'web/**'
+      - 'swing-screener/web/**'
+      - 'swing-screener/tools/**'
+      - 'swing-screener/apps-script/**'
+      - 'swing-screener/data/ownership.json'
+      - 'swing-screener/data/backtest-summary.json'
+      - 'swing-screener/data/news-accuracy.json'
+      - '.github/workflows/pages.yml'
+  schedule:
+    # Weekdays 10:30 UTC = 17:30 WIB, after the IDX close (16:00 WIB).
+    - cron: '30 10 * * 1-5'
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write   # commits the forward-test ledger (swing-screener/data/history)
   pages: write
   id-token: write
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -19,9 +30,35 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Rebuild the screener snapshot (Yahoo prices + Google News + ownership). If a source blocks the
+      # runner, the step fails softly and the last committed swing-screener/web/data/latest.json is served.
+      - name: Build screener snapshot
+        id: snap
+        continue-on-error: true
+        working-directory: swing-screener
+        run: node tools/build-snapshot.mjs
+
+      - name: Log picks to the forward-test ledger
+        if: steps.snap.outcome == 'success'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add swing-screener/data/history
+          git diff --cached --quiet || (git commit -m "screener: log picks $(date -u +%F)" && git push)
+
+      - name: Assemble site (Dompet at /, screener at /screener/)
+        run: |
+          mkdir -p _site/screener
+          cp -r web/. _site/
+          cp -r swing-screener/web/. _site/screener/
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: web
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4
