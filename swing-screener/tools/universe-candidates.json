@@ -1,0 +1,620 @@
+[
+ [
+  "BNGA",
+  "Bank CIMB Niaga",
+  "Banking",
+  "CIMB Niaga"
+ ],
+ [
+  "BDMN",
+  "Bank Danamon Indonesia",
+  "Banking",
+  "Danamon"
+ ],
+ [
+  "NISP",
+  "Bank OCBC NISP",
+  "Banking",
+  ""
+ ],
+ [
+  "ARTO",
+  "Bank Jago",
+  "Banking",
+  "Jago"
+ ],
+ [
+  "BBTN",
+  "Bank Tabungan Negara",
+  "Banking",
+  "BTN"
+ ],
+ [
+  "BTPS",
+  "Bank BTPN Syariah",
+  "Banking",
+  "BTPN Syariah"
+ ],
+ [
+  "BNLI",
+  "Bank Permata",
+  "Banking",
+  ""
+ ],
+ [
+  "BJBR",
+  "Bank BJB",
+  "Banking",
+  "BJB"
+ ],
+ [
+  "MEGA",
+  "Bank Mega",
+  "Banking",
+  ""
+ ],
+ [
+  "UNTR",
+  "United Tractors",
+  "Energy",
+  ""
+ ],
+ [
+  "ITMG",
+  "Indo Tambangraya Megah",
+  "Energy",
+  "Indo Tambangraya"
+ ],
+ [
+  "HRUM",
+  "Harum Energy",
+  "Energy",
+  ""
+ ],
+ [
+  "INDY",
+  "Indika Energy",
+  "Energy",
+  ""
+ ],
+ [
+  "ADMR",
+  "Alamtri Minerals Indonesia",
+  "Energy",
+  "Adaro Minerals"
+ ],
+ [
+  "ESSA",
+  "ESSA Industries Indonesia",
+  "Energy",
+  "ESSA"
+ ],
+ [
+  "AKRA",
+  "AKR Corporindo",
+  "Energy",
+  "AKR"
+ ],
+ [
+  "BYAN",
+  "Bayan Resources",
+  "Energy",
+  "Bayan"
+ ],
+ [
+  "BUMI",
+  "Bumi Resources",
+  "Energy",
+  ""
+ ],
+ [
+  "ELSA",
+  "Elnusa",
+  "Energy",
+  ""
+ ],
+ [
+  "PTRO",
+  "Petrosea",
+  "Energy",
+  ""
+ ],
+ [
+  "ENRG",
+  "Energi Mega Persada",
+  "Energy",
+  ""
+ ],
+ [
+  "PGEO",
+  "Pertamina Geothermal Energy",
+  "Energy",
+  "Pertamina Geothermal"
+ ],
+ [
+  "DSSA",
+  "Dian Swastatika Sentosa",
+  "Energy",
+  ""
+ ],
+ [
+  "CUAN",
+  "Petrindo Jaya Kreasi",
+  "Energy",
+  "Petrindo"
+ ],
+ [
+  "BREN",
+  "Barito Renewables Energy",
+  "Energy",
+  "Barito Renewables"
+ ],
+ [
+  "BRPT",
+  "Barito Pacific",
+  "Energy",
+  ""
+ ],
+ [
+  "TPIA",
+  "Chandra Asri Pacific",
+  "Chemicals",
+  "Chandra Asri"
+ ],
+ [
+  "MBMA",
+  "Merdeka Battery Materials",
+  "Metals",
+  "Merdeka Battery"
+ ],
+ [
+  "NCKL",
+  "Trimegah Bangun Persada",
+  "Metals",
+  "Harita Nickel"
+ ],
+ [
+  "BRMS",
+  "Bumi Resources Minerals",
+  "Mining",
+  ""
+ ],
+ [
+  "TINS",
+  "Timah",
+  "Metals",
+  ""
+ ],
+ [
+  "PSAB",
+  "J Resources Asia Pasifik",
+  "Mining",
+  "J Resources"
+ ],
+ [
+  "EXCL",
+  "XLSmart Telecom Sejahtera",
+  "Telco",
+  "XL Axiata,XLSmart"
+ ],
+ [
+  "TOWR",
+  "Sarana Menara Nusantara",
+  "Telco",
+  "Sarana Menara"
+ ],
+ [
+  "TBIG",
+  "Tower Bersama Infrastructure",
+  "Telco",
+  "Tower Bersama"
+ ],
+ [
+  "MTEL",
+  "Dayamitra Telekomunikasi",
+  "Telco",
+  "Mitratel"
+ ],
+ [
+  "WIFI",
+  "Solusi Sinergi Digital",
+  "Telco",
+  ""
+ ],
+ [
+  "EMTK",
+  "Elang Mahkota Teknologi",
+  "Tech",
+  "Emtek"
+ ],
+ [
+  "BUKA",
+  "Bukalapak",
+  "Tech",
+  ""
+ ],
+ [
+  "BELI",
+  "Global Digital Niaga",
+  "Tech",
+  "Blibli"
+ ],
+ [
+  "MYOR",
+  "Mayora Indah",
+  "Consumer",
+  "Mayora"
+ ],
+ [
+  "SIDO",
+  "Industri Jamu dan Farmasi Sido Muncul",
+  "Consumer",
+  "Sido Muncul"
+ ],
+ [
+  "GGRM",
+  "Gudang Garam",
+  "Consumer",
+  ""
+ ],
+ [
+  "HMSP",
+  "HM Sampoerna",
+  "Consumer",
+  "Sampoerna"
+ ],
+ [
+  "CMRY",
+  "Cisarua Mountain Dairy",
+  "Consumer",
+  "Cimory"
+ ],
+ [
+  "ULTJ",
+  "Ultrajaya Milk Industry",
+  "Consumer",
+  "Ultrajaya"
+ ],
+ [
+  "AMRT",
+  "Sumber Alfaria Trijaya",
+  "Retail",
+  "Alfamart"
+ ],
+ [
+  "MAPI",
+  "Mitra Adiperkasa",
+  "Retail",
+  ""
+ ],
+ [
+  "ACES",
+  "Aspirasi Hidup Indonesia",
+  "Retail",
+  "Ace Hardware"
+ ],
+ [
+  "ERAA",
+  "Erajaya Swasembada",
+  "Retail",
+  "Erajaya"
+ ],
+ [
+  "LPPF",
+  "Matahari Department Store",
+  "Retail",
+  ""
+ ],
+ [
+  "AVIA",
+  "Avia Avian",
+  "Chemicals",
+  ""
+ ],
+ [
+  "AALI",
+  "Astra Agro Lestari",
+  "Plantation",
+  ""
+ ],
+ [
+  "LSIP",
+  "PP London Sumatra Indonesia",
+  "Plantation",
+  "London Sumatra"
+ ],
+ [
+  "DSNG",
+  "Dharma Satya Nusantara",
+  "Plantation",
+  ""
+ ],
+ [
+  "TAPG",
+  "Triputra Agro Persada",
+  "Plantation",
+  ""
+ ],
+ [
+  "MIKA",
+  "Mitra Keluarga Karyasehat",
+  "Healthcare",
+  "Mitra Keluarga"
+ ],
+ [
+  "HEAL",
+  "Medikaloka Hermina",
+  "Healthcare",
+  "Hermina"
+ ],
+ [
+  "SILO",
+  "Siloam International Hospitals",
+  "Healthcare",
+  "Siloam"
+ ],
+ [
+  "PWON",
+  "Pakuwon Jati",
+  "Property",
+  "Pakuwon"
+ ],
+ [
+  "SMRA",
+  "Summarecon Agung",
+  "Property",
+  "Summarecon"
+ ],
+ [
+  "PTPP",
+  "PP (Persero)",
+  "Construction",
+  "PTPP"
+ ],
+ [
+  "WIKA",
+  "Wijaya Karya",
+  "Construction",
+  "WIKA"
+ ],
+ [
+  "ADHI",
+  "Adhi Karya",
+  "Construction",
+  ""
+ ],
+ [
+  "INTP",
+  "Indocement Tunggal Prakarsa",
+  "Construction",
+  "Indocement"
+ ],
+ [
+  "AUTO",
+  "Astra Otoparts",
+  "Automotive",
+  ""
+ ],
+ [
+  "ASSA",
+  "Adi Sarana Armada",
+  "Industrial",
+  ""
+ ],
+ [
+  "SCMA",
+  "Surya Citra Media",
+  "Media",
+  ""
+ ],
+ [
+  "MNCN",
+  "Media Nusantara Citra",
+  "Media",
+  ""
+ ],
+ [
+  "INKP",
+  "Indah Kiat Pulp & Paper",
+  "Chemicals",
+  "Indah Kiat"
+ ],
+ [
+  "TKIM",
+  "Pabrik Kertas Tjiwi Kimia",
+  "Chemicals",
+  "Tjiwi Kimia"
+ ],
+ [
+  "INET",
+  "Sinergi Inti Andalan Prima",
+  "Tech",
+  "Sinergi Inti"
+ ],
+ [
+  "BBHI",
+  "Allo Bank Indonesia",
+  "Banking",
+  "Allo Bank"
+ ],
+ [
+  "MDIY",
+  "Planet Fashion?",
+  "Retail",
+  ""
+ ],
+ [
+  "SMDR",
+  "Samudera Indonesia",
+  "Industrial",
+  ""
+ ],
+ [
+  "TLKM2",
+  "",
+  "",
+  ""
+ ],
+ [
+  "JARR",
+  "Jhonlin Agro Raya",
+  "Plantation",
+  "Jhonlin"
+ ],
+ [
+  "MAPA",
+  "Map Aktif Adiperkasa",
+  "Retail",
+  ""
+ ],
+ [
+  "EMAS",
+  "Merdeka Gold Resources",
+  "Mining",
+  ""
+ ],
+ [
+  "RAJA",
+  "Rukun Raharja",
+  "Energy",
+  ""
+ ],
+ [
+  "PNLF",
+  "Panin Financial",
+  "Banking",
+  ""
+ ],
+ [
+  "BSSR",
+  "Baramulti Suksessarana",
+  "Energy",
+  "Baramulti"
+ ],
+ [
+  "GEMS",
+  "Golden Energy Mines",
+  "Energy",
+  ""
+ ],
+ [
+  "KIJA",
+  "Kawasan Industri Jababeka",
+  "Property",
+  "Jababeka"
+ ],
+ [
+  "SRTG",
+  "Saratoga Investama Sedaya",
+  "Industrial",
+  "Saratoga"
+ ],
+ [
+  "ASRI",
+  "Alam Sutera Realty",
+  "Property",
+  "Alam Sutera"
+ ],
+ [
+  "DEWA",
+  "Darma Henwa",
+  "Energy",
+  ""
+ ],
+ [
+  "ABMM",
+  "ABM Investama",
+  "Energy",
+  ""
+ ],
+ [
+  "BMTR",
+  "Global Mediacom",
+  "Media",
+  "Global Mediacom"
+ ],
+ [
+  "CLEO",
+  "Sariguna Primatirta",
+  "Consumer",
+  "Cleo"
+ ],
+ [
+  "ADES",
+  "Akasha Wira International",
+  "Consumer",
+  "Akasha Wira"
+ ],
+ [
+  "MLBI",
+  "Multi Bintang Indonesia",
+  "Consumer",
+  "Bintang"
+ ],
+ [
+  "SSIA",
+  "Surya Semesta Internusa",
+  "Property",
+  ""
+ ],
+ [
+  "TOBA",
+  "TBS Energi Utama",
+  "Energy",
+  "TBS Energi"
+ ],
+ [
+  "DOID",
+  "Delta Dunia Makmur",
+  "Energy",
+  "Delta Dunia"
+ ],
+ [
+  "ISSP",
+  "Steel Pipe Industry of Indonesia",
+  "Industrial",
+  ""
+ ],
+ [
+  "BIRD",
+  "Blue Bird",
+  "Industrial",
+  ""
+ ],
+ [
+  "ACST",
+  "Acset Indonuša",
+  "Construction",
+  "Acset"
+ ],
+ [
+  "KRAS",
+  "Krakatau Steel",
+  "Metals",
+  "Krakatau Steel"
+ ],
+ [
+  "BFIN",
+  "BFI Finance Indonesia",
+  "Banking",
+  "BFI Finance"
+ ],
+ [
+  "CPRO",
+  "Central Proteina Prima",
+  "Poultry",
+  ""
+ ],
+ [
+  "SMSM",
+  "Selamat Sempurna",
+  "Industrial",
+  ""
+ ],
+ [
+  "MPMX",
+  "Mitra Pinasthika Mustika",
+  "Automotive",
+  ""
+ ]
+]

@@ -62,13 +62,13 @@
     "fwd": -0.002289642721948238
    },
    {
-    "setup": "Breakout (low edge)",
+    "setup": "Breakout",
     "n": 393,
     "hit": 0.20865139949109415,
     "fwd": -0.008197468207278888
    },
    {
-    "setup": "Extended (do not chase)",
+    "setup": "Extended",
     "n": 939,
     "hit": 0.22790202342917998,
     "fwd": -0.00897990923202326
@@ -128,13 +128,13 @@
     "fwd": 0.0028139751873094776
    },
    {
-    "setup": "Breakout (low edge)",
+    "setup": "Breakout",
     "n": 211,
     "hit": 0.16587677725118483,
     "fwd": -0.010615357279936897
    },
    {
-    "setup": "Extended (do not chase)",
+    "setup": "Extended",
     "n": 519,
     "hit": 0.16184971098265896,
     "fwd": -0.005790102868593421
@@ -194,13 +194,13 @@
     "fwd": -0.007313038302125553
    },
    {
-    "setup": "Breakout (low edge)",
+    "setup": "Breakout",
     "n": 182,
     "hit": 0.25824175824175827,
     "fwd": -0.005394311095570975
    },
    {
-    "setup": "Extended (do not chase)",
+    "setup": "Extended",
     "n": 420,
     "hit": 0.30952380952380953,
     "fwd": -0.012921598523975855

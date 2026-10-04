@@ -8,7 +8,8 @@ import { loadEngine, universe, loadPrices, ROOT } from './lib.mjs';
 
 const api = loadEngine();
 const HOLD = process.env.HOLDOUT === '1'; // stocks NOT used when the score was designed
-const uni = HOLD ? JSON.parse(fs.readFileSync(path.join(ROOT, 'tools', 'holdout-universe.json'), 'utf8')).filter(t => !universe(api).some(u => u.ticker === t)).map(t => ({ ticker: t })) : universe(api);
+const DESIGN = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools', 'design-universe.json'), 'utf8')); // the 27 the score was built on
+const uni = universe(api).filter(u => HOLD ? !DESIGN.includes(u.ticker) : DESIGN.includes(u.ticker));
 const cfg = { targetPct: +(process.env.TARGET || 8), stopMult: +(process.env.STOPMULT || 2.5), horizon: +(process.env.HORIZON || 15) };
 const STEP = 2, WARM = 250, WINDOW = 270, SPLIT = new Date('2024-10-01');
 const px = await loadPrices(uni.map(u => u.ticker + '.JK').concat(['^JKSE']));
@@ -67,7 +68,7 @@ function report(label, S) {
   const ic = monthlyIC(S, s => s.score);
   console.log(`score IC (monthly cross-sectional Spearman vs fwd return): ${ic.ic.toFixed(3)}  t=${ic.t.toFixed(2)}  positive in ${pct(ic.pos)} of ${ic.months} months`);
   console.log('setup           n    hit%   fwd%    avgR');
-  ['Oversold bounce', 'Neutral', 'Breakout (low edge)', 'Extended (do not chase)'].forEach(k => {
+  ['Oversold bounce', 'Neutral', 'Breakout', 'Extended'].forEach(k => {
     const g = S.filter(s => s.setup === k);
     if (g.length < 20) return;
     console.log(`${k.padEnd(19)} ${String(g.length).padStart(5)}  ${pct(mean(g.map(s => s.win))).padStart(6)} ${pct(mean(g.map(s => s.fwd))).padStart(7)}  ${mean(g.map(s => s.R)).toFixed(2).padStart(6)}`);
@@ -104,7 +105,7 @@ function summarize(S) {
     return { label: hi > 100 ? `${lo}+` : `${lo}-${hi - 1}`, n: g.length, hit: g.length ? mean(g.map(s => s.win)) : null, fwd: g.length ? mean(g.map(s => s.fwd)) : null };
   });
   const ic = monthlyIC(S, s => s.score);
-  const setups = ['Oversold bounce', 'Neutral', 'Breakout (low edge)', 'Extended (do not chase)'].map(k => {
+  const setups = ['Oversold bounce', 'Neutral', 'Breakout', 'Extended'].map(k => {
     const g = S.filter(s => s.setup === k);
     return { setup: k, n: g.length, hit: g.length ? mean(g.map(s => s.win)) : null, fwd: g.length ? mean(g.map(s => s.fwd)) : null };
   });

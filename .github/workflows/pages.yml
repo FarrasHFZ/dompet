@@ -29,7 +29,7 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -39,11 +39,11 @@ jobs:
         with:
           node-version: 22
 
-      # Keep the last good headlines between runs (Google News sometimes refuses the runner) without committing every run.
+      # Keep the 35-day headline archive (and its month back-fill progress) between runs (Google News sometimes refuses the runner) without committing every run.
       - uses: actions/cache@v4
         with:
           path: |
-            swing-screener/data/news-cache.json
+            swing-screener/data/news-store.json
             swing-screener/data/alert-state.json
           key: news-cache-${{ github.run_id }}
           restore-keys: news-cache-

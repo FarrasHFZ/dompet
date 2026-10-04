@@ -87,3 +87,9 @@ Open https://farrashfz.github.io/dompet/screener/ and install it: iPhone Safari 
 
 ## Out-of-sample check
 `HOLDOUT=1 node tools/backtest.mjs` runs the same score on 40 IDX stocks that were not used to design it (`tools/holdout-universe.json`). The edge replicates but smaller (top bucket +0.9% vs 0.0% baseline, IC 0.08), and expectancy after stops and fees is about zero.
+
+## Universe and news coverage
+- **Universe: 100 stocks** (`UNIVERSE_SEED` in `apps-script/Code.gs`). The score was designed on 27 of them (`tools/design-universe.json`); the other 73 are out-of-sample (`HOLDOUT=1 node tools/backtest.mjs`).
+- **News: a rolling 35-day archive**, 30 days shown. One Google News query returns at most ~100 items, which for an active stock covers only 2-3 weeks, so `tools/news.mjs` splits each query into date windows and halves any window that hits the cap, down to single days. First runs back-fill the month in resumable chunks (progress survives in the CI cache and in the published `data/news-30d.json`); after that hot stocks (top 30 by liquidity, ACT picks, watchlist) and themes refresh hourly and everything every 6 hours.
+- Coverage is measured, not assumed: the News tab shows headlines per day, stocks with news, and which stocks are thin.
+- Limit: this is what Google News indexes, not every Indonesian outlet. Scoring still uses only the last 7 days (with decay); the month is for context and search.

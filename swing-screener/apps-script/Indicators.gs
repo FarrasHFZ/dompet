@@ -182,14 +182,14 @@ function analyse_(b, idxCloses, cfg) {
   const rr = risk > 0 ? (target - close) / risk : null;
   const roomToRes = sr.resistance / close - 1;
 
-  // Backtests on 5y of IDX large caps (tools/backtest.mjs) found no edge in trend/breakout chasing and a
-  // consistent edge in deeply oversold names, so the setup labels follow that.
+  // Backtests (tools/backtest.mjs): the oversold bounce is the only setup with a consistent edge. Breakout and
+  // Extended underperformed on the 27 design stocks but did BETTER on 73 unseen ones, so they are labels, not verdicts.
   const dist20Atr = sma20 !== null && atr ? (close - sma20) / atr : 0;
   const os = oversold_(rsi, ret(5), dist20Atr);
   let setup = 'Neutral';
   if (os >= 0.5) setup = 'Oversold bounce';
-  else if (breakout) setup = 'Breakout (low edge)';
-  else if ((rsi !== null && rsi > 65) || dist20Atr > 2) setup = 'Extended (do not chase)';
+  else if (breakout) setup = 'Breakout';
+  else if ((rsi !== null && rsi > 65) || dist20Atr > 2) setup = 'Extended';
 
   return {
     close: close, chg1d: ret(1), chg5d: ret(5), chg20d: ret(20), atr: atr, atrPct: atr / close,
@@ -258,7 +258,8 @@ function buildPick_(u, b, a, nw, own, cfg) {
   const score = score_(a, nw.score);
   const items = nw.items.slice().sort((x, y) => Math.abs(y.sentiment * y.share) - Math.abs(x.sentiment * x.share)).slice(0, 4)
     .map(i => ({ title: i.title, link: i.link, category: i.category, sentiment: i.sentiment, direct: i.share === 1, published: new Date(i.published).toISOString() }));
-  const action = a.setup === 'Extended (do not chase)' ? 'SKIP' : score >= ACT_SCORE ? 'ACT' : 'WATCH';
+  // No SKIP bucket: 'do not chase' held on the 27 design stocks but reversed on 73 unseen ones (tools/backtest.mjs HOLDOUT=1).
+  const action = score >= ACT_SCORE ? 'ACT' : 'WATCH';
   const round1 = v => Math.round(v * 10) / 10;
   const partsOut = {};
   Object.keys(parts).forEach(k => { partsOut[k] = round1(parts[k]); });
@@ -273,7 +274,7 @@ function buildPick_(u, b, a, nw, own, cfg) {
     hitRate: a.hitRate, hitN: a.hitN, newsScore: round1(nw.score), headlines: items,
     narrative: narrative_(u.ticker, a, nw.score, nw.top, cfg),
     spark: b.c.slice(-90).map(x => Math.round(x * 100) / 100),
-    sparkDates: b.d.slice(-90).map(x => new Date(x).toISOString().slice(0, 10)),
+    sparkFrom: new Date(b.d[Math.max(0, n - 90)]).toISOString().slice(0, 10), sparkTo: new Date(b.d[n - 1]).toISOString().slice(0, 10),
     ownership: own || null,
   };
 }

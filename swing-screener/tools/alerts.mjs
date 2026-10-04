@@ -18,7 +18,9 @@ const ageText = d => { const m = Math.round((Date.now() - new Date(d)) / 60000);
 export function buildMessages({ api, picks, newsRows, meta, market, state, watchlist, now = Date.now() }) {
   const out = { lines: [], seenAdd: [], first: !state.initialised };
   const interest = new Map(); // ticker -> pick
-  picks.forEach(p => { if (p.action === 'ACT' || watchlist.includes(p.ticker)) interest.set(p.ticker, p); });
+  // In a broad selloff dozens of stocks are ACT; only the 10 best (plus your watchlist) earn news alerts.
+  picks.filter(p => p.action === 'ACT').slice(0, 10).forEach(p => interest.set(p.ticker, p));
+  picks.forEach(p => { if (watchlist.includes(p.ticker)) interest.set(p.ticker, p); });
   const sectors = new Set([...interest.values()].map(p => p.sector));
   const seen = new Set(state.seenNews || []);
 
@@ -69,12 +71,12 @@ export function buildMessages({ api, picks, newsRows, meta, market, state, watch
     const added = acts.filter(t => !(state.lastActs || []).includes(t)), dropped = (state.lastActs || []).filter(t => !acts.includes(t));
     if (added.length || dropped.length || state.lastRegime !== market.regime) {
       head.push(`<b>Signals for ${esc(meta.asOf)} close</b> · ${esc(market.regime)} (${market.oversoldCount}/${market.of} oversold)` +
-        (added.length ? `\n➕ New ACT: ${added.map(t => `<b>${t}</b> ${picks.find(p => p.ticker === t).score}`).join(', ')}` : '') +
-        (dropped.length ? `\n➖ Left ACT: ${dropped.join(', ')}` : ''));
+        (added.length ? `\n➕ New ACT (${added.length}): ${added.slice(0, 10).map(t => `<b>${t}</b> ${picks.find(p => p.ticker === t).score}`).join(', ')}${added.length > 10 ? ', …' : ''}` : '') +
+        (dropped.length ? `\n➖ Left ACT (${dropped.length}): ${dropped.slice(0, 10).join(', ')}${dropped.length > 10 ? ', …' : ''}` : ''));
     }
   }
   if (out.first) {
-    head.push(`✅ <b>IDX Swing Screener alerts connected.</b>\nACT now: ${acts.length ? acts.join(', ') : 'none'}. Regime: ${esc(market.regime)}.\nYou'll get new risk / commissioner / insider / government-investment / corporate-action headlines for ACT picks${watchlist.length ? ' and your watchlist (' + watchlist.join(', ') + ')' : ''}. Edit swing-screener/data/watchlist.json to add stocks.`);
+    head.push(`✅ <b>IDX Swing Screener alerts connected.</b>\nACT now: ${acts.length} stocks; top ${Math.min(10, acts.length)}: ${acts.slice(0, 10).join(', ') || 'none'}. Regime: ${esc(market.regime)}.\nYou'll get new risk / commissioner / insider / government-investment / corporate-action headlines for ACT picks${watchlist.length ? ' and your watchlist (' + watchlist.join(', ') + ')' : ''}. Edit swing-screener/data/watchlist.json to add stocks.`);
   }
   out.lines = head.concat(out.lines);
   // Telegram caps a message at 4096 chars; cut whole blocks (never mid-tag, which makes Telegram reject the message).

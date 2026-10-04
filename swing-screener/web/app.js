@@ -14,7 +14,7 @@
 
   const MQ = window.matchMedia('(max-width: 760px)');
   MQ.addEventListener('change', () => { if (DATA) renderPicks(); });
-  let DATA = null, FILTER = 'ACT', OPEN = null, NEWSCAT = 'ALL', NEWSQ = '', HIDEWRAP = true;
+  let DATA = null, PQ = '', FILTER = 'ACT', OPEN = null, NEWSCAT = 'ALL', NEWSQ = '', HIDEWRAP = true;
 
   async function load() {
     const url = LS.get('sheetUrl'), token = LS.get('sheetToken');
@@ -58,7 +58,8 @@
     const el = $('#tab-picks');
     const P = DATA.picks;
     const cnt = a => P.filter(p => p.action === a).length;
-    const list = FILTER === 'ALL' ? P : P.filter(p => p.action === FILTER);
+    const q = PQ.trim().toLowerCase();
+    const list = (FILTER === 'ALL' ? P : P.filter(p => p.action === FILTER)).filter(p => !q || p.ticker.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.sector.toLowerCase().includes(q));
     const sel = P.find(x => x.ticker === OPEN);
     const detail = s => `<div class="card pad detailcard" id="dcard"><div class="dhead"><b class="tk">${esc(s.ticker)}</b> <span class="muted">${esc(s.name)} · ${esc(s.sector)}</span><button class="ghost" id="dclose">Close</button></div>${detailHtml(s)}</div>`;
     const empty = '<div class="card empty">Nothing in this filter today.</div>';
@@ -70,8 +71,9 @@
       </table></div>`;
     el.innerHTML = `
       <div class="chips" role="group" aria-label="Filter">
-        ${[['ACT', `ACT (${cnt('ACT')})`], ['WATCH', `Watch (${cnt('WATCH')})`], ['SKIP', `Skip (${cnt('SKIP')})`], ['ALL', `All (${P.length})`]]
+        ${[['ACT', `ACT (${cnt('ACT')})`], ['WATCH', `Watch (${cnt('WATCH')})`], ['ALL', `All (${P.length})`]]
           .map(([v, l]) => `<button class="chip" data-f="${v}" aria-pressed="${FILTER === v}">${l}</button>`).join('')}
+        <input type="search" id="pq" placeholder="Search ticker, name or sector" value="${esc(PQ)}" style="max-width:240px;margin-left:auto">
       </div>
       <p class="muted hint">ACT = oversold-bounce score ≥ ${DATA.meta.actScore}. Few days have any; "none today" is a valid answer.</p>
       ${body}`;
@@ -79,6 +81,8 @@
     el.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { FILTER = b.dataset.f; OPEN = null; renderPicks(); });
     el.querySelectorAll('tr.row, .pcard').forEach(n => n.onclick = e => { if (e.target.closest('a')) return; toggle(n.dataset.t); });
     const dc = $('#dclose', el); if (dc) dc.onclick = () => { OPEN = null; renderPicks(); };
+    const pq = $('#pq', el); if (pq) pq.oninput = e => { PQ = e.target.value; const pos = e.target.selectionStart; renderPicks(); const i = $('#pq'); i.focus(); i.setSelectionRange(pos, pos); };
+    el.querySelectorAll('[data-news]').forEach(b => b.onclick = () => { NEWSPERIOD = '30d'; NEWSQ = b.dataset.news; NEWSCAT = 'ALL'; NEWSLIMIT = 120; renderNews(); document.querySelector('[data-tab=news]').click(); });
   }
 
   // Phone layout: one card per stock instead of a 15-column table.
@@ -124,7 +128,7 @@
     return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(p.ticker)} last 90 closes with support, resistance, stop and target">
       ${lines}<path d="${line}" fill="none" stroke="var(--ink)" stroke-width="1.8"/>
       <circle cx="${x(p.spark.length - 1)}" cy="${y(p.close)}" r="3.5" fill="var(--accent)"/>
-      <text x="${L}" y="${H - 4}">${esc(p.sparkDates[0])}</text><text x="${W - R - 54}" y="${H - 4}">${esc(p.sparkDates[p.sparkDates.length - 1])}</text></svg>`;
+      <text x="${L}" y="${H - 4}">${esc(p.sparkFrom)}</text><text x="${W - R - 54}" y="${H - 4}">${esc(p.sparkTo)}</text></svg>`;
   }
 
   function ownHtml(o) {
@@ -164,31 +168,65 @@
         <small class="muted">*How often this stock hit +${DATA.meta.params.targetPct}% before the stop within ${DATA.meta.params.horizon}d in its own last year (n=${p.hitN}). Informational only: it did not predict anything in the backtest.</small>
         <h2>Why it matters: news</h2>
         ${p.headlines.length ? `<ul class="hl-list">${p.headlines.map(h => `<li><span class="tag ${esc(h.category)}">${esc(h.category)}</span><span><a href="${safeUrl(h.link)}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a><div class="muted">${ago(h.published)} · ${h.direct ? 'names this stock' : 'sector-wide'} · ${h.sentiment > 0 ? 'supports' : h.sentiment < 0 ? 'risk' : 'neutral'}</div></span></li>`).join('')}</ul>` : '<p class="muted">No scored headlines in the last 7 days.</p>'}
+        <button class="chip" data-news="${esc(p.ticker)}">All 30-day headlines for ${esc(p.ticker)} →</button>
         <h2>Who owns it</h2>${ownHtml(p.ownership)}
         <h2>Earnings (P&L)</h2>${fundHtml(p.fundamentals)}</div></div>`;
   }
 
   // ---------- news ----------
+  let ARCH = null, ARCH_LOADING = false, NEWSPERIOD = '7d', NEWSLIMIT = 120;
+  async function loadArchive() {
+    if (ARCH || ARCH_LOADING) return;
+    ARCH_LOADING = true;
+    try {
+      const r = await fetch('data/news-30d.json?t=' + Math.floor(Date.now() / 600000));
+      const j = await r.json();
+      ARCH = j.rows.map(c => ({ published: new Date(c[0] * 1000).toISOString(), source: c[1], title: c[2], link: c[3], category: c[4], tickers: c[5] ? c[5].split(',') : [], sectors: c[6] ? c[6].split(',') : [], sentiment: c[7], roundup: !!c[8] }))
+        .sort((a, b) => new Date(b.published) - new Date(a.published));
+    } catch { ARCH = []; }
+    ARCH_LOADING = false;
+    renderNews();
+  }
+
+  function coverageHtml(c) {
+    if (!c) return '';
+    const max = Math.max(1, ...c.perDay);
+    const bars = c.perDay.map((v, i) => `<i style="height:${Math.max(2, Math.round(v / max * 34))}px" title="${v} headlines, ${30 - i - 1} days ago"></i>`).join('');
+    const pending = c.backfilled < c.keys;
+    return `<div class="card pad cov"><div class="covhead"><b>${c.headlines.toLocaleString()}</b> headlines in the last ${c.days} days · <b>${c.tickersCovered}/${c.tickers}</b> stocks have news · <b>${c.daysWithNews}/${c.days}</b> days covered${c.oldest ? ' · since ' + esc(c.oldest) : ''}</div>
+      <div class="bars" role="img" aria-label="Headlines per day, last 30 days">${bars}</div>
+      <div class="muted">${pending ? `Month history is still filling in (${c.backfilled}/${c.keys} sources done; finishes within a few hourly runs). ` : ''}${c.thin.length ? `Quiet or thin (under 3 headlines): ${c.thin.slice(0, 14).map(esc).join(', ')}${c.thin.length > 14 ? ' +' + (c.thin.length - 14) : ''}. ` : ''}${esc(c.note)}</div></div>`;
+  }
+
   function renderNews() {
     const el = $('#tab-news');
     const cats = ['ALL', 'GOV_INVEST', 'COMMISSIONER', 'INSIDER', 'CORP_ACTION', 'CONTRACT', 'EARNINGS', 'MACRO', 'RISK', 'OTHER'];
-    let N = DATA.news || [];
+    const periods = [['24h', '24 hours'], ['7d', '7 days'], ['30d', '30 days']];
+    if (NEWSPERIOD === '30d') loadArchive();
+    const base = NEWSPERIOD === '30d' ? (ARCH || []) : (DATA.news || []);
+    const horizon = Date.now() - (NEWSPERIOD === '24h' ? 1 : NEWSPERIOD === '7d' ? 7 : 30) * 864e5;
+    let N = base.filter(n => +new Date(n.published) >= horizon);
     if (NEWSCAT !== 'ALL') N = N.filter(n => n.category === NEWSCAT);
     if (HIDEWRAP) N = N.filter(n => !n.roundup);
     if (NEWSQ) { const q = NEWSQ.toLowerCase(); N = N.filter(n => n.title.toLowerCase().includes(q) || n.tickers.join(' ').toLowerCase().includes(q)); }
-    const shown = N.slice(0, 120);
+    const shown = N.slice(0, NEWSLIMIT);
+    const loading = NEWSPERIOD === '30d' && !ARCH;
     el.innerHTML = `
+      ${coverageHtml(DATA.meta.newsCoverage)}
+      <div class="chips" style="margin-top:12px">${periods.map(([v, l]) => `<button class="chip" data-p="${v}" aria-pressed="${NEWSPERIOD === v}">${l}</button>`).join('')}</div>
       <div class="chips">${cats.map(c => `<button class="chip" data-c="${c}" aria-pressed="${NEWSCAT === c}">${c === 'ALL' ? 'All' : c.replace('_', ' ')}</button>`).join('')}</div>
       <div class="chips"><input type="search" id="nq" placeholder="Filter by ticker or word" value="${esc(NEWSQ)}" style="max-width:280px">
-        <label class="muted"><input type="checkbox" id="hw" ${HIDEWRAP ? 'checked' : ''}> hide market wraps (IHSG / recommendation lists)</label></div>
-      <div class="card">${shown.length ? shown.map(n => `<div class="nrow">
-        <div class="muted">${ago(n.published)}</div>
+        <label class="muted"><input type="checkbox" id="hw" ${HIDEWRAP ? 'checked' : ''}> hide market wraps</label></div>
+      <div class="card">${loading ? '<div class="empty">Loading the 30-day archive…</div>' : shown.length ? shown.map(n => `<div class="nrow">
+        <div class="muted">${NEWSPERIOD === '30d' ? esc(n.published.slice(5, 10)) + ' · ' : ''}${ago(n.published)}</div>
         <div><span class="tag ${esc(n.category)}">${esc(n.category.replace('_', ' '))}</span></div>
         <div><a class="t" href="${safeUrl(n.link)}" target="_blank" rel="noopener noreferrer">${esc(n.title)}</a>
           <div class="muted">${esc(n.source)}${n.tickers.length ? ' · ' + n.tickers.map(esc).join(', ') : ''}${!n.tickers.length && n.sectors.length ? ' · sector: ' + n.sectors.map(esc).join(', ') : ''}</div></div>
         <div>${arrow(n.sentiment)}</div></div>`).join('') : '<div class="empty">No headlines match.</div>'}</div>
-      <p class="muted">${N.length} match, showing ${shown.length}. Categories and direction come from keyword rules; see Scorecard for measured accuracy. Links open the original publisher through Google News.</p>`;
-    el.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { NEWSCAT = b.dataset.c; renderNews(); });
+      <div class="chips" style="margin-top:10px">${N.length > shown.length ? '<button class="chip" id="more">Show 200 more</button>' : ''}<span class="muted">${N.length} match, showing ${shown.length}. Categories and direction come from keyword rules (see Scorecard for measured accuracy). Links open the original publisher through Google News.</span></div>`;
+    el.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { NEWSCAT = b.dataset.c; NEWSLIMIT = 120; renderNews(); });
+    el.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { NEWSPERIOD = b.dataset.p; NEWSLIMIT = 120; renderNews(); });
+    const more = $('#more', el); if (more) more.onclick = () => { NEWSLIMIT += 200; renderNews(); };
     $('#nq', el).oninput = e => { NEWSQ = e.target.value; const pos = e.target.selectionStart; renderNews(); const i = $('#nq'); i.focus(); i.setSelectionRange(pos, pos); };
     $('#hw', el).onchange = e => { HIDEWRAP = e.target.checked; renderNews(); };
   }

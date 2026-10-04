@@ -3,7 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { loadEngine, universe, loadPrices, ROOT } from './lib.mjs';
-import { fetchNewsWithCache } from './news.mjs';
+import { refreshNewsStore, newsCoverage, archiveForWeb } from './news.mjs';
 import { buildOwnership } from './ownership.mjs';
 import { fetchFundamentals } from './fundamentals.mjs';
 import { runAlerts } from './alerts.mjs';
@@ -37,9 +37,25 @@ Object.keys(px).forEach(k => { px[k] = splitLive(k, px[k]); });
 const idx = px['^JKSE'] ? px['^JKSE'].c : null;
 if (!uni.some(u => px[u.ticker + '.JK'])) throw new Error('no price data fetched');
 
-let newsRows = [], newsStatus = { state: 'error', note: 'News fetch crashed; see build log.' };
-try { ({ rows: newsRows, status: newsStatus } = await fetchNewsWithCache(api, uni, path.join(ROOT, 'data', 'news-cache.json'))); } catch (e) { console.error('news failed', e.message); }
+// Hot stocks get news every run (hourly); the rest on a 6-hourly full sweep. Hot = most liquid 30 from the last published
+// snapshot + current ACT picks + the watchlist.
+let prevPicks = [];
+try { prevPicks = JSON.parse(fs.readFileSync(path.join(OUT, 'latest.json'), 'utf8')).picks || []; } catch { /* first build */ }
+let watch = [];
+try { watch = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'watchlist.json'), 'utf8')).map(t => String(t).toUpperCase()); } catch { /* none */ }
+const hot = [...new Set(prevPicks.slice().sort((a, b) => b.valueB - a.valueB).slice(0, 30).map(p => p.ticker)
+  .concat(prevPicks.filter(p => p.action === 'ACT').map(p => p.ticker), watch))];
+const hourUtc = new Date(NOW).getUTCHours();
+
+let newsRows = [], newsStatus = { state: 'error', note: 'News fetch crashed; see build log.' }, newsBackfill = {}, newsKeys = 0;
+try {
+  ({ rows: newsRows, status: newsStatus, backfill: newsBackfill, keys: newsKeys } = await refreshNewsStore(api, uni, {
+    storeFile: path.join(ROOT, 'data', 'news-store.json'), legacyFile: path.join(ROOT, 'data', 'news-cache.json'), hot, fullSweep: hourUtc % 6 === 0,
+  }));
+} catch (e) { console.error('news failed', e.message); }
 console.log('news:', newsStatus.state, '-', newsStatus.note);
+const coverage = newsCoverage(api, uni, newsRows, newsBackfill, newsKeys);
+console.log(`news coverage: ${coverage.headlines} headlines / 30d, ${coverage.tickersCovered}/${coverage.tickers} stocks, ${coverage.daysWithNews}/30 days, oldest ${coverage.oldest}, back-fill ${coverage.backfilled}/${coverage.keys}`);
 const news = api.scoreNews_(newsRows, uni, Date.now());
 
 let ownership = null;
@@ -98,17 +114,20 @@ function forwardStats() {
 }
 
 const bt = fs.existsSync(path.join(ROOT, 'data', 'backtest-summary.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'backtest-summary.json'), 'utf8')) : null;
-const newsOut = newsRows.slice(0, 400).map(r => {
+// latest.json carries the last 7 days (fast first paint); the 30-day archive is a separate file loaded on demand.
+const weekAgo = Date.now() - 7 * 864e5;
+const newsOut = newsRows.filter(r => new Date(r[0]).getTime() >= weekAgo && (r[5] || r[4] !== 'OTHER')).slice(0, 900).map(r => {
   const cl = api.classify_(r[2]);
   return { published: new Date(r[0]).toISOString(), source: r[1], title: r[2], link: r[3], category: r[4], tickers: r[5] ? r[5].split(',') : [], sectors: r[6] ? r[6].split(',') : [], sentiment: r[7], roundup: !!cl.roundup };
 });
+fs.writeFileSync(path.join(OUT, 'news-30d.json'), JSON.stringify(archiveForWeb(api, newsRows, newsBackfill)));
 
 const na = path.join(ROOT, 'data', 'news-accuracy.json');
 const out = {
   meta: {
     generatedAt: new Date().toISOString(), asOf,
     session: { state: sessionOpen ? 'open' : 'closed', note: sessionOpen ? "IDX is open: scores use the last completed close; live quotes are today's partial bar." : 'IDX is closed: scores use the latest close.' }, engine: 'oversold-v2', commit: (process.env.GITHUB_SHA || '').slice(0, 7), actScore: api.ACT_SCORE,
-    params: cfg, universe: uni.length, ranked: picks.length, skipped, newsCount: newsRows.length, newsStatus, sample: false,
+    params: cfg, universe: uni.length, ranked: picks.length, skipped, newsCount: newsRows.length, newsStatus, newsCoverage: coverage, sample: false,
     sources: { prices: 'Yahoo Finance daily bars (.JK)', news: 'Google News RSS (Indonesian)', ownership: ownership ? `${ownership.source} (as of ${ownership.asOf})` : null, fundamentals: 'Yahoo Finance fundamentals-timeseries (unofficial, last ~5 quarters)' },
   },
   backtestHoldout: fs.existsSync(path.join(ROOT, 'data', 'backtest-holdout.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'backtest-holdout.json'), 'utf8')) : null,
