@@ -3,7 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { loadEngine, universe, loadPrices, ROOT } from './lib.mjs';
-import { fetchNewsRows } from './news.mjs';
+import { fetchNewsWithCache } from './news.mjs';
 import { buildOwnership } from './ownership.mjs';
 import { fetchFundamentals } from './fundamentals.mjs';
 
@@ -19,8 +19,9 @@ const px = await loadPrices(uni.map(u => u.ticker + '.JK').concat(['^JKSE']), '2
 const idx = px['^JKSE'] ? px['^JKSE'].c : null;
 if (!uni.some(u => px[u.ticker + '.JK'])) throw new Error('no price data fetched');
 
-let newsRows = [];
-try { newsRows = await fetchNewsRows(api, uni); } catch (e) { console.error('news failed', e.message); }
+let newsRows = [], newsStatus = { state: 'error', note: 'News fetch crashed; see build log.' };
+try { ({ rows: newsRows, status: newsStatus } = await fetchNewsWithCache(api, uni, path.join(ROOT, 'data', 'news-cache.json'))); } catch (e) { console.error('news failed', e.message); }
+console.log('news:', newsStatus.state, '-', newsStatus.note);
 const news = api.scoreNews_(newsRows, uni, Date.now());
 
 let ownership = null;
@@ -84,7 +85,7 @@ const na = path.join(ROOT, 'data', 'news-accuracy.json');
 const out = {
   meta: {
     generatedAt: new Date().toISOString(), asOf, engine: 'oversold-v2', commit: (process.env.GITHUB_SHA || '').slice(0, 7), actScore: api.ACT_SCORE,
-    params: cfg, universe: uni.length, ranked: picks.length, skipped, newsCount: newsRows.length, sample: false,
+    params: cfg, universe: uni.length, ranked: picks.length, skipped, newsCount: newsRows.length, newsStatus, sample: false,
     sources: { prices: 'Yahoo Finance daily bars (.JK)', news: 'Google News RSS (Indonesian)', ownership: ownership ? `${ownership.source} (as of ${ownership.asOf})` : null, fundamentals: 'Yahoo Finance fundamentals-timeseries (unofficial, last ~5 quarters)' },
   },
   newsAccuracy: fs.existsSync(na) ? JSON.parse(fs.readFileSync(na, 'utf8')) : null, market, picks, news: newsOut, ownership: ownership ? { asOf: ownership.asOf, note: ownership.note } : null, backtest: bt, forward: forwardStats(),

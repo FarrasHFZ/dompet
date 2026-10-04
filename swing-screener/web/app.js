@@ -45,6 +45,8 @@
       <div class="stat"><small>Oversold now (score ≥ ${m.actScore})</small><b>${k.oversoldCount ?? '–'} / ${k.of ?? '–'}</b></div>
       <div class="stat"><small>IHSG</small><b>${f0(k.idxClose)}</b></div>
       <div class="stat"><small>IHSG RSI(14) · 20d</small><b>${k.idxRsi == null ? '–' : k.idxRsi.toFixed(0)} · ${k.idxChg20d == null ? '–' : (k.idxChg20d * 100).toFixed(1) + '%'}</b></div>`;
+    const ns = m.newsStatus;
+    $('#banner').innerHTML = ns && ns.state !== 'ok' ? `<div class="note"><b>News ${esc(ns.state)}.</b> ${esc(ns.note)}</div>` : '';
     renderPicks(); renderNews(); renderScore(); renderHow();
   }
 

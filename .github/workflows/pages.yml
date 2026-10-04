@@ -34,6 +34,7 @@ jobs:
         with:
           node-version: 22
 
+      # News falls back to data/news-cache.json when Google News blocks the runner (it answered 503 once).
       # Rebuild the screener snapshot (Yahoo prices + Google News + ownership). If a source blocks the
       # runner, the step fails softly and the last committed swing-screener/web/data/latest.json is served.
       - name: Build screener snapshot
@@ -47,7 +48,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add swing-screener/data/history swing-screener/data/ownership-history
+          git add swing-screener/data/history swing-screener/data/ownership-history swing-screener/data/news-cache.json
           git diff --cached --quiet || (git commit -m "screener: log picks $(date -u +%F)" && git push)
 
       - name: Assemble site (Dompet at /, screener at /screener/)
