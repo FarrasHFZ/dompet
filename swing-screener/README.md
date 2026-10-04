@@ -42,7 +42,12 @@ Without the Sheet, everything still runs from GitHub. The Sheet is worth keeping
 |---|---|---|
 | Shareholders ≥1% | KSEI via IDX, monthly PDF (since Feb 2026). `tools/ownership.mjs` reads a community CSV conversion; direct route = parse IDX's PDF with pdfplumber in a monthly Action. | In app (context only: monthly, gaps for some state stakes) |
 | Broker summary / foreign flow | IDX shows it on its site but has no public API and returns 403 to scripts. Vendors (Index Alpha, Invezgo, Sectors, GoAPI…) sell it. Cheapest plan found is about Rp200k/month; test any free tier first. | Not added. Add only after a backtest shows it helps |
-| Fundamentals | Vendors above, or IDX XBRL filings | Not added |
+| Fundamentals (P&L) | Yahoo fundamentals-timeseries: ~5 quarters of revenue, net income, equity for all 27 tickers. IDX filings (XBRL/Excel/PDF) are the official source but scripts get 403. | In app (context only, not scored: no point-in-time history to backtest it) |
+
+## The Sheet
+Sheet: https://docs.google.com/spreadsheets/d/1Jx8BhKPjgwVIPy2RscS8ULYvcltB8AqumdOMBfaBUHk/edit (account farrashafizh22@gmail.com, same as Dompet)
+Script: https://script.google.com/d/1ZhRytpT--7paWSvmyqGBlQR8Gp_elY-8qNX6qDh5E5Ee4N3b0XJrKowZ/edit (pushed, version 1 deployed as web app).
+First run needs a one-time Google authorization click, done from the Sheet menu.
 
 ## Deploy the Sheet side
 Uses the `personal` clasp profile (separate from Dompet's script):

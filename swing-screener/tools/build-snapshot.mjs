@@ -5,6 +5,7 @@ import path from 'node:path';
 import { loadEngine, universe, loadPrices, ROOT } from './lib.mjs';
 import { fetchNewsRows } from './news.mjs';
 import { buildOwnership } from './ownership.mjs';
+import { fetchFundamentals } from './fundamentals.mjs';
 
 const cfg = { targetPct: +(process.env.TARGET || 8), horizon: +(process.env.HORIZON || 15), stopMult: +(process.env.STOPMULT || 2.5), minValueB: 5 };
 const api = loadEngine();
@@ -25,6 +26,9 @@ const news = api.scoreNews_(newsRows, uni, Date.now());
 let ownership = null;
 try { ownership = await buildOwnership(uni.map(u => u.ticker)); } catch (e) { console.error('ownership failed', e.message); }
 
+let fundamentals = {};
+try { fundamentals = await fetchFundamentals(uni.map(u => u.ticker)); } catch (e) { console.error('fundamentals failed', e.message); }
+
 const picks = [], skipped = [];
 let lastBar = null;
 uni.forEach(u => {
@@ -36,7 +40,9 @@ uni.forEach(u => {
   const nw = news[u.ticker];
   const d = b.d[b.d.length - 1]; if (!lastBar || d > lastBar) lastBar = d;
   const own = ownership && ownership.byTicker ? ownership.byTicker[u.ticker] : null;
-  picks.push(api.buildPick_(u, b, a, nw, own, cfg));
+  const pk = api.buildPick_(u, b, a, nw, own, cfg);
+  pk.fundamentals = fundamentals[u.ticker] || null;
+  picks.push(pk);
 });
 picks.sort((x, y) => y.score - x.score);
 const market = api.marketRead_(picks, idx);
@@ -79,7 +85,7 @@ const out = {
   meta: {
     generatedAt: new Date().toISOString(), asOf, engine: 'oversold-v2', commit: (process.env.GITHUB_SHA || '').slice(0, 7), actScore: api.ACT_SCORE,
     params: cfg, universe: uni.length, ranked: picks.length, skipped, newsCount: newsRows.length, sample: false,
-    sources: { prices: 'Yahoo Finance daily bars (.JK)', news: 'Google News RSS (Indonesian)', ownership: ownership ? `${ownership.source} (as of ${ownership.asOf})` : null },
+    sources: { prices: 'Yahoo Finance daily bars (.JK)', news: 'Google News RSS (Indonesian)', ownership: ownership ? `${ownership.source} (as of ${ownership.asOf})` : null, fundamentals: 'Yahoo Finance fundamentals-timeseries (unofficial, last ~5 quarters)' },
   },
   newsAccuracy: fs.existsSync(na) ? JSON.parse(fs.readFileSync(na, 'utf8')) : null, market, picks, news: newsOut, ownership: ownership ? { asOf: ownership.asOf, note: ownership.note } : null, backtest: bt, forward: forwardStats(),
 };

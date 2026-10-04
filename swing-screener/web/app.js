@@ -75,7 +75,7 @@
     const h = p.headlines[0];
     const open = OPEN === p.ticker;
     return `<tr class="row ${open ? 'open' : ''}" data-t="${esc(p.ticker)}">
-      <td><span class="tk">${esc(p.ticker)}</span><div class="nm">${esc(p.name)}</div></td>
+      <td><span class="tk">${esc(p.ticker)}</span><div class="nm">${esc(p.name)}${p.ownership ? " · " + esc(p.ownership.control) : ""}</div></td>
       <td><span class="act ${p.action}">${p.action}</span></td>
       <td><span class="score"><i style="width:${Math.round(p.score * 0.6)}px"></i><b>${p.score}</b></span></td>
       <td>${esc(p.setup)}</td><td class="n">${f0(p.close)}</td><td class="n">${pc(p.chg1d)}</td><td class="n">${pc(p.chg5d)}</td>
@@ -103,9 +103,26 @@
 
   function ownHtml(o) {
     if (!o) return '<p class="muted">No ≥1% holder record for this ticker in the latest monthly file.</p>';
-    return `<table><thead><tr><th>Holder (≥1%)</th><th>Type</th><th class="n">%</th></tr></thead><tbody>
-      ${o.holders.map(h => `<tr><td>${esc(h.name)}${h.foreign ? ' <span class="tag">foreign</span>' : ''}</td><td>${esc(h.type)}</td><td class="n">${h.pct.toFixed(2)}</td></tr>`).join('')}</tbody></table>
-      <p class="muted">${o.count} holders ≥1% own ${o.listedPct}% combined; foreign ${o.foreignPct}%${o.stateLinked ? '; state-linked holders ≥10%' : ''}. Monthly data: it shows who holds, not who is buying today. Custodian accounts can hide the real owner, and some state stakes are missing (BBRI/BBNI).</p>`;
+    const mix = Object.entries(o.typeMix || {}).sort((a, b) => b[1] - a[1]);
+    const chg = o.changes;
+    return `<p><span class="tag ${o.coverage === 'low' ? 'RISK' : ''}">${esc(o.control)}</span> ${esc(o.note)}</p>
+      <div class="mix" role="img" aria-label="Holder type mix">${mix.map(([k, v]) => `<i style="flex:${v}" title="${esc(k)} ${v}%"></i>`).join('')}</div>
+      <p class="muted">${mix.map(([k, v]) => `${esc(k)} ${v}%`).join(' · ')}</p>
+      <div class="scroll"><table><thead><tr><th>Holder (≥1%)</th><th>Type</th><th class="n">%</th></tr></thead><tbody>
+      ${o.holders.map(h => `<tr><td>${esc(h.name)}${h.foreign ? ' <span class="tag">foreign</span>' : ''}</td><td>${esc(h.type)}</td><td class="n">${h.pct.toFixed(2)}</td></tr>`).join('')}</tbody></table></div>
+      ${chg ? (chg.length ? `<p><b>Since last month:</b> ${chg.map(c => c.kind === 'new' ? `<span class="up">+ ${esc(c.name)} (${c.to}%)</span>` : c.kind === 'exit' ? `<span class="down">− ${esc(c.name)} exited (was ${c.from}%)</span>` : `${esc(c.name)} ${c.from}% → ${c.to}%`).join('; ')}</p>` : '<p class="muted">No holder moved by 0.5 points or more since last month.</p>') : '<p class="muted">Month-over-month changes appear once a second monthly file is available.</p>'}
+      <p class="muted">Monthly data shows who holds, not who is buying today. Custodian accounts can hide the real owner.</p>`;
+  }
+
+  const idr = x => (x == null ? '–' : Math.abs(x) >= 1e12 ? (x / 1e12).toFixed(1) + 'T' : (x / 1e9).toFixed(0) + 'B');
+  function fundHtml(f) {
+    if (!f) return '<p class="muted">No quarterly financials from the free source for this ticker.</p>';
+    const flags = f.flags.map(x => `<span class="tag ${x.startsWith('Profit up') ? '' : 'RISK'}">${esc(x)}</span>`).join(' ');
+    const rows = f.quarters.map(q => `<tr><td>${esc(q.date)}</td><td class="n">${idr(q.rev)}</td><td class="n ${q.ni < 0 ? 'down' : ''}">${idr(q.ni)}</td><td class="n">${q.rev && q.ni != null ? (q.ni / q.rev * 100).toFixed(1) + '%' : '–'}</td></tr>`).join('');
+    const yoy = f.yoy == null ? 'YoY n/a' : (f.yoy >= 0 ? '+' : '') + (f.yoy * 100).toFixed(0) + '% YoY';
+    return `${flags ? `<p>${flags}</p>` : ''}
+      <div class="scroll"><table><thead><tr><th>Quarter</th><th class="n">Revenue</th><th class="n">Net income</th><th class="n">Margin</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <p class="muted">Rp, per quarter (not cumulative). Latest net income ${yoy}. Free vendor data, last ~5 quarters, unaudited; a bank's "revenue" is not comparable with other sectors. Context only, not part of the score.</p>`;
   }
 
   function detailHtml(p) {
@@ -121,7 +138,8 @@
         <small class="muted">*How often this stock hit +${DATA.meta.params.targetPct}% before the stop within ${DATA.meta.params.horizon}d in its own last year (n=${p.hitN}). Informational only: it did not predict anything in the backtest.</small>
         <h2>Why it matters: news</h2>
         ${p.headlines.length ? `<ul class="hl-list">${p.headlines.map(h => `<li><span class="tag ${esc(h.category)}">${esc(h.category)}</span><span><a href="${safeUrl(h.link)}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a><div class="muted">${ago(h.published)} · ${h.direct ? 'names this stock' : 'sector-wide'} · ${h.sentiment > 0 ? 'supports' : h.sentiment < 0 ? 'risk' : 'neutral'}</div></span></li>`).join('')}</ul>` : '<p class="muted">No scored headlines in the last 7 days.</p>'}
-        <h2>Who owns it</h2>${ownHtml(p.ownership)}</div></div>`;
+        <h2>Who owns it</h2>${ownHtml(p.ownership)}
+        <h2>Earnings (P&L)</h2>${fundHtml(p.fundamentals)}</div></div>`;
   }
 
   // ---------- news ----------

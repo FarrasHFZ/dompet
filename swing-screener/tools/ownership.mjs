@@ -32,6 +32,8 @@ export async function fetchLatestCsv() {
   return { name: f.name, text };
 }
 
+const TYPE_NAMES = { CP: 'Corporate', ID: 'Individual', MF: 'Mutual fund', PF: 'Pension fund', IS: 'Insurance', IB: 'Financial inst.', SC: 'Securities co.', FD: 'Foundation', OT: 'Other' };
+
 export function summarize(rows, tickers) {
   const by = {};
   rows.forEach(r => { (by[r.share_code] = by[r.share_code] || []).push(r); });
@@ -41,15 +43,50 @@ export function summarize(rows, tickers) {
       .sort((a, b) => b.pct - a.pct);
     if (!h.length) { out[t] = null; return; }
     const sum = h.reduce((s, x) => s + x.pct, 0);
-    out[t] = {
+    const typeMix = {};
+    h.forEach(x => { const k = TYPE_NAMES[x.type] || 'Other'; typeMix[k] = +((typeMix[k] || 0) + x.pct).toFixed(2); });
+    const o = {
       holders: h.slice(0, 6), count: h.length, listedPct: +sum.toFixed(2),
       foreignPct: +h.filter(x => x.foreign).reduce((s, x) => s + x.pct, 0).toFixed(2),
-      topPct: h[0].pct, statePct: +h.filter(x => STATE.test(x.name)).reduce((s, x) => s + x.pct, 0).toFixed(2),
-      stateLinked: false,
+      topPct: h[0].pct, top3Pct: +h.slice(0, 3).reduce((s, x) => s + x.pct, 0).toFixed(2),
+      statePct: +h.filter(x => STATE.test(x.name)).reduce((s, x) => s + x.pct, 0).toFixed(2), typeMix,
     };
-    out[t].stateLinked = out[t].statePct >= 10;
+    o.stateLinked = o.statePct >= 10;
+    // Control read. Low coverage means a big holder (often the state) is missing from the >=1% list, so do not call it "widely held".
+    o.coverage = o.listedPct >= 40 ? 'ok' : 'low';
+    o.control = o.topPct >= 50 ? 'Controlled' : o.topPct >= 25 ? 'Anchor holder' : o.coverage === 'low' ? 'Unclear (data gap)' : 'Widely held';
+    const top = h[0];
+    const bits = [`${o.control}: ${top.name.replace(/\s+/g, ' ').trim()} ${top.pct}%`];
+    if (o.foreignPct >= 20) bits.push(`foreign ${o.foreignPct}%`);
+    if (o.stateLinked) bits.push(`state-linked ${o.statePct}%`);
+    if (o.coverage === 'ok') bits.push(`${o.count} holders ≥1% own ${o.listedPct}%, up to ${(100 - o.listedPct).toFixed(0)}% sits with smaller holders or unlisted blocks`);
+    else bits.push(`≥1% list covers only ${o.listedPct}% of shares: the main holder is probably missing`);
+    if (o.top3Pct >= 85) bits.push('very concentrated: thin real float, moves can be sharp both ways');
+    o.note = bits.join('; ') + '.';
+    out[t] = o;
   });
   return out;
+}
+
+const HISTDIR = path.join(ROOT, 'data', 'ownership-history');
+
+// Month-over-month: new holders, exits, and stake changes of 0.5 percentage points or more.
+export function diffOwnership(prev, cur, tickers) {
+  const changes = {};
+  tickers.forEach(t => {
+    const p = new Map((prev[t] || []).map(([n, v]) => [n, v])), c = new Map((cur[t] || []).map(([n, v]) => [n, v]));
+    const ch = [];
+    c.forEach((v, n) => { if (!p.has(n)) ch.push({ name: n, kind: 'new', to: v }); else if (Math.abs(v - p.get(n)) >= 0.5) ch.push({ name: n, kind: v > p.get(n) ? 'up' : 'down', from: p.get(n), to: v }); });
+    p.forEach((v, n) => { if (!c.has(n)) ch.push({ name: n, kind: 'exit', from: v }); });
+    changes[t] = ch;
+  });
+  return changes;
+}
+
+function slim(rows, tickers) {
+  const by = {};
+  rows.filter(r => tickers.includes(r.share_code)).forEach(r => { (by[r.share_code] = by[r.share_code] || []).push([r.investor_name, +r.percentage]); });
+  return by;
 }
 
 export async function buildOwnership(tickers) {
@@ -63,7 +100,24 @@ export async function buildOwnership(tickers) {
     if (fs.existsSync(f)) return JSON.parse(fs.readFileSync(f, 'utf8'));
     throw e;
   }
-  return { asOf, source, note: 'Holders of 1% or more only, from KSEI via IDX (monthly). Custodian/omnibus accounts hide the real owner.', byTicker: summarize(rows, tickers) };
+  const byTicker = summarize(rows, tickers);
+  // Keep one slim file per month so changes can be tracked as new months appear.
+  fs.mkdirSync(HISTDIR, { recursive: true });
+  const cur = slim(rows, tickers);
+  const mine = path.join(HISTDIR, `${asOf}.json`);
+  if (!fs.existsSync(mine)) fs.writeFileSync(mine, JSON.stringify(cur));
+  const prior = fs.readdirSync(HISTDIR).filter(f => /^\d{8}\.json$/.test(f) && f < `${asOf}.json`).sort().pop();
+  let changes = null, prevAsOf = null;
+  if (prior) {
+    prevAsOf = prior.slice(0, 8);
+    changes = diffOwnership(JSON.parse(fs.readFileSync(path.join(HISTDIR, prior), 'utf8')), cur, tickers);
+    tickers.forEach(t => { if (byTicker[t]) byTicker[t].changes = changes[t]; });
+  }
+  return {
+    asOf, prevAsOf, source, changesAvailable: !!prior,
+    note: 'Holders of 1% or more only, from KSEI via IDX (monthly). Custodian/omnibus accounts hide the real owner, and some state stakes are missing.',
+    byTicker,
+  };
 }
 
 if (process.argv[1] && process.argv[1].endsWith('ownership.mjs')) {

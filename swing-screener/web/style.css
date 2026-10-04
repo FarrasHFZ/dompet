@@ -40,12 +40,12 @@ input[type=search],input[type=url],input[type=password]{font:inherit;padding:6px
 .scroll{overflow-x:auto}
 table{border-collapse:collapse;width:100%;font-size:13px}
 th{background:var(--head);color:#fff;text-align:left;font-weight:600;padding:8px 10px;white-space:nowrap;position:sticky;top:0}
-td{padding:8px 10px;border-top:1px solid var(--line);white-space:nowrap}
+td{padding:8px 8px;border-top:1px solid var(--line);white-space:nowrap}
 td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 tr.row{cursor:pointer}
 tr.row:hover td{background:rgba(37,99,235,.06)}
 tr.open td{background:rgba(37,99,235,.08)}
-td.hl{max-width:340px;overflow:hidden;text-overflow:ellipsis}
+td.hl{max-width:230px;overflow:hidden;text-overflow:ellipsis}
 .tk{font-weight:700}
 .nm{color:var(--mute);font-size:12px}
 .up{color:var(--up)}.down{color:var(--down)}.mute{color:var(--mute)}.muted{color:var(--mute);font-size:12.5px}
@@ -91,10 +91,13 @@ svg.chart{width:100%;height:auto;display:block;background:var(--card);border:1px
 dialog{border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);max-width:460px;width:calc(100% - 32px)}
 dialog::backdrop{background:rgba(0,0,0,.5)}
 dialog label{display:block;margin:10px 0;font-size:12.5px;color:var(--mute)}
-.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .empty{padding:28px;text-align:center;color:var(--mute)}
 .detailcard{margin-bottom:12px;scroll-margin-top:8px}
 .dhead{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;margin-bottom:10px}
 .dhead button{margin-left:auto}
 .dgrid>*{min-width:0}
 .kv{grid-template-columns:repeat(auto-fit,minmax(96px,1fr))}
+.mix{display:flex;height:8px;border-radius:4px;overflow:hidden;gap:1px;margin:6px 0}
+.mix i{display:block;background:var(--accent)}
+.mix i:nth-child(2){opacity:.7}.mix i:nth-child(3){opacity:.5}.mix i:nth-child(n+4){opacity:.3}

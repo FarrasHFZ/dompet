@@ -1,7 +1,9 @@
 {
  "asOf": "20260227",
+ "prevAsOf": null,
  "source": "aryakdaniswara/idx-stock-ownership/kepemilikan_saham_20260227.csv",
- "note": "Holders of 1% or more only, from KSEI via IDX (monthly). Custodian/omnibus accounts hide the real owner.",
+ "changesAvailable": false,
+ "note": "Holders of 1% or more only, from KSEI via IDX (monthly). Custodian/omnibus accounts hide the real owner, and some state stakes are missing.",
  "byTicker": {
   "BBCA": {
    "holders": [
@@ -38,8 +40,16 @@
    "listedPct": 58.18,
    "foreignPct": 0,
    "topPct": 54.94,
+   "top3Pct": 57.16,
    "statePct": 0,
-   "stateLinked": false
+   "typeMix": {
+    "Corporate": 57.03,
+    "Individual": 1.15
+   },
+   "stateLinked": false,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: PT DWIMURIA INVESTAMA ANDALAN 54.94%; 4 holders ≥1% own 58.18%, up to 42% sits with smaller holders or unlisted blocks."
   },
   "BBRI": {
    "holders": [
@@ -69,8 +79,17 @@
    "listedPct": 5.86,
    "foreignPct": 1.14,
    "topPct": 3.63,
+   "top3Pct": 5.86,
    "statePct": 4.72,
-   "stateLinked": false
+   "typeMix": {
+    "Other": 3.63,
+    "Pension fund": 1.14,
+    "Insurance": 1.09
+   },
+   "stateLinked": false,
+   "coverage": "low",
+   "control": "Unclear (data gap)",
+   "note": "Unclear (data gap): INDONESIA INVESTMENT AUTHORITY 3.63%; ≥1% list covers only 5.86% of shares: the main holder is probably missing."
   },
   "BMRI": {
    "holders": [
@@ -107,8 +126,18 @@
    "listedPct": 62.07,
    "foreignPct": 1.26,
    "topPct": 51.48,
+   "top3Pct": 60.81,
    "statePct": 60.81,
-   "stateLinked": true
+   "typeMix": {
+    "Corporate": 51.48,
+    "Other": 8,
+    "Insurance": 1.33,
+    "Pension fund": 1.26
+   },
+   "stateLinked": true,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: PERUSAHAAN PERSEROAN (PERSERO) PT DANANTARA ASSET MANAGEMENT 51.48%; state-linked 60.81%; 4 holders ≥1% own 62.07%, up to 38% sits with smaller holders or unlisted blocks."
   },
   "BBNI": {
    "holders": [
@@ -145,8 +174,17 @@
    "listedPct": 7.95,
    "foreignPct": 1.18,
    "topPct": 3.51,
+   "top3Pct": 6.78,
    "statePct": 4.68,
-   "stateLinked": false
+   "typeMix": {
+    "Insurance": 4.68,
+    "Individual": 2.09,
+    "Pension fund": 1.18
+   },
+   "stateLinked": false,
+   "coverage": "low",
+   "control": "Unclear (data gap)",
+   "note": "Unclear (data gap): DJS KETENAGAKERJAAN PROGRAM JAMINAN HARI TUA 3.51%; ≥1% list covers only 7.95% of shares: the main holder is probably missing."
   },
   "BRIS": {
    "holders": [
@@ -183,8 +221,16 @@
    "listedPct": 91.34,
    "foreignPct": 1.25,
    "topPct": 51.47,
+   "top3Pct": 90.09,
    "statePct": 90.09,
-   "stateLinked": true
+   "typeMix": {
+    "Financial inst.": 90.09,
+    "Pension fund": 1.25
+   },
+   "stateLinked": true,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: PT BANK MANDIRI 51.47%; state-linked 90.09%; 4 holders ≥1% own 91.34%, up to 9% sits with smaller holders or unlisted blocks; very concentrated: thin real float, moves can be sharp both ways."
   },
   "TLKM": {
    "holders": [
@@ -235,8 +281,19 @@
    "listedPct": 61.69,
    "foreignPct": 7.72,
    "topPct": 51.57,
+   "top3Pct": 56.52,
    "statePct": 53.97,
-   "stateLinked": true
+   "typeMix": {
+    "Corporate": 51.57,
+    "Financial inst.": 4.85,
+    "Insurance": 2.4,
+    "Pension fund": 1.83,
+    "Other": 1.04
+   },
+   "stateLinked": true,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: PERUSAHAAN PERSEROAN (PERSERO) PT DANANTARA ASSET MANAGEMENT 51.57%; state-linked 53.97%; 6 holders ≥1% own 61.69%, up to 38% sits with smaller holders or unlisted blocks."
   },
   "ISAT": {
    "holders": [
@@ -287,8 +344,18 @@
    "listedPct": 88.63,
    "foreignPct": 70.67,
    "topPct": 65.64,
+   "top3Pct": 83.6,
    "statePct": 9.63,
-   "stateLinked": false
+   "typeMix": {
+    "Other": 65.64,
+    "Corporate": 19.58,
+    "Mutual fund": 2.15,
+    "Pension fund": 1.26
+   },
+   "stateLinked": false,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: OOREDOO HUTCHISON ASIA PTE. LTD. 65.64%; foreign 70.67%; 6 holders ≥1% own 88.63%, up to 11% sits with smaller holders or unlisted blocks."
   },
   "ASII": {
    "holders": [
@@ -339,8 +406,18 @@
    "listedPct": 61.17,
    "foreignPct": 57.42,
    "topPct": 50.11,
+   "top3Pct": 57.59,
    "statePct": 2.74,
-   "stateLinked": false
+   "typeMix": {
+    "Corporate": 55.86,
+    "Insurance": 2.74,
+    "Mutual fund": 1.29,
+    "Pension fund": 1.28
+   },
+   "stateLinked": false,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: JARDINE CYCLE AND CARRIAGE LIMITED 50.11%; foreign 57.42%; 6 holders ≥1% own 61.17%, up to 39% sits with smaller holders or unlisted blocks."
   },
   "ADRO": {
    "holders": [
@@ -391,8 +468,16 @@
    "listedPct": 70.58,
    "foreignPct": 1.63,
    "topPct": 47.79,
+   "top3Pct": 58.52,
    "statePct": 0,
-   "stateLinked": false
+   "typeMix": {
+    "Corporate": 55.42,
+    "Individual": 15.16
+   },
+   "stateLinked": false,
+   "coverage": "ok",
+   "control": "Anchor holder",
+   "note": "Anchor holder: ADARO STRATEGIC INVESTMENTS 47.79%; 8 holders ≥1% own 70.58%, up to 29% sits with smaller holders or unlisted blocks."
   },
   "PTBA": {
    "holders": [
@@ -415,8 +500,16 @@
    "listedPct": 67.47,
    "foreignPct": 0,
    "topPct": 65.93,
+   "top3Pct": 67.47,
    "statePct": 67.47,
-   "stateLinked": true
+   "typeMix": {
+    "Corporate": 65.93,
+    "Insurance": 1.54
+   },
+   "stateLinked": true,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: PERUSAHAAN PERSEROAN (PERSERO) PT MINERAL INDUSTRI INDONESIA 65.93%; state-linked 67.47%; 2 holders ≥1% own 67.47%, up to 33% sits with smaller holders or unlisted blocks."
   },
   "PGAS": {
    "holders": [
@@ -460,8 +553,17 @@
    "listedPct": 63.89,
    "foreignPct": 1.27,
    "topPct": 56.96,
+   "top3Pct": 61.26,
    "statePct": 59.46,
-   "stateLinked": true
+   "typeMix": {
+    "Corporate": 58.23,
+    "Insurance": 3.86,
+    "Securities co.": 1.8
+   },
+   "stateLinked": true,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: PT PERTAMINA (PERSERO) 56.96%; state-linked 59.46%; 5 holders ≥1% own 63.89%, up to 36% sits with smaller holders or unlisted blocks."
   },
   "MEDC": {
    "holders": [
@@ -505,8 +607,16 @@
    "listedPct": 79.17,
    "foreignPct": 24.85,
    "topPct": 51.5,
+   "top3Pct": 76.35,
    "statePct": 0,
-   "stateLinked": false
+   "typeMix": {
+    "Corporate": 78.16,
+    "Insurance": 1.01
+   },
+   "stateLinked": false,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: PT. MEDCO DAYA ABADI LESTARI 51.5%; foreign 24.85%; 5 holders ≥1% own 79.17%, up to 21% sits with smaller holders or unlisted blocks."
   },
   "AMMN": {
    "holders": [
@@ -557,8 +667,17 @@
    "listedPct": 90.29,
    "foreignPct": 8.89,
    "topPct": 32.17,
+   "top3Pct": 68.54,
    "statePct": 0,
-   "stateLinked": false
+   "typeMix": {
+    "Corporate": 86.74,
+    "Other": 2.49,
+    "Mutual fund": 1.06
+   },
+   "stateLinked": false,
+   "coverage": "ok",
+   "control": "Anchor holder",
+   "note": "Anchor holder: PT SUMBER GEMILANG PERSADA 32.17%; 9 holders ≥1% own 90.29%, up to 10% sits with smaller holders or unlisted blocks."
   },
   "ANTM": {
    "holders": [
@@ -574,8 +693,15 @@
    "listedPct": 65,
    "foreignPct": 0,
    "topPct": 65,
+   "top3Pct": 65,
    "statePct": 65,
-   "stateLinked": true
+   "typeMix": {
+    "Corporate": 65
+   },
+   "stateLinked": true,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: PERUSAHAAN PERSEROAN (PERSERO) PT MINERAL INDUSTRI INDONESIA 65%; state-linked 65%; 1 holders ≥1% own 65%, up to 35% sits with smaller holders or unlisted blocks."
   },
   "INCO": {
    "holders": [
@@ -626,8 +752,18 @@
    "listedPct": 84.46,
    "foreignPct": 48.21,
    "topPct": 34,
+   "top3Pct": 79.36,
    "statePct": 36.25,
-   "stateLinked": true
+   "typeMix": {
+    "Corporate": 79.36,
+    "Insurance": 2.25,
+    "Pension fund": 1.62,
+    "Other": 1.23
+   },
+   "stateLinked": true,
+   "coverage": "ok",
+   "control": "Anchor holder",
+   "note": "Anchor holder: PERUSAHAAN PERSEROAN (PERSERO) PT MINERAL INDUSTRI INDONESIA 34%; foreign 48.21%; state-linked 36.25%; 6 holders ≥1% own 84.46%, up to 16% sits with smaller holders or unlisted blocks."
   },
   "MDKA": {
    "holders": [
@@ -678,8 +814,18 @@
    "listedPct": 63.25,
    "foreignPct": 4.93,
    "topPct": 19.37,
+   "top3Pct": 38.71,
    "statePct": 2.15,
-   "stateLinked": false
+   "typeMix": {
+    "Corporate": 45.98,
+    "Individual": 9.73,
+    "Other": 3.98,
+    "Insurance": 3.56
+   },
+   "stateLinked": false,
+   "coverage": "ok",
+   "control": "Widely held",
+   "note": "Widely held: SARATOGA INVESTAMA SEDAYA TBK PT 19.37%; 12 holders ≥1% own 63.25%, up to 37% sits with smaller holders or unlisted blocks."
   },
   "CPIN": {
    "holders": [
@@ -730,8 +876,18 @@
    "listedPct": 86.17,
    "foreignPct": 24.34,
    "topPct": 55.53,
+   "top3Pct": 66.2,
    "statePct": 0,
-   "stateLinked": false
+   "typeMix": {
+    "Corporate": 67.64,
+    "Financial inst.": 14.53,
+    "Securities co.": 2.39,
+    "Insurance": 1.61
+   },
+   "stateLinked": false,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: CHAROEN POKPHAND INDONESIA GROUP 55.53%; foreign 24.34%; 9 holders ≥1% own 86.17%, up to 14% sits with smaller holders or unlisted blocks."
   },
   "JPFA": {
    "holders": [
@@ -782,8 +938,17 @@
    "listedPct": 74.76,
    "foreignPct": 72.52,
    "topPct": 55.43,
+   "top3Pct": 63.21,
    "statePct": 0,
-   "stateLinked": false
+   "typeMix": {
+    "Corporate": 63.94,
+    "Financial inst.": 8.58,
+    "Individual": 2.24
+   },
+   "stateLinked": false,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: JAPFA LTD 55.43%; foreign 72.52%; 8 holders ≥1% own 74.76%, up to 25% sits with smaller holders or unlisted blocks."
   },
   "ICBP": {
    "holders": [
@@ -820,8 +985,18 @@
    "listedPct": 84.82,
    "foreignPct": 2.43,
    "topPct": 80.53,
+   "top3Pct": 83.62,
    "statePct": 1.86,
-   "stateLinked": false
+   "typeMix": {
+    "Corporate": 80.53,
+    "Insurance": 1.86,
+    "Pension fund": 1.23,
+    "Mutual fund": 1.2
+   },
+   "stateLinked": false,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: INDOFOOD SUKSES MAKMUR TBK 80.53%; 4 holders ≥1% own 84.82%, up to 15% sits with smaller holders or unlisted blocks."
   },
   "INDF": {
    "holders": [
@@ -872,8 +1047,18 @@
    "listedPct": 62.77,
    "foreignPct": 59.03,
    "topPct": 50.07,
+   "top3Pct": 58.77,
    "statePct": 3.74,
-   "stateLinked": false
+   "typeMix": {
+    "Corporate": 55.03,
+    "Insurance": 3.74,
+    "Financial inst.": 1.54,
+    "Mutual fund": 2.46
+   },
+   "stateLinked": false,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: FIRST PACIFIC INVESTMENT MANAGEMENT LTD 50.07%; foreign 59.03%; 6 holders ≥1% own 62.77%, up to 37% sits with smaller holders or unlisted blocks."
   },
   "UNVR": {
    "holders": [
@@ -896,8 +1081,16 @@
    "listedPct": 86.05,
    "foreignPct": 0,
    "topPct": 84.99,
+   "top3Pct": 86.05,
    "statePct": 1.06,
-   "stateLinked": false
+   "typeMix": {
+    "Corporate": 84.99,
+    "Insurance": 1.06
+   },
+   "stateLinked": false,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: UNILEVER INDONESIA TBK. 84.99%; 2 holders ≥1% own 86.05%, up to 14% sits with smaller holders or unlisted blocks; very concentrated: thin real float, moves can be sharp both ways."
   },
   "KLBF": {
    "holders": [
@@ -948,8 +1141,18 @@
    "listedPct": 69.88,
    "foreignPct": 3.78,
    "topPct": 10.47,
+   "top3Pct": 30.86,
    "statePct": 2.01,
-   "stateLinked": false
+   "typeMix": {
+    "Corporate": 64.09,
+    "Mutual fund": 2.48,
+    "Insurance": 2.01,
+    "Other": 1.3
+   },
+   "stateLinked": false,
+   "coverage": "ok",
+   "control": "Widely held",
+   "note": "Widely held: PT LADANG IRA PANEN 10.47%; 11 holders ≥1% own 69.88%, up to 30% sits with smaller holders or unlisted blocks."
   },
   "GOTO": {
    "holders": [
@@ -1000,8 +1203,17 @@
    "listedPct": 48.78,
    "foreignPct": 37.65,
    "topPct": 7.65,
+   "top3Pct": 17.9,
    "statePct": 0,
-   "stateLinked": false
+   "typeMix": {
+    "Financial inst.": 11.42,
+    "Corporate": 36.11,
+    "Individual": 1.25
+   },
+   "stateLinked": false,
+   "coverage": "ok",
+   "control": "Widely held",
+   "note": "Widely held: SVF GT SUBCO (SINGAPORE) PTE. LTD. 7.65%; foreign 37.65%; 20 holders ≥1% own 48.78%, up to 51% sits with smaller holders or unlisted blocks."
   },
   "JSMR": {
    "holders": [
@@ -1045,8 +1257,17 @@
    "listedPct": 80.21,
    "foreignPct": 4.52,
    "topPct": 69.3,
+   "top3Pct": 75.77,
    "statePct": 75.69,
-   "stateLinked": true
+   "typeMix": {
+    "Corporate": 69.3,
+    "Insurance": 9.45,
+    "Pension fund": 1.46
+   },
+   "stateLinked": true,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: PERUSAHAAN PERSEROAN (PERSERO) PT DANANTARA ASSET MANAGEMENT 69.3%; state-linked 75.69%; 5 holders ≥1% own 80.21%, up to 20% sits with smaller holders or unlisted blocks."
   },
   "SMGR": {
    "holders": [
@@ -1097,8 +1318,18 @@
    "listedPct": 63.25,
    "foreignPct": 7.95,
    "topPct": 50.69,
+   "top3Pct": 56.83,
    "statePct": 55.3,
-   "stateLinked": true
+   "typeMix": {
+    "Corporate": 50.69,
+    "Insurance": 4.61,
+    "Mutual fund": 5.08,
+    "Other": 2.87
+   },
+   "stateLinked": true,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: PERUSAHAAN PERSEROAN (PERSERO) PT DANANTARA ASSET MANAGEMENT 50.69%; state-linked 55.3%; 8 holders ≥1% own 63.25%, up to 37% sits with smaller holders or unlisted blocks."
   },
   "BSDE": {
    "holders": [
@@ -1149,8 +1380,17 @@
    "listedPct": 83.53,
    "foreignPct": 9.65,
    "topPct": 30.52,
+   "top3Pct": 62.95,
    "statePct": 3.79,
-   "stateLinked": false
+   "typeMix": {
+    "Other": 33.31,
+    "Corporate": 46.43,
+    "Insurance": 3.79
+   },
+   "stateLinked": false,
+   "coverage": "ok",
+   "control": "Anchor holder",
+   "note": "Anchor holder: PARAGA ARTAMIDA, PT 30.52%; 12 holders ≥1% own 83.53%, up to 16% sits with smaller holders or unlisted blocks."
   },
   "CTRA": {
    "holders": [
@@ -1201,8 +1441,19 @@
    "listedPct": 68,
    "foreignPct": 7.34,
    "topPct": 53.31,
+   "top3Pct": 61.27,
    "statePct": 1.51,
-   "stateLinked": false
+   "typeMix": {
+    "Corporate": 56.06,
+    "Individual": 4.22,
+    "Mutual fund": 3.74,
+    "Other": 2.47,
+    "Insurance": 1.51
+   },
+   "stateLinked": false,
+   "coverage": "ok",
+   "control": "Controlled",
+   "note": "Controlled: PT. SANG PELOPOR 53.31%; 7 holders ≥1% own 68%, up to 32% sits with smaller holders or unlisted blocks."
   }
  }
 }
