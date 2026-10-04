@@ -38,12 +38,13 @@
 
   function render() {
     const m = DATA.meta, k = DATA.market || {};
-    const when = m.asOf ? 'prices as of ' + m.asOf : 'updated ' + new Date(m.generatedAt).toLocaleString();
-    $('#sub').textContent = `${when} · target +${m.params.targetPct}% in ${m.params.horizon}d · stop ${m.params.stopMult} ATR · ${m.ranked}/${m.universe} ranked`;
+    const sess = m.session && m.session.state === 'open' ? 'IDX open · live quotes' : 'IDX closed';
+    const newest = (DATA.news || []).reduce((t, n) => Math.max(t, +new Date(n.published)), 0);
+    $('#sub').textContent = `${sess} · refreshed ${ago(m.generatedAt)}${newest ? ' · newest headline ' + ago(new Date(newest).toISOString()) : ''} · scores from ${m.asOf || 'latest'} close · target +${m.params.targetPct}% in ${m.params.horizon}d`;
     $('#market').innerHTML = `
       <div class="stat"><small>Regime</small><b>${esc(k.regime || '–')}</b><div class="meter"><i style="width:${Math.round((k.breadth || 0) * 100)}%"></i></div></div>
       <div class="stat"><small>Oversold now (score ≥ ${m.actScore})</small><b>${k.oversoldCount ?? '–'} / ${k.of ?? '–'}</b></div>
-      <div class="stat"><small>IHSG</small><b>${f0(k.idxClose)}</b></div>
+      <div class="stat"><small>IHSG${k.idxLive ? ' (live)' : ''}</small><b>${f0(k.idxLive ? k.idxLive.price : k.idxClose)}</b>${k.idxLive ? ` <span class="muted">${pc(k.idxLive.chg, 2)}</span>` : ''}</div>
       <div class="stat"><small>IHSG RSI(14) · 20d</small><b>${k.idxRsi == null ? '–' : k.idxRsi.toFixed(0)} · ${k.idxChg20d == null ? '–' : (k.idxChg20d * 100).toFixed(1) + '%'}</b></div>`;
     const ns = m.newsStatus;
     $('#banner').innerHTML = ns && ns.state !== 'ok' ? `<div class="note"><b>News ${esc(ns.state)}.</b> ${esc(ns.note)}</div>` : '';
@@ -65,8 +66,8 @@
       </div>
       ${sel ? `<div class="card pad detailcard" id="dcard"><div class="dhead"><b class="tk">${esc(sel.ticker)}</b> <span class="muted">${esc(sel.name)} · ${esc(sel.sector)}</span><button class="ghost" id="dclose">Close</button></div>${detailHtml(sel)}</div>` : ''}
       <div class="card scroll"><table>
-        <thead><tr><th>Ticker</th><th>Action</th><th>Score</th><th>Setup</th><th class="n">Close</th><th class="n">1D</th><th class="n">5D</th><th class="n">RSI</th><th class="n">vs SMA20</th><th class="n">Stop</th><th class="n">Target</th><th class="n">R/R</th><th>News</th><th>Top headline</th></tr></thead>
-        <tbody>${list.length ? list.map(rowHtml).join('') : '<tr><td colspan="14" class="empty">Nothing in this filter today.</td></tr>'}</tbody>
+        <thead><tr><th>Ticker</th><th>Action</th><th>Score</th><th>Setup</th><th class="n">Close</th><th class="n">Live</th><th class="n">1D</th><th class="n">5D</th><th class="n">RSI</th><th class="n">vs SMA20</th><th class="n">Stop</th><th class="n">Target</th><th class="n">R/R</th><th>News</th><th>Top headline</th></tr></thead>
+        <tbody>${list.length ? list.map(rowHtml).join('') : '<tr><td colspan="15" class="empty">Nothing in this filter today.</td></tr>'}</tbody>
       </table></div>`;
     el.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { FILTER = b.dataset.f; OPEN = null; renderPicks(); });
     el.querySelectorAll('tr.row').forEach(tr => tr.onclick = e => { if (e.target.closest('a')) return; OPEN = OPEN === tr.dataset.t ? null : tr.dataset.t; renderPicks(); if (OPEN) $('#dcard').scrollIntoView({ block: 'start', behavior: 'smooth' }); });
@@ -80,7 +81,7 @@
       <td><span class="tk">${esc(p.ticker)}</span><div class="nm">${esc(p.name)}${p.ownership ? " · " + esc(p.ownership.control) : ""}</div></td>
       <td><span class="act ${p.action}">${p.action}</span></td>
       <td><span class="score"><i style="width:${Math.round(p.score * 0.6)}px"></i><b>${p.score}</b></span></td>
-      <td>${esc(p.setup)}</td><td class="n">${f0(p.close)}</td><td class="n">${pc(p.chg1d)}</td><td class="n">${pc(p.chg5d)}</td>
+      <td>${esc(p.setup)}</td><td class="n">${f0(p.close)}</td><td class="n">${p.live ? `${f0(p.live.price)} ${pc(p.live.chg)}` : '<span class="mute">–</span>'}</td><td class="n">${pc(p.chg1d)}</td><td class="n">${pc(p.chg5d)}</td>
       <td class="n">${p.rsi == null ? '–' : p.rsi.toFixed(0)}</td><td class="n">${p.dist20Atr.toFixed(1)} ATR</td>
       <td class="n">${f0(p.stop)}</td><td class="n">${f0(p.target)}</td><td class="n">${p.rr == null ? '–' : p.rr.toFixed(1)}</td>
       <td>${arrow(p.newsScore)}</td>
@@ -223,6 +224,11 @@
     if (dlg.returnValue === 'save') { LS.set('sheetUrl', $('#sheetUrl').value.trim()); LS.set('sheetToken', $('#sheetToken').value.trim()); load(); }
     if (dlg.returnValue === 'reset') { LS.del('sheetUrl'); LS.del('sheetToken'); load(); }
   });
+
+  // Keep the page fresh without a reload: re-read the data every 5 minutes while the tab is visible.
+  const REFRESH_MS = 5 * 60 * 1000;
+  setInterval(() => { if (!document.hidden && !(document.activeElement && document.activeElement.id === 'nq')) load().catch(() => { /* keep showing the last good data */ }); }, REFRESH_MS);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && DATA && Date.now() - new Date(DATA.meta.generatedAt) > REFRESH_MS) load().catch(() => {}); });
 
   load().catch(e => { $('#sub').textContent = 'Failed to load data: ' + e.message; });
 })();

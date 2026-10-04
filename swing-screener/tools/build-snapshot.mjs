@@ -16,6 +16,23 @@ fs.mkdirSync(OUT, { recursive: true });
 fs.mkdirSync(HIST, { recursive: true });
 
 const px = await loadPrices(uni.map(u => u.ticker + '.JK').concat(['^JKSE']), '2y', process.env.USE_CACHE === '1');
+// Intraday: Yahoo's last daily bar is today's partial bar. The score was validated on completed closes, so signals use the
+// last completed bar and today's partial bar is shown only as a live quote.
+const NOW = process.env.FAKE_NOW ? new Date(process.env.FAKE_NOW).getTime() : Date.now(); // FAKE_NOW: test hook for the intraday path
+const wib = new Date(NOW + 7 * 3600e3);
+const todayWib = wib.toISOString().slice(0, 10);
+const wibMin = wib.getUTCHours() * 60 + wib.getUTCMinutes();
+const sessionOpen = wib.getUTCDay() >= 1 && wib.getUTCDay() <= 5 && wibMin >= 9 * 60 && wibMin < 16 * 60 + 15;
+const live = {};
+function splitLive(sym, b) {
+  if (!b || b.c.length < 2) return b;
+  const n = b.c.length;
+  if (!(sessionOpen && b.d[n - 1].toISOString().slice(0, 10) === todayWib)) return b;
+  live[sym] = { price: b.c[n - 1], prev: b.c[n - 2], chg: b.c[n - 1] / b.c[n - 2] - 1, high: b.h[n - 1], low: b.l[n - 1], volume: b.v[n - 1] };
+  const cut = a => a.slice(0, n - 1);
+  return { d: cut(b.d), o: cut(b.o), h: cut(b.h), l: cut(b.l), c: cut(b.c), v: cut(b.v) };
+}
+Object.keys(px).forEach(k => { px[k] = splitLive(k, px[k]); });
 const idx = px['^JKSE'] ? px['^JKSE'].c : null;
 if (!uni.some(u => px[u.ticker + '.JK'])) throw new Error('no price data fetched');
 
@@ -43,14 +60,18 @@ uni.forEach(u => {
   const own = ownership && ownership.byTicker ? ownership.byTicker[u.ticker] : null;
   const pk = api.buildPick_(u, b, a, nw, own, cfg);
   pk.fundamentals = fundamentals[u.ticker] || null;
+  pk.live = live[u.ticker + '.JK'] || null;
   picks.push(pk);
 });
 picks.sort((x, y) => y.score - x.score);
 const market = api.marketRead_(picks, idx);
+market.idxLive = live['^JKSE'] || null;
 
 // ---- forward-test ledger ----
 const asOf = lastBar.toISOString().slice(0, 10);
-fs.writeFileSync(path.join(HIST, `${asOf}.json`), JSON.stringify({
+// Written once per signal day (first run after the close) so later news can never rewrite the logged signal.
+const ledgerFile = path.join(HIST, `${asOf}.json`);
+if (!process.env.FAKE_NOW && !fs.existsSync(ledgerFile)) fs.writeFileSync(ledgerFile, JSON.stringify({
   asOf, cfg, picks: picks.map(p => ({ ticker: p.ticker, score: p.score, action: p.action, setup: p.setup, entry: p.entry, stop: p.stop, target: p.target, newsScore: p.newsScore })),
 }));
 function forwardStats() {
@@ -84,7 +105,8 @@ const newsOut = newsRows.slice(0, 400).map(r => {
 const na = path.join(ROOT, 'data', 'news-accuracy.json');
 const out = {
   meta: {
-    generatedAt: new Date().toISOString(), asOf, engine: 'oversold-v2', commit: (process.env.GITHUB_SHA || '').slice(0, 7), actScore: api.ACT_SCORE,
+    generatedAt: new Date().toISOString(), asOf,
+    session: { state: sessionOpen ? 'open' : 'closed', note: sessionOpen ? "IDX is open: scores use the last completed close; live quotes are today's partial bar." : 'IDX is closed: scores use the latest close.' }, engine: 'oversold-v2', commit: (process.env.GITHUB_SHA || '').slice(0, 7), actScore: api.ACT_SCORE,
     params: cfg, universe: uni.length, ranked: picks.length, skipped, newsCount: newsRows.length, newsStatus, sample: false,
     sources: { prices: 'Yahoo Finance daily bars (.JK)', news: 'Google News RSS (Indonesian)', ownership: ownership ? `${ownership.source} (as of ${ownership.asOf})` : null, fundamentals: 'Yahoo Finance fundamentals-timeseries (unofficial, last ~5 quarters)' },
   },

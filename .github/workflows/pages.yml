@@ -12,8 +12,12 @@ on:
       - 'swing-screener/data/news-accuracy.json'
       - '.github/workflows/pages.yml'
   schedule:
-    # Weekdays 10:30 UTC = 17:30 WIB, after the IDX close (16:00 WIB).
-    - cron: '30 10 * * 1-5'
+    # All times UTC (WIB = UTC+7). News is continuous, so refresh hourly around the clock...
+    - cron: '0 * * * *'
+    # ...and every 30 min during IDX hours (09:00-16:30 WIB) for live quotes.
+    - cron: '30 2-9 * * 1-5'
+    # End-of-day run 17:35 WIB: the only one that commits the forward-test ledger.
+    - cron: '35 10 * * 1-5'
   workflow_dispatch:
 permissions:
   contents: write   # commits the forward-test ledger (swing-screener/data/history)
@@ -25,6 +29,7 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -33,6 +38,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      # Keep the last good headlines between runs (Google News sometimes refuses the runner) without committing every run.
+      - uses: actions/cache@v4
+        with:
+          path: swing-screener/data/news-cache.json
+          key: news-cache-${{ github.run_id }}
+          restore-keys: news-cache-
 
       # News falls back to data/news-cache.json when Google News blocks the runner (it answered 503 once).
       # Rebuild the screener snapshot (Yahoo prices + Google News + ownership). If a source blocks the
@@ -44,11 +56,11 @@ jobs:
         run: node tools/build-snapshot.mjs
 
       - name: Log picks to the forward-test ledger
-        if: steps.snap.outcome == 'success'
+        if: steps.snap.outcome == 'success' && (github.event_name != 'schedule' || github.event.schedule == '35 10 * * 1-5')
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add swing-screener/data/history swing-screener/data/ownership-history swing-screener/data/news-cache.json
+          git add swing-screener/data/history swing-screener/data/ownership-history
           git diff --cached --quiet || (git commit -m "screener: log picks $(date -u +%F)" && git push)
 
       - name: Assemble site (Dompet at /, screener at /screener/)
