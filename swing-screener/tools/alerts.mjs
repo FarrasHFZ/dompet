@@ -15,7 +15,7 @@ const MAX_ITEMS = 8;
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const ageText = d => { const m = Math.round((Date.now() - new Date(d)) / 60000); return m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} d ago`; };
 
-export function buildMessages({ api, picks, newsRows, meta, market, state, watchlist, now = Date.now() }) {
+export function buildMessages({ api, picks, newsRows, meta, market, state, watchlist, tracker = null, now = Date.now() }) {
   const out = { lines: [], seenAdd: [], first: !state.initialised };
   const interest = new Map(); // ticker -> pick
   // In a broad selloff dozens of stocks are ACT; only the 10 best (plus your watchlist) earn news alerts.
@@ -78,6 +78,16 @@ export function buildMessages({ api, picks, newsRows, meta, market, state, watch
   if (out.first) {
     head.push(`✅ <b>IDX Swing Screener alerts connected.</b>\nACT now: ${acts.length} stocks; top ${Math.min(10, acts.length)}: ${acts.slice(0, 10).join(', ') || 'none'}. Regime: ${esc(market.regime)}.\nYou'll get new risk / commissioner / insider / government-investment / corporate-action headlines for ACT picks${watchlist.length ? ' and your watchlist (' + watchlist.join(', ') + ')' : ''}. Edit swing-screener/data/watchlist.json to add stocks.`);
   }
+  // Trade results: ACT picks whose target or stop was hit (or that timed out) since the last run.
+  const seenR = new Set(state.resolvedSeen || []);
+  const newRes = tracker ? tracker.events.filter(t => !seenR.has(`${t.signal}|${t.ticker}`)) : [];
+  if (!out.first && newRes.length) {
+    const icon = { win: '✅', loss: '🛑', timeout: '⏱' }, word = { win: 'hit target', loss: 'stopped out', timeout: 'expired' };
+    const lines = newRes.slice(0, 8).map(t => `${icon[t.status]} <b>${t.ticker}</b> ${word[t.status]} ${(t.ret * 100 >= 0 ? '+' : '') + (t.ret * 100).toFixed(1)}% net in ${t.days}d <i>(signal ${t.signal}, score ${t.score})</i>`);
+    const a = tracker.act;
+    head.push(`<b>Trade results</b>\n${lines.join('\n')}${newRes.length > 8 ? `\n<i>+${newRes.length - 8} more</i>` : ''}` +
+      (a.n >= 5 ? `\n<i>Track record: ${a.wins}/${a.n} ACT trades hit target (${Math.round(a.winRate * 100)}%) vs ${tracker.control.winRate == null ? 'n/a' : Math.round(tracker.control.winRate * 100) + '%'} for the rest of the universe.</i>` : ''));
+  }
   out.lines = head.concat(out.lines);
   // Telegram caps a message at 4096 chars; cut whole blocks (never mid-tag, which makes Telegram reject the message).
   let used = 0;
@@ -86,12 +96,13 @@ export function buildMessages({ api, picks, newsRows, meta, market, state, watch
   out.lines = fit;
   out.newState = {
     initialised: true, lastActs: acts, lastSignalDay: meta.asOf, lastRegime: market.regime,
+    resolvedSeen: tracker ? tracker.resolvedIds : (state.resolvedSeen || []),
     seenNews: [...(state.seenNews || []), ...out.seenAdd].slice(-4000), updatedAt: new Date(now).toISOString(),
   };
   return out;
 }
 
-export async function runAlerts({ api, picks, newsRows, meta, market }) {
+export async function runAlerts({ api, picks, newsRows, meta, market, tracker }) {
   const token = process.env.TG_TOKEN, chat = process.env.TG_CHAT_ID, dry = process.env.DRY_ALERTS === '1';
   if (!dry && !(token && chat)) { console.log('alerts: skipped (TG_TOKEN / TG_CHAT_ID not set)'); return; }
   const stateFile = path.join(ROOT, 'data', 'alert-state.json');
@@ -100,7 +111,7 @@ export async function runAlerts({ api, picks, newsRows, meta, market }) {
   let watchlist = [];
   try { watchlist = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'watchlist.json'), 'utf8')).map(t => String(t).toUpperCase()); } catch { /* none */ }
 
-  const m = buildMessages({ api, picks, newsRows, meta, market, state, watchlist });
+  const m = buildMessages({ api, picks, newsRows, meta, market, state, watchlist, tracker });
   const text = m.lines.join('\n\n');
   if (m.lines.length) {
     if (dry) console.log('--- alert (dry run) ---\n' + text + '\n-----------------------');

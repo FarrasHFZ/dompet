@@ -7,6 +7,7 @@ import { refreshNewsStore, newsCoverage, archiveForWeb } from './news.mjs';
 import { buildOwnership } from './ownership.mjs';
 import { fetchFundamentals } from './fundamentals.mjs';
 import { runAlerts } from './alerts.mjs';
+import { buildTracker, readLedger } from './tracker.mjs';
 
 const cfg = { targetPct: +(process.env.TARGET || 8), horizon: +(process.env.HORIZON || 15), stopMult: +(process.env.STOPMULT || 2.5), minValueB: 5 };
 const api = loadEngine();
@@ -84,34 +85,25 @@ picks.sort((x, y) => y.score - x.score);
 const market = api.marketRead_(picks, idx);
 market.idxLive = live['^JKSE'] || null;
 
-// ---- forward-test ledger ----
+// ---- forward-test ledger + live track record ----
 const asOf = lastBar.toISOString().slice(0, 10);
-// Written once per signal day (first run after the close) so later news can never rewrite the logged signal.
+// Every ranked stock is logged once per signal day (first run after the close), so later news can never rewrite the
+// signal. Logging ALL stocks, not just ACT, gives the control group that makes a win rate meaningful.
 const ledgerFile = path.join(HIST, `${asOf}.json`);
-if (!process.env.FAKE_NOW && !fs.existsSync(ledgerFile)) fs.writeFileSync(ledgerFile, JSON.stringify({
-  asOf, cfg, picks: picks.map(p => ({ ticker: p.ticker, score: p.score, action: p.action, setup: p.setup, entry: p.entry, stop: p.stop, target: p.target, newsScore: p.newsScore })),
-}));
-function forwardStats() {
-  const files = fs.readdirSync(HIST).filter(f => /^\d{4}-\d{2}-\d{2}\.json$/.test(f)).sort();
-  const rows = [];
-  files.forEach(f => {
-    const h = JSON.parse(fs.readFileSync(path.join(HIST, f), 'utf8'));
-    h.picks.forEach(p => {
-      const b = px[p.ticker + '.JK'];
-      if (!b) return;
-      const i0 = b.d.findIndex(d => d.toISOString().slice(0, 10) === h.asOf);
-      if (i0 < 0 || i0 + cfg.horizon >= b.c.length) return; // not resolved yet
-      let res = 'timeout', exit = b.c[i0 + cfg.horizon];
-      for (let j = i0 + 1; j <= i0 + cfg.horizon; j++) {
-        if (b.l[j] <= p.stop) { res = 'loss'; exit = p.stop; break; }
-        if (b.h[j] >= p.target) { res = 'win'; exit = p.target; break; }
-      }
-      rows.push({ score: p.score, action: p.action, win: res === 'win' ? 1 : 0, ret: exit / p.entry - 1 - 0.004 });
-    });
-  });
-  const agg = g => ({ n: g.length, hit: g.length ? g.reduce((s, x) => s + x.win, 0) / g.length : null, avgNetRet: g.length ? g.reduce((s, x) => s + x.ret, 0) / g.length : null });
-  return { days: files.length, resolved: rows.length, act: agg(rows.filter(r => r.action === 'ACT')), all: agg(rows), note: 'Live forward test: picks logged each run, resolved after the horizon. Net of 0.4% fees.' };
+const LEDGER_V = 2; // v2 adds sector/RSI/regime for pattern analysis and logs the whole universe
+let existing = null;
+try { existing = JSON.parse(fs.readFileSync(ledgerFile, 'utf8')); } catch { /* none */ }
+if (!process.env.FAKE_NOW && (!existing || (existing.v || 1) < LEDGER_V)) {
+  fs.writeFileSync(ledgerFile, JSON.stringify({
+    v: LEDGER_V, asOf, cfg, regime: market.regime, breadth: market.breadth,
+    picks: picks.map(p => ({ ticker: p.ticker, sector: p.sector, score: p.score, action: p.action, setup: p.setup, rsi: p.rsi, dist20Atr: p.dist20Atr, rr: p.rr, atrPct: p.atrPct, entry: p.entry, stop: p.stop, target: p.target, newsScore: p.newsScore })),
+  }));
 }
+const tracker = buildTracker({ ledger: readLedger(HIST), bars: px, horizon: cfg.horizon });
+fs.writeFileSync(path.join(OUT, 'tracker.json'), JSON.stringify(tracker));
+const replayFile = path.join(ROOT, 'data', 'replay-tracker.json');
+if (fs.existsSync(replayFile)) fs.copyFileSync(replayFile, path.join(OUT, 'replay-tracker.json'));
+console.log(`tracker: ${tracker.signalDays} signal day(s), ACT closed ${tracker.act.n} (open ${tracker.act.open}), control closed ${tracker.control.n}`);
 
 const bt = fs.existsSync(path.join(ROOT, 'data', 'backtest-summary.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'backtest-summary.json'), 'utf8')) : null;
 // latest.json carries the last 7 days (fast first paint); the 30-day archive is a separate file loaded on demand.
@@ -131,11 +123,11 @@ const out = {
     sources: { prices: 'Yahoo Finance daily bars (.JK)', news: 'Google News RSS (Indonesian)', ownership: ownership ? `${ownership.source} (as of ${ownership.asOf})` : null, fundamentals: 'Yahoo Finance fundamentals-timeseries (unofficial, last ~5 quarters)' },
   },
   backtestHoldout: fs.existsSync(path.join(ROOT, 'data', 'backtest-holdout.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'backtest-holdout.json'), 'utf8')) : null,
-  newsAccuracy: fs.existsSync(na) ? JSON.parse(fs.readFileSync(na, 'utf8')) : null, market, picks, news: newsOut, ownership: ownership ? { asOf: ownership.asOf, note: ownership.note } : null, backtest: bt, forward: forwardStats(),
+  newsAccuracy: fs.existsSync(na) ? JSON.parse(fs.readFileSync(na, 'utf8')) : null, market, picks, news: newsOut, ownership: ownership ? { asOf: ownership.asOf, note: ownership.note } : null, backtest: bt, trackerSummary: { signalDays: tracker.signalDays, act: tracker.act, control: tracker.control, open: tracker.open.length, rules: tracker.rules },
 };
 fs.writeFileSync(path.join(OUT, 'latest.json'), JSON.stringify(out));
 console.log(`snapshot ${asOf}: ${picks.length} ranked (${picks.filter(p => p.action === 'ACT').length} ACT), ${skipped.length} skipped, ${newsRows.length} headlines, ${Math.round(fs.statSync(path.join(OUT, 'latest.json')).size / 1024)} KB`);
 picks.slice(0, 8).forEach(p => console.log(`${p.ticker} ${p.score} ${p.action} ${p.setup} rsi ${p.rsi && p.rsi.toFixed(0)} news ${p.newsScore}`));
 
 // Telegram digest (no-op unless TG_TOKEN / TG_CHAT_ID are set, or DRY_ALERTS=1). Never lets a failure break the build.
-if (!process.env.FAKE_NOW) { try { await runAlerts({ api, picks, newsRows, meta: out.meta, market }); } catch (e) { console.error('alerts failed', e.message); } }
+if (!process.env.FAKE_NOW) { try { await runAlerts({ api, picks, newsRows, meta: out.meta, market, tracker }); } catch (e) { console.error('alerts failed', e.message); } }

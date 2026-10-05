@@ -93,3 +93,11 @@ Open https://farrashfz.github.io/dompet/screener/ and install it: iPhone Safari 
 - **News: a rolling 35-day archive**, 30 days shown. One Google News query returns at most ~100 items, which for an active stock covers only 2-3 weeks, so `tools/news.mjs` splits each query into date windows and halves any window that hits the cap, down to single days. First runs back-fill the month in resumable chunks (progress survives in the CI cache and in the published `data/news-30d.json`); after that hot stocks (top 30 by liquidity, ACT picks, watchlist) and themes refresh hourly and everything every 6 hours.
 - Coverage is measured, not assumed: the News tab shows headlines per day, stocks with news, and which stocks are thin.
 - Limit: this is what Google News indexes, not every Indonesian outlet. Scoring still uses only the last 7 days (with decay); the month is for context and search.
+
+## Track record: how the method is kept honest
+- Every signal day the build logs **all** ranked stocks (not only ACT) to `data/history/`.
+- `tools/tracker.mjs` replays each logged signal against later prices with realistic rules: entry at the **next session's open**, the plan's stop/target price levels, 15 trading days, a bar touching both stop and target counts as a loss, gaps fill at the open, 0.4% fees, one position per stock at a time.
+- ACT picks are compared with the **rest of the universe on the same days** (control group): a win rate only means something next to the base rate.
+- Shown on the *Track record* tab: win rate with a 95% range, average net return, profit factor, open and closed trades, and breakdowns by setup, score, market regime, RSI, news, sector and stock.
+- Telegram sends a message when an ACT trade hits its target, is stopped out, or expires.
+- `node tools/tracker-replay.mjs` replays the last ~270 days through the same tracker (not live; today's universe, neutral news). Result of the first replay: ACT hit the +8% target 36% of the time vs 37% for the rest (no edge by that measure) and the average trade lost 0.8% net. Holding 15 days with no stop did better (ACT +0.3% vs rest -0.2% net), which is the same small edge the earlier backtest found.

@@ -223,7 +223,7 @@
         <div><a class="t" href="${safeUrl(n.link)}" target="_blank" rel="noopener noreferrer">${esc(n.title)}</a>
           <div class="muted">${esc(n.source)}${n.tickers.length ? ' · ' + n.tickers.map(esc).join(', ') : ''}${!n.tickers.length && n.sectors.length ? ' · sector: ' + n.sectors.map(esc).join(', ') : ''}</div></div>
         <div>${arrow(n.sentiment)}</div></div>`).join('') : '<div class="empty">No headlines match.</div>'}</div>
-      <div class="chips" style="margin-top:10px">${N.length > shown.length ? '<button class="chip" id="more">Show 200 more</button>' : ''}<span class="muted">${N.length} match, showing ${shown.length}. Categories and direction come from keyword rules (see Scorecard for measured accuracy). Links open the original publisher through Google News.</span></div>`;
+      <div class="chips" style="margin-top:10px">${N.length > shown.length ? '<button class="chip" id="more">Show 200 more</button>' : ''}<span class="muted">${N.length} match, showing ${shown.length}. Categories and direction come from keyword rules (see Track record for measured accuracy). Links open the original publisher through Google News.</span></div>`;
     el.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { NEWSCAT = b.dataset.c; NEWSLIMIT = 120; renderNews(); });
     el.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { NEWSPERIOD = b.dataset.p; NEWSLIMIT = 120; renderNews(); });
     const more = $('#more', el); if (more) more.onclick = () => { NEWSLIMIT += 200; renderNews(); };
@@ -238,18 +238,77 @@
       <tr><td class="mute">All (baseline)</td><td class="n mute">${s.n.toLocaleString()}</td><td class="n mute">${(s.baselineHit * 100).toFixed(1)}%</td><td class="n">${pc(s.baselineFwd, 2)}</td></tr></tbody></table></div>
       <p class="muted pad">Rank correlation of score vs next-15d return (monthly): ${s.ic.toFixed(3)} (t=${s.icT.toFixed(1)}); positive in ${Math.round(s.icMonthsPositive * 100)}% of months.</p>`;
   }
+  // ---------- track record (live ledger + replay) ----------
+  let TRACK = null, REPLAY = null, TRACK_FOR = null;
+  async function loadTrack() {
+    if (TRACK && TRACK_FOR === DATA.meta.generatedAt) return;
+    TRACK_FOR = DATA.meta.generatedAt;
+    const get = async u => { try { const r = await fetch(u + '?t=' + Math.floor(Date.now() / 300000)); return r.ok ? await r.json() : { error: true }; } catch { return { error: true }; } };
+    TRACK = await get('data/tracker.json');
+    if (!REPLAY) REPLAY = await get('data/replay-tracker.json');
+    const box = $('#trackbox'); if (box) box.innerHTML = trackHtml(TRACK, true) + replayHtml();
+  }
+  const pct1 = x => (x == null ? '–' : (x * 100).toFixed(1) + '%');
+  const sgn = x => (x == null ? '–' : (x >= 0 ? '+' : '') + (x * 100).toFixed(1) + '%');
+
+  function groupTable(title, groups, minN) {
+    const rows = (groups || []).filter(g => g.n >= minN);
+    if (!rows.length) return '';
+    return `<h3>${esc(title)}</h3><div class="card scroll"><table><thead><tr><th>Group</th><th class="n">Trades</th><th class="n">Hit target</th><th class="n">95% range</th><th class="n">Avg net</th><th class="n">Profit factor</th></tr></thead><tbody>
+      ${rows.map(g => `<tr><td>${esc(g.key)}</td><td class="n">${g.n}</td><td class="n">${pct1(g.winRate)}</td><td class="n mute">${pct1(g.ci[0])}–${pct1(g.ci[1])}</td><td class="n ${g.avgNet >= 0 ? 'up' : 'down'}">${sgn(g.avgNet)}</td><td class="n">${g.profitFactor == null ? '–' : g.profitFactor.toFixed(2)}</td></tr>`).join('')}</tbody></table></div>`;
+  }
+
+  function verdict(a, c) {
+    if (a.n < 30) return `Only ${a.n} closed ACT trade${a.n === 1 ? '' : 's'} so far: far too few to conclude anything. A hit rate on this few trades is noise.`;
+    const lo = a.ci[0], hi = a.ci[1], base = c.winRate;
+    const better = lo > base, worse = hi < base;
+    const money = a.avgNet > 0 ? 'and the average trade made money after fees' : 'but the average trade lost money after fees';
+    return `ACT hit its target ${pct1(a.winRate)} of the time vs ${pct1(base)} for the rest of the universe: ${better ? 'better than chance' : worse ? 'worse than chance' : 'not distinguishable from chance'} (95% range ${pct1(lo)}–${pct1(hi)}), ${money}.`;
+  }
+
+  function trackHtml(tr, live) {
+    if (!tr || tr.error) return '<div class="card empty">Track record not available from this data source.</div>';
+    const a = tr.act, c = tr.control;
+    const kpi = [['ACT hit target', pct1(a.winRate), `${a.wins} of ${a.n} closed`], ['Rest of universe', pct1(c.winRate), `${c.n} closed (control)`], ['ACT avg net / trade', sgn(a.avgNet), `rest: ${sgn(c.avgNet)}`], ['Profit factor', a.profitFactor == null ? '–' : a.profitFactor.toFixed(2), `rest: ${c.profitFactor == null ? '–' : c.profitFactor.toFixed(2)}`]];
+    let h = `<div class="market">${kpi.map(k => `<div class="stat"><small>${k[0]}</small><b>${k[1]}</b><div class="muted">${k[2]}</div></div>`).join('')}</div>
+      <div class="note"><b>Verdict so far.</b> ${esc(verdict(a, c))}</div>`;
+    if (live) {
+      h += `<h3>Open trades (${tr.open.length})</h3>`;
+      h += tr.open.length ? `<div class="card scroll"><table><thead><tr><th>Stock</th><th>Signal</th><th class="n">Entry</th><th class="n">Last</th><th class="n">P/L</th><th class="n">To target</th><th class="n">To stop</th><th class="n">Days left</th></tr></thead><tbody>
+        ${tr.open.slice(0, 40).map(t => `<tr><td><b>${esc(t.ticker)}</b> <span class="muted">${t.score}</span></td><td>${esc(t.signal)}</td><td class="n">${f0(t.entry)}</td><td class="n">${f0(t.last)}</td><td class="n">${pc(t.unrealized)}</td><td class="n">${pc(t.target / t.last - 1)}</td><td class="n">${pc(t.stop / t.last - 1)}</td><td class="n">${t.daysLeft}</td></tr>`).join('')}</tbody></table></div>`
+        : `<p class="muted">None open yet. ${tr.pendingAct ? tr.pendingAct + ' ACT signal' + (tr.pendingAct === 1 ? ' is' : 's are') + ' waiting for the next session open, where the trade starts.' : 'No ACT signal has been logged yet.'}</p>`;
+      h += `<h3>Closed trades (latest)</h3>`;
+      h += tr.closed.length ? `<div class="card scroll"><table><thead><tr><th>Stock</th><th>Result</th><th class="n">Net return</th><th class="n">Days</th><th>Signal</th><th>Setup</th></tr></thead><tbody>
+        ${tr.closed.slice(0, 25).map(t => `<tr><td><b>${esc(t.ticker)}</b> <span class="muted">${t.score}</span></td><td><span class="act ${t.status === 'win' ? 'ACT' : t.status === 'loss' ? 'SKIP' : 'WATCH'}">${t.status === 'win' ? 'hit target' : t.status === 'loss' ? 'stopped' : 'expired'}</span></td><td class="n ${t.ret >= 0 ? 'up' : 'down'}">${sgn(t.ret)}</td><td class="n">${t.days}</td><td>${esc(t.signal)}</td><td>${esc(t.setup)}</td></tr>`).join('')}</tbody></table></div>`
+        : `<p class="muted">Nothing has resolved yet. ${tr.signalDays} signal day${tr.signalDays === 1 ? '' : 's'} logged; each trade needs up to ${tr.horizon} trading days after its entry.</p>`;
+    }
+    h += groupTable('By setup', tr.bySetup, 5) + groupTable('By score', tr.byScore, 5) + groupTable('By market regime (ACT trades)', tr.byRegime, 5) +
+      groupTable('By RSI at signal (ACT)', tr.byRsi, 5) + groupTable('By news at signal (ACT)', tr.byNews, 5) + groupTable('By sector (ACT)', tr.bySector, 8) + groupTable('Best stocks so far (ACT)', tr.byTicker, 4);
+    h += `<p class="muted">${esc(tr.rules)} One position per stock at a time, so a stock that stays oversold for ten days counts once. The 95% range shows how little a small sample proves. Many cuts are shown, so some will look good by luck alone: trust a pattern only if it keeps showing up in the live results.</p>`;
+    return h;
+  }
+
+  function replayHtml() {
+    if (!REPLAY || REPLAY.error) return '';
+    const r = REPLAY.replay;
+    return `<h2>Replay: the last 13 months, same rules (not live)</h2>
+      <p class="muted">${esc(r.from)} to ${esc(r.to)}: every day's signals for all 100 stocks, pushed through the same tracker with realistic entries (next-session open), stops, targets and fees. ${esc(r.note)}</p>
+      ${trackHtml(REPLAY, false)}`;
+  }
+
   function renderScore() {
-    const el = $('#tab-score'), bt = DATA.backtest, fw = DATA.forward, na = DATA.newsAccuracy;
+    const el = $('#tab-score'), bt = DATA.backtest, na = DATA.newsAccuracy;
     if (!bt) { el.innerHTML = '<div class="empty">No backtest summary in this data source.</div>'; return; }
+    loadTrack();
     el.innerHTML = `
       <h2>Does the score predict anything? Walk-forward backtest</h2>
       <p class="muted">${esc(bt.params.source)}, ${esc(bt.params.from)} to ${esc(bt.params.to)}. Each day the score uses only data up to that day; outcome = next 15 trading days with the plan's stop and +${bt.params.targetPct}% target.</p>
       <div class="two"><div class="card"><div class="pad"><b>Out-of-sample (2024-10 →)</b></div>${bucketTable(bt.outOfSample)}</div>
       <div class="card"><div class="pad"><b>In-sample (before 2024-10)</b></div>${bucketTable(bt.inSample)}</div></div>
       ${DATA.backtestHoldout ? `<h2>Stocks it was NOT designed on</h2><div class="card"><div class="pad"><b>${DATA.backtestHoldout.params.tickers} other IDX stocks</b>, same rules, no re-tuning</div>${bucketTable(DATA.backtestHoldout.all)}</div><p class="muted">The edge replicates but is smaller, and after stops and fees the average trade is about zero. Treat ACT as a shortlist, not a signal to buy blindly.</p>` : ''}
-      <div class="note"><b>Read it honestly.</b> The v1 score (trend, momentum, breakout chasing) scored <i>negative</i> in this test, so it was replaced by an oversold-bounce score. The new score ranks better, but a +1% average 15-day move is small: after fees, stops and slippage the edge is thin, and it concentrates in broad market selloffs (many names oversold at once) rather than lone stocks. ${bt.caveats.map(esc).join(' ')}</div>
-      <h2>Live forward test (the real check)</h2>
-      <div class="card pad">${fw && fw.resolved ? `${fw.resolved} picks resolved over ${fw.days} logged days. ACT picks: n=${fw.act.n}, hit ${fw.act.hit == null ? '–' : Math.round(fw.act.hit * 100) + '%'}, avg net return ${fw.act.avgNetRet == null ? '–' : (fw.act.avgNetRet * 100).toFixed(2) + '%'} (after 0.4% fees). All picks: n=${fw.all.n}.` : `Logging started: ${fw ? fw.days : 0} day(s) recorded. Each run saves its picks; after ${DATA.meta.params.horizon} trading days they are scored against what actually happened and shown here. Expect a meaningful sample only after a few months.`}</div>
+      <div class="note"><b>Read it honestly.</b> The v1 score (trend, momentum, breakout chasing) scored <i>negative</i> in this test, so it was replaced by an oversold-bounce score. The new score ranks better, but a +1% average 15-day move is small, and in the 13-month replay with realistic entries, stops and fees the average ACT trade still lost money. The earlier idea that the edge lives in broad selloffs did not hold up there (see the regime table). ${bt.caveats.map(esc).join(' ')}</div>
+      <h2>Live track record: does it actually hit its targets?</h2>
+      <div id="trackbox"><div class="card empty">Loading…</div></div>
       <h2>News: how accurate is the classifier?</h2>
       ${na ? `<div class="card scroll"><table><thead><tr><th>Rules</th><th>Sample</th><th class="n">Category right</th><th class="n">Direction precision</th><th class="n">Direction recall</th></tr></thead><tbody>
         ${na.rows.map(r => `<tr><td>${esc(r.rules)}</td><td>${esc(r.sample)}</td><td class="n">${r.cat}%</td><td class="n">${r.prec}%</td><td class="n">${r.rec}%</td></tr>`).join('')}</tbody></table></div><p class="muted">${esc(na.note)}</p>` : ''}
