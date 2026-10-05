@@ -28,7 +28,7 @@ for (let t = ref.c.length - DAYS; t < ref.c.length - 1; t++) {
     const a = api.analyse_(w, idxC, cfg);
     if (!a || a.avgValue / 1e9 < 5) continue;
     const score = api.score_(a, 0);
-    picks.push({ ticker: u.ticker, sector: u.sector, score, action: score >= api.ACT_SCORE ? 'ACT' : 'WATCH', setup: a.setup, rsi: a.rsi, entry: a.entry, stop: process.env.HOLD15 ? 0 : a.stop, target: process.env.HOLD15 ? 1e9 : process.env.TARGET_ATR ? a.entry + (+process.env.TARGET_ATR) * a.atr : a.target, newsScore: 0 });
+    picks.push({ ticker: u.ticker, sector: u.sector, score, action: score >= api.ACT_SCORE ? 'ACT' : 'WATCH', setup: a.setup, rsi: a.rsi, atrPct: a.atrPct, dist20Atr: a.dist20Atr, entry: a.entry, stop: process.env.HOLD15 ? 0 : a.stop, target: process.env.HOLD15 ? 1e9 : process.env.TARGET_ATR ? a.entry + (+process.env.TARGET_ATR) * a.atr : a.target, newsScore: 0 });
   }
   const m = api.marketRead_(picks, null);
   ledger.push({ asOf: day, regime: m.regime, breadth: m.breadth, picks });

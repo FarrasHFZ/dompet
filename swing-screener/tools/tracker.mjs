@@ -108,6 +108,7 @@ export function buildTracker({ ledger, bars, horizon = 15, previousResolved = []
     byTicker: groupBy(act, t => t.ticker, 2).slice(0, 12),
     open: act.filter(t => t.status === 'open').sort((a, b) => b.score - a.score),
     closed: act.filter(t => ['win', 'loss', 'timeout'].includes(t.status)).sort((a, b) => (b.exitDate || '').localeCompare(a.exitDate || '')).slice(0, 150),
+    ...(process.env.TRACKER_TRADES ? { _trades: uniq } : {}),
     events, resolvedIds: act.filter(t => ['win', 'loss', 'timeout'].includes(t.status)).map(id),
   };
 }
