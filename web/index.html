@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f5f6f8">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg">
@@ -18,14 +18,18 @@
   <main id="app"></main>
 
   <nav id="nav" hidden>
-    <button data-tab="home" class="on"><i>🏠</i>Beranda</button>
-    <button data-tab="history"><i>🧾</i>Riwayat</button>
-    <button data-tab="add" class="add"><i>＋</i>Tambah</button>
-    <button data-tab="reports"><i>📊</i>Laporan</button>
+    <button data-tab="home" class="on">
+      <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Beranda</button>
+    <button data-tab="history">
+      <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Riwayat</button>
+    <button data-tab="add" class="add">
+      <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Tambah</button>
+    <button data-tab="reports">
+      <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Laporan</button>
   </nav>
 
   <div id="sheet" class="sheet" hidden></div>
-  <div id="toast" role="status"></div>
+  <div id="toast" role="status" aria-live="polite"></div>
 
   <script src="config.js"></script>
   <script src="app.js"></script>

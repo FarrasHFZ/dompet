@@ -100,7 +100,12 @@ function load_() {
     const key = r[0] instanceof Date ? fmt_(r[0], 'yyyy-MM') : String(r[0]);
     income[key] = Number(r[1]);
   });
-  return { transactions, income, categories: CATEGORY_RULES.map(r => r[0]).concat(DEFAULT_CATEGORY) };
+  return {
+    transactions,
+    income,
+    categories: CATEGORY_RULES.map(r => r[0]).concat(DEFAULT_CATEGORY),
+    rules: CATEGORY_RULES,   // lets the app preview the category while typing
+  };
 }
 
 function checkTx_(req) {
