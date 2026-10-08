@@ -12,6 +12,17 @@
   const ago = iso => { const h = (Date.now() - new Date(iso)) / 36e5; return h < 1 ? 'now' : h < 24 ? Math.round(h) + 'h ago' : Math.round(h / 24) + 'd ago'; };
   const arrow = s => (s > 0 ? '<span class="up">▲ supports</span>' : s < 0 ? '<span class="down">▼ risk</span>' : '<span class="mute">• neutral</span>');
 
+  const TIER = { 'ACT+': 'Bounce candle + flow up', ACT: 'Bounce candle confirmed', 'ACT?': 'Bounce candle, but flow down', WAIT: 'Oversold, wait for a bounce candle', SKIP: 'NeoBDM veto' };
+  const tierHtml = p => (p.tier && p.tier !== 'WATCH' ? '<span class="tier t' + (p.tier === 'ACT+' ? 'P' : p.tier === 'ACT?' ? 'Q' : p.tier) + '" title="' + esc(TIER[p.tier]) + '">' + esc(p.tier) + '</span>' : '');
+  const flowF = x => (x == null ? '–' : (x > 0 ? '+' : '') + x.toFixed(1) + 'B');
+  const nbHtml = p => {
+    const n = p.neobdm;
+    if (!n) return '<p class="muted">NeoBDM has no row for this ticker.</p>';
+    const tagCls = n.tag === 'FLOW+' ? 'up' : n.tag === 'FLOW-' || n.tag === 'AVOID' ? 'down' : '';
+    return '<p><span class="tag ' + (n.tag === 'AVOID' ? 'RISK' : '') + '">' + esc(n.tag) + '</span> <span class="' + tagCls + '">' + esc(n.note) + '</span></p>' +
+      '<p class="muted">Label derived from NeoBDM data of ' + esc(n.asOf) + ' (non-retail, foreign and institution flow, Clean, crossing, Pinky). Raw numbers are not published. Flow counts only when clean. It is a veto and a note, not a score: NeoBDM shows only today, so it could not be backtested.</p>';
+  };
+
   const MQ = window.matchMedia('(max-width: 760px)');
   MQ.addEventListener('change', () => { if (DATA) renderPicks(); });
   let DATA = null, PQ = '', FILTER = 'ACT', OPEN = null, NEWSCAT = 'ALL', NEWSQ = '', HIDEWRAP = true;
@@ -75,7 +86,7 @@
           .map(([v, l]) => `<button class="chip" data-f="${v}" aria-pressed="${FILTER === v}">${l}</button>`).join('')}
         <input type="search" id="pq" placeholder="Search ticker, name or sector" value="${esc(PQ)}" style="max-width:240px;margin-left:auto">
       </div>
-      <p class="muted hint">ACT = oversold-bounce score ≥ ${DATA.meta.actScore}. Few days have any; "none today" is a valid answer.</p>
+      <p class="muted hint">ACT = oversold-bounce score ≥ ${DATA.meta.actScore}. Badges: <b>ACT</b> bounce candle seen, <b>ACT+</b> and flow up, <b>ACT?</b> flow down, <b>WAIT</b> no bounce candle yet, <b>SKIP</b> NeoBDM veto (Pinky or illiquid). Few days have any; "none today" is a valid answer.</p>
       ${body}`;
     const toggle = t => { OPEN = OPEN === t ? null : t; renderPicks(); const d = $('#dcard'); if (OPEN && d) d.scrollIntoView({ block: MQ.matches ? 'nearest' : 'start', behavior: 'smooth' }); };
     el.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { FILTER = b.dataset.f; OPEN = null; renderPicks(); });
@@ -89,13 +100,13 @@
   function cardHtml(p) {
     const h = p.headlines[0];
     return `<article class="pcard ${OPEN === p.ticker ? 'open' : ''}" data-t="${esc(p.ticker)}">
-      <div class="ptop"><div><b class="tk">${esc(p.ticker)}</b> <span class="act ${p.action}">${p.action}</span>
+      <div class="ptop"><div><b class="tk">${esc(p.ticker)}</b> <span class="act ${p.action}">${p.action}</span> ${tierHtml(p)}
         <div class="nm">${esc(p.name)}${p.ownership ? ' · ' + esc(p.ownership.control) : ''}</div></div>
         <div class="pscore"><b>${p.score}</b><small>score</small></div></div>
       <div class="pmid">
         <div><small>${p.live ? 'Live' : 'Close'}</small><b>${f0(p.live ? p.live.price : p.close)}</b> ${p.live ? pc(p.live.chg) : pc(p.chg1d)}</div>
         <div><small>RSI · vs SMA20</small><b>${p.rsi == null ? '–' : p.rsi.toFixed(0)}</b> <span class="muted">${p.dist20Atr.toFixed(1)} ATR</span></div>
-        <div><small>Stop → Target</small><b>${f0(p.stop)} → ${f0(p.target)}</b></div>
+        <div><small>Stop → Target</small><b>${f0(p.action === 'ACT' && p.wideStop ? p.wideStop : p.stop)} → ${f0(p.target)}</b></div>
       </div>
       <div class="phl">${arrow(p.newsScore)} ${h ? `<a href="${safeUrl(h.link)}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a>` : '<span class="mute">no recent news</span>'}</div>
     </article>`;
@@ -106,7 +117,7 @@
     const open = OPEN === p.ticker;
     return `<tr class="row ${open ? 'open' : ''}" data-t="${esc(p.ticker)}">
       <td><span class="tk">${esc(p.ticker)}</span><div class="nm">${esc(p.name)}${p.ownership ? " · " + esc(p.ownership.control) : ""}</div></td>
-      <td><span class="act ${p.action}">${p.action}</span></td>
+      <td><span class="act ${p.action}">${p.action}</span> ${tierHtml(p)}</td>
       <td><span class="score"><i style="width:${Math.round(p.score * 0.6)}px"></i><b>${p.score}</b></span></td>
       <td>${esc(p.setup)}</td><td class="n">${f0(p.close)}</td><td class="n">${p.live ? `${f0(p.live.price)} ${pc(p.live.chg)}` : '<span class="mute">–</span>'}</td><td class="n">${pc(p.chg1d)}</td><td class="n">${pc(p.chg5d)}</td>
       <td class="n">${p.rsi == null ? '–' : p.rsi.toFixed(0)}</td><td class="n">${p.dist20Atr.toFixed(1)} ATR</td>
@@ -169,6 +180,8 @@
         <h2>Why it matters: news</h2>
         ${p.headlines.length ? `<ul class="hl-list">${p.headlines.map(h => `<li><span class="tag ${esc(h.category)}">${esc(h.category)}</span><span><a href="${safeUrl(h.link)}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a><div class="muted">${ago(h.published)} · ${h.direct ? 'names this stock' : 'sector-wide'} · ${h.sentiment > 0 ? 'supports' : h.sentiment < 0 ? 'risk' : 'neutral'}</div></span></li>`).join('')}</ul>` : '<p class="muted">No scored headlines in the last 7 days.</p>'}
         <button class="chip" data-news="${esc(p.ticker)}">All 30-day headlines for ${esc(p.ticker)} →</button>
+        <h2>NeoBDM flow</h2>${nbHtml(p)}
+        ${p.action === 'ACT' ? `<p class="muted"><b>Backtested plan for ACT:</b> wait for a bounce candle (${p.confirm ? 'seen today' : 'not yet'}) and use the wider stop ${f0(p.wideStop)} (3.5 ATR) instead of ${f0(p.stop)}. In 5 years × 100 stocks this took ACT from -0.2% to about +1.0% per trade, versus -0.7% for the rest.</p>` : ''}
         <h2>Who owns it</h2>${ownHtml(p.ownership)}
         <h2>Earnings (P&L)</h2>${fundHtml(p.fundamentals)}</div></div>`;
   }
