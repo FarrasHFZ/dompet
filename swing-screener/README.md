@@ -94,7 +94,29 @@ FLOW~, FLOW-, or AVOID (Pinky or illiquid).
 
 Missed days are fine, but labels older than 5 days stop affecting badges automatically.
 
-**What flow may do, and when that changes.** Today: veto (Pinky, illiquid -> SKIP) and annotate (ACT+ / ACT?). It may
+**2-year replay (2026-10-10, `tools/nb-hist-pull.js` -> `tools/experiment-nb.mjs`, pre-registered and committed before
+the pull).** NeoBDM's stock pages embed their Transaction Chart: each group's cumulative net value per session, about 474
+sessions back (from 2024-10). Group flow over w sessions / Yahoo turnover reproduces the screener's `<g>_cn_<w>` columns
+(checked against the 2026-10-09 snapshot to 4 digits), so the flow model can be replayed on 454 sessions x 100 stocks. The
+Inventory Analysis API adds daily net lots per broker for 1 year (max 10 brokers per call; each stock's 20 most active
+brokers by gross value). About 400 requests at 3-5 s spacing, stopping at the first error; raw data stays local
+(`data/nb-history.json`). Results:
+- T1 (the forward checklist, replayed): FLOW+ minus FLOW- -0.13% per 5 sessions (adjusted t -0.5), halves +0.18 / -0.43,
+  15 sessions -0.14 -> **fail**. "Accumulation" stocks did -0.18% vs the field (t -2.6).
+- T2 (FLOW- as a veto on ACT): per episode FLOW- looked worse (t 2.2) but by day the sign flipped (t -0.5), unseen ~0 and
+  the second half reversed -> **fail**. On the live trade (ACT + bounce candle) FLOW- bounces did +0.80% vs -0.44% for
+  neutral flow; the veto would have cut the account from +7.3% to +0.1% a year.
+- T3 (FLOW+ ranks first), T4 (accumulation vs distribution), T5 (broker concentration: top 3 buyers + top 3 sellers) -> **fail**.
+- Exploratory (`tools/explore-nb.mjs`): 5-session bandar buying came before slight underperformance (rank IC -0.037, t -2.9;
+  -0.027 after removing the price move), only in the second year. Now forward-tested as hypothesis C1 in
+  `tools/flow-forward.mjs` (bandar-sold-most third minus bought-most third; 60 days, adjusted t >= 2, both halves).
+
+So the ACT+ / ACT? sub-badges were retired: they implied flow-up bounces were better, which the replay contradicts.
+Public outputs: `data/nb-study.json` (aggregates) and `data/nb-history-tags.json` (60-session FLOW+/~/- strip per stock,
+extended by `flow-daily.mjs` each day). Re-run order: pull, `node tools/experiment-nb.mjs`, then `node tools/explore-nb.mjs`
+(it adds its block to nb-study.json).
+
+**What flow may do, and when that changes.** Today: veto (Pinky, illiquid -> SKIP) only; flow is shown as context. It may
 not promote a pick. `tools/flow-forward.mjs` scores every saved snapshot 5 and 15 sessions later against the same-day
 average, and prints a promotion checklist fixed in advance: at least 60 resolved days and 150 FLOW+ stock-days,
 FLOW+ minus FLOW- 5-session spread with overlap-adjusted t >= 2 (t / sqrt(5), since consecutive days share 4 of 5
@@ -110,7 +132,8 @@ predicts nothing (monthly rank IC -0.01). Refresh: open `https://www.idx.co.id/e
 in a normal browser tab (plain scripts get a Cloudflare 403; this repo does not try to get around that), pull days into
 the page's IndexedDB, export, then `node tools/idx-flow-import.mjs <export>`.
 
-NeoBDM limits: today's values only (no history API), screener max 15 columns, 20 rows per page; a bulk pull of every
+NeoBDM limits: the screener has today's values only (history comes from the stock pages, ~2 years, and the
+inventory API, 1 year, see above), screener max 15 columns, 20 rows per page; a bulk pull of every
 column (~1,700 requests) got a 429 block on 2026-10-07. The daily pull stays at about 24 requests at human pace and stops
 at the first rate-limit answer.
 

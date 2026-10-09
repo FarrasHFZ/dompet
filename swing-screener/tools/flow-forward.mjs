@@ -44,7 +44,7 @@ export function scoreSnaps(snaps, bars) {
       const b = bars[tk + '.JK']; if (!b) continue;
       const i0 = b.d.findIndex(d => d.toISOString().slice(0, 10) === s.date); if (i0 < 20) continue;
       const fr = readFlow(r, { chg5: b.c[i0] / b.c[i0 - 5] - 1, chg20: b.c[i0] / b.c[i0 - 20] - 1 });
-      const o = { date: s.date, tk, tag: fr.tag, phase: fr.phase, retail: fr.retail };
+      const o = { date: s.date, tk, tag: fr.tag, phase: fr.phase, retail: fr.retail, m5: r.m_cn_5 == null || r.m_cn_5 === '' ? null : +r.m_cn_5 };
       const entry = b.o[i0 + 1];
       H.forEach(h => { o['r' + h] = entry && b.c[i0 + h] ? b.c[i0 + h] / entry - 1 - FEE : null; });
       obs.push(o);
@@ -84,6 +84,20 @@ export function scoreSnaps(snaps, bars) {
     { rule: '15-session spread also positive', ok: l.spread.avg > 0, value: l.spread.avg == null ? null : +(l.spread.avg * 100).toFixed(2) },
   ];
   out.promotion = { promoted: checks.every(c => c.ok), checks };
+
+  // CONTRARIAN HYPOTHESIS C1, fixed 2026-10-10 from the 2-year replay (tools/experiment-nb.mjs, explore-nb.mjs), where
+  // 5-session Bandar net buying ranked below-average next-5-session returns even after removing the 5-day price move.
+  // The replay found it, so only the FORWARD record can confirm it. Each snapshot day: stocks in the bottom third of
+  // m_cn_5 (bandar sold most) minus the top third (bandar bought most), 5-session excess. Confirmed only if: >= 60 resolved
+  // days, overlap-adjusted t >= 2, positive in both halves. Until then it is shown, never used.
+  const cDays = Object.keys(byDay).sort().map(d => {
+    const l = byDay[d].filter(o => o.m5 != null && o.x5 != null); if (l.length < 30) return null;
+    const s = l.slice().sort((a, b) => a.m5 - b.m5), k = Math.floor(s.length / 3);
+    return mean(s.slice(0, k).map(o => o.x5)) - mean(s.slice(-k).map(o => o.x5));
+  }).filter(x => x != null);
+  const ch = Math.floor(cDays.length / 2), ct = tStat(cDays);
+  out.contrarian = { days: cDays.length, avg: cDays.length ? mean(cDays) : null, tAdj: ct == null ? null : ct / Math.sqrt(5), firstHalf: ch ? mean(cDays.slice(0, ch)) : null, secondHalf: ch ? mean(cDays.slice(ch)) : null };
+  out.contrarian.confirmed = cDays.length >= 60 && out.contrarian.avg > 0 && out.contrarian.tAdj >= 2 && out.contrarian.firstHalf > 0 && out.contrarian.secondHalf > 0;
   return out;
 }
 

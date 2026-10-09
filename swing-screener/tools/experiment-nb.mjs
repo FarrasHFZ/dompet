@@ -90,6 +90,7 @@ const extra = [
 const t1checks = sc.promotion.checks.concat(extra), t1pass = t1checks.every(c => c.ok);
 t1checks.forEach(c => console.log(`  ${c.ok ? '[x]' : '[ ]'} ${c.rule} -> ${JSON.stringify(c.value)}`));
 console.log(`  T1 -> ${t1pass ? 'PASS' : 'fail'}`);
+if (sc.contrarian) console.log(`  (added after the first run, descriptive) contrarian C1 replayed: bottom-third minus top-third bandar 5s: ${pc(sc.contrarian.avg)} adj t ${f2(sc.contrarian.tAdj)} over ${sc.contrarian.days} d, halves ${pc(sc.contrarian.firstHalf)} / ${pc(sc.contrarian.secondHalf)}`);
 
 // ---------- ACT signals in the window, live trade ----------
 function sim(b, i0, stop, target, horizon) {
@@ -223,7 +224,7 @@ fs.writeFileSync(path.join(ROOT, 'data', 'nb-history-tags.json'), JSON.stringify
 const strip = r => ({ ...r });
 fs.writeFileSync(path.join(ROOT, 'data', 'nb-study.json'), JSON.stringify({
   asOf: new Date().toISOString().slice(0, 10), from: allDays[0], to: allDays.at(-1), stocks: tks.length, sessions: allDays.length,
-  t1: { pass: t1pass, checks: t1checks, tags: Object.fromEntries(Object.entries(h5.tags).map(([k, g]) => [k, { n: g.n, avgExcess: g.avgExcess, t: g.t }])), phases: Object.fromEntries(Object.entries(h5.phases).map(([k, g]) => [k, { n: g.n, avgExcess: g.avgExcess, t: g.t }])), spread5: h5.spread, spread15: h15.spread.avg, unseen: scUnseen.horizons[5].spread.avg, step5: { avg: scStep.horizons[5].spread.avg, t: scStep.horizons[5].spread.t, days: scStep.horizons[5].spread.days } },
+  t1: { pass: t1pass, checks: t1checks, tags: Object.fromEntries(Object.entries(h5.tags).map(([k, g]) => [k, { n: g.n, avgExcess: g.avgExcess, t: g.t }])), phases: Object.fromEntries(Object.entries(h5.phases).map(([k, g]) => [k, { n: g.n, avgExcess: g.avgExcess, t: g.t }])), spread5: h5.spread, spread15: h15.spread.avg, unseen: scUnseen.horizons[5].spread.avg, contrarian: sc.contrarian || null, step5: { avg: scStep.horizons[5].spread.avg, t: scStep.horizons[5].spread.t, days: scStep.horizons[5].spread.days } },
   act: { signals: S.length, from: sdays[0], to: sdays.at(-1), liveByTag: byTag }, results: results.map(strip),
   portfolio: { base: { cagr: P0.cagr, mdd: P0.mdd, trades: P0.trades, final: P0.final, curve: P0.curve }, veto: { cagr: P1.cagr, mdd: P1.mdd, trades: P1.trades, final: P1.final, curve: P1.curve }, from: P0.from, to: P0.to },
   vetoAdopted: vetoAdopt, groupIC: t6, invFrom: invDays[0], invTo: invDays.at(-1),

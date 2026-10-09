@@ -189,3 +189,7 @@ tr[data-open]{cursor:pointer}
 @media (max-width:760px){.t-exp{grid-template-columns:1fr 1fr}.t-do p{font-size:14px}}
 .tier.tPAUSE{background:#78350f;color:#fde68a}
 .note.mkt{border-left-color:var(--warn);font-size:13.5px}
+/* NeoBDM replayed flow-tag strip */
+.fstrip { display: block; max-width: 100%; height: auto; }
+.fhist { margin: .5rem 0 .75rem; }
+.fhist small { display: block; color: var(--mute); margin-bottom: .25rem; }

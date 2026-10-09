@@ -20,7 +20,14 @@
   const UNIVERSE = '01a12133-4e90-739f-8583-fd7e5d2d03c9'; // "swing-100"
   const open = () => new Promise((ok, no) => { const r = indexedDB.open('nbhpull', 1); r.onupgradeneeded = () => r.result.createObjectStore('s'); r.onsuccess = () => ok(r.result); r.onerror = () => no(r.error); });
   const tx = (db, mode, fn) => new Promise((ok, no) => { const t = db.transaction('s', mode); const q = fn(t.objectStore('s')); t.oncomplete = () => ok(q && q.result); t.onerror = () => no(t.error); });
-  const wait = ms => new Promise(r => setTimeout(r, ms));
+  // Pauses run on a Web Worker timer: Chrome throttles a hidden tab's own timers to about one per minute, which would
+  // stall the pull (the request pace stays the same; only the throttling is avoided).
+  if (!window.__wwait) {
+    const wk = new Worker(URL.createObjectURL(new Blob(['onmessage=e=>setTimeout(()=>postMessage(e.data.id),e.data.ms)'], { type: 'text/javascript' })));
+    const pend = {}; let seq = 0; wk.onmessage = e => { pend[e.data](); delete pend[e.data]; };
+    window.__wwait = ms => new Promise(r => { const id = ++seq; pend[id] = r; wk.postMessage({ id, ms }); });
+  }
+  const wait = ms => window.__wwait(ms);
   const sig = x => (x == null ? null : +Number(x).toPrecision(7));
   const iso = d => d.toISOString().slice(0, 10);
   const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

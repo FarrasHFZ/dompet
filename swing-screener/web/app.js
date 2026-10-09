@@ -43,15 +43,24 @@
         <div><small>Volume Rotation</small><b>${bandHtml(b)}</b></div></div>
       <p class="muted">Bandarmetrics data of ${esc(b.asOf)}${b.stale ? ' <b>(stale)</b>' : ''}. Directions only. Context, not a signal: over 4 years and 100 stocks this read did not separate winning from losing ACT trades (see the Broker flow tab), so it does not change the badge. Most useful as a warning: LPM falling means large-order pressure is still on the sell side.</p>`;
   };
+  // Replayed flow tag for the last 60 sessions (tools/experiment-nb.mjs, extended daily): one cell per session.
+  const stripHtml = (h, big) => {
+    if (!h || !h.t) return '<span class="mute">–</span>';
+    const C = { '+': ['var(--up)', 'FLOW+'], '-': ['var(--down)', 'FLOW-'], '~': ['var(--mute)', 'FLOW~'] };
+    const n = h.t.length, w = big ? 6 : 2.5, g = big ? 1 : 0.5, H = big ? 18 : 12;
+    return `<svg class="fstrip" width="${n * (w + g)}" height="${H}" viewBox="0 0 ${n * (w + g)} ${H}" role="img" aria-label="Flow tag, last ${n} sessions to ${esc(h.d1)}: ${(h.t.match(/\+/g) || []).length} FLOW+, ${(h.t.match(/-/g) || []).length} FLOW-">${[...h.t].map((c, i) => `<rect x="${i * (w + g)}" y="0" width="${w}" height="${H}" rx="1" fill="${(C[c] || ['var(--mute)'])[0]}"${C[c] && c !== '~' ? '' : ' opacity=".3"'}><title>${esc((C[c] || [0, 'n/a'])[1])}</title></rect>`).join('')}</svg>`;
+  };
   const nbHtml = p => {
     const n = p.neobdm;
     if (!n) return '<p class="muted">NeoBDM has no row for this ticker.</p>';
+    const h = p.flowHist;
+    const hist = h ? `<div class="fhist"><small>Flow tag, last ${h.t.length} sessions (${esc(h.d0)} to ${esc(h.d1)})</small>${stripHtml(h, true)}<div class="muted"><span class="up">■</span> FLOW+ <span class="down">■</span> FLOW- <span class="mute">■</span> neutral${h.ph ? ` · ${esc(h.ph.toLowerCase())} for ${h.phDays} session${h.phDays === 1 ? '' : 's'}` : ''}. Replayed from NeoBDM's Transaction Chart history, then extended daily. Replayed cells trust every group fully (the history has no method-fit scores), so they can differ from today's live tag.</div></div>` : '';
     const tagCls = n.tag === 'FLOW+' ? 'up' : n.tag === 'FLOW-' || n.tag === 'AVOID' ? 'down' : '';
     const grid = n.groups ? `<div class="scroll"><table><thead><tr><th>Group</th><th>5 days</th><th>20 days</th><th>Method fits?</th></tr></thead><tbody>
       ${GROUPS.map(([k, l]) => n.groups[k] ? `<tr><td>${l}</td><td>${dirHtml(n.groups[k].d5)}</td><td>${dirHtml(n.groups[k].d20)}</td><td class="${n.groups[k].compat ? '' : 'mute'}">${n.groups[k].compat ? 'yes' : 'weak (half weight)'}</td></tr>` : '').join('')}</tbody></table></div>
       <p class="muted">Today's top 5 net buyers: ${mixHtml(n.brokers && n.brokers.buyers)}. Top 5 net sellers: ${mixHtml(n.brokers && n.brokers.sellers)}.</p>` : '';
-    return `<p><span class="tag ${n.tag === 'AVOID' ? 'RISK' : ''}">${esc(n.tag)}</span> ${n.phase ? phaseHtml(n.phase) : ''} <span class="${tagCls}">${esc(n.note)}</span></p>${grid}
-      <p class="muted">From NeoBDM data of ${esc(n.asOf)}${n.stale ? ' <b>(stale: no longer used for the badge)</b>' : ''}. Directions only; raw numbers are not published. Flow is the group's net buy as a share of turnover. It can veto (Pinky, illiquid) or annotate a pick; it cannot promote one until its forward test passes (see the Broker flow tab).</p>`;
+    return `<p><span class="tag ${n.tag === 'AVOID' ? 'RISK' : ''}">${esc(n.tag)}</span> ${n.phase ? phaseHtml(n.phase) : ''} <span class="${tagCls}">${esc(n.note)}</span></p>${hist}${grid}
+      <p class="muted">From NeoBDM data of ${esc(n.asOf)}${n.stale ? ' <b>(stale: no longer used for the badge)</b>' : ''}. Directions only; raw numbers are not published. Flow is the group's net buy as a share of turnover. It can veto (Pinky, illiquid), nothing more: replayed over two years of NeoBDM history, the flow tag did not predict returns or which bounces worked (see the Broker flow tab).</p>`;
   };
 
   const MQ = window.matchMedia('(max-width: 760px)');
@@ -105,7 +114,8 @@
       <div class="card scroll"><table><thead><tr><th>Label</th><th class="n">Stock-days</th><th class="n">Days</th><th class="n">Avg net</th><th class="n">Excess</th><th class="n">t</th></tr></thead><tbody>
       ${rows.map(([k, g]) => `<tr><td>${esc(k)}</td><td class="n">${g.n}</td><td class="n">${g.days}</td><td class="n">${g.n ? pc(g.avgNet, 2) : '–'}</td><td class="n">${g.n ? pc(g.avgExcess, 2) : '–'}</td><td class="n">${t(g.t)}</td></tr>`).join('')}</tbody></table></div>
       <h3>Promotion checklist ${sc.promotion.promoted ? '<span class="tag">passed</span>' : '<span class="tag RISK">not yet</span>'}</h3>
-      <ul class="checks">${sc.promotion.checks.map(c => `<li class="${c.ok ? 'up' : 'mute'}">${c.ok ? '✓' : '○'} ${esc(c.rule)} <span class="muted">(${esc(JSON.stringify(c.value))})</span></li>`).join('')}</ul>`;
+      <ul class="checks">${sc.promotion.checks.map(c => `<li class="${c.ok ? 'up' : 'mute'}">${c.ok ? '✓' : '○'} ${esc(c.rule)} <span class="muted">(${esc(JSON.stringify(c.value))})</span></li>`).join('')}</ul>
+      ${sc.contrarian ? `<h3>Contrarian hypothesis C1 ${sc.contrarian.confirmed ? '<span class="tag">confirmed</span>' : '<span class="tag RISK">open</span>'}</h3><p class="muted">Found in the 2-year replay, so only live snapshots can confirm it: stocks the bandar <b>sold</b> most over 5 sessions (bottom third) minus those it <b>bought</b> most (top third), next 5 sessions, excess. Needs 60 resolved days, overlap-adjusted t ≥ 2 and both halves positive. So far: ${sc.contrarian.days} day${sc.contrarian.days === 1 ? '' : 's'}${sc.contrarian.days ? `, ${pc(sc.contrarian.avg, 2)}, t ${sc.contrarian.tAdj == null ? '–' : sc.contrarian.tAdj.toFixed(1)}` : ''}.</p>` : ''}`;
   }
   function bmBtHtml(bm) {
     const x = bm && bm.experiment;
@@ -121,6 +131,45 @@
     if (!r || r.empty) return '';
     const t = v => (v == null ? '–' : v.toFixed(1));
     return `<h3>Data-weighted Bandarmetrics score</h3><p class="muted">Instead of BM's own rules, each input's weight was learned on Apr 2023 to Sep 2024 (the inputs need a year of history first) and judged only on Oct 2024 to Sep 2026. Trained on oversold trades, it kept one input: the <b>60-day LPM trend</b>. Out of sample, ACT trades in its top half beat the bottom half by ${pc(r.gapEpisodes, 2)} per trade (t=${t(r.tEpisodes)}), ${pc(r.gapByDay, 2)} by day (t=${t(r.tByDay)}), ${pc(r.unseen, 2)} on unseen stocks. The direction held everywhere, but it ${r.pass ? 'passed' : 'did not clear the bar (t >= 2)'}. So it is shown as the experimental <b>accumulation score</b> and logged daily; its live record is in Track record. A score trained on all stocks failed out of sample.</p>`;
+  }
+  // NeoBDM 2-year replay (tools/experiment-nb.mjs): the flow model run over NeoBDM's own Transaction Chart history.
+  function curveSvg(a, b) {
+    if (!a || !a.length) return '';
+    const W = 560, H = 150, L = 6, R = 6, T = 8, B = 18, all = a.concat(b || []).map(p => p[1]);
+    const lo = Math.min(...all), hi = Math.max(...all), x = i => L + (i / (a.length - 1)) * (W - L - R), y = v => T + (1 - (v - lo) / (hi - lo || 1)) * (H - T - B);
+    const path = s => s.map((p, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(p[1]).toFixed(1)}`).join('');
+    return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Account value, live rule with and without the FLOW- veto">
+      <line x1="${L}" x2="${W - R}" y1="${y(1)}" y2="${y(1)}" stroke="var(--mute)" stroke-dasharray="3 3"/>
+      <path d="${path(a)}" fill="none" stroke="var(--mute)" stroke-width="1.6"/>${b ? `<path d="${path(b)}" fill="none" stroke="var(--accent)" stroke-width="2"/>` : ''}
+      <text x="${L}" y="${H - 4}">${esc(a[0][0])}</text><text x="${W - R - 64}" y="${H - 4}">${esc(a.at(-1)[0])}</text></svg>`;
+  }
+  function nbHistHtml(x) {
+    if (!x) return '<p class="muted">Not run yet (tools/nb-hist-pull.js, then tools/experiment-nb.mjs).</p>';
+    const t = v => (v == null ? '–' : v.toFixed(1)), t2 = v => (v == null ? '–' : v.toFixed(2));
+    const t1 = x.t1, tags = Object.entries(t1.tags).filter(([, g]) => g.n), phases = Object.entries(t1.phases).filter(([, g]) => g.n);
+    const R = id => x.results.find(r => r.id === id) || {};
+    const T2 = R('T2'), P = x.portfolio, live = x.act.liveByTag || {};
+    const G = { m: 'Bandar', nr: 'Non-retail', i: 'Institution', s: 'Sultan', f: 'Foreign', z: 'Retail' };
+    return `<div class="note"><b>Now backtested, not only forward-tested.</b> Each NeoBDM stock page carries about two years of its Transaction Chart (each group's running net buying). Replaying the flow model over it gives ${x.sessions} sessions × ${x.stocks} stocks (${esc(x.from)} to ${esc(x.to)}) of the exact read the site shows, scored with the forward test's own code and checklist. The tests and pass bars were committed before the data was pulled. Not replayable: NeoBDM's method-fit, crossing and Pinky flags, so every group is trusted fully and nothing is tagged AVOID.</div>
+      ${(() => { const s = t1.spread5 || {}, acc = t1.phases.ACCUMULATION || {}, e = x.explore && x.explore.m;
+        return `<div class="card pad"><p><b>Verdict: the flow read describes who is trading, but it does not predict.</b> Over the next 5 sessions, FLOW+ stocks did ${pc(s.avg, 2)} versus FLOW- (t ${t(s.tAdj)} after the overlap correction; the bar was +2). "Accumulation", big money buying into weakness, came out <i>below</i> average (${pc(acc.avgExcess, 2)}, t ${t(acc.t)}). For the trade itself, bounces with big money selling did ${live['FLOW-'] ? pc(live['FLOW-'].avg, 2) : '–'} per trade versus ${live['FLOW~'] ? pc(live['FLOW~'].avg, 2) : '–'} for neutral flow, and skipping them would have cut the account from ${pc(P && P.base.cagr, 1)} to ${pc(P && P.veto.cagr, 1)} a year.</p>
+          <p><b>What changed on the site:</b> the ACT+ / ACT? sub-badges are retired (they implied flow-up bounces were better, which the replay contradicts); flow stays as context, and Pinky / illiquid still veto. ${e ? `The one hint left: short-term bandar <i>buying</i> came before slight <i>underperformance</i> (rank correlation ${t2(e.ic)}, t ${t(e.t)}; ${t2(e.partial)} after removing the price move), but only in the second year (${t2(e.h1)} then ${t2(e.h2)}). It is now a forward-test hypothesis (C1, below), not a rule.` : ''}</p></div>`; })()}
+      <h3>1. Does the flow tag predict the next 5 sessions? ${t1.pass ? '<span class="tag">passed</span>' : '<span class="tag RISK">failed</span>'}</h3>
+      <div class="card scroll"><table><thead><tr><th>Label (replayed)</th><th class="n">Stock-days</th><th class="n">Excess, 5 sessions</th><th class="n">t</th></tr></thead><tbody>
+      ${tags.concat(phases).map(([k, g]) => `<tr><td>${esc(k)}</td><td class="n">${g.n.toLocaleString()}</td><td class="n">${pc(g.avgExcess, 2)}</td><td class="n">${t(g.t)}</td></tr>`).join('')}</tbody></table></div>
+      <ul class="checks">${t1.checks.map(c => `<li class="${c.ok ? 'up' : 'mute'}">${c.ok ? '✓' : '○'} ${esc(c.rule)} <span class="muted">(${esc(JSON.stringify(c.value))})</span></li>`).join('')}</ul>
+      <h3>2. Does it improve the trade? ${x.vetoAdopted ? '<span class="tag">veto adopted</span>' : '<span class="tag RISK">not adopted</span>'}</h3>
+      <p class="muted">${x.act.signals.toLocaleString()} ACT signals in the window, traded with the live rule (wide stop, +8%, 15 sessions, fees). One trade per stock episode, by-day clustering, the 73 unseen stocks and both halves (split Oct 2025) must all agree.</p>
+      <div class="card scroll"><table><thead><tr><th>Test (A vs B)</th><th class="n">A / B per trade</th><th class="n">Gap</th><th class="n">t, episodes</th><th class="n">t, by day</th><th class="n">Unseen</th><th class="n">1st / 2nd half</th><th>Result</th></tr></thead><tbody>
+      ${x.results.filter(r => r.id !== 'T5').map(r => `<tr><td>${esc(r.id)} ${esc(r.name)}</td><td class="n">${pc(r.avgA, 2)} / ${pc(r.avgB, 2)}</td><td class="n">${pc(r.gap, 2)}</td><td class="n">${t(r.t)}</td><td class="n">${t(r.tDay)}</td><td class="n">${pc(r.unseen, 2)}</td><td class="n">${pc(r.h1, 1)} / ${pc(r.h2, 1)}</td><td>${r.pass ? '<span class="up">pass</span>' : '<span class="mute">fail (bar ' + r.bar + ')</span>'}</td></tr>`).join('')}</tbody></table></div>
+      <p class="muted">The live trade (ACT + bounce candle), one per episode: ${['FLOW+', 'FLOW~', 'FLOW-'].map(k => live[k] ? `${k} ${live[k].n} trades, avg ${pc(live[k].avg, 2)}` : '').filter(Boolean).join(' · ')}.</p>
+      ${P ? `<p class="muted">As an account (5 positions, market filter on, idle cash 4.5%), ${esc(P.from)} to ${esc(P.to)} (flat stretches = market filter off, in cash): <b>live rule</b> (grey) ${pc(P.base.cagr, 1)} a year, worst drawdown ${pc(P.base.mdd, 1)}, ${P.base.trades} trades; <b style="color:var(--accent)">with the FLOW- veto</b> ${pc(P.veto.cagr, 1)}, ${pc(P.veto.mdd, 1)}, ${P.veto.trades} trades.</p>${curveSvg(P.base.curve, P.veto.curve)}` : ''}
+      <h3>3. Broker inventory: do a few brokers loading up matter?</h3>
+      <p class="muted">NeoBDM's Inventory Analysis, one year (${esc(x.invFrom)} to ${esc(x.invTo)}), each stock's 20 most active brokers by gross value (not by net, so the choice does not know who accumulated). Concentration = the 3 biggest net buyers plus the 3 biggest net sellers over 20 sessions, as a share of volume. Rank correlation with the next 5 sessions: ${t2(R('T5').ic)} (t=${t(R('T5').t)}; halves ${t2(R('T5').h1)} / ${t2(R('T5').h2)}; unseen ${t2(R('T5').unseen)}) → ${R('T5').pass ? '<span class="up">pass</span>' : '<span class="mute">fail (bar 2.5)</span>'}.</p>
+      <h3>4. Which group's flow leads price? (descriptive)</h3>
+      <div class="card scroll"><table><thead><tr><th>Group</th><th class="n">5-session flow: IC</th><th class="n">t</th><th class="n">20-session flow: IC</th><th class="n">t</th><th class="n">20s halves</th></tr></thead><tbody>
+      ${Object.entries(G).map(([g, l]) => { const a = x.groupIC[g + '5'] || {}, b = x.groupIC[g + '20'] || {}; return `<tr><td>${l}</td><td class="n">${t2(a.ic)}</td><td class="n">${t(a.t)}</td><td class="n">${t2(b.ic)}</td><td class="n">${t(b.t)}</td><td class="n">${t2(b.h1)} / ${t2(b.h2)}</td></tr>`; }).join('')}</tbody></table></div>
+      <p class="muted">IC = rank correlation between a group's net buying (share of turnover) and the next 5 sessions' return versus other stocks, on every 5th session so windows don't overlap. Positive = buying by that group came before outperformance. Read-only: nothing here was used to pick a rule.</p>`;
   }
   function foreignBtHtml(fb) {
     if (!fb) return '<p class="muted">Not run yet: needs the IDX daily history (tools/idx-flow-import.mjs).</p>';
@@ -145,16 +194,18 @@
         <label class="muted"><input type="checkbox" id="fact" ${FLOWACT ? 'checked' : ''}> ACT only</label>
         <input type="search" id="fq" placeholder="Ticker or sector" value="${esc(FLOWQ)}" style="max-width:200px;margin-left:auto">
       </div>
-      <div class="card scroll"><table><thead><tr><th>Ticker</th><th>Flow</th><th>Phase</th><th>Big money 20d / 5d</th><th>Bandar 20d</th><th>Foreign 5d / 20d</th><th>Retail 20d</th><th>Transfer</th><th>BM read</th><th>BM score</th><th>Rotation</th><th>Pick</th></tr></thead><tbody>
+      <div class="card scroll"><table><thead><tr><th>Ticker</th><th>Flow</th><th>Last 60 sessions</th><th>Phase</th><th>Big money 20d / 5d</th><th>Bandar 20d</th><th>Foreign 5d / 20d</th><th>Retail 20d</th><th>Transfer</th><th>BM read</th><th>BM score</th><th>Rotation</th><th>Pick</th></tr></thead><tbody>
       ${list.length ? list.map(p => { const n = p.neobdm; return `<tr class="row" data-open="${esc(p.ticker)}" title="Open ${esc(p.ticker)}"><td><b class="tk">${esc(p.ticker)}</b><div class="nm">${esc(p.sector)}</div></td>
-        <td><span class="tag ${n.tag === 'AVOID' ? 'RISK' : ''}">${esc(n.tag)}</span></td><td>${phaseHtml(n.phase)}${n.turn ? `<div class="muted">${esc(n.turn)}</div>` : ''}</td>
+        <td><span class="tag ${n.tag === 'AVOID' ? 'RISK' : ''}">${esc(n.tag)}</span></td><td>${stripHtml(p.flowHist, false)}</td><td>${phaseHtml(n.phase)}${p.flowHist && p.flowHist.ph === n.phase ? `<div class="muted">${p.flowHist.phDays} sessions</div>` : ''}${n.turn ? `<div class="muted">${esc(n.turn)}</div>` : ''}</td>
         <td>${dirHtml(n.bigMoney && n.bigMoney.d20)} / ${dirHtml(n.bigMoney && n.bigMoney.d5)}</td>
         <td>${g(p, 'm', 'd20')}</td><td>${g(p, 'f', 'd5')} / ${g(p, 'f', 'd20')}</td><td>${g(p, 'z', 'd20')}</td>
         <td class="muted">${esc(n.retail)}${n.dirty ? '<div class="down">dirty tape</div>' : ''}</td>
         <td>${p.bm ? bmReadHtml(p.bm) + (p.bm.spike ? '<div class="muted">Intensity spike</div>' : '') : '<span class="mute">–</span>'}</td><td>${bmScoreHtml(p.bm && p.bm.score)}</td><td>${bandHtml(p.bm)}</td>
-        <td><span class="act ${p.action}">${p.action}</span> ${tierHtml(p)}</td></tr>`; }).join('') : '<tr><td colspan="12" class="empty">Nothing matches.</td></tr>'}</tbody></table></div>
-      <h2>Does broker flow help? Forward test</h2>
-      <div class="note"><b>Why a forward test.</b> NeoBDM shows only today's numbers, so the flow read cannot be backtested. Every trading day a snapshot is saved and scored later. Flow may start changing badges only after the checklist below passes (earliest around mid-January 2027). The rules were fixed on 2026-10-09, before any forward result, and correct t for overlapping holding periods.</div>
+        <td><span class="act ${p.action}">${p.action}</span> ${tierHtml(p)}</td></tr>`; }).join('') : '<tr><td colspan="13" class="empty">Nothing matches.</td></tr>'}</tbody></table></div>
+      <h2>Does broker flow help? 2-year replay</h2>
+      ${nbHistHtml(F.history)}
+      <h2>Forward test (live snapshots)</h2>
+      <div class="note"><b>Why a forward test as well.</b> The replay cannot see NeoBDM's method-fit and dirty-tape flags, and NeoBDM could revise old data. So every trading day the full live snapshot is still saved and scored later, with the checklist below (fixed on 2026-10-09, before any result; t is corrected for overlapping holding periods).</div>
       ${scorecardHtml(F.scorecard)}
       <h2>Foreign flow: 4-year backtest (IDX data)</h2>
       ${foreignBtHtml(F.foreignBacktest)}
@@ -191,7 +242,7 @@
         <input type="search" id="pq" placeholder="Search ticker, name or sector" value="${esc(PQ)}" style="max-width:240px;margin-left:auto">
       </div>
       ${marketBanner()}
-      <p class="muted hint">ACT = oversold-bounce score ≥ ${DATA.meta.actScore}. Badges: <b>ACT</b> bounce candle seen, <b>ACT+</b> and flow up, <b>ACT?</b> flow down, <b>WAIT</b> no bounce candle yet, <b>SKIP</b> NeoBDM veto (Pinky or illiquid), <b>PAUSE</b> market filter off. Few days have any; "none today" is a valid answer.</p>
+      <p class="muted hint">ACT = oversold-bounce score ≥ ${DATA.meta.actScore}. Badges: <b>ACT</b> bounce candle seen, <b>WAIT</b> no bounce candle yet, <b>SKIP</b> NeoBDM veto (Pinky or illiquid), <b>PAUSE</b> market filter off. Broker flow no longer adds ACT+ / ACT?: two years of NeoBDM history showed it did not tell good bounces from bad ones (Broker flow tab). Few days have any; "none today" is a valid answer.</p>
       ${body}`;
     const toggle = t => { OPEN = OPEN === t ? null : t; renderPicks(); const d = $('#dcard'); if (OPEN && d) d.scrollIntoView({ block: MQ.matches ? 'nearest' : 'start', behavior: 'smooth' }); };
     el.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { FILTER = b.dataset.f; OPEN = null; renderPicks(); });
@@ -345,7 +396,9 @@
     if (big) flowParts.push(/strong sell/.test(big) ? 'big brokers have been heavy net sellers this month (NeoBDM)' : /sell/.test(big) ? 'big brokers have been net sellers this month (NeoBDM)' : /buy/.test(big) ? 'big brokers have been net buyers this month (NeoBDM)' : 'big brokers show no clear direction (NeoBDM)');
     if (bm) flowParts.push(bm.quiet ? 'large orders have quietly been building even as the price fell (Bandarmetrics)' : bm.lpm === 'rising' ? 'large-order pressure is building (Bandarmetrics)' : bm.lpm === 'falling' ? 'large orders are still on the sell side (Bandarmetrics)' : 'large-order pressure is flat (Bandarmetrics)');
     const pro = flowParts.filter(s => /buy|building/.test(s)).length, con = flowParts.filter(s => /sell side|sellers/.test(s)).length;
-    const flowLine = flowParts.length ? `Who is trading it: ${flowParts.join(', while ')}. ${pro && con ? 'Mixed signals.' : pro ? 'That supports the bounce.' : con ? 'That is a warning: the selling may not be over.' : ''}` : '';
+    // No verdict from flow: the 2-year NeoBDM replay found big-money direction did not predict which bounces worked
+    // (bounces with big money selling did slightly better), and Bandarmetrics' read failed its own backtest.
+    const flowLine = flowParts.length ? `Who is trading it: ${flowParts.join(', while ')}. ${pro || con ? 'Worth knowing, but not a reason to trade or skip: in two years of NeoBDM history, bounces went about as well whichever way big money was trading.' : ''}` : '';
     const fl = (p.filings || [])[0];
     const filingLine = fl ? `Filed with IDX (${esc(fl[0])}): <b>${esc(fl[2])}</b>${fl[4] ? ` (<a href="${safeUrl(fl[4])}" target="_blank" rel="noopener noreferrer">filing</a>)` : ''}. ${fl[1] === 'dilution' ? 'New shares dilute existing holders and often weigh on the price until the deal is done.' : fl[1] === 'idxQuery' ? 'The exchange asked the company to explain unusual trading: something is moving the stock.' : fl[1] === 'mgmt' ? 'A board or management change.' : fl[1] === 'buyback' ? 'The company plans to buy back its own shares.' : fl[1] === 'dividend' ? 'A dividend announcement.' : ''}` : '';
     const marketLine = act && DATA.market && DATA.market.filter && !DATA.market.filter.ok ? `The market itself is weak: the IHSG is below its 200-day average, which historically made bounce trades lose money overall.` : '';
@@ -363,7 +416,7 @@
     // 4. technical detail (all the numbers, folded)
     const row = (ok, label, detail) => `<li class="${ok === true ? 'ok' : ok === false ? 'no' : ok === 'warn' ? 'wn' : 'na'}"><span>${ok === true ? '✓' : ok === false ? '✗' : ok === 'warn' ? '!' : '○'}</span><div><b>${label}</b> <span class="muted">${detail}</span></div></li>`;
     const ctx = [];
-    if (big) ctx.push(row(/buy/.test(big) ? true : /sell/.test(big) ? 'warn' : null, 'Big money (NeoBDM)', `${big} over 20 days${nb.phase ? ', phase ' + nb.phase.toLowerCase() : ''}`));
+    if (big) ctx.push(row(null, 'Big money (NeoBDM)', `${big} over 20 days${nb.phase ? ', phase ' + nb.phase.toLowerCase() : ''}; no edge in a 2-year replay`));
     if (bm) ctx.push(row(bm.lpm === 'rising' ? true : bm.lpm === 'falling' ? 'warn' : null, 'LPM (Bandarmetrics)', bm.quiet ? 'rising while price fell (quiet accumulation)' : bm.lpm));
     if (bm && bm.score != null) ctx.push(row(bm.score >= 67 ? true : bm.score <= 33 ? 'warn' : null, 'Accumulation score (experimental)', `${bm.score}/100, 60-day LPM trend vs other stocks`));
     ctx.push(row(p.newsScore >= 0.5 ? true : p.newsScore <= -0.5 ? 'warn' : null, 'Stock news', `score ${p.newsScore > 0 ? '+' : ''}${p.newsScore} (own headlines only)${p.newsBackdrop ? `; sector backdrop ${p.newsBackdrop > 0 ? '+' : ''}${p.newsBackdrop}, not scored` : ''}`));

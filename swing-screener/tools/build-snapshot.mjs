@@ -80,6 +80,11 @@ const nbStale = nbd ? (NOW - new Date(nbd.asOf + 'T10:00:00Z').getTime()) / 864e
 const bmFile = fs.readdirSync(path.join(ROOT, 'data')).filter(f => /^bm-tags-\d{4}-\d{2}-\d{2}\.json$/.test(f)).sort().at(-1);
 const bmd = bmFile ? { asOf: bmFile.slice(8, 18), by: JSON.parse(fs.readFileSync(path.join(ROOT, 'data', bmFile), 'utf8')) } : null;
 const bmStale = bmd ? (NOW - new Date(bmd.asOf + 'T10:00:00Z').getTime()) / 864e5 > 10 : true;
+// NeoBDM 2-year replay (tools/experiment-nb.mjs): study summary + replayed flow-tag history per stock (labels only).
+let nbStudy = null, nbHist = null;
+try { nbStudy = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'nb-study.json'), 'utf8')); } catch { /* not run */ }
+try { nbHist = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'nb-history-tags.json'), 'utf8')); } catch { /* not run */ }
+const flowVeto = !!(nbStudy && nbStudy.vetoAdopted);
 const picks = [], skipped = [];
 let lastBar = null;
 uni.forEach(u => {
@@ -101,7 +106,8 @@ uni.forEach(u => {
   const ov = nb && !nbStale ? nb : { tag: 'NONE', pts: 0, note: 'Not covered by NeoBDM.' };
   pk.neobdm = nb ? { asOf: nbd.asOf, stale: nbStale, ...nb } : null;
   pk.bm = bmd && bmd.by[u.ticker] ? { ...bmd.by[u.ticker], stale: bmStale } : null;
-  pk.tier = tierOf(pk.score, api.ACT_SCORE, pk.confirm, ov, marketOk);
+  pk.flowHist = nbHist && nbHist.by[u.ticker] ? nbHist.by[u.ticker] : null;
+  pk.tier = tierOf(pk.score, api.ACT_SCORE, pk.confirm, ov, marketOk, flowVeto);
   pk.filings = filings && filings.by[u.ticker] ? filings.by[u.ticker] : [];
   picks.push(pk);
 });
@@ -150,7 +156,7 @@ const out = {
   },
   // Broker-flow workflow: forward-test scorecard (tools/flow-forward.mjs) and the IDX foreign-flow backtest (tools/experiment-flow.mjs).
   research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
-  flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json'),
+  flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json'), history: nbStudy, flowVeto,
     bm: { asOf: bmd ? bmd.asOf : null, stale: bmStale, experiment: readJson('bm-experiment.json'), scoreExperiment: readJson('bm-score-experiment.json') } },
   backtestHoldout:fs.existsSync(path.join(ROOT, 'data', 'backtest-holdout.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'backtest-holdout.json'), 'utf8')) : null,
   newsAccuracy: fs.existsSync(na) ? JSON.parse(fs.readFileSync(na, 'utf8')) : null, market, picks, news: newsOut, ownership: ownership ? { asOf: ownership.asOf, note: ownership.note } : null, backtest: bt, trackerSummary: { signalDays: tracker.signalDays, act: tracker.act, control: tracker.control, open: tracker.open.length, rules: tracker.rules },

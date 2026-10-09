@@ -45,12 +45,16 @@ export function overlay(n) {
 // Technical rules from tools/experiment-v3.mjs (backtested) + NeoBDM veto/annotation (not backtested).
 // marketOk: IHSG above its 200-day average (tools/experiment-v4.mjs: chosen on 2022-10..2024-09, confirmed on 2024-10..:
 // second-half CAGR +6.3% vs 0.0%, max drawdown -12.7% vs -36.8%). Below it, oversold setups are paused, not traded.
-export function tierOf(score, actScore, confirm, ov, marketOk = true) {
+// flowVeto: set only when tools/experiment-nb.mjs (2-year NeoBDM replay, pre-registered) adopted it; FLOW- then skips.
+export function tierOf(score, actScore, confirm, ov, marketOk = true, flowVeto = false) {
   if (score < actScore) return 'WATCH';
   if (ov.tag === 'AVOID') return 'SKIP';
+  if (flowVeto && ov.tag === 'FLOW-') return 'SKIP';
   if (!marketOk) return 'PAUSE';
   if (!confirm) return 'WAIT';
-  return ov.tag === 'FLOW+' ? 'ACT+' : ov.tag === 'FLOW-' ? 'ACT?' : 'ACT';
+  // ACT+ / ACT? (flow up / down) were retired on 2026-10-10: the 2-year replay (tools/experiment-nb.mjs) found the flow tag
+  // did not separate good from bad bounces, and FLOW- bounces did slightly better, so a flow sub-badge would mislead.
+  return 'ACT';
 }
 
 // Daily snapshot (tools/neobdm-pull.js -> data/neobdm-snap/DATE.json, local) -> public tags carrying the full broker-flow

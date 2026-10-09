@@ -23,6 +23,19 @@ if (ageDays > 4) console.warn(`Warning: newest snapshot is ${date} (${ageDays.to
 const { by } = snapToTags(path.join(SNAP, newest));
 fs.writeFileSync(path.join(DATA, `neobdm-tags-${date}.json`), JSON.stringify(by));
 fs.readdirSync(DATA).filter(f => /^neobdm-tags-\d{4}-\d{2}-\d{2}\.json$/.test(f) && f !== `neobdm-tags-${date}.json`).forEach(f => fs.unlinkSync(path.join(DATA, f)));
+// Extend the per-stock 60-session tag strip (data/nb-history-tags.json, from tools/experiment-nb.mjs) with today's tag.
+const HT = path.join(DATA, 'nb-history-tags.json');
+if (fs.existsSync(HT)) {
+  const ht = JSON.parse(fs.readFileSync(HT, 'utf8'));
+  if (date > ht.asOf) {
+    for (const [tk, t] of Object.entries(by)) {
+      const h = ht.by[tk]; if (!h) continue;
+      h.t = (h.t + ({ 'FLOW+': '+', 'FLOW-': '-', 'FLOW~': '~' }[t.tag] || '?')).slice(-60);
+      h.phDays = t.phase === h.ph ? (h.phDays || 0) + 1 : 1; h.ph = t.phase; h.d1 = date;
+    }
+    ht.asOf = date; fs.writeFileSync(HT, JSON.stringify(ht));
+  }
+}
 const cnt = {}; Object.values(by).forEach(t => { cnt[t.tag] = (cnt[t.tag] || 0) + 1; });
 console.log(`labels ${date}: ${n} stocks`, JSON.stringify(cnt));
 
@@ -34,4 +47,4 @@ const s5 = sc.horizons[5].spread;
 console.log(`forward test: ${sc.snapshots} snapshots (${sc.firstSnap}..${sc.lastSnap}); resolved 5-session spread days ${s5.days}${s5.days ? `, FLOW+ minus FLOW- ${(s5.avg * 100).toFixed(2)}% adj t=${s5.tAdj == null ? 'n/a' : s5.tAdj.toFixed(2)}` : ''}`);
 console.log('promotion:', sc.promotion.promoted ? 'PASSED - flow may now change tiers (edit tierOf in tools/neobdm.mjs deliberately)' : 'not yet');
 sc.promotion.checks.forEach(c => console.log(c.ok ? ' [x]' : ' [ ]', c.rule, JSON.stringify(c.value)));
-console.log(`\nnext: git add swing-screener/data/neobdm-tags-${date}.json swing-screener/data/flow-scorecard.json && git commit && git push`);
+console.log(`\nnext: git add swing-screener/data/neobdm-tags-${date}.json swing-screener/data/flow-scorecard.json swing-screener/data/nb-history-tags.json && git commit && git push`);
