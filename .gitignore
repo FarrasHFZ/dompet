@@ -25,3 +25,5 @@ swing-screener/data/bm-snap/
 swing-screener/data/fundamentals-quarterly.json
 swing-screener/data/idx-announcements-new.json
 swing-screener/data/idx-announcements.json
+# NeoBDM transaction-chart + broker-inventory history (tools/nb-hist-pull.js; paid data, research input)
+swing-screener/data/nb-history.json
