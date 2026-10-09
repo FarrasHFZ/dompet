@@ -155,3 +155,22 @@ dialog label{display:block;margin:10px 0;font-size:12.5px;color:var(--mute)}
 .tag.phACCUMULATION,.tag.phMARKUP{color:var(--up)}.tag.phDISTRIBUTION,.tag.phMARKDOWN{color:var(--down)}.tag.phNEUTRAL{background:var(--line);color:var(--mute)}
 .checks{list-style:none;padding:0;margin:6px 0 12px;font-size:13.5px}.checks li{padding:2px 0}
 .warn{color:var(--warn)}
+/* stock summary (thesis) card at the top of a stock's detail */
+.thesis{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:6px 0 14px;background:var(--card)}
+.th-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.th-stage{font-weight:700;font-size:17px}
+.th-head .muted{margin-left:auto}
+.th-line{margin:4px 0 10px}
+.th-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.th-grid small,.th-checks small{color:var(--mute);text-transform:uppercase;letter-spacing:.03em;font-size:11px}
+.th-grid p{margin:3px 0 0;font-size:14px;line-height:1.45}
+.th-checks{display:grid;grid-template-columns:1fr 1.4fr;gap:12px;margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+.th-list{list-style:none;padding:0;margin:4px 0 0}
+.th-list li{display:flex;gap:8px;padding:3px 0;font-size:13.5px}
+.th-list li>span{width:16px;flex:none;text-align:center;font-weight:700}
+.th-list li.ok>span{color:var(--up)}.th-list li.no>span{color:var(--down)}.th-list li.wn>span{color:var(--warn)}.th-list li.na>span{color:var(--mute)}
+.th-foot{margin:10px 0 0}
+@media (max-width:760px){.th-grid,.th-checks{grid-template-columns:1fr}.th-stage{font-size:16px}}
+.jump{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}.jump .chip{font-size:12.5px}
+tr[data-open]{cursor:pointer}
+.pthesis{font-size:12.5px;margin-top:3px}
