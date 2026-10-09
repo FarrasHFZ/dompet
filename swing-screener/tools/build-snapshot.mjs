@@ -37,6 +37,9 @@ function splitLive(sym, b) {
 }
 Object.keys(px).forEach(k => { px[k] = splitLive(k, px[k]); });
 const idx = px['^JKSE'] ? px['^JKSE'].c : null;
+// Market filter (tools/experiment-v4.mjs, walk-forward): new bounce trades only while IHSG is above its 200-day average.
+const ihsgSma200 = idx && idx.length >= 200 ? idx.slice(-200).reduce((s, x) => s + x, 0) / 200 : null;
+const marketOk = ihsgSma200 == null ? true : idx[idx.length - 1] > ihsgSma200;
 if (!uni.some(u => px[u.ticker + '.JK'])) throw new Error('no price data fetched');
 
 // Hot stocks get news every run (hourly); the rest on a 6-hourly full sweep. Hot = most liquid 30 from the last published
@@ -67,6 +70,9 @@ let fundamentals = {};
 try { fundamentals = await fetchFundamentals(uni.map(u => u.ticker)); } catch (e) { console.error('fundamentals failed', e.message); }
 
 const nbd = loadNeobdm();
+// IDX company filings, last 45 days, meaningful types only (tools/ann-import.mjs; pulled in a browser, IDX blocks scripts).
+let filings = null;
+try { filings = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'idx-filings-recent.json'), 'utf8')); } catch { /* none yet */ }
 // Flow labels older than 5 calendar days no longer change tiers (shown as stale): old broker flow says little about a
 // setup two weeks later, and a silently frozen file must not keep promoting or demoting picks.
 const nbStale = nbd ? (NOW - new Date(nbd.asOf + 'T10:00:00Z').getTime()) / 864e5 > 5 : true;
@@ -95,12 +101,14 @@ uni.forEach(u => {
   const ov = nb && !nbStale ? nb : { tag: 'NONE', pts: 0, note: 'Not covered by NeoBDM.' };
   pk.neobdm = nb ? { asOf: nbd.asOf, stale: nbStale, ...nb } : null;
   pk.bm = bmd && bmd.by[u.ticker] ? { ...bmd.by[u.ticker], stale: bmStale } : null;
-  pk.tier = tierOf(pk.score, api.ACT_SCORE, pk.confirm, ov);
+  pk.tier = tierOf(pk.score, api.ACT_SCORE, pk.confirm, ov, marketOk);
+  pk.filings = filings && filings.by[u.ticker] ? filings.by[u.ticker] : [];
   picks.push(pk);
 });
 picks.sort((x, y) => y.score - x.score);
 const market = api.marketRead_(picks, idx);
 market.idxLive = live['^JKSE'] || null;
+market.filter = { ok: marketOk, ihsg: idx ? idx[idx.length - 1] : null, sma200: ihsgSma200 };
 
 // ---- forward-test ledger + live track record ----
 const asOf = lastBar.toISOString().slice(0, 10);
@@ -112,7 +120,7 @@ let existing = null;
 try { existing = JSON.parse(fs.readFileSync(ledgerFile, 'utf8')); } catch { /* none */ }
 if (!process.env.FAKE_NOW && (!existing || (existing.v || 1) < LEDGER_V)) {
   fs.writeFileSync(ledgerFile, JSON.stringify({
-    v: LEDGER_V, asOf, cfg, regime: market.regime, breadth: market.breadth,
+    v: LEDGER_V, asOf, cfg, regime: market.regime, breadth: market.breadth, marketOk,
     picks: picks.map(p => ({ ticker: p.ticker, sector: p.sector, score: p.score, action: p.action, setup: p.setup, rsi: p.rsi, dist20Atr: p.dist20Atr, rr: p.rr, atrPct: p.atrPct, entry: p.entry, stop: p.stop, target: p.target, newsScore: p.newsScore, bmScore: p.bm && !p.bm.stale && p.bm.score != null ? p.bm.score : null })),
   }));
 }
@@ -141,6 +149,7 @@ const out = {
     sources: { prices: 'Yahoo Finance daily bars (.JK)', news: 'Google News RSS (Indonesian)', ownership: ownership ? `${ownership.source} (as of ${ownership.asOf})` : null, fundamentals: 'Yahoo Finance fundamentals-timeseries (unofficial, last ~5 quarters)', neobdm: nbd ? 'NeoBDM Market Summary, ' + nbd.asOf + (nbStale ? ' (stale: not used for tiers)' : '') + ' (pulled from a logged-in browser; forward test running)' : null },
   },
   // Broker-flow workflow: forward-test scorecard (tools/flow-forward.mjs) and the IDX foreign-flow backtest (tools/experiment-flow.mjs).
+  research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
   flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json'),
     bm: { asOf: bmd ? bmd.asOf : null, stale: bmStale, experiment: readJson('bm-experiment.json'), scoreExperiment: readJson('bm-score-experiment.json') } },
   backtestHoldout:fs.existsSync(path.join(ROOT, 'data', 'backtest-holdout.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'backtest-holdout.json'), 'utf8')) : null,

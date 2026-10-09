@@ -13,7 +13,7 @@
   // News direction: +-0.5 deadband, so a stock with no real news reads neutral.
   const arrow = s => (s >= 0.5 ? '<span class="up">▲ supports</span>' : s <= -0.5 ? '<span class="down">▼ risk</span>' : '<span class="mute">• neutral</span>');
 
-  const TIER = { 'ACT+': 'Bounce candle + flow up', ACT: 'Bounce candle confirmed', 'ACT?': 'Bounce candle, but flow down', WAIT: 'Oversold, wait for a bounce candle', SKIP: 'NeoBDM veto' };
+  const TIER = { 'ACT+': 'Bounce candle + flow up', ACT: 'Bounce candle confirmed', 'ACT?': 'Bounce candle, but flow down', WAIT: 'Oversold, wait for a bounce candle', SKIP: 'NeoBDM veto', PAUSE: 'Market filter: IHSG below its 200-day average, no new bounce trades' };
   const tierHtml = p => (p.tier && p.tier !== 'WATCH' ? '<span class="tier t' + (p.tier === 'ACT+' ? 'P' : p.tier === 'ACT?' ? 'Q' : p.tier) + '" title="' + esc(TIER[p.tier]) + '">' + esc(p.tier) + '</span>' : '');
   const flowF = x => (x == null ? '–' : (x > 0 ? '+' : '') + x.toFixed(1) + 'B');
   // Broker flow (NeoBDM, derived labels only). Groups in the order a trader reads them: big money first, retail last.
@@ -190,7 +190,8 @@
           .map(([v, l]) => `<button class="chip" data-f="${v}" aria-pressed="${FILTER === v}">${l}</button>`).join('')}
         <input type="search" id="pq" placeholder="Search ticker, name or sector" value="${esc(PQ)}" style="max-width:240px;margin-left:auto">
       </div>
-      <p class="muted hint">ACT = oversold-bounce score ≥ ${DATA.meta.actScore}. Badges: <b>ACT</b> bounce candle seen, <b>ACT+</b> and flow up, <b>ACT?</b> flow down, <b>WAIT</b> no bounce candle yet, <b>SKIP</b> NeoBDM veto (Pinky or illiquid). Few days have any; "none today" is a valid answer.</p>
+      ${marketBanner()}
+      <p class="muted hint">ACT = oversold-bounce score ≥ ${DATA.meta.actScore}. Badges: <b>ACT</b> bounce candle seen, <b>ACT+</b> and flow up, <b>ACT?</b> flow down, <b>WAIT</b> no bounce candle yet, <b>SKIP</b> NeoBDM veto (Pinky or illiquid), <b>PAUSE</b> market filter off. Few days have any; "none today" is a valid answer.</p>
       ${body}`;
     const toggle = t => { OPEN = OPEN === t ? null : t; renderPicks(); const d = $('#dcard'); if (OPEN && d) d.scrollIntoView({ block: MQ.matches ? 'nearest' : 'start', behavior: 'smooth' }); };
     el.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { FILTER = b.dataset.f; OPEN = null; renderPicks(); });
@@ -277,10 +278,18 @@
   // story is kept in "Technical detail" below it. Only oversold score, bounce candle and the NeoBDM veto drive the badge;
   // everything else is context that was tested and did not add an edge, and is labelled that way.
   // One line for list cards: what to do and where it should go.
+  // Market filter (tools/experiment-v4.mjs, walk-forward): bounce trades only while IHSG is above its 200-day average.
+  function marketBanner() {
+    const f = DATA.market && DATA.market.filter;
+    if (!f || f.ok || f.sma200 == null) return '';
+    return `<div class="note mkt"><b>Market filter is OFF: stand aside from new bounce trades.</b> IHSG ${f0(f.ihsg)} is ${(Math.abs(f.ihsg / f.sma200 - 1) * 100).toFixed(1)}% below its 200-day average (${f0(f.sma200)}). In a 4-year test, skipping new trades in this condition cut the worst drawdown from −37% to −13% and turned −1.7% a year into +2.6% (chosen on 2022-24, confirmed on 2024-26). Oversold stocks still show, marked <b>PAUSE</b>, so you can watch them.</div>`;
+  }
+
   function thesisShort(p) {
     const m = DATA.meta;
     if (p.score < m.actScore) return '<span class="mute">No setup today</span>';
     if (p.tier === 'SKIP') return '<span class="down">Oversold, but vetoed (NeoBDM)</span>';
+    if (p.tier === 'PAUSE') return '<span class="warn">Oversold, but the market filter says stand aside</span>';
     const go = `expecting <span class="up">▲ ${f0(p.target)}</span> in ${m.params.horizon}d`;
     return p.tier === 'WAIT' ? `<span class="warn">Wait for a bounce candle</span> · ${go}` : `<span class="up">Bounce setup live</span> · ${go}`;
   }
@@ -314,34 +323,42 @@
     // 1. verdict (one line, plain)
     const verdict = !act ? `${p.ticker} is not a trade today.`
       : tier === 'SKIP' ? `${p.ticker} looks oversold, but we skip it.`
+      : tier === 'PAUSE' ? `${p.ticker} has been sold hard, but the whole market is in a downtrend, so we stand aside.`
       : tier === 'WAIT' ? `${p.ticker} has been sold hard and may be near a bounce, but it is not a buy yet.`
       : `${p.ticker} has been sold hard and has just started to bounce: the setup we trade.`;
     const doNow = !act ? 'Nothing to do. Keep it on the radar only.'
       : tier === 'SKIP' ? 'Do not trade it: NeoBDM flags unusual activity (Pinky) or thin trading.'
+      : tier === 'PAUSE' ? `Stand aside. The IHSG is below its 200-day average; in that condition oversold bounces failed often enough to cost money overall. Watch it, and act only when the market filter turns back on and a bounce candle appears.`
       : tier === 'WAIT' ? `Wait. Buy only after the first up day: a close above the previous day's high, or a green day closing above the previous close. Then buy at the next morning's open.`
       : `Buy at the next morning's open (around ${rp(px)}), with a stop and a target set straight away.`;
-    const cls = !act ? 'mute' : tier === 'SKIP' ? 'down' : tier === 'WAIT' ? 'warn' : 'up';
+    const cls = !act ? 'mute' : tier === 'SKIP' ? 'down' : tier === 'WAIT' || tier === 'PAUSE' ? 'warn' : 'up';
+    const live = act && tier !== 'SKIP' && tier !== 'PAUSE';
 
     // 2. the story, in sentences
     const ab = v => Math.abs(v * 100).toFixed(1) + '%';
     const fell = p.chg20d != null && p.chg20d < -0.05 ? `It has fallen ${ab(p.chg20d)} in about a month${p.chg5d < -0.02 ? `, ${ab(p.chg5d)} of that in the last week` : ''}.` : p.chg5d < -0.02 ? `It has fallen ${ab(p.chg5d)} in a week.` : 'Its price has not moved much lately.';
     const stretched = act ? `That makes it one of the most stretched stocks we follow (#${rank} of ${DATA.picks.length} today).` : `It is #${rank} of ${DATA.picks.length} on our oversold ranking, not stretched enough to trade.`;
-    const bet = act ? `When a stock drops this far this fast, sellers tend to run out and the price often snaps part of the way back. We are betting on that short rebound over the next 3 weeks, not on a long-term recovery.` : '';
+    const bet = !act ? '' : tier === 'PAUSE'
+      ? `Normally a drop like this sets up a short rebound trade. But with the whole market in a downtrend, those rebounds have failed too often to be worth taking.`
+      : `When a stock drops this far this fast, sellers tend to run out and the price often snaps part of the way back. We are betting on that short rebound over the next 3 weeks, not on a long-term recovery.`;
     const flowParts = [];
     if (big) flowParts.push(/strong sell/.test(big) ? 'big brokers have been heavy net sellers this month (NeoBDM)' : /sell/.test(big) ? 'big brokers have been net sellers this month (NeoBDM)' : /buy/.test(big) ? 'big brokers have been net buyers this month (NeoBDM)' : 'big brokers show no clear direction (NeoBDM)');
     if (bm) flowParts.push(bm.quiet ? 'large orders have quietly been building even as the price fell (Bandarmetrics)' : bm.lpm === 'rising' ? 'large-order pressure is building (Bandarmetrics)' : bm.lpm === 'falling' ? 'large orders are still on the sell side (Bandarmetrics)' : 'large-order pressure is flat (Bandarmetrics)');
     const pro = flowParts.filter(s => /buy|building/.test(s)).length, con = flowParts.filter(s => /sell side|sellers/.test(s)).length;
     const flowLine = flowParts.length ? `Who is trading it: ${flowParts.join(', while ')}. ${pro && con ? 'Mixed signals.' : pro ? 'That supports the bounce.' : con ? 'That is a warning: the selling may not be over.' : ''}` : '';
+    const fl = (p.filings || [])[0];
+    const filingLine = fl ? `Filed with IDX (${esc(fl[0])}): <b>${esc(fl[2])}</b>${fl[4] ? ` (<a href="${safeUrl(fl[4])}" target="_blank" rel="noopener noreferrer">filing</a>)` : ''}. ${fl[1] === 'dilution' ? 'New shares dilute existing holders and often weigh on the price until the deal is done.' : fl[1] === 'idxQuery' ? 'The exchange asked the company to explain unusual trading: something is moving the stock.' : fl[1] === 'mgmt' ? 'A board or management change.' : fl[1] === 'buyback' ? 'The company plans to buy back its own shares.' : fl[1] === 'dividend' ? 'A dividend announcement.' : ''}` : '';
+    const marketLine = act && DATA.market && DATA.market.filter && !DATA.market.filter.ok ? `The market itself is weak: the IHSG is below its 200-day average, which historically made bounce trades lose money overall.` : '';
     const newsLine = lastNews ? `Latest news about ${p.ticker} (${daysAgo(lastNews.published)}): <a href="${safeUrl(lastNews.link)}" target="_blank" rel="noopener noreferrer">“${esc(lastNews.title)}”</a>${lastNews.sentiment < 0 ? ', which reads as negative and may explain part of the drop.' : lastNews.sentiment > 0 ? ', which reads as positive.' : '.'}` : `No news about ${p.ticker} itself this week; the move looks market- or flow-driven.`;
 
     // 3. what we expect
-    const expect = !act || tier === 'SKIP' ? '' : `<div class="t-exp">
+    const expect = !live ? '' : `<div class="t-exp">
         <div><small>Direction</small><b class="up">▲ Up (a bounce)</b></div>
         <div><small>How far</small><b>${rp(p.target)}</b> <span class="muted">${pct(p.target / px - 1)}${stretch ? `, maybe ${rp(stretch)} (${pct(stretch / px - 1)})` : ''}</span></div>
         <div><small>How long</small><b>up to 3 weeks</b> <span class="muted">${m.params.horizon} trading days, then exit</span></div>
         <div><small>Wrong if</small><b class="down">below ${rp(stop)}</b> <span class="muted">${pct(stop / px - 1)}: exit, no second guessing</span></div>
       </div>`;
-    const odds = act && tier !== 'SKIP' ? `<p class="t-odds"><b>Honest odds:</b> trades like this reached the target about half the time, and averaged about +1% after costs over 5 years of tests. A small edge, so keep the position small: if the stop is hit you lose about ${Math.abs((stop / px - 1) * 100).toFixed(0)}%.</p>` : '';
+    const odds = live ? `<p class="t-odds"><b>Honest odds:</b> trades like this reached the target about half the time, and averaged about +1% after costs over 5 years of tests. A small edge, so keep the position small: if the stop is hit you lose about ${Math.abs((stop / px - 1) * 100).toFixed(0)}%.</p>` : '';
 
     // 4. technical detail (all the numbers, folded)
     const row = (ok, label, detail) => `<li class="${ok === true ? 'ok' : ok === false ? 'no' : ok === 'warn' ? 'wn' : 'na'}"><span>${ok === true ? '✓' : ok === false ? '✗' : ok === 'warn' ? '!' : '○'}</span><div><b>${label}</b> <span class="muted">${detail}</span></div></li>`;
@@ -366,12 +383,14 @@
     return `<div class="thesis">
       <div class="th-head"><span class="th-stage ${cls}">${esc(verdict)}</span>${tierHtml(p)}</div>
       <div class="t-do ${cls}"><small>What to do</small><p>${doNow}</p></div>
-      ${act && tier !== 'SKIP' ? tradeMapSvg(p, stop, px, stretch) : ''}
+      ${live ? tradeMapSvg(p, stop, px, stretch) : ''}
       ${expect}
       <div class="t-story"><small>The story</small>
         <p>${esc(fell)} ${esc(stretched)} ${esc(bet)}</p>
         ${flowLine ? `<p>${esc(flowLine)}</p>` : ''}
         <p>${newsLine}</p>
+        ${filingLine ? `<p>${filingLine}</p>` : ''}
+        ${marketLine ? `<p>${esc(marketLine)}</p>` : ''}
       </div>
       ${odds}
       ${tech}
@@ -390,7 +409,10 @@
         <div><small>Own hit rate*</small><b>${p.hitRate == null ? '–' : Math.round(p.hitRate * 100) + '%'}</b></div><div><small>Value / day</small><b>Rp ${p.valueB.toFixed(0)}B</b></div><div><small>ATR %</small><b>${(p.atrPct * 100).toFixed(1)}%</b></div></div>
         <div class="narr">${esc(p.narrative)}</div>
         <small class="muted">*How often this stock hit +${DATA.meta.params.targetPct}% before the stop within ${DATA.meta.params.horizon}d in its own last year (n=${p.hitN}). Informational only: it did not predict anything in the backtest.</small>
-        <h2 id="s-news">Why it matters: news</h2>
+        <h2 id="s-news">Company filings (IDX, last 45 days)</h2>
+        ${(p.filings || []).length ? `<ul class="hl-list">${p.filings.map(x => `<li><span class="tag ${x[1] === 'dilution' || x[1] === 'idxQuery' ? 'RISK' : ''}">${esc(x[2])}</span><span>${x[4] ? `<a href="${safeUrl(x[4])}" target="_blank" rel="noopener noreferrer">${esc(x[3])}</a>` : esc(x[3])}<div class="muted">${esc(x[0])}</div></span></li>`).join('')}</ul>` : '<p class="muted">No meaningful filings in the last 45 days.</p>'}
+        <p class="muted">Straight from the exchange, usually before the news sites. Routine filings are left out. Tested over 2023-26: no filing type changed how oversold bounces went, so filings are context, not part of the score.</p>
+        <h2>News</h2>
         ${p.headlines.length ? `<ul class="hl-list">${p.headlines.map(h => `<li><span class="tag ${esc(h.category)}">${esc(h.category)}</span><span><a href="${safeUrl(h.link)}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a><div class="muted">${ago(h.published)} · ${!h.direct ? 'sector backdrop, not scored' : h.recap ? 'price recap, not scored' : 'about this stock · ' + (h.sentiment > 0 ? 'supports' : h.sentiment < 0 ? 'risk' : 'neutral')}</div></span></li>`).join('')}</ul>` : '<p class="muted">No scored headlines in the last 7 days.</p>'}
         <button class="chip" data-news="${esc(p.ticker)}">All 30-day headlines for ${esc(p.ticker)} →</button>
         <h2 id="s-nb">NeoBDM flow</h2>${nbHtml(p)}
@@ -522,6 +544,22 @@
       ${trackHtml(REPLAY, false)}`;
   }
 
+  // Every idea tested, with its verdict (tools/experiment-v4.mjs). Rules were written down before each run.
+  function researchHtml(r) {
+    if (!r) return '';
+    const P = r.portfolio, R = r.regime, t = v => (v == null ? '–' : v.toFixed(1));
+    const row = x => `<tr><td>${esc(x.name)}</td><td class="n">${pc(x.gap != null ? x.gap : x.diff, 2)}</td><td class="n">${t(x.t)}</td><td class="n">${t(x.tDay)}</td><td>${x.pass ? '<span class="up">adopted</span>' : '<span class="mute">rejected</span>'}</td></tr>`;
+    return `<h2>What would this have made? Portfolio test</h2>
+      <p class="muted">The live rule (oversold + bounce candle, wide stop, +8% target, 15 days) run as a real account: max 5 positions, 20% each, best score first, fees included, ${esc(P.from)} to ${esc(P.to)}.</p>
+      <div class="market"><div class="stat"><small>Live rule, no filter</small><b class="down">${pc(P.cagr)} / yr</b><div class="muted">worst drawdown ${pc(P.mdd)}</div></div>
+        <div class="stat"><small>IHSG buy and hold</small><b>${pc(P.ihsg.cagr)} / yr</b><div class="muted">worst drawdown ${pc(P.ihsg.mdd)}</div></div>
+        ${R ? `<div class="stat"><small>With market filter (${esc(R.pick)}), cash at 4.5%</small><b class="up">${pc(R.full[R.pick].cagr)} / yr</b><div class="muted">worst drawdown ${pc(R.full[R.pick].mdd)}</div></div>` : ''}</div>
+      <div class="note"><b>Read it honestly.</b> The bounce edge is real but relative: oversold stocks beat other stocks on the same days, yet in a falling market that still lost money. The one change that held up out of sample is <b>when</b> to trade: only while the IHSG is above its 200-day average (chosen on 2022-24, then ${R && R.adopt ? 'confirmed' : 'tested'} on 2024-26). Spreading over more, smaller positions also helped in every variant (not yet adopted).</div>
+      <h3>Ideas tested (rules fixed before each run)</h3>
+      <div class="card scroll"><table><thead><tr><th>Idea</th><th class="n">Effect per trade</th><th class="n">t, episodes</th><th class="n">t, by day</th><th>Verdict</th></tr></thead><tbody>${r.results.map(row).join('')}${R ? `<tr><td>Market filter: trade only when IHSG > 200-day average (walk-forward)</td><td class="n">${pc(R.secondHalf[R.pick].cagr - R.secondHalf.none.cagr, 1)} / yr</td><td class="n">–</td><td class="n">–</td><td>${R.adopt ? '<span class="up">adopted</span>' : '<span class="mute">rejected</span>'}</td></tr>` : ''}</tbody></table></div>
+      <p class="muted">E = company filings on IDX, F = fundamentals from Stockbit (only numbers already published on the signal day), X = exit rules. An idea is adopted only if it holds counting each stock episode once, grouped by day, on the 73 stocks the score was not built on, and in both halves of the period.</p>`;
+  }
+
   function renderScore() {
     const el = $('#tab-score'), bt = DATA.backtest, na = DATA.newsAccuracy;
     if (!bt) { el.innerHTML = '<div class="empty">No backtest summary in this data source.</div>'; return; }
@@ -533,6 +571,7 @@
       <div class="card"><div class="pad"><b>In-sample (before 2024-10)</b></div>${bucketTable(bt.inSample)}</div></div>
       ${DATA.backtestHoldout ? `<h2>Stocks it was NOT designed on</h2><div class="card"><div class="pad"><b>${DATA.backtestHoldout.params.tickers} other IDX stocks</b>, same rules, no re-tuning</div>${bucketTable(DATA.backtestHoldout.all)}</div><p class="muted">The edge replicates but is smaller, and after stops and fees the average trade is about zero. Treat ACT as a shortlist, not a signal to buy blindly.</p>` : ''}
       <div class="note"><b>Read it honestly.</b> The v1 score (trend, momentum, breakout chasing) scored <i>negative</i> in this test, so it was replaced by an oversold-bounce score. The new score ranks better, but a +1% average 15-day move is small, and in the 13-month replay with realistic entries, stops and fees the average ACT trade still lost money. The earlier idea that the edge lives in broad selloffs did not hold up there (see the regime table). ${bt.caveats.map(esc).join(' ')}</div>
+      ${researchHtml(DATA.research)}
       <h2>Live track record: does it actually hit its targets?</h2>
       <div id="trackbox"><div class="card empty">Loading…</div></div>
       <h2>News: how accurate is the classifier?</h2>

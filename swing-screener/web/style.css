@@ -187,3 +187,5 @@ tr[data-open]{cursor:pointer}
 .t-tech{margin-top:8px;border-top:1px solid var(--line);padding-top:6px}
 .t-tech summary{cursor:pointer;color:var(--accent);font-size:13.5px;padding:4px 0}
 @media (max-width:760px){.t-exp{grid-template-columns:1fr 1fr}.t-do p{font-size:14px}}
+.tier.tPAUSE{background:#78350f;color:#fde68a}
+.note.mkt{border-left-color:var(--warn);font-size:13.5px}

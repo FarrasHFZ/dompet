@@ -43,9 +43,12 @@ export function overlay(n) {
 }
 
 // Technical rules from tools/experiment-v3.mjs (backtested) + NeoBDM veto/annotation (not backtested).
-export function tierOf(score, actScore, confirm, ov) {
+// marketOk: IHSG above its 200-day average (tools/experiment-v4.mjs: chosen on 2022-10..2024-09, confirmed on 2024-10..:
+// second-half CAGR +6.3% vs 0.0%, max drawdown -12.7% vs -36.8%). Below it, oversold setups are paused, not traded.
+export function tierOf(score, actScore, confirm, ov, marketOk = true) {
   if (score < actScore) return 'WATCH';
   if (ov.tag === 'AVOID') return 'SKIP';
+  if (!marketOk) return 'PAUSE';
   if (!confirm) return 'WAIT';
   return ov.tag === 'FLOW+' ? 'ACT+' : ov.tag === 'FLOW-' ? 'ACT?' : 'ACT';
 }

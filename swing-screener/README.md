@@ -148,6 +148,22 @@ stock once, then repeat `await __bmBurst(38000)` until all 100 are stored (switc
 `__bmChunk(0, 100)` to `bm-snap/<date>.json` through the receiver's `/upload` page; run `node tools/bm-labels.mjs`; commit
 `data/bm-tags-<date>.json`. Raw Bandarmetrics data (`bm-history.json`, `bm-snap/`) stays local.
 
+## v4 study: filings, fundamentals, exits, portfolio, market filter (`tools/experiment-v4.mjs`)
+New data: IDX company announcements (20.7k, 2023-07..; `tools/ann-pull.js` in a browser tab, `tools/ann-import.mjs`) and Stockbit
+quarterly revenue / net income (24 quarters, read from the logged-in financials page; used point-in-time from each
+report's IDX release date). Raw files stay local; `data/idx-filings-recent.json` (last 45 days, meaningful types) is public.
+
+Pre-registered tests on the live trade (rules in the file header): no filing type (capital raise, buyback, IDX query,
+dividend, report release), no fundamental (profitable TTM, revenue or profit growth) and no exit change (20-day-average
+target, 10/20-day hold, breakeven stop) passed. Filings are shown as context.
+
+Portfolio test (max 5 positions, 20% each, fees): 2022-10..2026-10 the live rule made -3.4%/yr (worst drawdown -37%),
+about the IHSG (-3.1%/yr). The edge is relative, not absolute. Walk-forward market filter: chosen on 2022-10..2024-09
+among IHSG > 50-day / > 200-day / no -5% month, then judged on 2024-10..: **IHSG > 200-day average** gave +6.3%/yr vs 0.0%
+and -12.7% vs -36.8% drawdown -> adopted (tier PAUSE when off). Full period with idle cash at 4.5%: +2.6%/yr, -12.7%.
+Robustness: every window (100-250 days) and position count (3/5/8) cut drawdown; returns are noisier. Not adopted but
+noted: more, smaller positions (8) helped in every variant.
+
 ## Telegram alerts
 What you get (one digest per run, only new items, never repeated): new risk / commissioner or director / insider-buying / government-investment / corporate-action / contract / earnings headlines about today's ACT picks and `data/watchlist.json`, sector-wide government or risk news for those picks' sectors, and once per signal day which stocks entered or left ACT.
 
