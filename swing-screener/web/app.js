@@ -10,7 +10,8 @@
   const f1 = x => (x === null || x === undefined ? '–' : x.toFixed(1));
   const pc = (x, d = 1) => (x === null || x === undefined ? '<span class="mute">–</span>' : `<span class="${x > 0 ? 'up' : x < 0 ? 'down' : ''}">${x > 0 ? '+' : ''}${(x * 100).toFixed(d)}%</span>`);
   const ago = iso => { const h = (Date.now() - new Date(iso)) / 36e5; return h < 1 ? 'now' : h < 24 ? Math.round(h) + 'h ago' : Math.round(h / 24) + 'd ago'; };
-  const arrow = s => (s > 0 ? '<span class="up">▲ supports</span>' : s < 0 ? '<span class="down">▼ risk</span>' : '<span class="mute">• neutral</span>');
+  // News direction: +-0.5 deadband, so a stock with no real news reads neutral.
+  const arrow = s => (s >= 0.5 ? '<span class="up">▲ supports</span>' : s <= -0.5 ? '<span class="down">▼ risk</span>' : '<span class="mute">• neutral</span>');
 
   const TIER = { 'ACT+': 'Bounce candle + flow up', ACT: 'Bounce candle confirmed', 'ACT?': 'Bounce candle, but flow down', WAIT: 'Oversold, wait for a bounce candle', SKIP: 'NeoBDM veto' };
   const tierHtml = p => (p.tier && p.tier !== 'WATCH' ? '<span class="tier t' + (p.tier === 'ACT+' ? 'P' : p.tier === 'ACT?' ? 'Q' : p.tier) + '" title="' + esc(TIER[p.tier]) + '">' + esc(p.tier) + '</span>' : '');
@@ -213,7 +214,7 @@
         <div><small>RSI · vs SMA20</small><b>${p.rsi == null ? '–' : p.rsi.toFixed(0)}</b> <span class="muted">${p.dist20Atr.toFixed(1)} ATR</span></div>
         <div><small>Stop → Target</small><b>${f0(p.action === 'ACT' && p.wideStop ? p.wideStop : p.stop)} → ${f0(p.target)}</b></div>
       </div>
-      <div class="phl">${arrow(p.newsScore)} ${h ? `<a href="${safeUrl(h.link)}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a>` : '<span class="mute">no recent news</span>'}</div>
+      <div class="phl">${h ? arrow(h.direct && !h.recap ? h.sentiment : 0) : ''} ${h ? `<a href="${safeUrl(h.link)}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a>` : '<span class="mute">no recent news</span>'}</div>
     </article>`;
   }
 
@@ -271,9 +272,10 @@
       <p class="muted">Rp, per quarter (not cumulative). Latest net income ${yoy}. Free vendor data, last ~5 quarters, unaudited; a bank's "revenue" is not comparable with other sectors. Context only, not part of the score.</p>`;
   }
 
-  // Plain-language summary at the top of a stock: what the setup is, what we expect, the plan, and what agrees or
-  // disagrees. Only the first block (oversold score, bounce candle, NeoBDM veto) drives the badge; the rest is context
-  // that was tested and did NOT add an edge, so it is labelled as such.
+  // The stock, explained like a person would: what happened, what we are betting on, what to do, who is on the other side,
+  // what would prove us wrong, and the honest odds. A picture of the trade sits in the middle; every number behind the
+  // story is kept in "Technical detail" below it. Only oversold score, bounce candle and the NeoBDM veto drive the badge;
+  // everything else is context that was tested and did not add an edge, and is labelled that way.
   // One line for list cards: what to do and where it should go.
   function thesisShort(p) {
     const m = DATA.meta;
@@ -283,46 +285,96 @@
     return p.tier === 'WAIT' ? `<span class="warn">Wait for a bounce candle</span> · ${go}` : `<span class="up">Bounce setup live</span> · ${go}`;
   }
 
+  function tradeMapSvg(p, stop, px, stretch) {
+    const pts = [['Wrong below', stop, 'var(--down)'], ['Now', px, 'var(--ink)'], ['Target', p.target, 'var(--up)']].concat(stretch ? [['Stretch', stretch, 'var(--up)']] : []);
+    const lo = Math.min(...pts.map(x => x[1])), hi = Math.max(...pts.map(x => x[1])), W = MQ.matches ? 340 : 600, L = MQ.matches ? 34 : 40, R = MQ.matches ? 34 : 40;
+    const x = v => L + ((v - lo) / (hi - lo || 1)) * (W - L - R);
+    const pc = v => (v / px - 1 >= 0 ? '+' : '') + ((v / px - 1) * 100).toFixed(1) + '%';
+    return `<svg class="tmap" viewBox="0 0 ${W} 74" role="img" aria-label="Trade map: stop ${f0(stop)}, now ${f0(px)}, target ${f0(p.target)}${stretch ? ', stretch ' + f0(stretch) : ''}">
+      <rect x="${x(stop)}" y="30" width="${x(px) - x(stop)}" height="8" rx="4" fill="var(--down)" opacity=".25"/>
+      <rect x="${x(px)}" y="30" width="${x(stretch || p.target) - x(px)}" height="8" rx="4" fill="var(--up)" opacity=".25"/>
+      ${pts.map(([l, v, c], k) => `<line x1="${x(v)}" x2="${x(v)}" y1="24" y2="44" stroke="${c}" stroke-width="${l === 'Now' ? 3 : 2}"/>
+        <text x="${x(v)}" y="${k % 2 ? 62 : 16}" text-anchor="middle" fill="${c}" font-size="12" font-weight="600">${l} ${f0(v)}</text>
+        ${l === 'Now' ? '' : `<text x="${x(v)}" y="${k % 2 ? 74 : 4}" dy="${k % 2 ? 0 : 0}" text-anchor="middle" fill="var(--mute)" font-size="11">${pc(v)}</text>`}`).join('')}
+    </svg>`;
+  }
+
   function thesisHtml(p) {
     const m = DATA.meta, act = p.score >= m.actScore, tier = p.tier || (act ? 'ACT' : 'WATCH');
     const stop = act && p.wideStop ? p.wideStop : p.stop, px = p.live ? p.live.price : p.close;
-    const pct = x => (x >= 0 ? '+' : '') + (x * 100).toFixed(1) + '%';
+    const pct = v => (v >= 0 ? '+' : '−') + Math.abs(v * 100).toFixed(1) + '%';
+    const rp = v => 'Rp ' + f0(v);
     const stretch = p.targetMR && p.targetMR > p.target ? p.targetMR : null;
-    const stage = !act ? ['No setup today', 'mute', `Not oversold enough to trade the bounce (score ${p.score}, needs ${m.actScore}). Nothing to do; shown for context.`]
-      : tier === 'SKIP' ? ['Oversold, but vetoed', 'down', 'NeoBDM flags this stock (Pinky or illiquid), so the bounce trade is skipped.']
-      : tier === 'WAIT' ? ['Oversold: wait for a bounce candle', 'warn', 'The drop is big enough, but the stock has not turned yet. Buying before the turn is what lost money in the backtest.']
-      : ['Bounce setup is live', 'up', 'Oversold and a bounce candle has printed: this is the pattern the backtest supports.'];
-    const why = `${p.ticker} fell ${pct(p.chg5d)} in 5 days${p.chg20d != null ? ' and ' + pct(p.chg20d) + ' in 20' : ''}; RSI ${p.rsi == null ? '–' : p.rsi.toFixed(0)} (below 30 is oversold); ${Math.abs(p.dist20Atr).toFixed(1)} ATR ${p.dist20Atr < 0 ? 'below' : 'above'} its 20-day average. Stocks this stretched tend to snap back toward that average; the snap-back is the trade.`;
-    const expect = !act ? '<b class="mute">No call</b>'
-      : `<b class="up">▲ Up, a bounce</b> to <b>${f0(p.target)}</b> (${pct(p.target / px - 1)})${stretch ? `, stretch <b>${f0(stretch)}</b> (20-day average, ${pct(stretch / px - 1)})` : ''} within ${m.params.horizon} sessions. <span class="down">Wrong if it closes under ${f0(stop)} (${pct(stop / px - 1)}).</span>`;
-    const plan = !act ? '' : tier === 'SKIP' ? 'Skip.' : tier === 'WAIT'
-      ? `Don't buy yet. Trigger: a day that closes above the previous day's high, or a green day closing above the previous close. Then buy at the next open, stop ${f0(stop)}, target ${f0(p.target)}, and exit after ${m.params.horizon} sessions if neither is hit.`
-      : `Buy at the next open (around ${f0(px)}), stop ${f0(stop)}, target ${f0(p.target)}; exit after ${m.params.horizon} sessions if neither is hit.`;
+    const rank = DATA.picks.slice().sort((a, b) => b.score - a.score).findIndex(x => x.ticker === p.ticker) + 1;
+    const nb = p.neobdm, bm = p.bm, big = nb && nb.bigMoney ? nb.bigMoney.d20 : null;
+    const own = p.headlines.filter(h => h.direct && !h.recap);
+    const lastNews = own[0];
+    const daysAgo = iso => { const d = Math.round((Date.now() - new Date(iso)) / 864e5); return d <= 0 ? 'today' : d === 1 ? 'yesterday' : d + ' days ago'; };
+
+    // 1. verdict (one line, plain)
+    const verdict = !act ? `${p.ticker} is not a trade today.`
+      : tier === 'SKIP' ? `${p.ticker} looks oversold, but we skip it.`
+      : tier === 'WAIT' ? `${p.ticker} has been sold hard and may be near a bounce, but it is not a buy yet.`
+      : `${p.ticker} has been sold hard and has just started to bounce: the setup we trade.`;
+    const doNow = !act ? 'Nothing to do. Keep it on the radar only.'
+      : tier === 'SKIP' ? 'Do not trade it: NeoBDM flags unusual activity (Pinky) or thin trading.'
+      : tier === 'WAIT' ? `Wait. Buy only after the first up day: a close above the previous day's high, or a green day closing above the previous close. Then buy at the next morning's open.`
+      : `Buy at the next morning's open (around ${rp(px)}), with a stop and a target set straight away.`;
+    const cls = !act ? 'mute' : tier === 'SKIP' ? 'down' : tier === 'WAIT' ? 'warn' : 'up';
+
+    // 2. the story, in sentences
+    const ab = v => Math.abs(v * 100).toFixed(1) + '%';
+    const fell = p.chg20d != null && p.chg20d < -0.05 ? `It has fallen ${ab(p.chg20d)} in about a month${p.chg5d < -0.02 ? `, ${ab(p.chg5d)} of that in the last week` : ''}.` : p.chg5d < -0.02 ? `It has fallen ${ab(p.chg5d)} in a week.` : 'Its price has not moved much lately.';
+    const stretched = act ? `That makes it one of the most stretched stocks we follow (#${rank} of ${DATA.picks.length} today).` : `It is #${rank} of ${DATA.picks.length} on our oversold ranking, not stretched enough to trade.`;
+    const bet = act ? `When a stock drops this far this fast, sellers tend to run out and the price often snaps part of the way back. We are betting on that short rebound over the next 3 weeks, not on a long-term recovery.` : '';
+    const flowParts = [];
+    if (big) flowParts.push(/strong sell/.test(big) ? 'big brokers have been heavy net sellers this month (NeoBDM)' : /sell/.test(big) ? 'big brokers have been net sellers this month (NeoBDM)' : /buy/.test(big) ? 'big brokers have been net buyers this month (NeoBDM)' : 'big brokers show no clear direction (NeoBDM)');
+    if (bm) flowParts.push(bm.quiet ? 'large orders have quietly been building even as the price fell (Bandarmetrics)' : bm.lpm === 'rising' ? 'large-order pressure is building (Bandarmetrics)' : bm.lpm === 'falling' ? 'large orders are still on the sell side (Bandarmetrics)' : 'large-order pressure is flat (Bandarmetrics)');
+    const pro = flowParts.filter(s => /buy|building/.test(s)).length, con = flowParts.filter(s => /sell side|sellers/.test(s)).length;
+    const flowLine = flowParts.length ? `Who is trading it: ${flowParts.join(', while ')}. ${pro && con ? 'Mixed signals.' : pro ? 'That supports the bounce.' : con ? 'That is a warning: the selling may not be over.' : ''}` : '';
+    const newsLine = lastNews ? `Latest news about ${p.ticker} (${daysAgo(lastNews.published)}): <a href="${safeUrl(lastNews.link)}" target="_blank" rel="noopener noreferrer">“${esc(lastNews.title)}”</a>${lastNews.sentiment < 0 ? ', which reads as negative and may explain part of the drop.' : lastNews.sentiment > 0 ? ', which reads as positive.' : '.'}` : `No news about ${p.ticker} itself this week; the move looks market- or flow-driven.`;
+
+    // 3. what we expect
+    const expect = !act || tier === 'SKIP' ? '' : `<div class="t-exp">
+        <div><small>Direction</small><b class="up">▲ Up (a bounce)</b></div>
+        <div><small>How far</small><b>${rp(p.target)}</b> <span class="muted">${pct(p.target / px - 1)}${stretch ? `, maybe ${rp(stretch)} (${pct(stretch / px - 1)})` : ''}</span></div>
+        <div><small>How long</small><b>up to 3 weeks</b> <span class="muted">${m.params.horizon} trading days, then exit</span></div>
+        <div><small>Wrong if</small><b class="down">below ${rp(stop)}</b> <span class="muted">${pct(stop / px - 1)}: exit, no second guessing</span></div>
+      </div>`;
+    const odds = act && tier !== 'SKIP' ? `<p class="t-odds"><b>Honest odds:</b> trades like this reached the target about half the time, and averaged about +1% after costs over 5 years of tests. A small edge, so keep the position small: if the stop is hit you lose about ${Math.abs((stop / px - 1) * 100).toFixed(0)}%.</p>` : '';
+
+    // 4. technical detail (all the numbers, folded)
     const row = (ok, label, detail) => `<li class="${ok === true ? 'ok' : ok === false ? 'no' : ok === 'warn' ? 'wn' : 'na'}"><span>${ok === true ? '✓' : ok === false ? '✗' : ok === 'warn' ? '!' : '○'}</span><div><b>${label}</b> <span class="muted">${detail}</span></div></li>`;
-    const nb = p.neobdm, bm = p.bm, bmDir = nb && nb.bigMoney ? nb.bigMoney.d20 : null;
     const ctx = [];
-    if (bmDir) ctx.push(row(/buy/.test(bmDir) ? true : /sell/.test(bmDir) ? 'warn' : null, 'Big money (NeoBDM)', `${bmDir} over 20 days${nb.phase ? ', ' + nb.phase.toLowerCase() : ''}`));
-    if (bm) ctx.push(row(bm.lpm === 'rising' ? true : bm.lpm === 'falling' ? 'warn' : null, 'Large-order pressure (Bandarmetrics LPM)', bm.quiet ? 'rising while price fell (quiet accumulation)' : bm.lpm === 'falling' ? 'falling: big sellers still active' : bm.lpm));
-    if (bm && bm.score != null) ctx.push(row(bm.score >= 67 ? true : bm.score <= 33 ? 'warn' : null, 'Accumulation score (experimental)', `${bm.score}/100: ${bm.score >= 67 ? 'big orders have been building for 60 days' : bm.score <= 33 ? 'weak 60-day accumulation' : 'middle of the pack'}`));
-    ctx.push(row(p.newsScore >= 0.5 ? true : p.newsScore <= -0.5 ? 'warn' : null, 'News', p.newsScore >= 0.5 ? 'supportive' : p.newsScore <= -0.5 ? 'risk headlines' : 'nothing clear'));
-    if (act && p.resistance && p.resistance < p.target) ctx.push(row('warn', 'Resistance', `${f0(p.resistance)} sits below the target, so the move may stall there`));
-    if (act && p.rr != null && p.rr < 1) ctx.push(row('warn', 'Reward vs risk', `${p.rr.toFixed(1)} : 1 with the plan stop; the wider stop makes it lower`));
-    const agree = ctx.filter(x => x.startsWith('<li class="ok"')).length, warn = ctx.filter(x => x.startsWith('<li class="wn"')).length;
-    return `<div class="thesis">
-      <div class="th-head"><span class="th-stage ${stage[1]}">${stage[0]}</span>${tierHtml(p)}<span class="muted">score ${p.score}</span></div>
-      <p class="th-line">${stage[2]}</p>
-      <div class="th-grid">
-        <div><small>Expected direction</small><p>${expect}</p></div>
-        <div><small>Why (the thesis)</small><p>${esc(why)}</p></div>
-        ${plan ? `<div><small>Plan</small><p>${plan}</p></div>` : ''}
-      </div>
+    if (big) ctx.push(row(/buy/.test(big) ? true : /sell/.test(big) ? 'warn' : null, 'Big money (NeoBDM)', `${big} over 20 days${nb.phase ? ', phase ' + nb.phase.toLowerCase() : ''}`));
+    if (bm) ctx.push(row(bm.lpm === 'rising' ? true : bm.lpm === 'falling' ? 'warn' : null, 'LPM (Bandarmetrics)', bm.quiet ? 'rising while price fell (quiet accumulation)' : bm.lpm));
+    if (bm && bm.score != null) ctx.push(row(bm.score >= 67 ? true : bm.score <= 33 ? 'warn' : null, 'Accumulation score (experimental)', `${bm.score}/100, 60-day LPM trend vs other stocks`));
+    ctx.push(row(p.newsScore >= 0.5 ? true : p.newsScore <= -0.5 ? 'warn' : null, 'Stock news', `score ${p.newsScore > 0 ? '+' : ''}${p.newsScore} (own headlines only)${p.newsBackdrop ? `; sector backdrop ${p.newsBackdrop > 0 ? '+' : ''}${p.newsBackdrop}, not scored` : ''}`));
+    if (act && p.resistance && p.resistance < p.target) ctx.push(row('warn', 'Resistance', `${f0(p.resistance)} sits below the target`));
+    if (act && p.rr != null && p.rr < 1) ctx.push(row('warn', 'Reward vs risk', `${p.rr.toFixed(1)} : 1 with the plan stop`));
+    const tech = `<details class="t-tech"><summary>Technical detail: the numbers behind this</summary>
+      <p class="muted">Oversold score ${p.score} (ACT at ${m.actScore}) = oversold ${p.parts.oversold} + support ${p.parts.support} + news ${p.parts.news}. RSI(14) ${p.rsi == null ? '–' : p.rsi.toFixed(0)}; ${p.dist20Atr.toFixed(1)} ATR from the 20-day average (${f0(p.sma20)}); ATR ${(p.atrPct * 100).toFixed(1)}% a day. Entry ${f0(p.entry)}, plan stop ${f0(p.stop)}, wide stop ${f0(p.wideStop)} (3.5 ATR), target ${f0(p.target)} (+${m.params.targetPct}%), support ${f0(p.support)}, resistance ${f0(p.resistance)}. Bounce candle = close above the previous high, or a green candle closing above the previous close.</p>
       <div class="th-checks"><div><small>Drives the badge (backtested)</small><ul class="th-list">
-        ${row(act, 'Oversold', `score ${p.score} vs ${m.actScore} needed`)}
+        ${row(act, 'Oversold', `score ${p.score} vs ${m.actScore}`)}
         ${act ? row(p.confirm ? true : null, 'Bounce candle', p.confirm ? 'seen' : 'not yet') : ''}
         ${act ? row(tier !== 'SKIP', 'No NeoBDM veto', tier === 'SKIP' ? 'Pinky or illiquid' : 'clear') : ''}
       </ul></div>
-      <div><small>Context: ${agree} agree, ${warn} warn (tested, no proven edge)</small><ul class="th-list">${ctx.join('')}</ul></div></div>
-      ${act ? `<p class="muted th-foot">How good is this pattern? Over 5 years × 100 stocks, oversold + bounce candle + the wide stop averaged about +1% per trade and hit the +8% target about half the time. A weak edge: keep positions small.</p>` : ''}
+      <div><small>Context (tested, no proven edge)</small><ul class="th-list">${ctx.join('')}</ul></div></div>
+      <p class="muted">Backtest, 5 years × 100 stocks: oversold + bounce candle + wide stop ≈ +1% per trade, target hit ≈ 50%, vs −0.7% for non-oversold stocks on the same days. Buying oversold stocks before the bounce candle did not make money.</p>
+    </details>`;
+
+    return `<div class="thesis">
+      <div class="th-head"><span class="th-stage ${cls}">${esc(verdict)}</span>${tierHtml(p)}</div>
+      <div class="t-do ${cls}"><small>What to do</small><p>${doNow}</p></div>
+      ${act && tier !== 'SKIP' ? tradeMapSvg(p, stop, px, stretch) : ''}
+      ${expect}
+      <div class="t-story"><small>The story</small>
+        <p>${esc(fell)} ${esc(stretched)} ${esc(bet)}</p>
+        ${flowLine ? `<p>${esc(flowLine)}</p>` : ''}
+        <p>${newsLine}</p>
+      </div>
+      ${odds}
+      ${tech}
     </div>`;
   }
 
@@ -339,7 +391,7 @@
         <div class="narr">${esc(p.narrative)}</div>
         <small class="muted">*How often this stock hit +${DATA.meta.params.targetPct}% before the stop within ${DATA.meta.params.horizon}d in its own last year (n=${p.hitN}). Informational only: it did not predict anything in the backtest.</small>
         <h2 id="s-news">Why it matters: news</h2>
-        ${p.headlines.length ? `<ul class="hl-list">${p.headlines.map(h => `<li><span class="tag ${esc(h.category)}">${esc(h.category)}</span><span><a href="${safeUrl(h.link)}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a><div class="muted">${ago(h.published)} · ${h.direct ? 'names this stock' : 'sector-wide'} · ${h.sentiment > 0 ? 'supports' : h.sentiment < 0 ? 'risk' : 'neutral'}</div></span></li>`).join('')}</ul>` : '<p class="muted">No scored headlines in the last 7 days.</p>'}
+        ${p.headlines.length ? `<ul class="hl-list">${p.headlines.map(h => `<li><span class="tag ${esc(h.category)}">${esc(h.category)}</span><span><a href="${safeUrl(h.link)}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a><div class="muted">${ago(h.published)} · ${!h.direct ? 'sector backdrop, not scored' : h.recap ? 'price recap, not scored' : 'about this stock · ' + (h.sentiment > 0 ? 'supports' : h.sentiment < 0 ? 'risk' : 'neutral')}</div></span></li>`).join('')}</ul>` : '<p class="muted">No scored headlines in the last 7 days.</p>'}
         <button class="chip" data-news="${esc(p.ticker)}">All 30-day headlines for ${esc(p.ticker)} →</button>
         <h2 id="s-nb">NeoBDM flow</h2>${nbHtml(p)}
         <h2 id="s-bm">Bandarmetrics read</h2>${bmHtml(p)}

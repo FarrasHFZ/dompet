@@ -256,8 +256,9 @@ const ACT_SCORE = 65;
 function buildPick_(u, b, a, nw, own, cfg) {
   const parts = scoreParts_(a, nw.score);
   const score = score_(a, nw.score);
-  const items = nw.items.slice().sort((x, y) => Math.abs(y.sentiment * y.share) - Math.abs(x.sentiment * x.share)).slice(0, 4)
-    .map(i => ({ title: i.title, link: i.link, category: i.category, sentiment: i.sentiment, direct: i.share === 1, published: new Date(i.published).toISOString() }));
+  const rank = i => (i.share < 1 ? 2 : i.recap || i.dup ? 1 : 0);
+  const items = nw.items.slice().sort((x, y) => rank(x) - rank(y) || new Date(y.published) - new Date(x.published)).filter(i => !i.dup).slice(0, 6)
+    .map(i => ({ title: i.title, link: i.link, category: i.category, sentiment: i.sentiment, direct: i.share === 1, recap: !!i.recap, published: new Date(i.published).toISOString() }));
   // No SKIP bucket: 'do not chase' held on the 27 design stocks but reversed on 73 unseen ones (tools/backtest.mjs HOLDOUT=1).
   const action = score >= ACT_SCORE ? 'ACT' : 'WATCH';
   const round1 = v => Math.round(v * 10) / 10;
@@ -271,7 +272,7 @@ function buildPick_(u, b, a, nw, own, cfg) {
     support: a.support, supportTouches: a.supportTouches, resistance: a.resistance, resistanceTouches: a.resistanceTouches,
     sma20: a.sma20, sma50: a.sma50, sma200: a.sma200, hi52: a.hi52, lo52: a.lo52,
     entry: a.entry, stop: a.stop, target: a.target, targetMR: a.targetMR, rr: a.rr, roomToRes: a.roomToRes,
-    hitRate: a.hitRate, hitN: a.hitN, newsScore: round1(nw.score), headlines: items,
+    hitRate: a.hitRate, hitN: a.hitN, newsScore: round1(nw.score), newsBackdrop: round1(nw.backdrop || 0), headlines: items,
     narrative: narrative_(u.ticker, a, nw.score, nw.top, cfg),
     spark: b.c.slice(-90).map(x => Math.round(x * 100) / 100),
     sparkFrom: new Date(b.d[Math.max(0, n - 90)]).toISOString().slice(0, 10), sparkTo: new Date(b.d[n - 1]).toISOString().slice(0, 10),

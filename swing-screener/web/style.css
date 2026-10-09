@@ -174,3 +174,16 @@ dialog label{display:block;margin:10px 0;font-size:12.5px;color:var(--mute)}
 .jump{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}.jump .chip{font-size:12.5px}
 tr[data-open]{cursor:pointer}
 .pthesis{font-size:12.5px;margin-top:3px}
+/* story-style stock summary */
+.t-do{border-left:4px solid var(--line);padding:6px 12px;margin:10px 0;background:var(--soft);border-radius:6px}
+.t-do.up{border-left-color:var(--up)}.t-do.warn{border-left-color:var(--warn)}.t-do.down{border-left-color:var(--down)}
+.t-do small,.t-story small,.t-exp small{color:var(--mute);text-transform:uppercase;letter-spacing:.03em;font-size:11px}
+.t-do p{margin:2px 0 0;font-size:15px;font-weight:600;color:var(--ink)}
+.tmap{width:100%;height:auto;max-height:96px;margin:6px 0 2px;overflow:visible}
+.t-exp{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:8px 0}
+.t-exp b{display:block;font-size:15px}.t-exp .muted{font-size:12px}
+.t-story p{margin:4px 0 8px;font-size:14.5px;line-height:1.55}
+.t-odds{margin:6px 0;font-size:13.5px}
+.t-tech{margin-top:8px;border-top:1px solid var(--line);padding-top:6px}
+.t-tech summary{cursor:pointer;color:var(--accent);font-size:13.5px;padding:4px 0}
+@media (max-width:760px){.t-exp{grid-template-columns:1fr 1fr}.t-do p{font-size:14px}}

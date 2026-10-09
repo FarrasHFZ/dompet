@@ -12,7 +12,7 @@ const CATEGORY_RULES = [
   ['OTHER', /asing (lepas|jual|beli|borong)|dilepas asing|diburu asing|net (buy|sell)/i],
   ['CORP_ACTION', /dividen|buyback|stock split|rights? issue|pmhmetd|divestasi|lepas saham|private placement|akuisisi|tender offer|\bmtn\b|obligasi|\bipo\b/i],
   ['INSIDER', /(presdir|direktur|komisaris|dirut|pengendali)[^]*(belanjakan|beli saham|borong|tambah kepemilikan)|insider/i],
-  ['COMMISSIONER', /komisaris|direksi|direktur utama|\bdirut\b|\bceo\b|masa jabatan|reshuffle|pengurus/i],
+  ['COMMISSIONER', /komisaris|\bkomut\b|direksi|direktur utama|\bdirut\b|\bpresdir\b|\bceo\b|masa jabatan|reshuffle|pengurus|mengundurkan diri|lepas jabatan|\bresign/i],
   ['MACRO', /\bbi rate\b|suku bunga|bunga penjaminan|\bthe fed\b|inflasi|\bbps\b/i],
   ['GOV_INVEST', /\bplts\b|\bpph\b|bebas pajak|danantara|investasi pemerintah|proyek strategis|\bpsn\b|hilirisasi|kementerian|menko|insentif|subsidi|stimulus|apbn|kemenkeu|bumn|swasembada|makan bergizi|\bmbg\b|ibu kota nusantara|\bikn\b|penyertaan modal/i],
   ['CONTRACT', /kontrak|tender|proyek baru|proyek berjalan|progres|kerja sama|kemitraan|pesanan|order book/i],
@@ -20,9 +20,12 @@ const CATEGORY_RULES = [
 ];
 
 const POSITIVE = /\bnaik\b|melonjak|menguat|meroket|melesat|melompat|terbang|\btumbuh\b|dividen|buyback|akuisisi|kontrak baru|kantongi kontrak|suntik|insentif|stimulus|ekspansi|rekor|upgrade|net buy|diburu|akumulasi|borong|surplus|positif|jagokan|rebound|\bcuan\b|\buntung\b|belanjakan|bebas pajak|tanggung pph/i;
-const NEGATIVE = /\bturun\w*|anjlok|melemah|\brugi\b|gagal bayar|suspen|denda|korupsi|tersangka|pailit|pkpu|downgrade|sanksi|\buma\b|\bfca\b|aksi jual|net sell|jual bersih|asing lepas|dilepas asing|terkoreksi|\bkoreksi\b|defisit|negatif|batal|tunda|cabut|\bjatuh\b|rontok|ambruk|ambles|merosot|tertekan|terjun|mentok arb|kena arb|tergerus|longsor|risiko baru|\bboncos\b|pangkas|berkurang|kenaikan (bi rate|suku bunga)|kerek suku bunga|suku bunga (\w+ ){0,3}naik/i;
+const NEGATIVE = /\bturun\w*|anjlok|melemah|\brugi\b|gagal bayar|suspen|denda|korupsi|tersangka|pailit|pkpu|downgrade|sanksi|\buma\b|\bfca\b|aksi jual|net sell|jual bersih|asing lepas|dilepas asing|terkoreksi|\bkoreksi\b|defisit|negatif|batal|tunda|cabut|\bjatuh\b|rontok|ambruk|ambles|merosot|tertekan|terjun|mentok arb|kena arb|tergerus|longsor|risiko baru|\bboncos\b|pangkas|berkurang|kenaikan (bi rate|suku bunga)|kerek suku bunga|suku bunga (\w+ ){0,3}naik|mengundurkan diri/i;
 // Market wraps ("IHSG ...", "Rekomendasi Saham Hari Ini: A, B, C"): a stock named there is a side mention.
 const ROUNDUP = /rekomendasi saham|saham pilihan|stockpick|halaman \d/i;
+// Price recaps only restate a move ("Saham X melemah 2%: cek level kuncinya", "top net sell"): the price already shows it, so
+// they are listed but never scored. A headline that also names an event (category other than OTHER) is not a recap.
+const RECAP = /level kunci|jenuh (jual|beli)|\brsi\b|ditutup (melemah|menguat|naik|turun)|top (net )?(buy|sell|gainer|loser)|top net|saham .{0,30}(melemah|menguat|naik|turun|anjlok|melonjak|melesat|meroket|ambles|ambrol|terjun|tertekan|rebound) .{0,20}?[\d.,]+ ?(%|persen)|\brebound ke rp|pergerakan saham|analisis teknikal|target harga|tertekan saat ihsg/i;
 // Gold-price and "buyback emas" pages are Antam's product price spam, not the stock.
 const IGNORE = /harga (buyback )?emas|buyback emas|logam mulia|rincian harga emas/i;
 const NOT_TICKERS = ['IHSG', 'BUMN', 'APBN', 'IDX', 'OJK', 'PLTS', 'DPRD', 'QRIS'];
@@ -66,7 +69,8 @@ function classify_(title) {
   if (/\?\s*$/.test(title) || roundup) sent = 0;
   // Two names with opposite moves in one headline cannot be attributed to either.
   if (pos >= 0 && neg >= 0 && nTick >= 2) sent = 0;
-  return { category: category, sentiment: sent, roundup: roundup };
+  const recap = category === 'OTHER' && RECAP.test(title);
+  return { category: category, sentiment: sent, roundup: roundup, recap: recap };
 }
 
 function rssUrl_(q) {
@@ -166,9 +170,15 @@ function newsScores_(uni) {
 }
 
 // rows use NEWS_HEADERS order. Returns {TICKER: {score, top, topLink, items:[{title,link,category,sentiment,share,published}]}}
+// v3 (2026-10-10): only headlines that name the stock count toward its score, each story once, price recaps excluded.
+// Sector/theme stories (e.g. dozens of 'Danantara will buy stocks' articles) used to be spread over every stock in the
+// sector at 1/4 weight and pinned almost every score at +3; they now form a separate, unscored backdrop.
+// Titles are re-classified at scoring time so rule fixes apply to stored headlines too.
 function scoreNews_(rows, uni, nowMs) {
   const out = {};
-  uni.forEach(u => { out[u.ticker] = { score: 0, top: '', topLink: '', topAbs: 0, items: [] }; });
+  uni.forEach(u => { out[u.ticker] = { score: 0, top: '', topLink: '', topAbs: 0, items: [], backdrop: 0, backdropN: 0, seen: [] }; });
+  const words = t => String(t).toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).filter(w => w.length > 3);
+  const sameStory = (a, b) => { const A = new Set(a), n = b.filter(w => A.has(w)).length; return n / Math.max(1, Math.min(a.length, b.length)) >= 0.6; };
   const bySector = {};
   uni.forEach(u => { (bySector[u.sector] = bySector[u.sector] || []).push(u.ticker); });
   const catWeight = { RISK: 1.5, COMMISSIONER: 1.0, GOV_INVEST: 1.2, CORP_ACTION: 1.2, CONTRACT: 1.0, EARNINGS: 1.0, MACRO: 0.8, OTHER: 0.5 };
@@ -176,17 +186,23 @@ function scoreNews_(rows, uni, nowMs) {
   rows.forEach(r => {
     const ageDays = (nowMs - new Date(r[0]).getTime()) / 86400000;
     if (ageDays > 7) return;
-    const category = r[4], sent = Number(r[7]) || 0;
+    const cl = classify_(String(r[2]));
+    const category = cl.category, sent = cl.sentiment;
     // Government-investment news is thesis-supporting even when the headline has no polarity word.
     const eff = sent === 0 && category === 'GOV_INVEST' ? 0.3 : sent;
     if (eff === 0) return;
     const w = (catWeight[category] || 0.5) * Math.pow(0.85, ageDays);
+    const wd = words(r[2]);
     const apply = (ticker, share) => {
       const o = out[ticker];
       if (!o) return;
-      const c = eff * w * share;
+      if (share < 1) { o.backdrop += eff * w; o.backdropN++; if (o.items.filter(i => i.share < 1).length < 2 && !o.seen.some(s => sameStory(s, wd))) { o.seen.push(wd); o.items.push({ title: r[2], link: r[3], category: category, sentiment: eff, share: share, published: r[0], recap: false }); } return; }
+      const dup = o.seen.some(s => sameStory(s, wd));
+      o.items.push({ title: r[2], link: r[3], category: category, sentiment: cl.recap ? 0 : eff, share: share, published: r[0], recap: cl.recap, dup: dup });
+      if (dup || cl.recap) return;
+      o.seen.push(wd);
+      const c = eff * w;
       o.score += c;
-      o.items.push({ title: r[2], link: r[3], category: category, sentiment: eff, share: share, published: r[0] });
       if (Math.abs(c) > o.topAbs) { o.topAbs = Math.abs(c); o.top = '[' + category + '] ' + r[2]; o.topLink = r[3]; }
     };
     const direct = String(r[5]).split(',').filter(Boolean);
@@ -195,6 +211,6 @@ function scoreNews_(rows, uni, nowMs) {
       if (direct.indexOf(t) < 0) apply(t, 0.25);
     }));
   });
-  Object.keys(out).forEach(t => { out[t].score = Math.max(-3, Math.min(3, out[t].score)); });
+  Object.keys(out).forEach(t => { const o = out[t]; o.score = Math.max(-3, Math.min(3, o.score)); o.backdrop = Math.max(-3, Math.min(3, o.backdrop)); delete o.seen; });
   return out;
 }
