@@ -15,6 +15,12 @@
 
   const TIER = { 'ACT+': 'Bounce candle + flow up', ACT: 'Bounce candle confirmed', 'ACT?': 'Bounce candle, but flow down', WAIT: 'Oversold, wait for a bounce candle', SKIP: 'NeoBDM veto', PAUSE: 'Market filter: IHSG below its 200-day average, no new bounce trades' };
   const tierHtml = p => (p.tier && p.tier !== 'WATCH' ? '<span class="tier t' + (p.tier === 'ACT+' ? 'P' : p.tier === 'ACT?' ? 'Q' : p.tier) + '" title="' + esc(TIER[p.tier]) + '">' + esc(p.tier) + '</span>' : '');
+  // Conglomerate group label (tools/groups.mjs): short name, rank on hover; a click opens the Groups tab.
+  const groupTag = p => {
+    const g = p.group; if (!g) return '';
+    const short = g.id === 'bumn' ? 'BUMN' : String(g.alias || g.name).replace(/^saham /, '');
+    return `<button class="gtag${g.hot ? ' hot' : ''}" data-group="${esc(g.id)}" title="${esc(g.name)} group: #${g.rank || '–'} of ${g.of} by 20-day strength${g.hot ? ', jumped 10%+ in a week recently' : ''}. Click for the Groups tab.">${esc(short)}</button>`;
+  };
   const flowF = x => (x == null ? '–' : (x > 0 ? '+' : '') + x.toFixed(1) + 'B');
   // Broker flow (NeoBDM, derived labels only). Groups in the order a trader reads them: big money first, retail last.
   const GROUPS = [['m', 'Bandar'], ['nr', 'Non-retail'], ['i', 'Institution'], ['s', 'Sultan'], ['f', 'Foreign'], ['z', 'Retail']];
@@ -311,7 +317,8 @@
       ${body}`;
     const toggle = t => { OPEN = OPEN === t ? null : t; renderPicks(); const d = $('#dcard'); if (OPEN && d) d.scrollIntoView({ block: MQ.matches ? 'nearest' : 'start', behavior: 'smooth' }); };
     el.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { FILTER = b.dataset.f; OPEN = null; renderPicks(); });
-    el.querySelectorAll('tr.row, .pcard').forEach(n => n.onclick = e => { if (e.target.closest('a')) return; toggle(n.dataset.t); });
+    el.querySelectorAll('tr.row, .pcard').forEach(n => n.onclick = e => { if (e.target.closest('a, .gtag')) return; toggle(n.dataset.t); });
+    el.querySelectorAll('.gtag').forEach(b => b.onclick = e => { e.stopPropagation(); document.querySelector('[data-tab=groups]').click(); window.scrollTo(0, 0); });
     const dc = $('#dclose', el); if (dc) dc.onclick = () => { OPEN = null; renderPicks(); };
     el.querySelectorAll('[data-jump]').forEach(b => b.onclick = e => { e.stopPropagation(); const t = document.getElementById(b.dataset.jump); if (t) t.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
     const pq = $('#pq', el); if (pq) pq.oninput = e => { PQ = e.target.value; const pos = e.target.selectionStart; renderPicks(); const i = $('#pq'); i.focus(); i.setSelectionRange(pos, pos); };
@@ -322,7 +329,7 @@
   function cardHtml(p) {
     const h = p.headlines[0];
     return `<article class="pcard ${OPEN === p.ticker ? 'open' : ''}" data-t="${esc(p.ticker)}">
-      <div class="ptop"><div><b class="tk">${esc(p.ticker)}</b> <span class="act ${p.action}">${p.action}</span> ${tierHtml(p)}
+      <div class="ptop"><div><b class="tk">${esc(p.ticker)}</b> <span class="act ${p.action}">${p.action}</span> ${tierHtml(p)} ${groupTag(p)}
         <div class="nm">${esc(p.name)}${p.ownership ? ' · ' + esc(p.ownership.control) : ''}</div>
         <div class="pthesis">${thesisShort(p)}</div></div>
         <div class="pscore"><b>${p.score}</b><small>score</small></div></div>
@@ -339,7 +346,7 @@
     const h = p.headlines[0];
     const open = OPEN === p.ticker;
     return `<tr class="row ${open ? 'open' : ''}" data-t="${esc(p.ticker)}">
-      <td><span class="tk">${esc(p.ticker)}</span><div class="nm">${esc(p.name)}${p.ownership ? " · " + esc(p.ownership.control) : ""}</div><div class="pthesis">${thesisShort(p)}</div></td>
+      <td><span class="tk">${esc(p.ticker)}</span> ${groupTag(p)}<div class="nm">${esc(p.name)}${p.ownership ? " · " + esc(p.ownership.control) : ""}</div><div class="pthesis">${thesisShort(p)}</div></td>
       <td><span class="act ${p.action}">${p.action}</span> ${tierHtml(p)}</td>
       <td><span class="score"><i style="width:${Math.round(p.score * 0.6)}px"></i><b>${p.score}</b></span></td>
       <td>${esc(p.setup)}</td><td class="n">${f0(p.close)}</td><td class="n">${p.live ? `${f0(p.live.price)} ${pc(p.live.chg)}` : '<span class="mute">–</span>'}</td><td class="n">${pc(p.chg1d)}</td><td class="n">${pc(p.chg5d)}</td>

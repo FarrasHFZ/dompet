@@ -207,3 +207,6 @@ table.heat th { font-size: 10px; padding: 4px 2px; white-space: nowrap; }
 td.mem { min-width: 180px; } .chip.sm { padding: 1px 7px; font-size: 11px; margin: 1px; }
 .chip.off { opacity: .55; cursor: default; display: inline-block; border: 1px solid var(--line); border-radius: 999px; }
 svg.spark { display: block; }
+/* Conglomerate group label in Picks */
+.gtag { display: inline-block; min-height: 0; padding: 1px 7px; margin-left: 4px; font-size: 11px; font-weight: 600; line-height: 1.5; border-radius: 999px; border: 1px solid var(--accent); background: var(--soft); color: var(--accent); vertical-align: middle; cursor: pointer; }
+.gtag.hot { border-color: var(--warn); color: var(--warn); }
