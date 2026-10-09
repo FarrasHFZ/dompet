@@ -17,3 +17,6 @@ swing-screener/data/alert-state.json
 swing-screener/data/neobdm-full-*.json
 swing-screener/data/neobdm-ledger/
 swing-screener/tools/receive.mjs
+swing-screener/data/neobdm-snap/
+# IDX daily stock summary history (research input for tools/experiment-flow.mjs; rebuilt with tools/idx-flow-import.mjs)
+swing-screener/data/idx-foreign-flow.json

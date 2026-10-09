@@ -67,6 +67,9 @@ let fundamentals = {};
 try { fundamentals = await fetchFundamentals(uni.map(u => u.ticker)); } catch (e) { console.error('fundamentals failed', e.message); }
 
 const nbd = loadNeobdm();
+// Flow labels older than 5 calendar days no longer change tiers (shown as stale): old broker flow says little about a
+// setup two weeks later, and a silently frozen file must not keep promoting or demoting picks.
+const nbStale = nbd ? (NOW - new Date(nbd.asOf + 'T10:00:00Z').getTime()) / 864e5 > 5 : true;
 const picks = [], skipped = [];
 let lastBar = null;
 uni.forEach(u => {
@@ -84,8 +87,9 @@ uni.forEach(u => {
   const m = b.c.length;
   pk.confirm = b.c[m - 1] > b.h[m - 2] || (b.c[m - 1] > b.o[m - 1] && b.c[m - 1] > b.c[m - 2]);
   pk.wideStop = api.roundToTick_(Math.min(a.stop, a.entry - 3.5 * a.atr), 'down');
-  const ov = nbd && nbd.by[u.ticker] ? nbd.by[u.ticker] : { tag: 'NONE', pts: 0, note: 'Not covered by NeoBDM.' };
-  pk.neobdm = nbd && nbd.by[u.ticker] ? { asOf: nbd.asOf, tag: ov.tag, note: ov.note } : null;
+  const nb = nbd && nbd.by[u.ticker];
+  const ov = nb && !nbStale ? nb : { tag: 'NONE', pts: 0, note: 'Not covered by NeoBDM.' };
+  pk.neobdm = nb ? { asOf: nbd.asOf, stale: nbStale, ...nb } : null;
   pk.tier = tierOf(pk.score, api.ACT_SCORE, pk.confirm, ov);
   picks.push(pk);
 });
@@ -123,14 +127,17 @@ const newsOut = newsRows.filter(r => new Date(r[0]).getTime() >= weekAgo && (r[5
 fs.writeFileSync(path.join(OUT, 'news-30d.json'), JSON.stringify(archiveForWeb(api, newsRows, newsBackfill)));
 
 const na = path.join(ROOT, 'data', 'news-accuracy.json');
+const readJson = f => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'data', f), 'utf8')); } catch { return null; } };
 const out = {
   meta: {
     generatedAt: new Date().toISOString(), asOf,
     session: { state: sessionOpen ? 'open' : 'closed', note: sessionOpen ? "IDX is open: scores use the last completed close; live quotes are today's partial bar." : 'IDX is closed: scores use the latest close.' }, engine: 'oversold-v2', commit: (process.env.GITHUB_SHA || '').slice(0, 7), actScore: api.ACT_SCORE,
     params: cfg, universe: uni.length, ranked: picks.length, skipped, newsCount: newsRows.length, newsStatus, newsCoverage: coverage, sample: false,
-    sources: { prices: 'Yahoo Finance daily bars (.JK)', news: 'Google News RSS (Indonesian)', ownership: ownership ? `${ownership.source} (as of ${ownership.asOf})` : null, fundamentals: 'Yahoo Finance fundamentals-timeseries (unofficial, last ~5 quarters)', neobdm: nbd ? 'NeoBDM Market Summary, ' + nbd.asOf + ' (exported by hand; not backtested)' : null },
+    sources: { prices: 'Yahoo Finance daily bars (.JK)', news: 'Google News RSS (Indonesian)', ownership: ownership ? `${ownership.source} (as of ${ownership.asOf})` : null, fundamentals: 'Yahoo Finance fundamentals-timeseries (unofficial, last ~5 quarters)', neobdm: nbd ? 'NeoBDM Market Summary, ' + nbd.asOf + (nbStale ? ' (stale: not used for tiers)' : '') + ' (pulled from a logged-in browser; forward test running)' : null },
   },
-  backtestHoldout: fs.existsSync(path.join(ROOT, 'data', 'backtest-holdout.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'backtest-holdout.json'), 'utf8')) : null,
+  // Broker-flow workflow: forward-test scorecard (tools/flow-forward.mjs) and the IDX foreign-flow backtest (tools/experiment-flow.mjs).
+  flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json') },
+  backtestHoldout:fs.existsSync(path.join(ROOT, 'data', 'backtest-holdout.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'backtest-holdout.json'), 'utf8')) : null,
   newsAccuracy: fs.existsSync(na) ? JSON.parse(fs.readFileSync(na, 'utf8')) : null, market, picks, news: newsOut, ownership: ownership ? { asOf: ownership.asOf, note: ownership.note } : null, backtest: bt, trackerSummary: { signalDays: tracker.signalDays, act: tracker.act, control: tracker.control, open: tracker.open.length, rules: tracker.rules },
 };
 fs.writeFileSync(path.join(OUT, 'latest.json'), JSON.stringify(out));

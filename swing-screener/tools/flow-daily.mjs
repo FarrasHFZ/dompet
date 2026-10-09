@@ -1,0 +1,37 @@
+// Daily broker-flow step, run after tools/neobdm-pull.js has saved today's snapshot (see README "Broker-flow workflow").
+//   1. checks the newest data/neobdm-snap/DATE.json is complete and recent
+//   2. writes the public labels data/neobdm-tags-DATE.json (directions only) and removes older label files
+//   3. re-scores every saved snapshot against prices -> data/flow-scorecard.json (forward test + promotion checklist)
+// Commit the two data files afterwards; the GitHub build picks them up.
+// Usage: node tools/flow-daily.mjs
+import fs from 'node:fs';
+import path from 'node:path';
+import { loadEngine, universe, loadPrices, ROOT } from './lib.mjs';
+import { snapToTags } from './neobdm.mjs';
+import { readSnaps, scoreSnaps } from './flow-forward.mjs';
+
+const DATA = path.join(ROOT, 'data'), SNAP = path.join(DATA, 'neobdm-snap');
+const files = fs.existsSync(SNAP) ? fs.readdirSync(SNAP).filter(f => /^\d{4}-\d{2}-\d{2}\.json$/.test(f)).sort() : [];
+if (!files.length) { console.error('No snapshot in data/neobdm-snap/. Run tools/neobdm-pull.js in the NeoBDM tab first.'); process.exit(1); }
+const newest = files.at(-1), date = newest.slice(0, 10);
+const raw = JSON.parse(fs.readFileSync(path.join(SNAP, newest), 'utf8'))[date];
+const n = Object.keys(raw.rows).length;
+const ageDays = (Date.now() - new Date(date + 'T10:00:00Z')) / 864e5;
+if (!raw.complete || n < 95) { console.error(`Snapshot ${date} is incomplete (${n} rows, complete=${raw.complete}). Re-run the pull; not publishing.`); process.exit(1); }
+if (ageDays > 4) console.warn(`Warning: newest snapshot is ${date} (${ageDays.toFixed(0)} days old). The site will mark it stale after 5 days.`);
+
+const { by } = snapToTags(path.join(SNAP, newest));
+fs.writeFileSync(path.join(DATA, `neobdm-tags-${date}.json`), JSON.stringify(by));
+fs.readdirSync(DATA).filter(f => /^neobdm-tags-\d{4}-\d{2}-\d{2}\.json$/.test(f) && f !== `neobdm-tags-${date}.json`).forEach(f => fs.unlinkSync(path.join(DATA, f)));
+const cnt = {}; Object.values(by).forEach(t => { cnt[t.tag] = (cnt[t.tag] || 0) + 1; });
+console.log(`labels ${date}: ${n} stocks`, JSON.stringify(cnt));
+
+const api = loadEngine(), uni = universe(api);
+const bars = await loadPrices(uni.map(u => u.ticker + '.JK'), '2y', process.env.REFRESH !== '1');
+const sc = scoreSnaps(readSnaps(), bars);
+fs.writeFileSync(path.join(DATA, 'flow-scorecard.json'), JSON.stringify({ ...sc, asOf: new Date().toISOString() }));
+const s5 = sc.horizons[5].spread;
+console.log(`forward test: ${sc.snapshots} snapshots (${sc.firstSnap}..${sc.lastSnap}); resolved 5-session spread days ${s5.days}${s5.days ? `, FLOW+ minus FLOW- ${(s5.avg * 100).toFixed(2)}% adj t=${s5.tAdj == null ? 'n/a' : s5.tAdj.toFixed(2)}` : ''}`);
+console.log('promotion:', sc.promotion.promoted ? 'PASSED - flow may now change tiers (edit tierOf in tools/neobdm.mjs deliberately)' : 'not yet');
+sc.promotion.checks.forEach(c => console.log(c.ok ? ' [x]' : ' [ ]', c.rule, JSON.stringify(c.value)));
+console.log(`\nnext: git add swing-screener/data/neobdm-tags-${date}.json swing-screener/data/flow-scorecard.json && git commit && git push`);

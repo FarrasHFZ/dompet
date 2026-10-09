@@ -4,6 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './lib.mjs';
+import { readFlow, publicFlow } from './flow-model.mjs';
 
 // Public-safe: data/neobdm-tags-YYYY-MM-DD.json holds only derived labels (tag, points, note), never NeoBDM's raw numbers.
 export function loadNeobdm() {
@@ -49,8 +50,29 @@ export function tierOf(score, actScore, confirm, ov) {
   return ov.tag === 'FLOW+' ? 'ACT+' : ov.tag === 'FLOW-' ? 'ACT?' : 'ACT';
 }
 
-if (process.argv[1] && process.argv[1].endsWith('neobdm.mjs') && process.argv[2]) {
-  const csv = process.argv[2], d = csv.match(/(\d{4}-\d{2}-\d{2})/)[1];
-  fs.writeFileSync(path.join(ROOT, 'data', 'neobdm-tags-' + d + '.json'), JSON.stringify(csvToTags(csv)));
-  console.log('wrote neobdm-tags-' + d + '.json');
+// Daily snapshot (tools/neobdm-pull.js -> data/neobdm-snap/DATE.json, local) -> public tags carrying the full broker-flow
+// read of tools/flow-model.mjs: phase, per-group directions, retail transfer, broker mix, hygiene. No raw NeoBDM numbers.
+export function snapToTags(snapFile) {
+  const d = path.basename(snapFile).slice(0, 10), j = JSON.parse(fs.readFileSync(snapFile, 'utf8')), s = j[d] || j;
+  const by = {};
+  Object.entries(s.rows).forEach(([tk, r]) => { by[tk] = publicFlow(readFlow(r)); });
+  return { date: d, by };
+}
+
+// Usage: node tools/neobdm.mjs             newest data/neobdm-snap/*.json -> data/neobdm-tags-DATE.json
+//        node tools/neobdm.mjs <file.csv>  legacy hand export
+if (process.argv[1] && process.argv[1].endsWith('neobdm.mjs')) {
+  const arg = process.argv[2];
+  if (arg && arg.endsWith('.csv')) {
+    const d = arg.match(/(\d{4}-\d{2}-\d{2})/)[1];
+    fs.writeFileSync(path.join(ROOT, 'data', 'neobdm-tags-' + d + '.json'), JSON.stringify(csvToTags(arg)));
+    console.log('wrote neobdm-tags-' + d + '.json');
+  } else {
+    const dir = path.join(ROOT, 'data', 'neobdm-snap');
+    const f = arg || path.join(dir, fs.readdirSync(dir).filter(x => /^\d{4}-\d{2}-\d{2}\.json$/.test(x)).sort().at(-1));
+    const { date, by } = snapToTags(f);
+    fs.writeFileSync(path.join(ROOT, 'data', 'neobdm-tags-' + date + '.json'), JSON.stringify(by));
+    const cnt = {}; Object.values(by).forEach(t => { cnt[t.tag] = (cnt[t.tag] || 0) + 1; cnt[t.phase] = (cnt[t.phase] || 0) + 1; });
+    console.log('wrote neobdm-tags-' + date + '.json:', Object.keys(by).length, 'stocks', JSON.stringify(cnt));
+  }
 }

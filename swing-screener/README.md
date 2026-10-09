@@ -68,8 +68,51 @@ Known limits: `IDX:COMPOSITE` for IHSG in GOOGLEFINANCE is unverified; GOOGLEFIN
     node tools/ownership.mjs           # refresh data/ownership.json
     node tools/mock-sheet-test.mjs     # smoke-test the Apps Script entry points
     node tools/serve.mjs               # preview web/ on :5174
+    node tools/flow-daily.mjs          # NeoBDM snapshot -> public flow labels + forward-test scorecard
+    node tools/experiment-flow.mjs     # 4-year IDX foreign-flow backtest of ACT
 
 Not financial advice.
+
+## Broker-flow workflow (NeoBDM + IDX foreign flow)
+Goal: read who is buying (bandar, non-retail, institution, sultan, foreign) and who is on the other side (retail), every
+day, the same way, and only let that read change a pick once it has proven itself out of sample.
+
+**The read** (`tools/flow-model.mjs`, rules fixed 2026-10-09, versioned): big money = Bandar, Non-retail, Institution and
+Sultan, weighted, each at half weight when NeoBDM rates its method a poor fit for the stock (compatibility < 0.5). Flows are
+the group's net buy as a share of turnover over 5 and 20 sessions. Phase = 20-day big money against the 20-day price move:
+accumulation (buying into weakness, the case that matters for an oversold bounce), markup, distribution, markdown,
+neutral. Retail moving against big money confirms the transfer. Crossing or Clean <= -3 halves everything. Tag: FLOW+,
+FLOW~, FLOW-, or AVOID (Pinky or illiquid).
+
+**Daily, after NeoBDM updates (about 19:00-22:00 WIB):**
+1. `node tools/flow-receiver.mjs` (local only, port 5175)
+2. In Chrome, logged in, open `https://neobdm.tech/new-market-summary/` and run `tools/neobdm-pull.js` (DevTools console,
+   or ask Claude in Chrome). About 2 minutes: 20 page reads of the `swing-screener` screener on the `swing-100` stock list,
+   then the tab hands the data to the receiver -> `data/neobdm-snap/DATE.json` (git-ignored, paid data).
+3. `node tools/flow-daily.mjs` -> `data/neobdm-tags-DATE.json` (directions only, public) and `data/flow-scorecard.json`.
+4. Commit those two files and push. The site's **Broker flow** tab and each pick's NeoBDM section update on the next build.
+
+Missed days are fine, but labels older than 5 days stop affecting badges automatically.
+
+**What flow may do, and when that changes.** Today: veto (Pinky, illiquid -> SKIP) and annotate (ACT+ / ACT?). It may
+not promote a pick. `tools/flow-forward.mjs` scores every saved snapshot 5 and 15 sessions later against the same-day
+average, and prints a promotion checklist fixed in advance: at least 60 resolved days and 150 FLOW+ stock-days,
+FLOW+ minus FLOW- 5-session spread with overlap-adjusted t >= 2 (t / sqrt(5), since consecutive days share 4 of 5
+sessions), positive in both halves, and a positive 15-session spread. Earliest possible pass: about 65 trading days of
+snapshots (mid-January 2027). Only then change `tierOf` in `tools/neobdm.mjs`, deliberately, as a new version.
+
+**Foreign flow has 4 years of free history** (IDX daily stock summary: foreign buy/sell per stock). `tools/experiment-flow.mjs`
+tests whether 5-day foreign net buying improves ACT trades, with the decision rule written in the file before the run;
+its result is published as `data/flow-experiment.json`. Result (2026-10-09, 982 trading days, 3,319 ACT signals): raw
+gap +0.75 points per trade for F5 > 0 (t=2.2), but only +0.39 (t=0.9) clustered by day and +0.20 (t=0.3) with one trade
+per stock episode. Not adopted; foreign flow stays a small part of the NeoBDM note. Across all stocks (not just ACT) it
+predicts nothing (monthly rank IC -0.01). Refresh: open `https://www.idx.co.id/en/market-data/trading-summary/stock-summary`
+in a normal browser tab (plain scripts get a Cloudflare 403; this repo does not try to get around that), pull days into
+the page's IndexedDB, export, then `node tools/idx-flow-import.mjs <export>`.
+
+NeoBDM limits: today's values only (no history API), screener max 15 columns, 20 rows per page; a bulk pull of every
+column (~1,700 requests) got a 429 block on 2026-10-07. The daily pull stays at about 24 requests at human pace and stops
+at the first rate-limit answer.
 
 ## Telegram alerts
 What you get (one digest per run, only new items, never repeated): new risk / commissioner or director / insider-buying / government-investment / corporate-action / contract / earnings headlines about today's ACT picks and `data/watchlist.json`, sector-wide government or risk news for those picks' sectors, and once per signal day which stocks entered or left ACT.

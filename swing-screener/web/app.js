@@ -15,12 +15,22 @@
   const TIER = { 'ACT+': 'Bounce candle + flow up', ACT: 'Bounce candle confirmed', 'ACT?': 'Bounce candle, but flow down', WAIT: 'Oversold, wait for a bounce candle', SKIP: 'NeoBDM veto' };
   const tierHtml = p => (p.tier && p.tier !== 'WATCH' ? '<span class="tier t' + (p.tier === 'ACT+' ? 'P' : p.tier === 'ACT?' ? 'Q' : p.tier) + '" title="' + esc(TIER[p.tier]) + '">' + esc(p.tier) + '</span>' : '');
   const flowF = x => (x == null ? '–' : (x > 0 ? '+' : '') + x.toFixed(1) + 'B');
+  // Broker flow (NeoBDM, derived labels only). Groups in the order a trader reads them: big money first, retail last.
+  const GROUPS = [['m', 'Bandar'], ['nr', 'Non-retail'], ['i', 'Institution'], ['s', 'Sultan'], ['f', 'Foreign'], ['z', 'Retail']];
+  const dirCls = d => (/buy/.test(d) ? 'up' : /sell/.test(d) ? 'down' : 'mute');
+  const dirHtml = d => `<span class="${dirCls(d || '')}">${esc(d || '–')}</span>`;
+  const PHASE = { ACCUMULATION: 'Big money buying while price is weak', MARKUP: 'Big money buying, price rising', DISTRIBUTION: 'Big money selling while price holds', MARKDOWN: 'Big money selling, price falling', NEUTRAL: 'No clear big-money direction' };
+  const phaseHtml = ph => `<span class="tag ph${esc(ph || 'NEUTRAL')}" title="${esc(PHASE[ph] || '')}">${esc((ph || 'n/a').toLowerCase())}</span>`;
+  const mixHtml = m => (m ? `${m.foreign} foreign · ${m.retail} retail · ${m.other} other` : '–');
   const nbHtml = p => {
     const n = p.neobdm;
     if (!n) return '<p class="muted">NeoBDM has no row for this ticker.</p>';
     const tagCls = n.tag === 'FLOW+' ? 'up' : n.tag === 'FLOW-' || n.tag === 'AVOID' ? 'down' : '';
-    return '<p><span class="tag ' + (n.tag === 'AVOID' ? 'RISK' : '') + '">' + esc(n.tag) + '</span> <span class="' + tagCls + '">' + esc(n.note) + '</span></p>' +
-      '<p class="muted">Label derived from NeoBDM data of ' + esc(n.asOf) + ' (non-retail, foreign and institution flow, Clean, crossing, Pinky). Raw numbers are not published. Flow counts only when clean. It is a veto and a note, not a score: NeoBDM shows only today, so it could not be backtested.</p>';
+    const grid = n.groups ? `<div class="scroll"><table><thead><tr><th>Group</th><th>5 days</th><th>20 days</th><th>Method fits?</th></tr></thead><tbody>
+      ${GROUPS.map(([k, l]) => n.groups[k] ? `<tr><td>${l}</td><td>${dirHtml(n.groups[k].d5)}</td><td>${dirHtml(n.groups[k].d20)}</td><td class="${n.groups[k].compat ? '' : 'mute'}">${n.groups[k].compat ? 'yes' : 'weak (half weight)'}</td></tr>` : '').join('')}</tbody></table></div>
+      <p class="muted">Today's top 5 net buyers: ${mixHtml(n.brokers && n.brokers.buyers)}. Top 5 net sellers: ${mixHtml(n.brokers && n.brokers.sellers)}.</p>` : '';
+    return `<p><span class="tag ${n.tag === 'AVOID' ? 'RISK' : ''}">${esc(n.tag)}</span> ${n.phase ? phaseHtml(n.phase) : ''} <span class="${tagCls}">${esc(n.note)}</span></p>${grid}
+      <p class="muted">From NeoBDM data of ${esc(n.asOf)}${n.stale ? ' <b>(stale: no longer used for the badge)</b>' : ''}. Directions only; raw numbers are not published. Flow is the group's net buy as a share of turnover. It can veto (Pinky, illiquid) or annotate a pick; it cannot promote one until its forward test passes (see the Broker flow tab).</p>`;
   };
 
   const MQ = window.matchMedia('(max-width: 760px)');
@@ -61,7 +71,58 @@
       <div class="stat"><small>IHSG RSI(14) · 20d</small><b>${k.idxRsi == null ? '–' : k.idxRsi.toFixed(0)} · ${k.idxChg20d == null ? '–' : (k.idxChg20d * 100).toFixed(1) + '%'}</b></div>`;
     const ns = m.newsStatus;
     $('#banner').innerHTML = ns && ns.state !== 'ok' ? `<div class="note"><b>News ${esc(ns.state)}.</b> ${esc(ns.note)}</div>` : '';
-    renderPicks(); renderNews(); renderScore(); renderHow();
+    renderPicks(); renderFlow(); renderNews(); renderScore(); renderHow();
+  }
+
+  // ---------- broker flow ----------
+  let FLOWPH = 'ALL', FLOWQ = '', FLOWACT = false;
+  function scorecardHtml(sc) {
+    if (!sc || !sc.snapshots) return '<div class="card empty">No forward-test snapshots scored yet.</div>';
+    const h = sc.horizons['5'] || {}, rows = Object.entries({ ...(h.tags || {}), ...(h.phases || {}) });
+    const t = x => (x == null ? '–' : x.toFixed(1));
+    return `<p class="muted">${sc.snapshots} daily snapshot${sc.snapshots === 1 ? '' : 's'}, ${esc(sc.firstSnap)} to ${esc(sc.lastSnap)}. Outcome: buy at the next open, sell 5 sessions later, after 0.4% fees. "Excess" removes the market's move (all 100 stocks' average that day).</p>
+      <div class="card scroll"><table><thead><tr><th>Label</th><th class="n">Stock-days</th><th class="n">Days</th><th class="n">Avg net</th><th class="n">Excess</th><th class="n">t</th></tr></thead><tbody>
+      ${rows.map(([k, g]) => `<tr><td>${esc(k)}</td><td class="n">${g.n}</td><td class="n">${g.days}</td><td class="n">${g.n ? pc(g.avgNet, 2) : '–'}</td><td class="n">${g.n ? pc(g.avgExcess, 2) : '–'}</td><td class="n">${t(g.t)}</td></tr>`).join('')}</tbody></table></div>
+      <h3>Promotion checklist ${sc.promotion.promoted ? '<span class="tag">passed</span>' : '<span class="tag RISK">not yet</span>'}</h3>
+      <ul class="checks">${sc.promotion.checks.map(c => `<li class="${c.ok ? 'up' : 'mute'}">${c.ok ? '✓' : '○'} ${esc(c.rule)} <span class="muted">(${esc(JSON.stringify(c.value))})</span></li>`).join('')}</ul>`;
+  }
+  function foreignBtHtml(fb) {
+    if (!fb) return '<p class="muted">Not run yet: needs the IDX daily history (tools/idx-flow-import.mjs).</p>';
+    return `<p class="muted">${esc(fb.summary)}</p>${fb.rows ? `<p class="muted">Trades overlap (a stock oversold for a week gives several), so these averages are descriptive; the corrected test is in the line above.</p><div class="card scroll"><table><thead><tr><th>ACT signals</th><th class="n">Trades</th><th class="n">Avg net (wide stop)</th><th class="n">Hit target</th></tr></thead><tbody>
+      ${fb.rows.map(r => `<tr><td>${esc(r.label)}</td><td class="n">${r.n}</td><td class="n">${pc(r.avg, 2)}</td><td class="n">${pct1(r.win)}</td></tr>`).join('')}</tbody></table></div>` : ''}`;
+  }
+  function renderFlow() {
+    const el = $('#tab-flow'), F = DATA.flow || {};
+    const P = DATA.picks.filter(p => p.neobdm);
+    if (!P.length) { el.innerHTML = '<div class="card empty">No NeoBDM snapshot in this build.</div>'; return; }
+    const q = FLOWQ.trim().toLowerCase();
+    const cnt = ph => P.filter(p => p.neobdm.phase === ph).length;
+    const order = { 'FLOW+': 0, 'FLOW~': 1, 'FLOW-': 2, AVOID: 3 };
+    const list = P.filter(p => (FLOWPH === 'ALL' || p.neobdm.phase === FLOWPH) && (!FLOWACT || p.action === 'ACT') && (!q || p.ticker.toLowerCase().includes(q) || p.sector.toLowerCase().includes(q)))
+      .sort((a, b) => order[a.neobdm.tag] - order[b.neobdm.tag] || (b.neobdm.pts || 0) - (a.neobdm.pts || 0));
+    const g = (p, k, w) => dirHtml(p.neobdm.groups && p.neobdm.groups[k] && p.neobdm.groups[k][w]);
+    el.innerHTML = `
+      ${F.stale ? `<div class="note"><b>Flow data is stale (${esc(F.asOf)}).</b> Labels are shown for reference but no longer change any badge. Run the daily NeoBDM pull.</div>` : ''}
+      <p class="muted">NeoBDM broker flow of ${esc(F.asOf || '–')}, read the same way every day (rules fixed in <code>tools/flow-model.mjs</code>). <b>Big money</b> = Bandar, Non-retail, Institution and Sultan combined; <b>retail</b> is read as the other side of the trade. A phase compares big money's 20-day flow with the 20-day price move.</p>
+      <div class="chips" role="group" aria-label="Phase">
+        ${['ALL', 'ACCUMULATION', 'MARKUP', 'DISTRIBUTION', 'MARKDOWN', 'NEUTRAL'].map(ph => `<button class="chip" data-ph="${ph}" aria-pressed="${FLOWPH === ph}">${ph === 'ALL' ? 'All (' + P.length + ')' : ph.toLowerCase() + ' (' + cnt(ph) + ')'}</button>`).join('')}
+        <label class="muted"><input type="checkbox" id="fact" ${FLOWACT ? 'checked' : ''}> ACT only</label>
+        <input type="search" id="fq" placeholder="Ticker or sector" value="${esc(FLOWQ)}" style="max-width:200px;margin-left:auto">
+      </div>
+      <div class="card scroll"><table><thead><tr><th>Ticker</th><th>Flow</th><th>Phase</th><th>Big money 20d / 5d</th><th>Bandar 20d</th><th>Foreign 5d / 20d</th><th>Retail 20d</th><th>Transfer</th><th>Pick</th></tr></thead><tbody>
+      ${list.length ? list.map(p => { const n = p.neobdm; return `<tr><td><b class="tk">${esc(p.ticker)}</b><div class="nm">${esc(p.sector)}</div></td>
+        <td><span class="tag ${n.tag === 'AVOID' ? 'RISK' : ''}">${esc(n.tag)}</span></td><td>${phaseHtml(n.phase)}${n.turn ? `<div class="muted">${esc(n.turn)}</div>` : ''}</td>
+        <td>${dirHtml(n.bigMoney && n.bigMoney.d20)} / ${dirHtml(n.bigMoney && n.bigMoney.d5)}</td>
+        <td>${g(p, 'm', 'd20')}</td><td>${g(p, 'f', 'd5')} / ${g(p, 'f', 'd20')}</td><td>${g(p, 'z', 'd20')}</td>
+        <td class="muted">${esc(n.retail)}${n.dirty ? '<div class="down">dirty tape</div>' : ''}</td><td><span class="act ${p.action}">${p.action}</span> ${tierHtml(p)}</td></tr>`; }).join('') : '<tr><td colspan="9" class="empty">Nothing matches.</td></tr>'}</tbody></table></div>
+      <h2>Does broker flow help? Forward test</h2>
+      <div class="note"><b>Why a forward test.</b> NeoBDM shows only today's numbers, so the flow read cannot be backtested. Every trading day a snapshot is saved and scored later. Flow may start changing badges only after the checklist below passes (earliest around mid-January 2027). The rules were fixed on 2026-10-09, before any forward result, and correct t for overlapping holding periods.</div>
+      ${scorecardHtml(F.scorecard)}
+      <h2>Foreign flow: 4-year backtest (IDX data)</h2>
+      ${foreignBtHtml(F.foreignBacktest)}`;
+    el.querySelectorAll('[data-ph]').forEach(b => b.onclick = () => { FLOWPH = b.dataset.ph; renderFlow(); });
+    $('#fact', el).onchange = e => { FLOWACT = e.target.checked; renderFlow(); };
+    $('#fq', el).oninput = e => { FLOWQ = e.target.value; const pos = e.target.selectionStart; renderFlow(); const i = $('#fq'); i.focus(); i.setSelectionRange(pos, pos); };
   }
 
   // ---------- picks ----------
@@ -343,7 +404,7 @@
       <h2>Data you can add next</h2>
       <div class="two">
         <div class="card pad"><b>Shareholders ≥1% (live here)</b><p class="muted">KSEI data that IDX publishes monthly (since Feb 2026). Good for context: who controls the stock, foreign share, state stakes, new/exiting holders month to month. Too slow for swing timing and has gaps, so it is displayed, not scored.</p></div>
-        <div class="card pad"><b>Broker summary (not yet)</b><p class="muted">Per-stock buy/sell by broker is what traders use for accumulation. IDX shows it on its site but has no public API and blocks scripts. Paid options exist (about Rp200k/month at the cheapest I found), and a free tier of a few requests a day is worth testing first. Would be scored only after a backtest, like everything else.</p></div>
+        <div class="card pad"><b>Broker flow (live, on trial)</b><p class="muted">NeoBDM splits each day's broker summary into bandar, non-retail, institution, sultan, foreign and retail flow. A snapshot is saved every trading day and read with fixed rules (Broker flow tab). It can veto or annotate a pick but not promote one until its forward test passes. Foreign flow alone has 4 years of free IDX history and is backtested separately.</p></div>
       </div>`;
   }
 
