@@ -113,7 +113,7 @@ try { existing = JSON.parse(fs.readFileSync(ledgerFile, 'utf8')); } catch { /* n
 if (!process.env.FAKE_NOW && (!existing || (existing.v || 1) < LEDGER_V)) {
   fs.writeFileSync(ledgerFile, JSON.stringify({
     v: LEDGER_V, asOf, cfg, regime: market.regime, breadth: market.breadth,
-    picks: picks.map(p => ({ ticker: p.ticker, sector: p.sector, score: p.score, action: p.action, setup: p.setup, rsi: p.rsi, dist20Atr: p.dist20Atr, rr: p.rr, atrPct: p.atrPct, entry: p.entry, stop: p.stop, target: p.target, newsScore: p.newsScore })),
+    picks: picks.map(p => ({ ticker: p.ticker, sector: p.sector, score: p.score, action: p.action, setup: p.setup, rsi: p.rsi, dist20Atr: p.dist20Atr, rr: p.rr, atrPct: p.atrPct, entry: p.entry, stop: p.stop, target: p.target, newsScore: p.newsScore, bmScore: p.bm && !p.bm.stale && p.bm.score != null ? p.bm.score : null })),
   }));
 }
 const tracker = buildTracker({ ledger: readLedger(HIST), bars: px, horizon: cfg.horizon });
@@ -142,7 +142,7 @@ const out = {
   },
   // Broker-flow workflow: forward-test scorecard (tools/flow-forward.mjs) and the IDX foreign-flow backtest (tools/experiment-flow.mjs).
   flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json'),
-    bm: { asOf: bmd ? bmd.asOf : null, stale: bmStale, experiment: readJson('bm-experiment.json') } },
+    bm: { asOf: bmd ? bmd.asOf : null, stale: bmStale, experiment: readJson('bm-experiment.json'), scoreExperiment: readJson('bm-score-experiment.json') } },
   backtestHoldout:fs.existsSync(path.join(ROOT, 'data', 'backtest-holdout.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'backtest-holdout.json'), 'utf8')) : null,
   newsAccuracy: fs.existsSync(na) ? JSON.parse(fs.readFileSync(na, 'utf8')) : null, market, picks, news: newsOut, ownership: ownership ? { asOf: ownership.asOf, note: ownership.note } : null, backtest: bt, trackerSummary: { signalDays: tracker.signalDays, act: tracker.act, control: tracker.control, open: tracker.open.length, rules: tracker.rules },
 };

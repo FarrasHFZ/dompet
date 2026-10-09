@@ -27,10 +27,14 @@
   const BAND = { green: ['efficient', 'up'], yellow: ['fading', 'warn'], red: ['churn', 'down'] };
   const bmReadHtml = b => { const r = BMREAD[b.read] || [b.read, 'mute']; return `<span class="${r[1]}">${esc(r[0])}</span>`; };
   const bandHtml = b => { const x = BAND[b && b.band]; return x ? `<span class="${x[1]}">${x[0]}</span>` : '<span class="mute">–</span>'; };
+  // Experimental BM accumulation score: today's rank (0-100) of the 60-session LPM trend. Held its direction out of
+  // sample but did not clear the bar, so it is shown and forward-tested, never part of the badge.
+  const bmScoreHtml = s => (s == null ? '<span class="mute">–</span>' : `<b class="${s >= 67 ? 'up' : s <= 33 ? 'down' : ''}">${s}</b><span class="muted">/100</span>`);
   const bmHtml = p => {
     const b = p.bm;
     if (!b) return '<p class="muted">No Bandarmetrics data for this ticker.</p>';
     return `<div class="kv">
+        <div><small>Accumulation score (experimental)</small>${bmScoreHtml(b.score)}<div class="muted">60-day LPM trend vs other stocks</div></div>
         <div><small>Read</small><b>${bmReadHtml(b)}</b></div>
         <div><small>LPM (direction)</small><b class="${b.lpm === 'rising' ? 'up' : b.lpm === 'falling' ? 'down' : ''}">${esc(b.lpm)}</b>${b.quiet ? '<div class="muted">rising while price fell</div>' : ''}</div>
         <div><small>Flow lens: ${esc(b.lens)}</small><b class="${b.lensDir === 'up' ? 'up' : b.lensDir === 'down' ? 'down' : ''}">${esc(b.lensDir)}</b><div class="muted">${b.foreignDriven ? 'foreign-driven stock' : 'locally-driven stock'}</div></div>
@@ -110,6 +114,13 @@
       <div class="card scroll"><table><thead><tr><th>Test (A vs B)</th><th class="n">Gap per trade</th><th class="n">t, episodes</th><th class="n">t, by day</th><th class="n">Unseen</th><th class="n">1st / 2nd half</th><th>Result</th></tr></thead><tbody>
       ${x.results.map(r => `<tr><td>${esc(r.name)}</td><td class="n">${pc(r.gapEpisodes, 2)}</td><td class="n">${t(r.tEpisodes)}</td><td class="n">${t(r.tByDay)}</td><td class="n">${pc(r.unseen, 2)}</td><td class="n">${pc(r.firstHalf, 1)} / ${pc(r.secondHalf, 1)}</td><td>${r.pass ? '<span class="up">pass</span>' : '<span class="mute">fail (bar ' + r.bar + ')</span>'}</td></tr>`).join('')}</tbody></table></div>`;
   }
+  function bmScoreBtHtml(x) {
+    if (!x) return '';
+    const r = x.results.find(y => y.label === 'S_act');
+    if (!r || r.empty) return '';
+    const t = v => (v == null ? '–' : v.toFixed(1));
+    return `<h3>Data-weighted Bandarmetrics score</h3><p class="muted">Instead of BM's own rules, each input's weight was learned on Apr 2023 to Sep 2024 (the inputs need a year of history first) and judged only on Oct 2024 to Sep 2026. Trained on oversold trades, it kept one input: the <b>60-day LPM trend</b>. Out of sample, ACT trades in its top half beat the bottom half by ${pc(r.gapEpisodes, 2)} per trade (t=${t(r.tEpisodes)}), ${pc(r.gapByDay, 2)} by day (t=${t(r.tByDay)}), ${pc(r.unseen, 2)} on unseen stocks. The direction held everywhere, but it ${r.pass ? 'passed' : 'did not clear the bar (t >= 2)'}. So it is shown as the experimental <b>accumulation score</b> and logged daily; its live record is in Track record. A score trained on all stocks failed out of sample.</p>`;
+  }
   function foreignBtHtml(fb) {
     if (!fb) return '<p class="muted">Not run yet: needs the IDX daily history (tools/idx-flow-import.mjs).</p>';
     return `<p class="muted">${esc(fb.summary)}</p>${fb.rows ? `<p class="muted">Trades overlap (a stock oversold for a week gives several), so these averages are descriptive; the corrected test is in the line above.</p><div class="card scroll"><table><thead><tr><th>ACT signals</th><th class="n">Trades</th><th class="n">Avg net (wide stop)</th><th class="n">Hit target</th></tr></thead><tbody>
@@ -133,21 +144,22 @@
         <label class="muted"><input type="checkbox" id="fact" ${FLOWACT ? 'checked' : ''}> ACT only</label>
         <input type="search" id="fq" placeholder="Ticker or sector" value="${esc(FLOWQ)}" style="max-width:200px;margin-left:auto">
       </div>
-      <div class="card scroll"><table><thead><tr><th>Ticker</th><th>Flow</th><th>Phase</th><th>Big money 20d / 5d</th><th>Bandar 20d</th><th>Foreign 5d / 20d</th><th>Retail 20d</th><th>Transfer</th><th>BM read</th><th>Rotation</th><th>Pick</th></tr></thead><tbody>
+      <div class="card scroll"><table><thead><tr><th>Ticker</th><th>Flow</th><th>Phase</th><th>Big money 20d / 5d</th><th>Bandar 20d</th><th>Foreign 5d / 20d</th><th>Retail 20d</th><th>Transfer</th><th>BM read</th><th>BM score</th><th>Rotation</th><th>Pick</th></tr></thead><tbody>
       ${list.length ? list.map(p => { const n = p.neobdm; return `<tr class="row" data-open="${esc(p.ticker)}" title="Open ${esc(p.ticker)}"><td><b class="tk">${esc(p.ticker)}</b><div class="nm">${esc(p.sector)}</div></td>
         <td><span class="tag ${n.tag === 'AVOID' ? 'RISK' : ''}">${esc(n.tag)}</span></td><td>${phaseHtml(n.phase)}${n.turn ? `<div class="muted">${esc(n.turn)}</div>` : ''}</td>
         <td>${dirHtml(n.bigMoney && n.bigMoney.d20)} / ${dirHtml(n.bigMoney && n.bigMoney.d5)}</td>
         <td>${g(p, 'm', 'd20')}</td><td>${g(p, 'f', 'd5')} / ${g(p, 'f', 'd20')}</td><td>${g(p, 'z', 'd20')}</td>
         <td class="muted">${esc(n.retail)}${n.dirty ? '<div class="down">dirty tape</div>' : ''}</td>
-        <td>${p.bm ? bmReadHtml(p.bm) + (p.bm.spike ? '<div class="muted">Intensity spike</div>' : '') : '<span class="mute">–</span>'}</td><td>${bandHtml(p.bm)}</td>
-        <td><span class="act ${p.action}">${p.action}</span> ${tierHtml(p)}</td></tr>`; }).join('') : '<tr><td colspan="11" class="empty">Nothing matches.</td></tr>'}</tbody></table></div>
+        <td>${p.bm ? bmReadHtml(p.bm) + (p.bm.spike ? '<div class="muted">Intensity spike</div>' : '') : '<span class="mute">–</span>'}</td><td>${bmScoreHtml(p.bm && p.bm.score)}</td><td>${bandHtml(p.bm)}</td>
+        <td><span class="act ${p.action}">${p.action}</span> ${tierHtml(p)}</td></tr>`; }).join('') : '<tr><td colspan="12" class="empty">Nothing matches.</td></tr>'}</tbody></table></div>
       <h2>Does broker flow help? Forward test</h2>
       <div class="note"><b>Why a forward test.</b> NeoBDM shows only today's numbers, so the flow read cannot be backtested. Every trading day a snapshot is saved and scored later. Flow may start changing badges only after the checklist below passes (earliest around mid-January 2027). The rules were fixed on 2026-10-09, before any forward result, and correct t for overlapping holding periods.</div>
       ${scorecardHtml(F.scorecard)}
       <h2>Foreign flow: 4-year backtest (IDX data)</h2>
       ${foreignBtHtml(F.foreignBacktest)}
       <h2>Bandarmetrics read: 4-year backtest</h2>
-      ${bmBtHtml(F.bm)}`;
+      ${bmBtHtml(F.bm)}
+      ${bmScoreBtHtml(F.bm && F.bm.scoreExperiment)}`;
     el.querySelectorAll('[data-ph]').forEach(b => b.onclick = () => { FLOWPH = b.dataset.ph; renderFlow(); });
     // A row opens that stock's full read in Picks.
     el.querySelectorAll('tr[data-open]').forEach(r => r.onclick = () => { OPEN = r.dataset.open; FILTER = 'ALL'; document.querySelector('[data-tab=picks]').click(); renderPicks(); const d = $('#dcard'); if (d) d.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
@@ -291,6 +303,7 @@
     const ctx = [];
     if (bmDir) ctx.push(row(/buy/.test(bmDir) ? true : /sell/.test(bmDir) ? 'warn' : null, 'Big money (NeoBDM)', `${bmDir} over 20 days${nb.phase ? ', ' + nb.phase.toLowerCase() : ''}`));
     if (bm) ctx.push(row(bm.lpm === 'rising' ? true : bm.lpm === 'falling' ? 'warn' : null, 'Large-order pressure (Bandarmetrics LPM)', bm.quiet ? 'rising while price fell (quiet accumulation)' : bm.lpm === 'falling' ? 'falling: big sellers still active' : bm.lpm));
+    if (bm && bm.score != null) ctx.push(row(bm.score >= 67 ? true : bm.score <= 33 ? 'warn' : null, 'Accumulation score (experimental)', `${bm.score}/100: ${bm.score >= 67 ? 'big orders have been building for 60 days' : bm.score <= 33 ? 'weak 60-day accumulation' : 'middle of the pack'}`));
     ctx.push(row(p.newsScore >= 0.5 ? true : p.newsScore <= -0.5 ? 'warn' : null, 'News', p.newsScore >= 0.5 ? 'supportive' : p.newsScore <= -0.5 ? 'risk headlines' : 'nothing clear'));
     if (act && p.resistance && p.resistance < p.target) ctx.push(row('warn', 'Resistance', `${f0(p.resistance)} sits below the target, so the move may stall there`));
     if (act && p.rr != null && p.rr < 1) ctx.push(row('warn', 'Reward vs risk', `${p.rr.toFixed(1)} : 1 with the plan stop; the wider stop makes it lower`));
@@ -444,7 +457,7 @@
         : `<p class="muted">Nothing has resolved yet. ${tr.signalDays} signal day${tr.signalDays === 1 ? '' : 's'} logged; each trade needs up to ${tr.horizon} trading days after its entry.</p>`;
     }
     h += groupTable('By setup', tr.bySetup, 5) + groupTable('By score', tr.byScore, 5) + groupTable('By market regime (ACT trades)', tr.byRegime, 5) +
-      groupTable('By RSI at signal (ACT)', tr.byRsi, 5) + groupTable('By news at signal (ACT)', tr.byNews, 5) + groupTable('By sector (ACT)', tr.bySector, 8) + groupTable('Best stocks so far (ACT)', tr.byTicker, 4);
+      groupTable('By RSI at signal (ACT)', tr.byRsi, 5) + groupTable('By news at signal (ACT)', tr.byNews, 5) + groupTable('By Bandarmetrics accumulation score (ACT, experimental, logged from 12 Oct 2026)', tr.byBm, 1) + groupTable('By sector (ACT)', tr.bySector, 8) + groupTable('Best stocks so far (ACT)', tr.byTicker, 4);
     h += `<p class="muted">${esc(tr.rules)} One position per stock at a time, so a stock that stays oversold for ten days counts once. The 95% range shows how little a small sample proves. Many cuts are shown, so some will look good by luck alone: trust a pattern only if it keeps showing up in the live results.</p>`;
     return h;
   }

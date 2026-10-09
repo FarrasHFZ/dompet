@@ -38,6 +38,10 @@ export function foreignProfile(rows) {
 export function bmRead(s, t, px = {}, fp = null) {
   if (t < 140 || s.l[t] == null) return null;
   const d20 = s.l[t] - s.l[t - 20], d10 = s.l[t] - s.l[t - 10];
+  // 60-session LPM trend in sd of its own past year: the one BM input whose direction held out of sample
+  // (tools/experiment-bm-score.mjs). Ranked across stocks it becomes the experimental BM accumulation score.
+  let lpm60z = null;
+  if (t >= 320 && s.l[t - 60] != null) { const h = []; for (let k = t - 250; k < t; k++) if (s.l[k] != null && s.l[k - 60] != null) h.push(s.l[k] - s.l[k - 60]); const sh = sd(h); if (h.length > 100 && sh) lpm60z = (s.l[t] - s.l[t - 60]) / sh; }
   const hist = []; for (let k = Math.max(20, t - 250); k < t; k++) if (s.l[k] != null && s.l[k - 20] != null) hist.push(s.l[k] - s.l[k - 20]);
   const z = hist.length > 60 && sd(hist) ? d20 / sd(hist) : null;
   const lpm = z == null ? 'unknown' : z >= Z_DIR ? 'rising' : z <= -Z_DIR ? 'falling' : 'flat';
@@ -59,7 +63,7 @@ export function bmRead(s, t, px = {}, fp = null) {
   const quiet = lpm === 'rising' && chg20 != null && chg20 <= 0; // BM's bullish divergence: pressure ahead of price
 
   return {
-    v: BM_MODEL_V, read, lpm, lpmUp20: d20 > 0, lpmUp10: d10 > 0, lpmZ: z, quiet, spike, vr, band,
+    v: BM_MODEL_V, read, lpm, lpm60z, lpmUp20: d20 > 0, lpmUp10: d10 > 0, lpmZ: z, quiet, spike, vr, band,
     lens, lensDir, foreignDriven: !!(fp && fp.driven), parF: fp ? fp.parF : null, corrF: fp ? fp.corrF : null,
   };
 }

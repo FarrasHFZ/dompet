@@ -136,7 +136,13 @@ checks across all stocks and at 20/40/60 sessions found no significant edge (bes
 sessions, t=1.6). So the read is shown beside each pick and in the Broker flow tab as context and a warning, and never
 changes a badge.
 
-**Refresh (weekly is enough; labels go stale after 10 days):** start `node tools/flow-receiver.mjs`; in a logged-in
+**Experimental accumulation score** (`tools/experiment-bm-score.mjs`): instead of BM's rules, input weights were learned on
+Apr 2023 - Sep 2024 and judged on Oct 2024 - Sep 2026 only. Trained on ACT trades it kept one input, the 60-session LPM trend;
+out of sample the top half beat the bottom half by +0.49/trade (t=0.7), +1.03 by day (t=1.9), +0.95 on unseen stocks: right
+direction everywhere, below the bar. It is shown as a 0-100 rank (today's percentile across the 100 stocks), logged in the
+ledger as `bmScore` and tracked live in Track record ("By Bandarmetrics accumulation score"). It never changes a badge.
+
+**Refresh (daily, by the scheduled evening task; labels go stale after 10 days):** start `node tools/flow-receiver.mjs`; in a logged-in
 Bandarmetrics chart tab paste `tools/bm-pull.js`, set `__bmStart` to ~60 days back, `await __bmReset()`, switch the chart's
 stock once, then repeat `await __bmBurst(38000)` until all 100 are stored (switch stock again after a 401); export with
 `__bmChunk(0, 100)` to `bm-snap/<date>.json` through the receiver's `/upload` page; run `node tools/bm-labels.mjs`; commit

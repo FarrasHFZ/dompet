@@ -28,7 +28,7 @@ export function readLedger(dir) {
 // bars: column bars {d,o,h,l,c}. Returns a trade record.
 export function resolveTrade(p, asOf, bars, horizon) {
   const i0 = bars.d.findIndex(d => d.toISOString().slice(0, 10) === asOf);
-  const base = { ticker: p.ticker, signal: asOf, score: p.score, action: p.action, setup: p.setup, sector: p.sector || null, regime: p.regime || null, rsi: p.rsi ?? null, news: p.newsScore ?? null, stop: p.stop, target: p.target };
+  const base = { ticker: p.ticker, signal: asOf, score: p.score, action: p.action, setup: p.setup, sector: p.sector || null, regime: p.regime || null, rsi: p.rsi ?? null, news: p.newsScore ?? null, bm: p.bmScore ?? null, stop: p.stop, target: p.target };
   if (i0 < 0 || i0 + 1 >= bars.c.length) return { ...base, status: 'pending' };
   const j0 = i0 + 1, entry = bars.o[j0];
   const last = Math.min(j0 + horizon - 1, bars.c.length - 1);
@@ -104,6 +104,8 @@ export function buildTracker({ ledger, bars, horizon = 15, previousResolved = []
     byScore: groupBy(uniq, t => bucket(t.score)),
     bySetup: groupBy(uniq, t => t.setup, 5), bySector: groupBy(act, t => t.sector, 3), byRegime: groupBy(act, t => t.regime, 3),
     byRsi: groupBy(act, t => rsiBand(t.rsi), 3),
+    // Forward test of the experimental Bandarmetrics accumulation score (logged from 2026-10-12).
+    byBm: groupBy(act, t => (t.bm == null ? null : t.bm >= 50 ? 'BM score top half' : 'BM score bottom half'), 1),
     byNews: groupBy(act, t => (t.news === null ? null : t.news >= 0.5 ? 'news supports' : t.news <= -0.5 ? 'news against' : 'no clear news'), 3),
     byTicker: groupBy(act, t => t.ticker, 2).slice(0, 12),
     open: act.filter(t => t.status === 'open').sort((a, b) => b.score - a.score),

@@ -34,7 +34,7 @@ const px = await loadPrices(uni.map(u => u.ticker + '.JK'), '2y', process.env.RE
 let FLOW = null;
 try { FLOW = JSON.parse(fs.readFileSync(path.join(DATA, 'idx-foreign-flow.json'), 'utf8')); } catch { /* lens falls back to money flow */ }
 const fdays = FLOW ? Object.keys(FLOW).sort() : [];
-const by = {};
+const by = {}, lpm60 = {};
 let asOf = '';
 for (const u of uni) {
   const s = H[u.ticker]; if (!s || !s.d.length) continue;
@@ -51,8 +51,12 @@ for (const u of uni) {
   const r = bmRead(s, t, { chg20 }, fp);
   if (!r) continue;
   by[u.ticker] = { asOf: day, ...bmPublic(r) };
+  if (r.lpm60z != null) lpm60[u.ticker] = r.lpm60z;
   if (day > asOf) asOf = day;
 }
+// Experimental BM accumulation score: today's percentile (0-100) of the 60-session LPM trend across the universe.
+const z60 = Object.entries(lpm60).sort((a, b) => a[1] - b[1]);
+z60.forEach(([tk], k) => { by[tk].score = Math.round(z60.length > 1 ? (k / (z60.length - 1)) * 100 : 50); });
 fs.writeFileSync(path.join(DATA, `bm-tags-${asOf}.json`), JSON.stringify(by));
 fs.readdirSync(DATA).filter(f => /^bm-tags-\d{4}-\d{2}-\d{2}\.json$/.test(f) && f !== `bm-tags-${asOf}.json`).forEach(f => fs.unlinkSync(path.join(DATA, f)));
 const cnt = {}; Object.values(by).forEach(x => { cnt[x.read] = (cnt[x.read] || 0) + 1; });
