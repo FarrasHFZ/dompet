@@ -22,6 +22,22 @@
   const PHASE = { ACCUMULATION: 'Big money buying while price is weak', MARKUP: 'Big money buying, price rising', DISTRIBUTION: 'Big money selling while price holds', MARKDOWN: 'Big money selling, price falling', NEUTRAL: 'No clear big-money direction' };
   const phaseHtml = ph => `<span class="tag ph${esc(ph || 'NEUTRAL')}" title="${esc(PHASE[ph] || '')}">${esc((ph || 'n/a').toLowerCase())}</span>`;
   const mixHtml = m => (m ? `${m.foreign} foreign · ${m.retail} retail · ${m.other} other` : '–');
+  // Bandarmetrics read (context only: tools/experiment-bm.mjs found no edge for ACT trades, so it never changes a badge).
+  const BMREAD = { ACCUM_CONFIRMED: ['Accumulation, confirmed', 'up'], ACCUM_BUILDING: ['Accumulation building', 'up'], DISTRIB_CONFIRMED: ['Distribution, confirmed', 'down'], DISTRIB_STARTING: ['Distribution starting', 'down'], HIDDEN_DISTRIBUTION: ['Hidden distribution', 'down'], CHURN: ['Churn, no direction', 'mute'], FLAT: ['Flat, no pressure', 'mute'], UNKNOWN: ['Not enough data', 'mute'] };
+  const BAND = { green: ['efficient', 'up'], yellow: ['fading', 'warn'], red: ['churn', 'down'] };
+  const bmReadHtml = b => { const r = BMREAD[b.read] || [b.read, 'mute']; return `<span class="${r[1]}">${esc(r[0])}</span>`; };
+  const bandHtml = b => { const x = BAND[b && b.band]; return x ? `<span class="${x[1]}">${x[0]}</span>` : '<span class="mute">–</span>'; };
+  const bmHtml = p => {
+    const b = p.bm;
+    if (!b) return '<p class="muted">No Bandarmetrics data for this ticker.</p>';
+    return `<div class="kv">
+        <div><small>Read</small><b>${bmReadHtml(b)}</b></div>
+        <div><small>LPM (direction)</small><b class="${b.lpm === 'rising' ? 'up' : b.lpm === 'falling' ? 'down' : ''}">${esc(b.lpm)}</b>${b.quiet ? '<div class="muted">rising while price fell</div>' : ''}</div>
+        <div><small>Flow lens: ${esc(b.lens)}</small><b class="${b.lensDir === 'up' ? 'up' : b.lensDir === 'down' ? 'down' : ''}">${esc(b.lensDir)}</b><div class="muted">${b.foreignDriven ? 'foreign-driven stock' : 'locally-driven stock'}</div></div>
+        <div><small>Intensity (timing)</small><b>${b.spike ? 'spike, last 3 days' : 'quiet'}</b></div>
+        <div><small>Volume Rotation</small><b>${bandHtml(b)}</b></div></div>
+      <p class="muted">Bandarmetrics data of ${esc(b.asOf)}${b.stale ? ' <b>(stale)</b>' : ''}. Directions only. Context, not a signal: over 4 years and 100 stocks this read did not separate winning from losing ACT trades (see the Broker flow tab), so it does not change the badge. Most useful as a warning: LPM falling means large-order pressure is still on the sell side.</p>`;
+  };
   const nbHtml = p => {
     const n = p.neobdm;
     if (!n) return '<p class="muted">NeoBDM has no row for this ticker.</p>';
@@ -86,6 +102,14 @@
       <h3>Promotion checklist ${sc.promotion.promoted ? '<span class="tag">passed</span>' : '<span class="tag RISK">not yet</span>'}</h3>
       <ul class="checks">${sc.promotion.checks.map(c => `<li class="${c.ok ? 'up' : 'mute'}">${c.ok ? '✓' : '○'} ${esc(c.rule)} <span class="muted">(${esc(JSON.stringify(c.value))})</span></li>`).join('')}</ul>`;
   }
+  function bmBtHtml(bm) {
+    const x = bm && bm.experiment;
+    if (!x) return '<p class="muted">Not run yet (tools/experiment-bm.mjs).</p>';
+    const t = v => (v == null ? '–' : v.toFixed(1));
+    return `<p class="muted">LPM, Intensity, Volume Rotation and Money Flow from Bandarmetrics, ${esc(x.from)} to ${esc(x.to)}, ${x.act.toLocaleString()} ACT signals. The tests and pass bars were written down before the first run. Each needs a high enough t both with one trade per episode and by day, plus a positive gap on the 73 unseen stocks and in both halves. ${x.results.some(r => r.pass) ? '' : '<b>None passed</b>, so the read is shown as context and never changes a badge. Exploratory checks at 20, 40 and 60 sessions and across all stocks found no significant edge either.'}${bm.stale ? ' Labels are stale (' + esc(bm.asOf) + ').' : ''}</p>
+      <div class="card scroll"><table><thead><tr><th>Test (A vs B)</th><th class="n">Gap per trade</th><th class="n">t, episodes</th><th class="n">t, by day</th><th class="n">Unseen</th><th class="n">1st / 2nd half</th><th>Result</th></tr></thead><tbody>
+      ${x.results.map(r => `<tr><td>${esc(r.name)}</td><td class="n">${pc(r.gapEpisodes, 2)}</td><td class="n">${t(r.tEpisodes)}</td><td class="n">${t(r.tByDay)}</td><td class="n">${pc(r.unseen, 2)}</td><td class="n">${pc(r.firstHalf, 1)} / ${pc(r.secondHalf, 1)}</td><td>${r.pass ? '<span class="up">pass</span>' : '<span class="mute">fail (bar ' + r.bar + ')</span>'}</td></tr>`).join('')}</tbody></table></div>`;
+  }
   function foreignBtHtml(fb) {
     if (!fb) return '<p class="muted">Not run yet: needs the IDX daily history (tools/idx-flow-import.mjs).</p>';
     return `<p class="muted">${esc(fb.summary)}</p>${fb.rows ? `<p class="muted">Trades overlap (a stock oversold for a week gives several), so these averages are descriptive; the corrected test is in the line above.</p><div class="card scroll"><table><thead><tr><th>ACT signals</th><th class="n">Trades</th><th class="n">Avg net (wide stop)</th><th class="n">Hit target</th></tr></thead><tbody>
@@ -109,17 +133,21 @@
         <label class="muted"><input type="checkbox" id="fact" ${FLOWACT ? 'checked' : ''}> ACT only</label>
         <input type="search" id="fq" placeholder="Ticker or sector" value="${esc(FLOWQ)}" style="max-width:200px;margin-left:auto">
       </div>
-      <div class="card scroll"><table><thead><tr><th>Ticker</th><th>Flow</th><th>Phase</th><th>Big money 20d / 5d</th><th>Bandar 20d</th><th>Foreign 5d / 20d</th><th>Retail 20d</th><th>Transfer</th><th>Pick</th></tr></thead><tbody>
+      <div class="card scroll"><table><thead><tr><th>Ticker</th><th>Flow</th><th>Phase</th><th>Big money 20d / 5d</th><th>Bandar 20d</th><th>Foreign 5d / 20d</th><th>Retail 20d</th><th>Transfer</th><th>BM read</th><th>Rotation</th><th>Pick</th></tr></thead><tbody>
       ${list.length ? list.map(p => { const n = p.neobdm; return `<tr><td><b class="tk">${esc(p.ticker)}</b><div class="nm">${esc(p.sector)}</div></td>
         <td><span class="tag ${n.tag === 'AVOID' ? 'RISK' : ''}">${esc(n.tag)}</span></td><td>${phaseHtml(n.phase)}${n.turn ? `<div class="muted">${esc(n.turn)}</div>` : ''}</td>
         <td>${dirHtml(n.bigMoney && n.bigMoney.d20)} / ${dirHtml(n.bigMoney && n.bigMoney.d5)}</td>
         <td>${g(p, 'm', 'd20')}</td><td>${g(p, 'f', 'd5')} / ${g(p, 'f', 'd20')}</td><td>${g(p, 'z', 'd20')}</td>
-        <td class="muted">${esc(n.retail)}${n.dirty ? '<div class="down">dirty tape</div>' : ''}</td><td><span class="act ${p.action}">${p.action}</span> ${tierHtml(p)}</td></tr>`; }).join('') : '<tr><td colspan="9" class="empty">Nothing matches.</td></tr>'}</tbody></table></div>
+        <td class="muted">${esc(n.retail)}${n.dirty ? '<div class="down">dirty tape</div>' : ''}</td>
+        <td>${p.bm ? bmReadHtml(p.bm) + (p.bm.spike ? '<div class="muted">Intensity spike</div>' : '') : '<span class="mute">–</span>'}</td><td>${bandHtml(p.bm)}</td>
+        <td><span class="act ${p.action}">${p.action}</span> ${tierHtml(p)}</td></tr>`; }).join('') : '<tr><td colspan="11" class="empty">Nothing matches.</td></tr>'}</tbody></table></div>
       <h2>Does broker flow help? Forward test</h2>
       <div class="note"><b>Why a forward test.</b> NeoBDM shows only today's numbers, so the flow read cannot be backtested. Every trading day a snapshot is saved and scored later. Flow may start changing badges only after the checklist below passes (earliest around mid-January 2027). The rules were fixed on 2026-10-09, before any forward result, and correct t for overlapping holding periods.</div>
       ${scorecardHtml(F.scorecard)}
       <h2>Foreign flow: 4-year backtest (IDX data)</h2>
-      ${foreignBtHtml(F.foreignBacktest)}`;
+      ${foreignBtHtml(F.foreignBacktest)}
+      <h2>Bandarmetrics read: 4-year backtest</h2>
+      ${bmBtHtml(F.bm)}`;
     el.querySelectorAll('[data-ph]').forEach(b => b.onclick = () => { FLOWPH = b.dataset.ph; renderFlow(); });
     $('#fact', el).onchange = e => { FLOWACT = e.target.checked; renderFlow(); };
     $('#fq', el).oninput = e => { FLOWQ = e.target.value; const pos = e.target.selectionStart; renderFlow(); const i = $('#fq'); i.focus(); i.setSelectionRange(pos, pos); };
@@ -242,6 +270,7 @@
         ${p.headlines.length ? `<ul class="hl-list">${p.headlines.map(h => `<li><span class="tag ${esc(h.category)}">${esc(h.category)}</span><span><a href="${safeUrl(h.link)}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a><div class="muted">${ago(h.published)} · ${h.direct ? 'names this stock' : 'sector-wide'} · ${h.sentiment > 0 ? 'supports' : h.sentiment < 0 ? 'risk' : 'neutral'}</div></span></li>`).join('')}</ul>` : '<p class="muted">No scored headlines in the last 7 days.</p>'}
         <button class="chip" data-news="${esc(p.ticker)}">All 30-day headlines for ${esc(p.ticker)} →</button>
         <h2>NeoBDM flow</h2>${nbHtml(p)}
+        <h2>Bandarmetrics read</h2>${bmHtml(p)}
         ${p.action === 'ACT' ? `<p class="muted"><b>Backtested plan for ACT:</b> wait for a bounce candle (${p.confirm ? 'seen today' : 'not yet'}) and use the wider stop ${f0(p.wideStop)} (3.5 ATR) instead of ${f0(p.stop)}. In 5 years × 100 stocks this took ACT from -0.2% to about +1.0% per trade, versus -0.7% for the rest.</p>` : ''}
         <h2>Who owns it</h2>${ownHtml(p.ownership)}
         <h2>Earnings (P&L)</h2>${fundHtml(p.fundamentals)}</div></div>`;

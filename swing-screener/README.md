@@ -114,6 +114,34 @@ NeoBDM limits: today's values only (no history API), screener max 15 columns, 20
 column (~1,700 requests) got a 429 block on 2026-10-07. The daily pull stays at about 24 requests at human pace and stops
 at the first rate-limit answer.
 
+## Bandarmetrics read (context only)
+Bandarmetrics (bandarmetrics.com, paid) has history back to 2022 for its own indicators, so unlike NeoBDM it could be
+backtested. What each one is, from its "Panduan Kombinasi Indikator" and the app's own code:
+
+| Indicator | Question it answers | How it is read here (`tools/bm-model.mjs`) |
+|---|---|---|
+| LPM, Liquidity Pressure Model (`q3_200`) | Where to? Cumulative pressure from large orders; leads price; wins every conflict | 20-session change vs its own past year: rising / flat / falling (±0.25 sd) |
+| Intensity (`momentum`) | When? How aggressively large orders are being split; timing only, never direction | spike = last 3 sessions above the 90th percentile of the prior 120 |
+| Volume Rotation (`volume_ratio`) | How healthy? Efficiency of the transfer | BM's own bands: <=3 efficient, <=7 fading, >7 churn |
+| Money Flow (`bai`) | Short-term lens of top buyers/sellers, for locally-driven stocks | 10-session change |
+| Foreign Flow (`ff`) + Corr F / Par F | Lens for foreign-driven stocks (participation > 20-30%, correlation > 0.5) | from IDX data: Par F 180d >= 25% and return~net-foreign corr 120d >= 0.5 |
+
+The read chains them as BM does: LPM direction, then the lens confirms (accumulation confirmed / building, distribution
+confirmed / starting, hidden distribution, churn, flat).
+
+**Result** (`tools/experiment-bm.mjs`, rules fixed before the run, 2022-10..2026-09, 3,319 ACT signals): no test passed.
+LPM rising vs not among ACT trades: -0.05 points per trade (t=-0.1); accumulation vs distribution +0.11 (t=0.2); Intensity
+spike or lens confirmation on top of LPM rising made trades slightly worse; the bounce-candle subset -0.31. Exploratory
+checks across all stocks and at 20/40/60 sessions found no significant edge (best: LPM rising +0.96% excess at 60
+sessions, t=1.6). So the read is shown beside each pick and in the Broker flow tab as context and a warning, and never
+changes a badge.
+
+**Refresh (weekly is enough; labels go stale after 10 days):** start `node tools/flow-receiver.mjs`; in a logged-in
+Bandarmetrics chart tab paste `tools/bm-pull.js`, set `__bmStart` to ~60 days back, `await __bmReset()`, switch the chart's
+stock once, then repeat `await __bmBurst(38000)` until all 100 are stored (switch stock again after a 401); export with
+`__bmChunk(0, 100)` to `bm-snap/<date>.json` through the receiver's `/upload` page; run `node tools/bm-labels.mjs`; commit
+`data/bm-tags-<date>.json`. Raw Bandarmetrics data (`bm-history.json`, `bm-snap/`) stays local.
+
 ## Telegram alerts
 What you get (one digest per run, only new items, never repeated): new risk / commissioner or director / insider-buying / government-investment / corporate-action / contract / earnings headlines about today's ACT picks and `data/watchlist.json`, sector-wide government or risk news for those picks' sectors, and once per signal day which stocks entered or left ACT.
 

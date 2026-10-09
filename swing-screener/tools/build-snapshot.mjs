@@ -70,6 +70,10 @@ const nbd = loadNeobdm();
 // Flow labels older than 5 calendar days no longer change tiers (shown as stale): old broker flow says little about a
 // setup two weeks later, and a silently frozen file must not keep promoting or demoting picks.
 const nbStale = nbd ? (NOW - new Date(nbd.asOf + 'T10:00:00Z').getTime()) / 864e5 > 5 : true;
+// Bandarmetrics read (tools/bm-labels.mjs): context only, never changes a tier (tools/experiment-bm.mjs found no edge).
+const bmFile = fs.readdirSync(path.join(ROOT, 'data')).filter(f => /^bm-tags-\d{4}-\d{2}-\d{2}\.json$/.test(f)).sort().at(-1);
+const bmd = bmFile ? { asOf: bmFile.slice(8, 18), by: JSON.parse(fs.readFileSync(path.join(ROOT, 'data', bmFile), 'utf8')) } : null;
+const bmStale = bmd ? (NOW - new Date(bmd.asOf + 'T10:00:00Z').getTime()) / 864e5 > 10 : true;
 const picks = [], skipped = [];
 let lastBar = null;
 uni.forEach(u => {
@@ -90,6 +94,7 @@ uni.forEach(u => {
   const nb = nbd && nbd.by[u.ticker];
   const ov = nb && !nbStale ? nb : { tag: 'NONE', pts: 0, note: 'Not covered by NeoBDM.' };
   pk.neobdm = nb ? { asOf: nbd.asOf, stale: nbStale, ...nb } : null;
+  pk.bm = bmd && bmd.by[u.ticker] ? { ...bmd.by[u.ticker], stale: bmStale } : null;
   pk.tier = tierOf(pk.score, api.ACT_SCORE, pk.confirm, ov);
   picks.push(pk);
 });
@@ -136,7 +141,8 @@ const out = {
     sources: { prices: 'Yahoo Finance daily bars (.JK)', news: 'Google News RSS (Indonesian)', ownership: ownership ? `${ownership.source} (as of ${ownership.asOf})` : null, fundamentals: 'Yahoo Finance fundamentals-timeseries (unofficial, last ~5 quarters)', neobdm: nbd ? 'NeoBDM Market Summary, ' + nbd.asOf + (nbStale ? ' (stale: not used for tiers)' : '') + ' (pulled from a logged-in browser; forward test running)' : null },
   },
   // Broker-flow workflow: forward-test scorecard (tools/flow-forward.mjs) and the IDX foreign-flow backtest (tools/experiment-flow.mjs).
-  flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json') },
+  flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json'),
+    bm: { asOf: bmd ? bmd.asOf : null, stale: bmStale, experiment: readJson('bm-experiment.json') } },
   backtestHoldout:fs.existsSync(path.join(ROOT, 'data', 'backtest-holdout.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'backtest-holdout.json'), 'utf8')) : null,
   newsAccuracy: fs.existsSync(na) ? JSON.parse(fs.readFileSync(na, 'utf8')) : null, market, picks, news: newsOut, ownership: ownership ? { asOf: ownership.asOf, note: ownership.note } : null, backtest: bt, trackerSummary: { signalDays: tracker.signalDays, act: tracker.act, control: tracker.control, open: tracker.open.length, rules: tracker.rules },
 };

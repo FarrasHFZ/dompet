@@ -20,3 +20,5 @@ swing-screener/tools/receive.mjs
 swing-screener/data/neobdm-snap/
 # IDX daily stock summary history (research input for tools/experiment-flow.mjs; rebuilt with tools/idx-flow-import.mjs)
 swing-screener/data/idx-foreign-flow.json
+swing-screener/data/bm-history.json
+swing-screener/data/bm-snap/
