@@ -1,0 +1,62 @@
+{
+  "_doc": "Conglomerate groups, hand-curated. Each member: [ticker, KSEI holder regex that proves the link (or null), note, since]. tools/groups.mjs checks every regex against the latest KSEI >=1% holder file and records the matching holder line as evidence; a member without a match is published as a 'known link' (softer: the holding vehicle is not named in the KSEI list). 'since' = first date the stock belonged to the group (point-in-time for backtests). One primary group per stock.",
+  "groups": [
+    { "id": "prajogo", "name": "Prajogo Pangestu (Barito)", "alias": "saham PP", "members": [
+      ["BRPT", "PRAJOGO", null, null], ["TPIA", "BARITO PACIFIC", null, null], ["BREN", "BARITO PACIFIC", null, null],
+      ["CUAN", "PRAJOGO", null, null], ["CDIA", "CHANDRA ASRI", null, null],
+      ["PTRO", "PETRINDO|KREASI JASA", "Petrindo (CUAN) took control via Kreasi Jasa Persada in 2023", "2023-08-01"] ] },
+    { "id": "isam", "name": "Haji Isam (Jhonlin)", "alias": "saham Haji Isam", "members": [
+      ["JARR", "ESHAN AGRO|BARAMEGA", "Jhonlin Agro Raya; Eshan Agro and Baramega are Jhonlin vehicles", null],
+      ["PGUN", "ARAYA AGRO|CITRA AGRO RAYA|BARAMEGA", "Pradiksi Gunatama; shares Baramega Citra Mulia Persada with JARR", null] ] },
+    { "id": "happy", "name": "Happy Hapsoro (Rukun Raharja)", "alias": "saham Happy Hapsoro", "members": [
+      ["RAJA", "HAPSORO|SENTOSA BERSAMA MITRA", null, null], ["RATU", "RUKUN RAHARJA", null, null], ["MINA", "HAPSORO|BASIS UTAMA PRIMA", null, null] ] },
+    { "id": "aguan", "name": "Aguan (Agung Sedayu)", "alias": "saham Aguan / PIK", "members": [
+      ["PANI", "MULTI ARTHA PRATAMA", "Multi Artha Pratama is the Agung Sedayu holding vehicle", null], ["CBDK", "PANTAI INDAH KAPUK|AGUNG SEDAYU", null, null] ] },
+    { "id": "salim", "name": "Salim (Indofood)", "alias": "saham Salim", "members": [
+      ["INDF", "FIRST PACIFIC", null, null], ["ICBP", "INDOFOOD", null, null], ["SIMP", "INDOFOOD", null, null],
+      ["LSIP", "SALIM IVOMAS", null, null], ["DNET", "ANTHONI SALIM", null, null], ["DCII", "ANTHONI SALIM", null, null] ] },
+    { "id": "sinarmas", "name": "Sinar Mas (Widjaja)", "alias": "saham Sinarmas", "members": [
+      ["DSSA", "SINAR MAS TUNGGAL", null, null], ["INKP", "PURINUSA", null, null], ["TKIM", "PURINUSA", null, null],
+      ["SMAR", "PURIMAS", "Purimas Sasmita is the Sinar Mas Agribusiness holding", null], ["BSIM", "SINAR MAS", null, null],
+      ["SMMA", "SINAR MAS", null, null], ["GEMS", "DIAN SWASTATIKA", null, null], ["LIFE", "SINAR MAS", null, null],
+      ["BSDE", "PARAGA ARTAMIDA", "Paraga Artamida is Sinar Mas Land's holding", null], ["DUTI", "BUMI SERPONG", null, null],
+      ["DMAS", "SUMBER ARUSMULIA", "Sinar Mas Land and Sojitz joint venture", null] ] },
+    { "id": "djarum", "name": "Djarum (Hartono)", "alias": "saham Djarum", "members": [
+      ["BBCA", "DWIMURIA", null, null], ["TOWR", "DWIMURIA|SAPTA ADHIKARI", null, null],
+      ["SUPR", "PROFESIONAL TELEKOMUNIKASI", "Protelindo is a TOWR subsidiary", null], ["BELI", "GLOBAL INVESTAMA ANDALAN|DWIMURIA", null, null] ] },
+    { "id": "astra", "name": "Astra (Jardine)", "alias": "saham Astra", "members": [
+      ["ASII", "JARDINE", null, null], ["UNTR", "ASTRA INTERNATIONAL", null, null], ["AALI", "ASTRA INTERNATIONAL", null, null],
+      ["AUTO", "ASTRA INTERNATIONAL", null, null], ["ASGR", "ASTRA INTERNATIONAL", null, null] ] },
+    { "id": "thohir", "name": "Thohir and Saratoga (Adaro, Merdeka)", "alias": "saham Boy Thohir", "members": [
+      ["ADRO", "ADARO STRATEGIC", null, null], ["AADI", "ADARO STRATEGIC", null, null], ["ADMR", "ALAMTRI", null, null],
+      ["MDKA", "SARATOGA|THOHIR", null, null], ["MBMA", "MERDEKA ENERGI|THOHIR", null, null], ["ESSA", "THOHIR", null, null],
+      ["TRIM", "THOHIR", null, null], ["PALM", "PROVIDENT CAPITAL|THOHIR", null, null], ["MPMX", "SARATOGA", null, null],
+      ["SRTG", "SOERYADJAYA|UNITRAS", null, null] ] },
+    { "id": "bakrie", "name": "Bakrie", "alias": "saham Bakrie", "members": [
+      ["BUMI", "BAKRIE", "Salim-linked Mach Energy is now the largest holder", null], ["BRMS", "BUMI RESOURCES", null, null],
+      ["ENRG", "BAKRIE", null, null], ["UNSP", "BAKRIE", null, null], ["VKTR", "BAKRIE", null, null], ["VIVA", "BAKRIE", null, null],
+      ["BTEL", "BAKRIE", null, null], ["BIPI", "BAKRIE", null, null], ["DEWA", null, "Darma Henwa, a long-standing Bakrie-group company", null],
+      ["BNBR", null, "Bakrie & Brothers (the holding itself)", null] ] },
+    { "id": "mnc", "name": "MNC (Hary Tanoesoedibjo)", "alias": "saham MNC", "members": [
+      ["BHIT", "TANOESOEDIBJO|MNC|BHAKTI", null, null], ["BMTR", "MNC", null, null], ["MNCN", "GLOBAL MEDIACOM", null, null],
+      ["MSIN", "MNC|GLOBAL MEDIACOM", null, null], ["IPTV", "GLOBAL MEDIACOM", null, null], ["KPIG", "MNC", null, null],
+      ["BABP", "MNC", null, null], ["BCAP", "MNC", null, null], ["IATA", "MNC", null, null] ] },
+    { "id": "lippo", "name": "Lippo (Riady)", "alias": "saham Lippo", "members": [
+      ["LPKR", "MULTIPOLAR", null, null], ["LPPF", "MULTIPOLAR", null, null], ["MPPA", "MULTIPOLAR", null, null],
+      ["MLPT", "MULTIPOLAR", null, null], ["MLPL", null, "Multipolar's parent; holders sit behind custodian accounts", null],
+      ["LPCK", "KEMUNING SATIATAMA", "Kemuning Satiatama is an LPKR subsidiary", null] ] },
+    { "id": "emtek", "name": "Emtek (Sariaatmadja)", "alias": "saham Emtek", "members": [
+      ["EMTK", "SARIAATMADJA", null, null], ["SCMA", "ELANG MAHKOTA", null, null], ["SAME", "ELANG MAHKOTA", null, null], ["BUKA", "ELANG MAHKOTA", null, null] ] },
+    { "id": "triputra", "name": "Triputra (T.P. Rachmat)", "alias": "saham Triputra", "members": [
+      ["DSNG", "TRIPUTRA", null, null], ["TAPG", "TRIPUTRA", null, null] ] },
+    { "id": "medco", "name": "Panigoro (Medco)", "alias": "saham Medco", "members": [
+      ["MEDC", "MEDCO DAYA", null, null], ["AMMN", "MEDCO ENERGI|SUMBER GEMILANG", null, null] ] },
+    { "id": "bumn", "name": "State-owned (BUMN, Danantara)", "alias": "saham BUMN", "members": [
+      ["BMRI", "PERSERO", null, null], ["BBRI", null, "state majority held through Danantara; not in the >=1% list", null], ["BBNI", null, "state majority held through Danantara; not in the >=1% list", null],
+      ["BBTN", null, "state majority held through Danantara; not in the >=1% list", null], ["BRIS", "BANK MANDIRI|PERSERO", null, null], ["TLKM", "PERSERO", null, null],
+      ["MTEL", "TELEKOMUNIKASI INDONESIA", null, null], ["PGAS", "PERTAMINA", null, null], ["PGEO", "PERTAMINA", null, null], ["ELSA", "PERTAMINA", null, null],
+      ["PTBA", "PERSERO", null, null], ["ANTM", "PERSERO", null, null], ["TINS", "MINERAL INDUSTRI", null, null], ["INCO", "PERSERO", null, null],
+      ["SMGR", "PERSERO", null, null], ["JSMR", "PERSERO", null, null], ["KRAS", "PERSERO", null, null], ["PTPP", "PERSERO", null, null],
+      ["WIKA", "PERSERO", null, null], ["GIAA", "PERSERO", null, null] ] }
+  ]
+}

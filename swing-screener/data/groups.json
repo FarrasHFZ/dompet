@@ -1,0 +1,1038 @@
+{
+ "asOf": "2026-02-27",
+ "source": "KSEI shareholders >= 1% (via IDX), curated in tools/groups-map.json",
+ "groups": [
+  {
+   "id": "prajogo",
+   "name": "Prajogo Pangestu (Barito)",
+   "alias": "saham PP",
+   "members": [
+    {
+     "tk": "BRPT",
+     "evidence": "PRAJOGO PANGESTU 71.37%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 71.37
+    },
+    {
+     "tk": "TPIA",
+     "evidence": "BARITO PACIFIC TBK 34.63%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 34.63
+    },
+    {
+     "tk": "BREN",
+     "evidence": "PT Barito Pacific Tbk 64.14%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 64.14
+    },
+    {
+     "tk": "CUAN",
+     "evidence": "PRAJOGO PANGESTU 84.10%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 84.1
+    },
+    {
+     "tk": "CDIA",
+     "evidence": "PT CHANDRA ASRI PACIFIC TBK 60.00%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 60
+    },
+    {
+     "tk": "PTRO",
+     "evidence": "PT. KREASI JASA PERSADA 45.33%; PT PETRINDO JAYA KREASI TBK 1.38%",
+     "soft": false,
+     "note": "Petrindo (CUAN) took control via Kreasi Jasa Persada in 2023",
+     "since": "2023-08-01",
+     "linkPct": 46.71
+    }
+   ]
+  },
+  {
+   "id": "isam",
+   "name": "Haji Isam (Jhonlin)",
+   "alias": "saham Haji Isam",
+   "members": [
+    {
+     "tk": "JARR",
+     "evidence": "ESHAN AGRO SENTOSA PT 86.64%; PT BARAMEGA CITRA MULIA PERSADA 2.72%",
+     "soft": false,
+     "note": "Jhonlin Agro Raya; Eshan Agro and Baramega are Jhonlin vehicles",
+     "since": null,
+     "linkPct": 89.36
+    },
+    {
+     "tk": "PGUN",
+     "evidence": "PT ARAYA AGRO LESTARI 38.44%; PT CITRA AGRO RAYA 38.25%",
+     "soft": false,
+     "note": "Pradiksi Gunatama; shares Baramega Citra Mulia Persada with JARR",
+     "since": null,
+     "linkPct": 92.38
+    }
+   ]
+  },
+  {
+   "id": "happy",
+   "name": "Happy Hapsoro (Rukun Raharja)",
+   "alias": "saham Happy Hapsoro",
+   "members": [
+    {
+     "tk": "RAJA",
+     "evidence": "PT SENTOSA BERSAMA MITRA 35.25%; HAPSORO 27.52%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 62.77
+    },
+    {
+     "tk": "RATU",
+     "evidence": "RUKUN RAHARJA TBK 68.77%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 68.77
+    },
+    {
+     "tk": "MINA",
+     "evidence": "PT BASIS UTAMA PRIMA 30.48%; HAPSORO 19.68%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 50.16
+    }
+   ]
+  },
+  {
+   "id": "aguan",
+   "name": "Aguan (Agung Sedayu)",
+   "alias": "saham Aguan / PIK",
+   "members": [
+    {
+     "tk": "PANI",
+     "evidence": "MULTI ARTHA PRATAMA PT 84.09%",
+     "soft": false,
+     "note": "Multi Artha Pratama is the Agung Sedayu holding vehicle",
+     "since": null,
+     "linkPct": 84.09
+    },
+    {
+     "tk": "CBDK",
+     "evidence": "PANTAI INDAH KAPUK DUA TBK PT 87.27%; PT Agung Sedayu 1.37%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 88.64
+    }
+   ]
+  },
+  {
+   "id": "salim",
+   "name": "Salim (Indofood)",
+   "alias": "saham Salim",
+   "members": [
+    {
+     "tk": "INDF",
+     "evidence": "FIRST PACIFIC INVESTMENT MANAGEMENT LTD 50.07%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 50.07
+    },
+    {
+     "tk": "ICBP",
+     "evidence": "INDOFOOD SUKSES MAKMUR TBK 80.53%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 80.53
+    },
+    {
+     "tk": "SIMP",
+     "evidence": "INDOFOOD AGRI RESOURCES LTD. 73.46%; INDOFOOD SUKSES MAKMUR TBK 6.68%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 80.14
+    },
+    {
+     "tk": "LSIP",
+     "evidence": "PT SALIM IVOMAS PRATAMA TBK 59.51%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 59.51
+    },
+    {
+     "tk": "DNET",
+     "evidence": "ANTHONI SALIM 25.30%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 25.3
+    },
+    {
+     "tk": "DCII",
+     "evidence": "ANTHONI SALIM 11.12%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 11.12
+    }
+   ]
+  },
+  {
+   "id": "sinarmas",
+   "name": "Sinar Mas (Widjaja)",
+   "alias": "saham Sinarmas",
+   "members": [
+    {
+     "tk": "DSSA",
+     "evidence": "PT SINAR MAS TUNGGAL 59.90%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 59.9
+    },
+    {
+     "tk": "INKP",
+     "evidence": "APP PURINUSA EKAPERSADA 41.05%; PT APP PURINUSA EKAPERSADA 17.26%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 58.31
+    },
+    {
+     "tk": "TKIM",
+     "evidence": "APP PURINUSA EKAPERSADA 59.67%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 59.67
+    },
+    {
+     "tk": "SMAR",
+     "evidence": "bPkT PURIMAS SASMITA 92.40%",
+     "soft": false,
+     "note": "Purimas Sasmita is the Sinar Mas Agribusiness holding",
+     "since": null,
+     "linkPct": 92.4
+    },
+    {
+     "tk": "BSIM",
+     "evidence": "PT SINAR MAS MULTIARTHA Tbk 59.99%; SINAR MAS CAKRAWALA 1.03%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 61.02
+    },
+    {
+     "tk": "SMMA",
+     "evidence": "SINAR MAS CAKRAWALA 48.93%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 48.93
+    },
+    {
+     "tk": "GEMS",
+     "evidence": "PT DIAN SWASTATIKA SENTOSA TBK 51.00%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 51
+    },
+    {
+     "tk": "LIFE",
+     "evidence": "PT SINAR MAS MULTIARTHA Tbk 12.50%; SINAR MAS CAKRAWALA 1.61%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 14.11
+    },
+    {
+     "tk": "BSDE",
+     "evidence": "PARAGA ARTAMIDA, PT 30.52%; PT PARAGA ARTAMIDA 6.80%",
+     "soft": false,
+     "note": "Paraga Artamida is Sinar Mas Land's holding",
+     "since": null,
+     "linkPct": 37.32
+    },
+    {
+     "tk": "DUTI",
+     "evidence": "BUMI SERPONG DAMAI TBK PT 92.38%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 92.38
+    },
+    {
+     "tk": "DMAS",
+     "evidence": "PT SUMBER ARUSMULIA 57.28%",
+     "soft": false,
+     "note": "Sinar Mas Land and Sojitz joint venture",
+     "since": null,
+     "linkPct": 57.28
+    }
+   ]
+  },
+  {
+   "id": "djarum",
+   "name": "Djarum (Hartono)",
+   "alias": "saham Djarum",
+   "members": [
+    {
+     "tk": "BBCA",
+     "evidence": "PT DWIMURIA INVESTAMA ANDALAN 54.94%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 54.94
+    },
+    {
+     "tk": "TOWR",
+     "evidence": "PT SAPTA ADHIKARI INVESTAMA PT 45.29%; PT DWIMURIA INVESTAMA ANDALAN 19.95%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 65.24
+    },
+    {
+     "tk": "SUPR",
+     "evidence": "PT PROFESIONAL TELEKOMUNIKASI INDONESIA 97.33%",
+     "soft": false,
+     "note": "Protelindo is a TOWR subsidiary",
+     "since": null,
+     "linkPct": 97.33
+    },
+    {
+     "tk": "BELI",
+     "evidence": "PT GLOBAL INVESTAMA ANDALAN 76.57%; PT DWIMURIA INVESTAMA ANDALAN 4.80%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 81.37
+    }
+   ]
+  },
+  {
+   "id": "astra",
+   "name": "Astra (Jardine)",
+   "alias": "saham Astra",
+   "members": [
+    {
+     "tk": "ASII",
+     "evidence": "JARDINE CYCLE AND CARRIAGE LIMITED 50.11%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 50.11
+    },
+    {
+     "tk": "UNTR",
+     "evidence": "PT ASTRA INTERNATIONAL TBK 59.50%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 59.5
+    },
+    {
+     "tk": "AALI",
+     "evidence": "PT ASTRA INTERNATIONAL TBK 79.68%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 79.68
+    },
+    {
+     "tk": "AUTO",
+     "evidence": "PT ASTRA INTERNATIONAL TBK 80.00%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 80
+    },
+    {
+     "tk": "ASGR",
+     "evidence": "PT ASTRA INTERNATIONAL TBK 76.87%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 76.87
+    }
+   ]
+  },
+  {
+   "id": "thohir",
+   "name": "Thohir and Saratoga (Adaro, Merdeka)",
+   "alias": "saham Boy Thohir",
+   "members": [
+    {
+     "tk": "ADRO",
+     "evidence": "ADARO STRATEGIC INVESTMENTS 47.79%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 47.79
+    },
+    {
+     "tk": "AADI",
+     "evidence": "ADARO STRATEGIC INVESTMENTS 41.10%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 41.1
+    },
+    {
+     "tk": "ADMR",
+     "evidence": "ALAMTRI RESOURCES INDONESIA TBK PT 85.45%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 85.45
+    },
+    {
+     "tk": "MDKA",
+     "evidence": "SARATOGA INVESTAMA SEDAYA TBK PT 19.37%; GARIBALDI THOHIR 7.46%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 28.81
+    },
+    {
+     "tk": "MBMA",
+     "evidence": "MERDEKA ENERGI NUSANTARA, PT 50.04%; GARIBALDI THOHIR 2.26%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 52.3
+    },
+    {
+     "tk": "ESSA",
+     "evidence": "GARIBALDI THOHIR 14.55%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 14.55
+    },
+    {
+     "tk": "TRIM",
+     "evidence": "GARIBALDI THOHIR 34.68%; TRINUGRAHA THOHIR HARMONI, PT 1.13%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 35.81
+    },
+    {
+     "tk": "PALM",
+     "evidence": "PT PROVIDENT CAPITAL INDONESIA 58.02%; GARIBALDI THOHIR 19.90%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 77.92
+    },
+    {
+     "tk": "MPMX",
+     "evidence": "SARATOGA INVESTAMA SEDAYA TBK PT 57.67%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 57.67
+    },
+    {
+     "tk": "SRTG",
+     "evidence": "EDWIN SOERYADJAYA 35.88%; PT UNITRAS PERTAMA 31.62%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 67.5
+    }
+   ]
+  },
+  {
+   "id": "bakrie",
+   "name": "Bakrie",
+   "alias": "saham Bakrie",
+   "members": [
+    {
+     "tk": "BUMI",
+     "evidence": "PT BAKRIE CAPITAL INDONESIA 1.18%",
+     "soft": false,
+     "note": "Salim-linked Mach Energy is now the largest holder",
+     "since": null,
+     "linkPct": 1.18
+    },
+    {
+     "tk": "BRMS",
+     "evidence": "BUMI RESOURCES TBK 3.08%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 3.08
+    },
+    {
+     "tk": "ENRG",
+     "evidence": "PT BAKRIE CAPITAL INDONESIA 4.70%; PT BAKRIE KALILA INVESTMENT 3.09%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 7.79
+    },
+    {
+     "tk": "UNSP",
+     "evidence": "PT BAKRIE CAPITAL INDONESIA 17.82%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 17.82
+    },
+    {
+     "tk": "VKTR",
+     "evidence": "BAKRIE & BROTHERS TBK, PT 24.40%; Bakrie Metal Industries, PT 14.43%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 40.09
+    },
+    {
+     "tk": "VIVA",
+     "evidence": "PT. Bakrie Global Ventura 32.94%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 32.94
+    },
+    {
+     "tk": "BTEL",
+     "evidence": "PT. Bakrie Global Ventura 7.17%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 7.17
+    },
+    {
+     "tk": "BIPI",
+     "evidence": "PT BAKRIE CAPITAL INDONESIA 6.00%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 6
+    },
+    {
+     "tk": "DEWA",
+     "evidence": null,
+     "soft": true,
+     "note": "Darma Henwa, a long-standing Bakrie-group company",
+     "since": null,
+     "linkPct": null
+    },
+    {
+     "tk": "BNBR",
+     "evidence": null,
+     "soft": true,
+     "note": "Bakrie & Brothers (the holding itself)",
+     "since": null,
+     "linkPct": null
+    }
+   ]
+  },
+  {
+   "id": "mnc",
+   "name": "MNC (Hary Tanoesoedibjo)",
+   "alias": "saham MNC",
+   "members": [
+    {
+     "tk": "BHIT",
+     "evidence": "EP - BHAKTI PANJIWIRA 6.11%; HARY TANOESOEDIBJO 3.12%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 11.03
+    },
+    {
+     "tk": "BMTR",
+     "evidence": "PT. MNC ASIA HOLDING TBK 34.32%; PT MNC KAPITAL INDONESIA TBK 2.03%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 36.35
+    },
+    {
+     "tk": "MNCN",
+     "evidence": "PT GLOBAL MEDIACOM TBK 40.10%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 40.1
+    },
+    {
+     "tk": "MSIN",
+     "evidence": "PT. MNC SEKURITAS 8.69%; PT GLOBAL MEDIACOM TBK 7.97%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 25.01
+    },
+    {
+     "tk": "IPTV",
+     "evidence": "PT GLOBAL MEDIACOM TBK 62.77%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 62.77
+    },
+    {
+     "tk": "KPIG",
+     "evidence": "PT. MNC ASIA HOLDING TBK 18.72%; PT. MNC SEKURITAS 7.45%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 27.48
+    },
+    {
+     "tk": "BABP",
+     "evidence": "PT MNC KAPITAL INDONESIA TBK 48.85%; MNC TOURISM INDONESIA TBK 6.82%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 55.67
+    },
+    {
+     "tk": "BCAP",
+     "evidence": "PT. MNC ASIA HOLDING TBK 47.25%; MNC TOURISM INDONESIA TBK 4.93%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 52.18
+    },
+    {
+     "tk": "IATA",
+     "evidence": "PT. MNC ASIA HOLDING TBK 11.61%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 11.61
+    }
+   ]
+  },
+  {
+   "id": "lippo",
+   "name": "Lippo (Riady)",
+   "alias": "saham Lippo",
+   "members": [
+    {
+     "tk": "LPKR",
+     "evidence": "PT. MULTIPOLAR TBK 1.71%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 1.71
+    },
+    {
+     "tk": "LPPF",
+     "evidence": "PT. MULTIPOLAR TBK 9.30%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 9.3
+    },
+    {
+     "tk": "MPPA",
+     "evidence": "PT. MULTIPOLAR TBK 50.14%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 50.14
+    },
+    {
+     "tk": "MLPT",
+     "evidence": "PT. MULTIPOLAR TBK 84.95%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 84.95
+    },
+    {
+     "tk": "MLPL",
+     "evidence": null,
+     "soft": true,
+     "note": "Multipolar's parent; holders sit behind custodian accounts",
+     "since": null,
+     "linkPct": null
+    },
+    {
+     "tk": "LPCK",
+     "evidence": "KEMUNING SATIATAMA, PT. 89.00%",
+     "soft": false,
+     "note": "Kemuning Satiatama is an LPKR subsidiary",
+     "since": null,
+     "linkPct": 89
+    }
+   ]
+  },
+  {
+   "id": "emtek",
+   "name": "Emtek (Sariaatmadja)",
+   "alias": "saham Emtek",
+   "members": [
+    {
+     "tk": "EMTK",
+     "evidence": "RD EDDY K SARIAATMADJA 21.88%; RD FOFO SARIAATMADJA 4.72%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 26.6
+    },
+    {
+     "tk": "SCMA",
+     "evidence": "PT ELANG MAHKOTA TEKNOLOGI TBK 74.42%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 74.42
+    },
+    {
+     "tk": "SAME",
+     "evidence": "PT ELANG MAHKOTA TEKNOLOGI TBK 84.78%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 84.78
+    },
+    {
+     "tk": "BUKA",
+     "evidence": "PT ELANG MAHKOTA TEKNOLOGI TBK 10.49%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 10.49
+    }
+   ]
+  },
+  {
+   "id": "triputra",
+   "name": "Triputra (T.P. Rachmat)",
+   "alias": "saham Triputra",
+   "members": [
+    {
+     "tk": "DSNG",
+     "evidence": "TRIPUTRA INVESTINDO ARYA 28.33%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 28.33
+    },
+    {
+     "tk": "TAPG",
+     "evidence": "TRIPUTRA INVESTINDO ARYA 24.12%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 24.12
+    }
+   ]
+  },
+  {
+   "id": "medco",
+   "name": "Panigoro (Medco)",
+   "alias": "saham Medco",
+   "members": [
+    {
+     "tk": "MEDC",
+     "evidence": "PT. MEDCO DAYA ABADI LESTARI 51.50%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 51.5
+    },
+    {
+     "tk": "AMMN",
+     "evidence": "PT SUMBER GEMILANG PERSADA 32.17%; PT MEDCO ENERGI INTERNASIONAL TBK 20.92%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 53.09
+    }
+   ]
+  },
+  {
+   "id": "bumn",
+   "name": "State-owned (BUMN, Danantara)",
+   "alias": "saham BUMN",
+   "members": [
+    {
+     "tk": "BMRI",
+     "evidence": "PERUSAHAAN PERSEROAN (PERSERO) PT DANANTARA ASSET MANAGEMENT 51.48%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 51.48
+    },
+    {
+     "tk": "BBRI",
+     "evidence": null,
+     "soft": true,
+     "note": "state majority held through Danantara; not in the >=1% list",
+     "since": null,
+     "linkPct": null
+    },
+    {
+     "tk": "BBNI",
+     "evidence": null,
+     "soft": true,
+     "note": "state majority held through Danantara; not in the >=1% list",
+     "since": null,
+     "linkPct": null
+    },
+    {
+     "tk": "BBTN",
+     "evidence": null,
+     "soft": true,
+     "note": "state majority held through Danantara; not in the >=1% list",
+     "since": null,
+     "linkPct": null
+    },
+    {
+     "tk": "BRIS",
+     "evidence": "PT BANK MANDIRI 51.47%; PERUSAHAAN PERSEROAN (PERSERO) BANK NEGARA INDONESIA 23.24%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 90.09
+    },
+    {
+     "tk": "TLKM",
+     "evidence": "PERUSAHAAN PERSEROAN (PERSERO) PT DANANTARA ASSET MANAGEMENT 51.57%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 51.57
+    },
+    {
+     "tk": "MTEL",
+     "evidence": "PT TELEKOMUNIKASI INDONESIA 71.83%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 71.83
+    },
+    {
+     "tk": "PGAS",
+     "evidence": "PT PERTAMINA (PERSERO) 56.96%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 56.96
+    },
+    {
+     "tk": "PGEO",
+     "evidence": "PERTAMINA POWER INDONESIA 68.32%; PT. PERTAMINA DANA VENTURA 5.93%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 74.25
+    },
+    {
+     "tk": "ELSA",
+     "evidence": "PT PERTAMINA HULU ENERGI 51.10%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 51.1
+    },
+    {
+     "tk": "PTBA",
+     "evidence": "PERUSAHAAN PERSEROAN (PERSERO) PT MINERAL INDUSTRI INDONESIA 65.93%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 65.93
+    },
+    {
+     "tk": "ANTM",
+     "evidence": "PERUSAHAAN PERSEROAN (PERSERO) PT MINERAL INDUSTRI INDONESIA 65.00%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 65
+    },
+    {
+     "tk": "TINS",
+     "evidence": "PT MINERAL INDUSTRI INDONESIA (PERSERO) 65.00%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 65
+    },
+    {
+     "tk": "INCO",
+     "evidence": "PERUSAHAAN PERSEROAN (PERSERO) PT MINERAL INDUSTRI INDONESIA 34.00%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 34
+    },
+    {
+     "tk": "SMGR",
+     "evidence": "PERUSAHAAN PERSEROAN (PERSERO) PT DANANTARA ASSET MANAGEMENT 50.69%; PT TASPEN (PERSERO) 1.19%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 51.88
+    },
+    {
+     "tk": "JSMR",
+     "evidence": "PERUSAHAAN PERSEROAN (PERSERO) PT DANANTARA ASSET MANAGEMENT 69.30%; PT TASPEN (PERSERO) 2.98%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 72.28
+    },
+    {
+     "tk": "KRAS",
+     "evidence": "PERUSAHAAN PERSEROAN (PERSERO) PT DANANTARA ASSET MANAGEMENT 80.00%; PERUSAHAAN PERSEROAN (PERSERO) PT. ASABRI 1.31%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 81.31
+    },
+    {
+     "tk": "PTPP",
+     "evidence": "PERUSAHAAN PERSEROAN (PERSERO) PT DANANTARA ASSET MANAGEMENT 51.00%; PT TASPEN (PERSERO) 1.33%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 52.33
+    },
+    {
+     "tk": "WIKA",
+     "evidence": "PERUSAHAAN PERSEROAN (PERSERO) PT DANANTARA ASSET MANAGEMENT 90.11%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 90.11
+    },
+    {
+     "tk": "GIAA",
+     "evidence": "PERUSAHAAN PERSEROAN (PERSERO) PT DANANTARA ASSET MANAGEMENT 91.11%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 91.11
+    }
+   ]
+  }
+ ],
+ "byTicker": {
+  "BRPT": "prajogo",
+  "TPIA": "prajogo",
+  "BREN": "prajogo",
+  "CUAN": "prajogo",
+  "CDIA": "prajogo",
+  "PTRO": "prajogo",
+  "JARR": "isam",
+  "PGUN": "isam",
+  "RAJA": "happy",
+  "RATU": "happy",
+  "MINA": "happy",
+  "PANI": "aguan",
+  "CBDK": "aguan",
+  "INDF": "salim",
+  "ICBP": "salim",
+  "SIMP": "salim",
+  "LSIP": "salim",
+  "DNET": "salim",
+  "DCII": "salim",
+  "DSSA": "sinarmas",
+  "INKP": "sinarmas",
+  "TKIM": "sinarmas",
+  "SMAR": "sinarmas",
+  "BSIM": "sinarmas",
+  "SMMA": "sinarmas",
+  "GEMS": "sinarmas",
+  "LIFE": "sinarmas",
+  "BSDE": "sinarmas",
+  "DUTI": "sinarmas",
+  "DMAS": "sinarmas",
+  "BBCA": "djarum",
+  "TOWR": "djarum",
+  "SUPR": "djarum",
+  "BELI": "djarum",
+  "ASII": "astra",
+  "UNTR": "astra",
+  "AALI": "astra",
+  "AUTO": "astra",
+  "ASGR": "astra",
+  "ADRO": "thohir",
+  "AADI": "thohir",
+  "ADMR": "thohir",
+  "MDKA": "thohir",
+  "MBMA": "thohir",
+  "ESSA": "thohir",
+  "TRIM": "thohir",
+  "PALM": "thohir",
+  "MPMX": "thohir",
+  "SRTG": "thohir",
+  "BUMI": "bakrie",
+  "BRMS": "bakrie",
+  "ENRG": "bakrie",
+  "UNSP": "bakrie",
+  "VKTR": "bakrie",
+  "VIVA": "bakrie",
+  "BTEL": "bakrie",
+  "BIPI": "bakrie",
+  "DEWA": "bakrie",
+  "BNBR": "bakrie",
+  "BHIT": "mnc",
+  "BMTR": "mnc",
+  "MNCN": "mnc",
+  "MSIN": "mnc",
+  "IPTV": "mnc",
+  "KPIG": "mnc",
+  "BABP": "mnc",
+  "BCAP": "mnc",
+  "IATA": "mnc",
+  "LPKR": "lippo",
+  "LPPF": "lippo",
+  "MPPA": "lippo",
+  "MLPT": "lippo",
+  "MLPL": "lippo",
+  "LPCK": "lippo",
+  "EMTK": "emtek",
+  "SCMA": "emtek",
+  "SAME": "emtek",
+  "BUKA": "emtek",
+  "DSNG": "triputra",
+  "TAPG": "triputra",
+  "MEDC": "medco",
+  "AMMN": "medco",
+  "BMRI": "bumn",
+  "BBRI": "bumn",
+  "BBNI": "bumn",
+  "BBTN": "bumn",
+  "BRIS": "bumn",
+  "TLKM": "bumn",
+  "MTEL": "bumn",
+  "PGAS": "bumn",
+  "PGEO": "bumn",
+  "ELSA": "bumn",
+  "PTBA": "bumn",
+  "ANTM": "bumn",
+  "TINS": "bumn",
+  "INCO": "bumn",
+  "SMGR": "bumn",
+  "JSMR": "bumn",
+  "KRAS": "bumn",
+  "PTPP": "bumn",
+  "WIKA": "bumn",
+  "GIAA": "bumn"
+ }
+}
