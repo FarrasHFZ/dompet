@@ -134,8 +134,8 @@ dialog label{display:block;margin:10px 0;font-size:12.5px;color:var(--mute)}
   .pill{display:none}
   /* Bottom tab bar like a native app */
   .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;margin:0;border:0;border-top:1px solid var(--line);background:var(--card);
-    display:grid;grid-template-columns:repeat(5,1fr);padding:0 2px env(safe-area-inset-bottom);overflow:visible}
-  .tabs button{padding:12px 2px;border-bottom:0;border-top:2px solid transparent;font-size:11.5px;line-height:1.2;min-height:48px}
+    display:grid;grid-template-columns:repeat(6,1fr);padding:0 2px env(safe-area-inset-bottom);overflow:visible}
+  .tabs button{padding:12px 2px;border-bottom:0;border-top:2px solid transparent;font-size:10.5px;line-height:1.15;white-space:normal;min-height:48px}
   .tabs button[aria-selected=true]{border-top-color:var(--accent)}
   .market{grid-template-columns:1fr 1fr}
   .stat b{font-size:15px}
@@ -193,3 +193,17 @@ tr[data-open]{cursor:pointer}
 .fstrip { display: block; max-width: 100%; height: auto; }
 .fhist { margin: .5rem 0 .75rem; }
 .fhist small { display: block; color: var(--mute); margin-bottom: .25rem; }
+/* Conglomerate groups tab */
+.rrg { width: 100%; max-width: 720px; height: auto; display: block; margin: 0 auto; }
+.rrg .qL { fill: var(--up); opacity: .07; } .rrg .qI { fill: var(--accent); opacity: .07; }
+.rrg .qW { fill: var(--warn); opacity: .07; } .rrg .qG { fill: var(--down); opacity: .07; }
+.rrg .ql { fill: var(--mute); font-size: 11px; } .rrg .ax { stroke: var(--line); stroke-width: 1; }
+.rrg .trail { fill: none; stroke: var(--mute); stroke-width: 1.2; opacity: .55; }
+.rrg .dot { fill: var(--mute); } .rrg .dot.LEADING, .rrg .dot.IMPROVING { fill: var(--up); }
+.rrg .dot.WEAKENING { fill: var(--warn); } .rrg .dot.LAGGING { fill: var(--down); }
+.rrg .gl { fill: var(--ink); font-size: 11px; font-weight: 600; }
+table.heat td.hc { background: color-mix(in srgb, var(--accent) calc(var(--k) * 85%), transparent); text-align: center; font-size: 11px; min-width: 18px; padding: 4px 2px; color: var(--ink); }
+table.heat th { font-size: 10px; padding: 4px 2px; white-space: nowrap; }
+td.mem { min-width: 180px; } .chip.sm { padding: 1px 7px; font-size: 11px; margin: 1px; }
+.chip.off { opacity: .55; cursor: default; display: inline-block; border: 1px solid var(--line); border-radius: 999px; }
+svg.spark { display: block; }

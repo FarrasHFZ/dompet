@@ -101,7 +101,7 @@
       <div class="stat"><small>IHSG RSI(14) · 20d</small><b>${k.idxRsi == null ? '–' : k.idxRsi.toFixed(0)} · ${k.idxChg20d == null ? '–' : (k.idxChg20d * 100).toFixed(1) + '%'}</b></div>`;
     const ns = m.newsStatus;
     $('#banner').innerHTML = ns && ns.state !== 'ok' ? `<div class="note"><b>News ${esc(ns.state)}.</b> ${esc(ns.note)}</div>` : '';
-    renderPicks(); renderFlow(); renderNews(); renderScore(); renderHow();
+    renderPicks(); renderFlow(); renderGroups(); renderNews(); renderScore(); renderHow();
   }
 
   // ---------- broker flow ----------
@@ -217,6 +217,71 @@
     el.querySelectorAll('tr[data-open]').forEach(r => r.onclick = () => { OPEN = r.dataset.open; FILTER = 'ALL'; document.querySelector('[data-tab=picks]').click(); renderPicks(); const d = $('#dcard'); if (d) d.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
     $('#fact', el).onchange = e => { FLOWACT = e.target.checked; renderFlow(); };
     $('#fq', el).oninput = e => { FLOWQ = e.target.value; const pos = e.target.selectionStart; renderFlow(); const i = $('#fq'); i.focus(); i.setSelectionRange(pos, pos); };
+  }
+
+  // ---------- conglomerate groups ----------
+  const QUAD = { LEADING: ['leading', 'up', 'Stronger than the IHSG and still gaining'], IMPROVING: ['improving', 'up', 'Weaker than the IHSG but catching up'], WEAKENING: ['weakening', 'warn', 'Stronger than the IHSG but fading'], LAGGING: ['lagging', 'down', 'Weaker than the IHSG and still slipping'] };
+  const f1x = x => (x == null ? '–' : x.toFixed(2));
+  const quadHtml = q => { const x = QUAD[q]; return x ? `<span class="${x[1]}" title="${x[2]}">${x[0]}</span>` : '<span class="mute">–</span>'; };
+  const sparkSvg = (a, w = 90, h = 22) => { if (!a || a.length < 2) return ''; const lo = Math.min(...a), hi = Math.max(...a), x = i => (i / (a.length - 1)) * w, y = v => h - 2 - ((v - lo) / (hi - lo || 1)) * (h - 4); return `<svg class="spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true"><path d="${a.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join('')}" fill="none" stroke="${a.at(-1) >= a[0] ? 'var(--up)' : 'var(--down)'}" stroke-width="1.5"/></svg>`; };
+  function rotationSvg(G) {
+    const pts = G.groups.filter(g => g.trail && g.trail.length > 1);
+    if (!pts.length) return '';
+    const W = MQ.matches ? 340 : 620, H = MQ.matches ? 300 : 380, P = 28;
+    // Scale to where groups are NOW (one runaway trail must not squash everyone else); older trail points are clipped.
+    const xs = pts.map(g => g.trail.at(-1)[0]), ys = pts.map(g => g.trail.at(-1)[1]);
+    const mx = Math.max(0.02, ...xs.map(Math.abs)) * 1.25, my = Math.max(0.01, ...ys.map(Math.abs)) * 1.25;
+    const cl = (v, m) => Math.max(-m, Math.min(m, v));
+    const x = v => P + ((cl(v, mx) + mx) / (2 * mx)) * (W - 2 * P), y = v => H - P - ((cl(v, my) + my) / (2 * my)) * (H - 2 * P);
+    const quad = (x0, y0, x1, y1, label, cls, tx, ty, anchor) => `<rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" class="q${cls}"/><text x="${tx}" y="${ty}" text-anchor="${anchor}" class="ql">${label}</text>`;
+    return `<svg class="rrg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Rotation map: each group's strength versus the IHSG (across) and whether it is gaining or fading (up/down), with its path over 8 weeks">
+      ${quad(x(0), P, W - P, y(0), 'Leading', 'L', W - P - 4, P + 14, 'end')}${quad(P, P, x(0), y(0), 'Improving', 'I', P + 4, P + 14, 'start')}
+      ${quad(P, y(0), x(0), H - P, 'Lagging', 'G', P + 4, H - P - 6, 'start')}${quad(x(0), y(0), W - P, H - P, 'Weakening', 'W', W - P - 4, H - P - 6, 'end')}
+      <line x1="${x(0)}" x2="${x(0)}" y1="${P}" y2="${H - P}" class="ax"/><line x1="${P}" x2="${W - P}" y1="${y(0)}" y2="${y(0)}" class="ax"/>
+      <text x="${W / 2}" y="${H - 6}" text-anchor="middle" class="ql">← weaker than IHSG (20 sessions) · stronger →</text>
+      ${(() => { // labels: nudge apart when two would overlap
+        const L = pts.map(g => ({ g, lx: x(g.trail.at(-1)[0]) + 6, ly: y(g.trail.at(-1)[1]) + 4 })).sort((a, b) => a.ly - b.ly);
+        L.forEach((a, i) => { for (let j = 0; j < i; j++) { const b = L[j]; if (Math.abs(a.lx - b.lx) < 70 && a.ly - b.ly < 12) a.ly = b.ly + 12; } });
+        return L.map(({ g, lx, ly }) => { const inBox = p => Math.abs(p[0]) <= mx && Math.abs(p[1]) <= my, t = []; for (let k = g.trail.length - 1; k >= Math.max(0, g.trail.length - 4) && inBox(g.trail[k]); k--) t.unshift(g.trail[k]); if (!t.length) t.push(g.trail.at(-1)); const last = t.at(-1); return `<g><path d="${t.map((p, i) => `${i ? 'L' : 'M'}${x(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`).join('')}" class="trail"/><circle cx="${x(last[0])}" cy="${y(last[1])}" r="4" class="dot ${g.read && g.read.quad}"/><text x="${lx}" y="${ly}" class="gl">${esc(g.id === 'bumn' ? 'BUMN' : g.alias.replace(/^saham /, ''))}</text><title>${esc(g.name)}: ${g.read ? (g.read.rs * 100).toFixed(1) + '% vs IHSG over 20 sessions' : ''}</title></g>`; }).join('');
+      })()}
+    </svg>`;
+  }
+  function renderGroups() {
+    const el = $('#tab-groups'), G = DATA.groups;
+    if (!G) { el.innerHTML = '<div class="card empty">No group data in this build (tools/groups.mjs).</div>'; return; }
+    const st = G.study || {}, inPicks = new Set(DATA.picks.map(p => p.ticker));
+    const list = G.groups.slice().sort((a, b) => (G.rankNow[a.id] || 99) - (G.rankNow[b.id] || 99));
+    const nm = id => { const g = G.groups.find(x => x.id === id); return g ? g.name : id; };
+    const hot = (G.hot || []).slice().sort((a, b) => a.age - b.age);
+    const h4 = st.h4, h1 = st.h1, h2 = st.h2, h3 = st.h3;
+    const ids = list.map(g => g.id), nW = G.weeks.length;
+    const heat = `<div class="card scroll"><table class="heat"><thead><tr><th>Group</th>${G.weeks.map((w, i) => `<th title="${esc(w.d)}">${i % 4 === 0 || i === nW - 1 ? esc(w.d.slice(5)) : ''}</th>`).join('')}</tr></thead><tbody>
+      ${ids.map(id => `<tr><td>${esc(nm(id))}</td>${G.weeks.map(w => { const r = w.rank[id], n = Object.keys(w.rank).length; return `<td class="hc" style="--k:${r ? (1 - (r - 1) / Math.max(1, n - 1)).toFixed(2) : 0}" title="${esc(w.d)}: ${r ? '#' + r + ' of ' + n : 'n/a'}">${r && r <= 3 ? r : ''}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div>`;
+    el.innerHTML = `
+      <p class="muted">Indonesian traders often play a conglomerate's stocks together, "saham PP" (Prajogo Pangestu), "saham Haji Isam", Bakrie, MNC, and move on to another group after a while. Each group below is an equal-weight index of its listed companies (a stock counts only while it trades at least Rp 1 B a day). Every link is backed by the KSEI ≥1% shareholder list of ${esc(G.mapAsOf || '–')}; an asterisk marks a well-known link whose holding company is not named there. The map lives in <code>tools/groups-map.json</code>.</p>
+      ${hot.length ? `<div class="note"><b>Hot right now:</b> ${hot.map(h => `${esc(nm(h.id))} jumped 10%+ in a week (${h.age === 0 ? 'today' : h.age + ' session' + (h.age === 1 ? '' : 's') + ' ago'})`).join('; ')}. ${h4 ? `In the 5-year test, groups after a jump like this beat the IHSG by ${pc(h4.avg, 1)} on average over the next 2 weeks (${pct1(h4.win)} of the time; ${h4.events} cases). A tendency, not a promise, and it is a momentum trade, not the oversold-bounce setup this screener trades.` : ''}</div>` : ''}
+      <div class="card scroll"><table><thead><tr><th class="n">#</th><th>Group</th><th>Now</th><th class="n">5 days</th><th class="n">20 days</th><th class="n">vs IHSG 20d</th><th class="n">60 days</th><th>Last 60 sessions</th><th class="n">Weeks top 3</th><th>Members</th></tr></thead><tbody>
+      ${list.map(g => { const r = g.read || {}; return `<tr><td class="n">${G.rankNow[g.id] || '–'}</td><td><b>${esc(g.name)}</b><div class="nm">${esc(g.alias)}${r.active != null ? ` · ${r.active} trading` : ''}</div></td><td>${quadHtml(r.quad)}${hot.some(h => h.id === g.id) ? ' <span class="tag">hot</span>' : ''}</td>
+        <td class="n">${pc(r.r5)}</td><td class="n">${pc(r.r20)}</td><td class="n">${pc(r.rs)}</td><td class="n">${pc(r.r60)}</td><td>${sparkSvg(g.spark)}</td><td class="n">${g.weeksTop3 || '–'}</td>
+        <td class="mem">${g.members.map(m => inPicks.has(m.tk) ? `<button class="chip sm" data-open="${esc(m.tk)}" title="${esc(m.evidence || m.note || 'known link')}">${esc(m.tk)}${m.soft ? '*' : ''}</button>` : `<span class="chip sm off" title="${esc(m.evidence || m.note || 'known link')} (outside the screener's 100)">${esc(m.tk)}${m.soft ? '*' : ''}</span>`).join('')}</td></tr>`; }).join('')}</tbody></table></div>
+      <p class="muted">Ranked by 20-session return versus the IHSG, groups with at least 2 trading members. Members in blue are in the screener's 100 and open the stock; hover a member for the KSEI holder that links it.</p>
+      <h2>Rotation map</h2>
+      <p class="muted">Across: how much stronger than the IHSG the group was over 20 sessions. Up/down: whether that lead is growing or shrinking over the last week. Groups usually travel counter-clockwise: improving → leading → weakening → lagging. The tail is each group's path over the last 3 weeks.</p>
+      <div class="card pad">${rotationSvg(G)}</div>
+      <h2>Who led, week by week (last 26 weeks)</h2>
+      <p class="muted">Darker = higher rank that week; numbers mark the top 3. This is the rotation: money sits in a group for a while, then moves.</p>
+      ${heat}
+      <h2>Does the rotation story hold up? 5-year test</h2>
+      ${h1 ? `<div class="card pad"><ul class="checks">
+        <li class="${h2 && h2.sameGroup > h2.crossGroupSameSector ? 'up' : 'mute'}"><b>Group stocks do move together.</b> Daily returns of two stocks in the same group correlate ${f1x(h2 && h2.sameGroup)} on average, versus ${f1x(h2 && h2.crossGroupSameSector)} for two stocks in the same sector but different groups. So it is not only a sector effect.</li>
+        <li class="mute"><b>Rotation is fast.</b> A group stays in the top 3 for a median of ${h1.runMedianWeeks} week${h1.runMedianWeeks === 1 ? '' : 's'} (mean ${h1.runMeanWeeks.toFixed(1)}), and the #1 group changed in ${h1.leaderChanges} of ${h1.weeks - 1} weeks.</li>
+        <li class="mute"><b>Leaders keep leading a little, but not reliably</b> (the primary test): the top 3 groups beat the bottom 3 by ${pc(h1.horizons['20'].avg, 1)} over the next 20 sessions, positive in both halves, but t ${h1.horizons['20'].tAdj.toFixed(1)} after the overlap correction (the bar was 2). Verdict: ${esc(h1.verdict === 'NEITHER' ? 'no reliable momentum or reversal' : h1.verdict.toLowerCase())}.</li>
+        ${h4 ? `<li class="${h4.pass ? 'up' : 'mute'}"><b>After a group jumps 10%+ in a week, it tends to keep going</b> ${h4.pass ? '(passed, bar t ≥ 2.5)' : '(failed)'}: over the next 10 sessions it beat the IHSG by ${pc(h4.avg, 2)} (t ${h4.t.toFixed(1)}, ${h4.events} cases, ${pct1(h4.win)} positive; ${pc(h4.h1, 1)} and ${pc(h4.h2, 1)} in the two halves). Strongest for ${Object.entries(h4.byGroup).filter(([, v]) => v.n >= 8).sort((a, b) => b[1].avg - a[1].avg).slice(0, 3).map(([k, v]) => `${esc(nm(k))} (${v.n}×, ${pc(v.avg, 1)})`).join(', ')}; it failed for ${Object.entries(h4.byGroup).filter(([, v]) => v.n >= 4 && v.avg < 0).map(([k, v]) => `${esc(nm(k))} (${v.n}×, ${pc(v.avg, 1)})`).join(', ') || 'none'}. Cases on the same days overlap, so the real certainty is lower than t suggests.</li>` : ''}
+        ${h3 ? `<li class="${h3.pass ? 'up' : 'mute'}"><b>For this screener's bounce trades, the group's trend does not matter</b> ${h3.pass ? '(passed)' : '(failed)'}: oversold bounces in groups that were leading or improving averaged ${pc(h3.avgA, 2)} per trade versus ${pc(h3.avgB, 2)} in lagging or weakening groups (t ${h3.t.toFixed(1)}; by day ${h3.tDay.toFixed(1)}). The badge stays as it is.</li>` : ''}
+      </ul><p class="muted">Rules written and committed before the first run (<code>tools/experiment-groups.mjs</code>), from ${esc(st.from || '–')}. Membership uses today's ownership for the whole period (except dated changes such as PTRO joining Prajogo in 2023), so older history is slightly flattering to today's groups.</p></div>` : '<p class="muted">Study not run yet.</p>'}
+      <h3>Live record of the "hot group" rule (since ${esc(G.liveFrom)})</h3>
+      ${(G.live || []).length ? `<div class="card scroll"><table><thead><tr><th>Group</th><th>Jump seen</th><th class="n">Next 10 sessions vs IHSG</th></tr></thead><tbody>${G.live.map(e => `<tr><td>${esc(nm(e.id))}</td><td>${esc(e.d)}</td><td class="n">${e.x == null ? `<span class="mute">open, ${Math.max(0, 11 - e.age)} sessions left</span>` : pc(e.x, 2)}</td></tr>`).join('')}</tbody></table></div>` : '<p class="muted">No group has jumped 10%+ in a week since the rule was fixed. Cases will appear here and be scored automatically.</p>'}`;
+    el.querySelectorAll('[data-open]').forEach(b => b.onclick = () => { OPEN = b.dataset.open; FILTER = 'ALL'; document.querySelector('[data-tab=picks]').click(); renderPicks(); const d = $('#dcard'); if (d) d.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
   }
 
   // ---------- picks ----------
@@ -401,6 +466,8 @@
     const flowLine = flowParts.length ? `Who is trading it: ${flowParts.join(', while ')}. ${pro || con ? 'Worth knowing, but not a reason to trade or skip: in two years of NeoBDM history, bounces went about as well whichever way big money was trading.' : ''}` : '';
     const fl = (p.filings || [])[0];
     const filingLine = fl ? `Filed with IDX (${esc(fl[0])}): <b>${esc(fl[2])}</b>${fl[4] ? ` (<a href="${safeUrl(fl[4])}" target="_blank" rel="noopener noreferrer">filing</a>)` : ''}. ${fl[1] === 'dilution' ? 'New shares dilute existing holders and often weigh on the price until the deal is done.' : fl[1] === 'idxQuery' ? 'The exchange asked the company to explain unusual trading: something is moving the stock.' : fl[1] === 'mgmt' ? 'A board or management change.' : fl[1] === 'buyback' ? 'The company plans to buy back its own shares.' : fl[1] === 'dividend' ? 'A dividend announcement.' : ''}` : '';
+    const gp = p.group, gq = gp && QUAD[gp.quad];
+    const groupLine = gp ? `Part of the <b>${esc(gp.name)}</b> group (${esc(gp.alias)}), now #${gp.rank || '–'} of ${gp.of} groups${gq ? ', ' + gq[0] + ' (' + gq[2].charAt(0).toLowerCase() + gq[2].slice(1) + ')' : ''}${gp.hot ? '; the group jumped 10%+ in a week recently' : ''}. Group stocks tend to move together, so watch the rest of the group, but in the 5-year test the group's trend did not change how bounce trades went (Groups tab).` : '';
     const marketLine = act && DATA.market && DATA.market.filter && !DATA.market.filter.ok ? `The market itself is weak: the IHSG is below its 200-day average, which historically made bounce trades lose money overall.` : '';
     const newsLine = lastNews ? `Latest news about ${p.ticker} (${daysAgo(lastNews.published)}): <a href="${safeUrl(lastNews.link)}" target="_blank" rel="noopener noreferrer">“${esc(lastNews.title)}”</a>${lastNews.sentiment < 0 ? ', which reads as negative and may explain part of the drop.' : lastNews.sentiment > 0 ? ', which reads as positive.' : '.'}` : `No news about ${p.ticker} itself this week; the move looks market- or flow-driven.`;
 
@@ -443,6 +510,7 @@
         ${flowLine ? `<p>${esc(flowLine)}</p>` : ''}
         <p>${newsLine}</p>
         ${filingLine ? `<p>${filingLine}</p>` : ''}
+        ${groupLine ? `<p>${groupLine}</p>` : ''}
         ${marketLine ? `<p>${esc(marketLine)}</p>` : ''}
       </div>
       ${odds}

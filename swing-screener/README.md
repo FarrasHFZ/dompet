@@ -137,6 +137,32 @@ inventory API, 1 year, see above), screener max 15 columns, 20 rows per page; a 
 column (~1,700 requests) got a 429 block on 2026-10-07. The daily pull stays at about 24 requests at human pace and stops
 at the first rate-limit answer.
 
+## Conglomerate groups and rotation (Groups tab)
+The market habit of playing a conglomerate's stocks together ("saham PP", "saham Haji Isam", Bakrie, MNC...) and then
+rotating to another group. `tools/groups-map.json` is the hand-curated map (16 groups: Prajogo/Barito, Haji Isam/Jhonlin,
+Happy Hapsoro, Aguan, Salim, Sinar Mas, Djarum, Astra, Thohir-Saratoga, Bakrie, MNC, Lippo, Emtek, Triputra, Medco, BUMN).
+`node tools/groups.mjs` checks every link against the latest KSEI >=1% holder file and writes `data/groups.json` with the
+holder line as evidence (a `*` marks a known link whose holding company is not named, e.g. DEWA, BNBR, MLPL, state banks
+held through Danantara). Re-run it when a new monthly KSEI file appears; edit the map to add a group or member.
+
+Group index = equal-weight daily return of members trading >= Rp 1 B/day (60-session average), from a member's `since`
+date. The build (hourly) prices every member, including those outside the 100, and publishes: rank by 20-session return
+vs the IHSG, rotation quadrant (leading / weakening / lagging / improving), a 26-week rank heatmap, "hot" groups (index
++10% in 5 sessions within the last 10), and each pick's group in its story.
+
+**Study** (`tools/experiment-groups.mjs`, pre-registered in commit 286bd9b, 2022-01..2026-10):
+- Group stocks do co-move beyond sector: same-group pairs correlate 0.32 vs 0.25 for same-sector pairs in different groups.
+- Rotation is fast: a group stays in the top 3 for a median of 2 weeks; the #1 group changed in 105 of 225 weeks.
+- H1 (primary) top-3 minus bottom-3 groups over the next 20 sessions: +1.67%, both halves positive, adjusted t 1.2 -> no
+  reliable momentum or reversal.
+- H3 oversold bounces in leading/improving groups vs lagging/weakening: +0.55% vs +0.22% per trade, t 0.5 -> fail; the badge
+  is unchanged.
+- H4 (secondary, bar 2.5) after a group index jumps >= 10% in 5 sessions: +2.17% vs IHSG over the next 10 sessions,
+  t 2.7, 173 cases, both halves positive -> pass. Same-day cases overlap, so certainty is lower than t says; it failed for
+  Haji Isam, Aguan and Emtek. Shown as a "hot group" note (a momentum observation, not the screener's trade); events after
+  2026-10-10 are scored automatically on the Groups tab as the live record.
+Caveat: membership is today's for the whole period (dated exceptions in the map), which flatters older history.
+
 ## Bandarmetrics read (context only)
 Bandarmetrics (bandarmetrics.com, paid) has history back to 2022 for its own indicators, so unlike NeoBDM it could be
 backtested. What each one is, from its "Panduan Kombinasi Indikator" and the app's own code:

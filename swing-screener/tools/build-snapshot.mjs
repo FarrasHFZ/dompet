@@ -9,6 +9,7 @@ import { fetchFundamentals } from './fundamentals.mjs';
 import { runAlerts } from './alerts.mjs';
 import { buildTracker, readLedger } from './tracker.mjs';
 import { loadNeobdm, tierOf } from './neobdm.mjs';
+import { loadGroups, groupSeries, groupSummary, groupReadAt } from './groups.mjs';
 
 const cfg = { targetPct: +(process.env.TARGET || 8), horizon: +(process.env.HORIZON || 15), stopMult: +(process.env.STOPMULT || 2.5), minValueB: 5 };
 const api = loadEngine();
@@ -18,7 +19,10 @@ const HIST = path.join(ROOT, 'data', 'history');
 fs.mkdirSync(OUT, { recursive: true });
 fs.mkdirSync(HIST, { recursive: true });
 
-const px = await loadPrices(uni.map(u => u.ticker + '.JK').concat(['^JKSE']), '2y', process.env.USE_CACHE === '1');
+// Conglomerate groups (tools/groups.mjs): members outside the 100 are priced too, only for the group indices.
+const gmap = loadGroups();
+const groupTks = gmap ? [...new Set(gmap.groups.flatMap(g => g.members.map(m => m.tk)))].filter(t => !uni.some(u => u.ticker === t)) : [];
+const px = await loadPrices(uni.map(u => u.ticker + '.JK').concat(['^JKSE'], groupTks.map(t => t + '.JK')), '2y', process.env.USE_CACHE === '1');
 // Intraday: Yahoo's last daily bar is today's partial bar. The score was validated on completed closes, so signals use the
 // last completed bar and today's partial bar is shown only as a live quote.
 const NOW = process.env.FAKE_NOW ? new Date(process.env.FAKE_NOW).getTime() : Date.now(); // FAKE_NOW: test hook for the intraday path
@@ -85,6 +89,32 @@ let nbStudy = null, nbHist = null;
 try { nbStudy = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'nb-study.json'), 'utf8')); } catch { /* not run */ }
 try { nbHist = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'nb-history-tags.json'), 'utf8')); } catch { /* not run */ }
 const flowVeto = !!(nbStudy && nbStudy.vetoAdopted);
+// Group rotation: today's read per group + the forward record of the "hot group" rule (tools/experiment-groups.mjs H4:
+// after a group index jumps >= 10% in 5 sessions it beat the IHSG over the next 10, in the 5-year test). Events after the
+// pre-registration date are scored here from prices, so the live record builds itself.
+let groups = null;
+const GROUP_RULE_FROM = '2026-10-10';
+if (gmap && px['^JKSE']) {
+  try {
+    const S = groupSeries(px, gmap, px['^JKSE']), T = S.days.length - 1;
+    groups = groupSummary(S, gmap);
+    const hot = [], live = [];
+    for (const g of gmap.groups) {
+      let last = -1e9;
+      for (let t = 70; t <= T; t++) {
+        const r = groupReadAt(S, g.id, t); if (!r || r.active < 2 || r.r5 == null || r.r5 < 0.10 || t - last < 20) continue;
+        last = t;
+        const done = t + 11 <= T, l = S.g[g.id].lvl;
+        const out = t + 1 <= T ? { id: g.id, d: S.days[t], age: T - t, x: done ? (l[t + 11] / l[t + 1]) - (S.ihsg[t + 11] / S.ihsg[t + 1]) : null } : null;
+        if (out && T - t <= 10) hot.push(out);
+        if (out && S.days[t] >= GROUP_RULE_FROM) live.push(out);
+      }
+    }
+    groups.hot = hot; groups.live = live; groups.liveFrom = GROUP_RULE_FROM;
+    groups.byTicker = {};
+    gmap.groups.forEach(g => { const r = groups.groups.find(x => x.id === g.id); g.members.forEach(m => { groups.byTicker[m.tk] = { id: g.id, name: g.name, alias: g.alias, rank: groups.rankNow[g.id] || null, of: Object.keys(groups.rankNow).length, quad: r && r.read ? r.read.quad : null, hot: hot.some(h => h.id === g.id), evidence: m.evidence, soft: m.soft }; }); });
+  } catch (e) { console.error('groups failed', e.message); }
+}
 const picks = [], skipped = [];
 let lastBar = null;
 uni.forEach(u => {
@@ -107,6 +137,7 @@ uni.forEach(u => {
   pk.neobdm = nb ? { asOf: nbd.asOf, stale: nbStale, ...nb } : null;
   pk.bm = bmd && bmd.by[u.ticker] ? { ...bmd.by[u.ticker], stale: bmStale } : null;
   pk.flowHist = nbHist && nbHist.by[u.ticker] ? nbHist.by[u.ticker] : null;
+  pk.group = groups && groups.byTicker[u.ticker] ? groups.byTicker[u.ticker] : null;
   pk.tier = tierOf(pk.score, api.ACT_SCORE, pk.confirm, ov, marketOk, flowVeto);
   pk.filings = filings && filings.by[u.ticker] ? filings.by[u.ticker] : [];
   picks.push(pk);
@@ -155,6 +186,7 @@ const out = {
     sources: { prices: 'Yahoo Finance daily bars (.JK)', news: 'Google News RSS (Indonesian)', ownership: ownership ? `${ownership.source} (as of ${ownership.asOf})` : null, fundamentals: 'Yahoo Finance fundamentals-timeseries (unofficial, last ~5 quarters)', neobdm: nbd ? 'NeoBDM Market Summary, ' + nbd.asOf + (nbStale ? ' (stale: not used for tiers)' : '') + ' (pulled from a logged-in browser; forward test running)' : null },
   },
   // Broker-flow workflow: forward-test scorecard (tools/flow-forward.mjs) and the IDX foreign-flow backtest (tools/experiment-flow.mjs).
+  groups: groups ? { ...groups, byTicker: undefined, study: readJson('groups-study.json') } : null,
   research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
   flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json'), history: nbStudy, flowVeto,
     bm: { asOf: bmd ? bmd.asOf : null, stale: bmStale, experiment: readJson('bm-experiment.json'), scoreExperiment: readJson('bm-score-experiment.json') } },

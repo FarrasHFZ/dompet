@@ -90,7 +90,7 @@ export function groupSummary(S, gm) {
   return { asOf: S.days[T], mapAsOf: gm.asOf, rankNow: rankAt(T), weeks, groups };
 }
 
-if (process.argv[1] && process.argv[1].endsWith('groups.mjs')) {
+if (process.argv[1] && path.basename(process.argv[1]) === 'groups.mjs') {
   const { parseCsv, fetchLatestCsv } = await import('./ownership.mjs');
   let name, text;
   try { ({ name, text } = await fetchLatestCsv()); fs.writeFileSync(path.join(CACHE, 'ownership_latest.csv'), text); } catch (e) { console.error('fetch failed, using cache:', e.message); name = 'cache'; text = fs.readFileSync(path.join(CACHE, 'ownership_latest.csv'), 'utf8'); }
