@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './lib.mjs';
 
-const ALLOW = /^(idx-foreign-flow\.json|neobdm-snap\/\d{4}-\d{2}-\d{2}\.json|bm-history\.json|fundamentals-quarterly\.json|idx-announcements-new\.json|bm-snap\/\d{4}-\d{2}-\d{2}\.json|nb-history\.json)$/;
+const ALLOW = /^(idx-foreign-flow\.json|neobdm-snap\/\d{4}-\d{2}-\d{2}\.json|bm-history\.json|fundamentals-quarterly\.json|idx-announcements-new\.json|bm-snap\/\d{4}-\d{2}-\d{2}\.json|nb-history\.json|nb-inventory\.json)$/;
 const H = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': 'GET,POST,OPTIONS', 'Access-Control-Allow-Private-Network': 'true' };
 const load = f => (fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : {});
 
