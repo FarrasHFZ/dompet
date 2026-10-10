@@ -327,6 +327,7 @@
     el.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { FILTER = b.dataset.f; OPEN = null; renderPicks(); });
     el.querySelectorAll('tr.row, .pcard').forEach(n => n.onclick = e => { if (e.target.closest('a, .gtag')) return; toggle(n.dataset.t); });
     el.querySelectorAll('.gtag').forEach(b => b.onclick = e => { e.stopPropagation(); document.querySelector('[data-tab=groups]').click(); window.scrollTo(0, 0); });
+    bindSizer(el);
     const dc = $('#dclose', el); if (dc) dc.onclick = () => { OPEN = null; renderPicks(); };
     el.querySelectorAll('[data-jump]').forEach(b => b.onclick = e => { e.stopPropagation(); const t = document.getElementById(b.dataset.jump); if (t) t.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
     const pq = $('#pq', el); if (pq) pq.oninput = e => { PQ = e.target.value; const pos = e.target.selectionStart; renderPicks(); const i = $('#pq'); i.focus(); i.setSelectionRange(pos, pos); };
@@ -413,9 +414,77 @@
   function marketBanner() {
     const f = DATA.market && DATA.market.filter;
     if (!f || f.ok || f.sma200 == null) return '';
-    return `<div class="note mkt"><b>Market filter is OFF: stand aside from new bounce trades.</b> IHSG ${f0(f.ihsg)} is ${(Math.abs(f.ihsg / f.sma200 - 1) * 100).toFixed(1)}% below its 200-day average (${f0(f.sma200)}). In a 4-year test, skipping new trades in this condition cut the worst drawdown from −37% to −13% and turned −1.7% a year into +2.6% (chosen on 2022-24, confirmed on 2024-26). Oversold stocks still show, marked <b>PAUSE</b>, so you can watch them.</div>`;
+    // How far is "ON"? The IHSG must close above its 200-day average, and that average itself drifts: if it keeps
+    // falling at its last-4-weeks pace, the bar keeps getting lower. Both shown, no forecast of the index.
+    const need = f.sma200 / f.ihsg - 1, perWeek = f.sma200ago ? (f.sma200 - f.sma200ago) / 4 : null;
+    const gap = Math.max(0, Math.min(1, f.ihsg / f.sma200));
+    const weeks = perWeek && perWeek < 0 ? (f.sma200 - f.ihsg) / -perWeek : null;
+    return `<div class="note mkt"><b>Market filter is OFF: stand aside from new bounce trades.</b> IHSG ${f0(f.ihsg)} is ${(Math.abs(f.ihsg / f.sma200 - 1) * 100).toFixed(1)}% below its 200-day average (${f0(f.sma200)}). In a 4-year test, skipping new trades in this condition cut the worst drawdown from −37% to −13% (chosen on 2022-24, confirmed on 2024-26). Oversold stocks still show, marked <b>PAUSE</b>, so you can watch them.
+      <div class="gauge" role="img" aria-label="IHSG is at ${Math.round(gap * 100)}% of its 200-day average"><i style="width:${(gap * 100).toFixed(1)}%"></i><span>IHSG ${f0(f.ihsg)}</span><em>ON at ${f0(f.sma200)}</em></div>
+      <div class="muted">Distance to ON: the IHSG needs <b>+${(need * 100).toFixed(1)}%</b> at today's average.${perWeek != null ? ` The average itself is ${perWeek < 0 ? 'falling' : 'rising'} about ${f0(Math.abs(perWeek))} points a week${weeks ? `; at that pace it would meet a flat IHSG in roughly ${Math.round(weeks)} weeks` : ''}.` : ''} You get a Telegram alert the day it flips.</div></div>`;
   }
 
+
+  const POS = () => (DATA.sizing && DATA.sizing.rule && DATA.sizing.rule.max) || (DATA.market && DATA.market.filter && DATA.market.filter.positions) || 5;
+  const acctM = () => { const v = +LS.get('acctM'); return v > 0 ? v : 100; }; // Rp million
+  function sizeCalc(price, stop, target) {
+    const budget = acctM() * 1e6 / POS(), lots = Math.max(0, Math.floor(budget / (price * 100)));
+    const cost = lots * 100 * price, fee = cost * 0.004;
+    return { budget, lots, cost, loss: lots * 100 * (price - stop) + fee, gain: lots * 100 * (target - price) - fee };
+  }
+  function sizerHtml(p, stop, px) {
+    const c = sizeCalc(px, stop, p.target), rp = v => 'Rp ' + f0(v), N = POS();
+    return `<div class="sizer" data-sizer="${esc(p.ticker)}" data-px="${px}" data-stop="${stop}" data-tg="${p.target}">
+      <small class="sz-h">How much to buy</small>
+      <div class="sz-in"><label>Account <input type="number" min="1" step="1" inputmode="numeric" value="${acctM()}" data-acct> Rp million</label><span class="muted" data-o="budget">1 of ${N} positions = ${rp(c.budget)}</span></div>
+      <div class="sz-out"><div><small>Buy</small><b data-o="lots">${c.lots.toLocaleString()} lots</b><span class="muted" data-o="cost">${rp(c.cost)}</span></div>
+        <div><small>If the stop is hit</small><b class="down" data-o="loss">−${rp(c.loss)}</b><span class="muted" data-o="lossp">${(c.loss / (acctM() * 1e6) * 100).toFixed(1)}% of the account</span></div>
+        <div><small>At the target</small><b class="up" data-o="gain">+${rp(c.gain)}</b><span class="muted" data-o="gainp">${(c.gain / (acctM() * 1e6) * 100).toFixed(1)}% of the account</span></div>
+        <div><button class="chip" data-paper="${esc(p.ticker)}">${paperBook().some(t => t.tk === p.ticker && !t.closed) ? 'In paper journal ✓' : 'Paper-trade this'}</button></div></div>
+      <p class="muted">Why ${N} positions: in a walk-forward test (picked on 2022-24, confirmed on 2024-26) spreading over ${N} positions beat 5 on both return and drawdown. Whole lots of 100 shares, 0.4% fees. Your account size is saved only in this browser.</p></div>`;
+  }
+  // Paper-trade journal (this browser only): entries from the stock page, marked against the latest close each load.
+  const paperBook = () => { try { return JSON.parse(LS.get('paperBook') || '[]'); } catch { return []; } };
+  const savePaper = b => LS.set('paperBook', JSON.stringify(b));
+  function bindSizer(el) {
+    el.querySelectorAll('[data-acct]').forEach(i => {
+      i.onclick = e => e.stopPropagation();
+      i.oninput = () => {
+        const v = +i.value; if (!(v > 0)) return; LS.set('acctM', String(v));
+        const box = i.closest('[data-sizer]'), c = sizeCalc(+box.dataset.px, +box.dataset.stop, +box.dataset.tg), rp = x => 'Rp ' + f0(x);
+        const set = (k, t) => { const n = box.querySelector('[data-o=' + k + ']'); if (n) n.textContent = t; };
+        set('lots', c.lots.toLocaleString() + ' lots'); set('cost', rp(c.cost)); set('loss', '−' + rp(c.loss)); set('gain', '+' + rp(c.gain)); set('budget', '1 of ' + POS() + ' positions = ' + rp(c.budget));
+        set('lossp', (c.loss / (v * 1e6) * 100).toFixed(1) + '% of the account'); set('gainp', (c.gain / (v * 1e6) * 100).toFixed(1) + '% of the account');
+      };
+    });
+    el.querySelectorAll('[data-paper]').forEach(b => b.onclick = e => {
+      e.stopPropagation(); const box = b.closest('[data-sizer]'), tk = b.dataset.paper, book = paperBook();
+      if (book.some(t => t.tk === tk && !t.closed)) { document.querySelector('[data-tab=score]').click(); return; }
+      const c = sizeCalc(+box.dataset.px, +box.dataset.stop, +box.dataset.tg);
+      book.push({ tk, day: DATA.meta.asOf, entry: +box.dataset.px, stop: +box.dataset.stop, target: +box.dataset.tg, lots: c.lots, added: new Date().toISOString() });
+      savePaper(book); b.textContent = 'In paper journal ✓';
+    });
+  }
+  function paperHtml() {
+    const book = paperBook();
+    if (!book.length) return '<p class="muted">Nothing yet. On any oversold stock&#39;s page, press <b>Paper-trade this</b>: it records the entry, stop, target and lot size, and checks them against the latest close each time you open the site. Stored only in this browser.</p>';
+    const by = Object.fromEntries(DATA.picks.map(p => [p.ticker, p]));
+    let tot = 0;
+    const rows = book.map((t, k) => {
+      const p = by[t.tk], now = p ? (p.live ? p.live.price : p.close) : null;
+      const st = t.closed ? t.closed.why : now == null ? 'no price' : now <= t.stop ? 'below stop' : now >= t.target ? 'at target' : 'open';
+      const exit = t.closed ? t.closed.px : now, pl = exit == null ? null : (exit / t.entry - 1) - 0.004;
+      if (pl != null) tot += pl * t.lots * 100 * t.entry;
+      const cls = /target/.test(st) ? 'up' : /stop/.test(st) ? 'down' : 'muted';
+      return `<tr><td><b>${esc(t.tk)}</b></td><td>${esc(t.day)}</td><td class="n">${f0(t.entry)}</td><td class="n">${f0(t.stop)} / ${f0(t.target)}</td><td class="n">${t.lots}</td><td class="n">${f0(exit)}</td><td class="n">${pc(pl, 1)}</td><td><span class="${cls}">${esc(st)}</span></td><td>${t.closed ? '' : '<button class="chip sm" data-close="' + k + '">close</button>'} <button class="chip sm" data-del="${k}" title="Remove">✕</button></td></tr>`;
+    }).join('');
+    return `<div class="card scroll"><table><thead><tr><th>Stock</th><th>Signal</th><th class="n">Entry</th><th class="n">Stop / target</th><th class="n">Lots</th><th class="n">Now / exit</th><th class="n">P/L</th><th>Status</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+      <p class="muted">Paper P/L so far: <b class="${tot >= 0 ? 'up' : 'down'}">${tot >= 0 ? '+' : '−'}Rp ${f0(Math.abs(tot))}</b>. Status uses the latest close (a stop touched intraday and recovered is not caught), so close a trade yourself when your broker would have. Entry is the price when you pressed the button; the real rule buys at the next open.</p>`;
+  }
+  function bindPaper(el) {
+    el.querySelectorAll('[data-close]').forEach(b => b.onclick = () => { const book = paperBook(), t = book[+b.dataset.close], p = DATA.picks.find(x => x.ticker === t.tk), now = p ? (p.live ? p.live.price : p.close) : t.entry; t.closed = { px: now, day: DATA.meta.asOf, why: now <= t.stop ? 'stop' : now >= t.target ? 'target' : 'closed' }; savePaper(book); renderScore(); });
+    el.querySelectorAll('[data-del]').forEach(b => b.onclick = () => { const book = paperBook(); book.splice(+b.dataset.del, 1); savePaper(book); renderScore(); });
+  }
   function thesisShort(p) {
     const m = DATA.meta;
     if (p.score < m.actScore) return '<span class="mute">No setup today</span>';
@@ -498,6 +567,9 @@
         <div><small>How long</small><b>up to 3 weeks</b> <span class="muted">${m.params.horizon} trading days, then exit</span></div>
         <div><small>Wrong if</small><b class="down">below ${rp(stop)}</b> <span class="muted">${pct(stop / px - 1)}: exit, no second guessing</span></div>
       </div>`;
+    // How much to buy: account / positions (tools/experiment-sizing.mjs), in whole lots of 100 shares, with the loss if the
+    // stop is hit and the gain at the target, both after the 0.4% round-trip fee. Account size stays in this browser only.
+    const sizer = act && tier !== 'SUSP' ? sizerHtml(p, stop, px) : '';
     const odds = live ? `<p class="t-odds"><b>Honest odds:</b> trades like this reached the target about half the time, and averaged about +1% after costs over 5 years of tests. A small edge, so keep the position small: if the stop is hit you lose about ${Math.abs((stop / px - 1) * 100).toFixed(0)}%.</p>` : '';
 
     // 4. technical detail (all the numbers, folded)
@@ -525,6 +597,7 @@
       <div class="t-do ${cls}"><small>What to do</small><p>${doNow}</p></div>
       ${live ? tradeMapSvg(p, stop, px, stretch) : ''}
       ${expect}
+      ${sizer}
       <div class="t-story"><small>The story</small>
         <p>${esc(fell)} ${esc(stretched)} ${esc(bet)}</p>
         ${flowLine ? `<p>${esc(flowLine)}</p>` : ''}
@@ -688,14 +761,15 @@
   // Every idea tested, with its verdict (tools/experiment-v4.mjs). Rules were written down before each run.
   function researchHtml(r) {
     if (!r) return '';
-    const P = r.portfolio, R = r.regime, t = v => (v == null ? '–' : v.toFixed(1));
+    const P = r.portfolio, R = r.regime, Z = DATA.sizing, t = v => (v == null ? '–' : v.toFixed(1));
     const row = x => `<tr><td>${esc(x.name)}</td><td class="n">${pc(x.gap != null ? x.gap : x.diff, 2)}</td><td class="n">${t(x.t)}</td><td class="n">${t(x.tDay)}</td><td>${x.pass ? '<span class="up">adopted</span>' : '<span class="mute">rejected</span>'}</td></tr>`;
     return `<h2>What would this have made? Portfolio test</h2>
-      <p class="muted">The live rule (oversold + bounce candle, wide stop, +8% target, 15 days) run as a real account: max 5 positions, 20% each, best score first, fees included, ${esc(P.from)} to ${esc(P.to)}.</p>
+      <p class="muted">The live rule (oversold + bounce candle, wide stop, +8% target, 15 days) run as a real account: max 5 positions, 20% each (the original test; the adopted rule is now ${Z && Z.adopt ? Z.rule.max + ' positions of ' + Math.round(100 / Z.rule.max) + '% each' : '5 positions'}), best score first, fees included, ${esc(P.from)} to ${esc(P.to)}.</p>
       <div class="market"><div class="stat"><small>Live rule, no filter</small><b class="down">${pc(P.cagr)} / yr</b><div class="muted">worst drawdown ${pc(P.mdd)}</div></div>
         <div class="stat"><small>IHSG buy and hold</small><b>${pc(P.ihsg.cagr)} / yr</b><div class="muted">worst drawdown ${pc(P.ihsg.mdd)}</div></div>
-        ${R ? `<div class="stat"><small>With market filter (${esc(R.pick)}), cash at 4.5%</small><b class="up">${pc(R.full[R.pick].cagr)} / yr</b><div class="muted">worst drawdown ${pc(R.full[R.pick].mdd)}</div></div>` : ''}</div>
+        ${R ? `<div class="stat"><small>With market filter (${esc(R.pick)}), cash at 4.5%</small><b class="up">${pc(R.full[R.pick].cagr)} / yr</b><div class="muted">worst drawdown ${pc(R.full[R.pick].mdd)}</div></div>` : ''}${Z && Z.adopt ? `<div class="stat"><small>+ ${Z.rule.max} smaller positions (adopted)</small><b class="up">${pc(Z.results[Z.pick].full.cagr)} / yr</b><div class="muted">worst drawdown ${pc(Z.results[Z.pick].full.mdd)}</div></div>` : ''}</div>
       <div class="note"><b>Read it honestly.</b> The bounce edge is real but relative: oversold stocks beat other stocks on the same days, yet in a falling market that still lost money. The one change that held up out of sample is <b>when</b> to trade: only while the IHSG is above its 200-day average (chosen on 2022-24, then ${R && R.adopt ? 'confirmed' : 'tested'} on 2024-26). Spreading over more, smaller positions also helped in every variant (not yet adopted).</div>
+      ${Z ? `<h3>How many positions? (walk-forward, ${esc(Z.asOf)})</h3><div class="card scroll"><table><thead><tr><th>Rule</th><th class="n">2022-24 (pick)</th><th class="n">2024-26 (check)</th><th class="n">Full period</th><th class="n">Worst drawdown</th><th class="n">Trades</th></tr></thead><tbody>${Object.entries(Z.results).map(([k, v]) => `<tr><td>${k === Z.pick ? '<b>' : ''}${k.startsWith('N') ? 'max ' + k.slice(1) + ' positions, equal size' : 'risk 1.5% per trade, max 8'}${k === 'N5' ? ' (before)' : ''}${k === Z.pick ? ' ← picked' + (Z.adopt ? ', adopted' : '') + '</b>' : ''}</td><td class="n">${pc(v.first.cagr, 1)}</td><td class="n">${pc(v.second.cagr, 1)}</td><td class="n">${pc(v.full.cagr, 1)}</td><td class="n">${pc(v.full.mdd, 1)}</td><td class="n">${v.full.trades}</td></tr>`).join('')}</tbody></table></div><p class="muted">Picked on the first half only, then checked on the second, with the market filter on and idle cash at 4.5%. More, smaller positions win because the edge is many small noisy wins: spreading over more trades evens out the luck. Each position is now ${Z.adopt ? Math.round(100 / Z.rule.max) : 20}% of the account; the stock pages size it for you.</p>` : ''}
       <h3>Ideas tested (rules fixed before each run)</h3>
       <div class="card scroll"><table><thead><tr><th>Idea</th><th class="n">Effect per trade</th><th class="n">t, episodes</th><th class="n">t, by day</th><th>Verdict</th></tr></thead><tbody>${r.results.map(row).join('')}${R ? `<tr><td>Market filter: trade only when IHSG > 200-day average (walk-forward)</td><td class="n">${pc(R.secondHalf[R.pick].cagr - R.secondHalf.none.cagr, 1)} / yr</td><td class="n">–</td><td class="n">–</td><td>${R.adopt ? '<span class="up">adopted</span>' : '<span class="mute">rejected</span>'}</td></tr>` : ''}</tbody></table></div>
       <p class="muted">E = company filings on IDX, F = fundamentals from Stockbit (only numbers already published on the signal day), X = exit rules. An idea is adopted only if it holds counting each stock episode once, grouped by day, on the 73 stocks the score was not built on, and in both halves of the period.</p>`;
@@ -724,12 +798,15 @@
       <div class="note"><b>Read it honestly.</b> The v1 score (trend, momentum, breakout chasing) scored <i>negative</i> in this test, so it was replaced by an oversold-bounce score. The new score ranks better, but a +1% average 15-day move is small, and in the 13-month replay with realistic entries, stops and fees the average ACT trade still lost money. The earlier idea that the edge lives in broad selloffs did not hold up there (see the regime table). ${bt.caveats.map(esc).join(' ')}</div>
       ${expansionHtml(DATA.expansion)}
       ${researchHtml(DATA.research)}
+      <h2>My paper trades</h2>
+      <div id="paperbox">${paperHtml()}</div>
       <h2>Live track record: does it actually hit its targets?</h2>
       <div id="trackbox"><div class="card empty">Loading…</div></div>
       <h2>News: how accurate is the classifier?</h2>
       ${na ? `<div class="card scroll"><table><thead><tr><th>Rules</th><th>Sample</th><th class="n">Category right</th><th class="n">Direction precision</th><th class="n">Direction recall</th></tr></thead><tbody>
         ${na.rows.map(r => `<tr><td>${esc(r.rules)}</td><td>${esc(r.sample)}</td><td class="n">${r.cat}%</td><td class="n">${r.prec}%</td><td class="n">${r.rec}%</td></tr>`).join('')}</tbody></table></div><p class="muted">${esc(na.note)}</p>` : ''}
       `;
+    bindPaper(el);
   }
 
   // ---------- how it works ----------
@@ -771,6 +848,7 @@
   document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
     document.querySelectorAll('.tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
     document.querySelectorAll('.panel').forEach(p => { p.hidden = p.id !== 'tab-' + b.dataset.tab; });
+    if (b.dataset.tab === 'score' && DATA) { const pbx = document.getElementById('paperbox'); if (pbx) { pbx.innerHTML = paperHtml(); bindPaper(pbx); } }
   });
   $('#refreshBtn').onclick = () => load().catch(() => {});
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => { /* optional */ });

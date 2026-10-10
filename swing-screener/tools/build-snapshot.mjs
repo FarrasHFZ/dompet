@@ -116,6 +116,7 @@ if (gmap && px['^JKSE']) {
     gmap.groups.forEach(g => { const r = groups.groups.find(x => x.id === g.id); g.members.forEach(m => { groups.byTicker[m.tk] = { id: g.id, name: g.name, alias: g.alias, rank: groups.rankNow[g.id] || null, of: Object.keys(groups.rankNow).length, quad: r && r.read ? r.read.quad : null, hot: hot.some(h => h.id === g.id), evidence: m.evidence, soft: m.soft }; }); });
   } catch (e) { console.error('groups failed', e.message); }
 }
+function readJsonSafe(f) { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'data', f), 'utf8')); } catch { return null; } }
 const picks = [], skipped = [];
 let lastBar = null;
 uni.forEach(u => {
@@ -180,7 +181,9 @@ const dataCoverage = {
 };
 console.log('data coverage', JSON.stringify({ ...dataCoverage, missing: Object.fromEntries(Object.entries(dataCoverage.missing).map(([k, v]) => [k, v.length])) }));
 market.idxLive = live['^JKSE'] || null;
-market.filter = { ok: marketOk, ihsg: idx ? idx[idx.length - 1] : null, sma200: ihsgSma200 };
+// sma200 four weeks ago: how fast the bar the IHSG must clear is moving (for the 'how far to ON' gauge)
+const sma200ago = idx && idx.length >= 220 ? idx.slice(-220, -20).reduce((a, x) => a + x, 0) / 200 : null;
+market.filter = { ok: marketOk, ihsg: idx ? idx[idx.length - 1] : null, sma200: ihsgSma200, sma200ago, positions: (readJsonSafe('sizing-study.json') || {}).rule?.max || 5 };
 
 // ---- forward-test ledger + live track record ----
 const asOf = lastBar.toISOString().slice(0, 10);
@@ -223,7 +226,7 @@ const out = {
   },
   // Broker-flow workflow: forward-test scorecard (tools/flow-forward.mjs) and the IDX foreign-flow backtest (tools/experiment-flow.mjs).
   groups: groups ? { ...groups, byTicker: undefined, study: readJson('groups-study.json') } : null,
-  expansion: readJson('expand-study.json'), research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
+  expansion: readJson('expand-study.json'), sizing: readJson('sizing-study.json'), research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
   flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json'), history: nbStudy, flowVeto,
     bm: { asOf: bmd ? bmd.asOf : null, stale: bmStale, experiment: readJson('bm-experiment.json'), scoreExperiment: readJson('bm-score-experiment.json') } },
   backtestHoldout:fs.existsSync(path.join(ROOT, 'data', 'backtest-holdout.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'backtest-holdout.json'), 'utf8')) : null,

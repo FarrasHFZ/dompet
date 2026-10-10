@@ -213,6 +213,16 @@ and -12.7% vs -36.8% drawdown -> adopted (tier PAUSE when off). Full period with
 Robustness: every window (100-250 days) and position count (3/5/8) cut drawdown; returns are noisier. Not adopted but
 noted: more, smaller positions (8) helped in every variant.
 
+## Position count (adopted 2026-10-10, `tools/experiment-sizing.mjs`)
+Walk-forward, pre-registered (commit before the run): candidates max 3 / 5 / 8 / 10 equal-weight positions and a
+risk-based variant (1.5% of equity at the stop, max 8), all with the market filter and 4.5% idle cash, live rule on the
+tested 100. Picked on 2022-10..2024-09: **10 positions** (+6.9%/yr, DD -4.7%). Checked on 2024-10..: +6.8%/yr vs +6.3%
+for 5, drawdown -8.7% vs -12.7% -> adopted. Full period +6.5%/yr, DD -8.7% (5 positions: +2.6%, -12.7%).
+The site uses it: each oversold stock page has a "How much to buy" box (account size kept in the browser; lots of
+100, 0.4% fees, loss at the stop and gain at the target) and a **Paper-trade this** button feeding a local journal in
+Track record. The market-filter banner shows how far the IHSG is from its 200-day average and how fast that average is
+moving, and Telegram announces the day the filter flips.
+
 ## Telegram alerts
 What you get (one digest per run, only new items, never repeated): new risk / commissioner or director / insider-buying / government-investment / corporate-action / contract / earnings headlines about today's ACT picks and `data/watchlist.json`, sector-wide government or risk news for those picks' sectors, and once per signal day which stocks entered or left ACT.
 
