@@ -37,6 +37,21 @@ Without the Sheet, everything still runs from GitHub. The Sheet is worth keeping
 - So ACT calls are paper trades. The market filter mostly keeps the account in cash in downtrends; the live ledger
   keeps running as a forward test.
 
+## Flow study v2 and "Who moves it" (2026-10-10)
+
+All on the shared harness `tools/study-lib.mjs` (non-overlapping dates, within-date permutation, p < 0.05 AND t >= 2,
+both halves), pre-registered in `tools/experiment-flow2.mjs` and `tools/experiment-foreign-rep.mjs`:
+- Retail-dominated stocks do worse: FAILED, the opposite showed (+3.0% per 20 sessions for the most retail-heavy third).
+- Foreign buying predicts returns on foreign-driven stocks: near miss. +1.34%/20 sessions (p 0.096, both halves +) on
+  the tested 100; replication on the 200 new stocks +2.62% (p 0.113, both halves +); control on stocks foreigners do not
+  move ~0 / negative. Promising, unproven: forward-tested by `tools/flow-read.mjs` (promote only with >= 12 forward
+  dates and a pass).
+- Bandarmetrics LPM 60-session change: FAILED (p 0.26). Intensity / Volume Rotation showed low permutation p with t
+  ~1.7: that is how the harness learned to require t >= 2 too (stable stock traits make within-date shuffles too narrow).
+- `tools/flow-read.mjs` (evening task, step A6) publishes per stock: foreign-driven or not (120-session correlation of
+  foreign net and price), foreign buying third, retail share (nearest 5%). Shown as "Who moves it" on stock pages, a
+  "foreign buying · watch" chip, and the Signal lab table (How it works). Nothing here changes a badge.
+
 ## Momentum 10: the paper-only second strategy (Momentum tab)
 
 Monthly: liquid stocks (Rp 5 B a day), rank by 12-1 month return, hold the top 10 equal weight from the next open to

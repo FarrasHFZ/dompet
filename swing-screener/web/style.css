@@ -273,3 +273,7 @@ html.noscroll,html.noscroll body{overflow:hidden}
 .kact{color:var(--accent)}.krad{color:var(--warn)}
 .sc-calls details{margin-top:8px}.sc-calls summary{cursor:pointer;font-weight:600;font-size:13px}
 .note.warnnote{border-left-color:var(--down)}
+/* Who moves it */
+.whobox{border:1px solid var(--line);border-radius:8px;padding:6px 12px;background:var(--card)}
+.whobox p{margin:6px 0}
+.tag.wchip{background:var(--soft);color:var(--accent);border:1px dashed var(--accent)}

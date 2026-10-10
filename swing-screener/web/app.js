@@ -143,6 +143,39 @@
     el.querySelectorAll('tr[data-open]').forEach(r => r.onclick = () => { OPEN = r.dataset.open; FILTER = 'ALL'; document.querySelector('[data-tab=picks]').click(); if (MQ.matches) history.pushState({ sheet: OPEN }, ''); renderPicks(); const d = $('#dcard'); if (d && !MQ.matches) d.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
   }
 
+  // ---------- who moves this stock (tools/flow-read.mjs) + signal lab ----------
+  const third = n => (n === 3 ? 'top third' : n === 2 ? 'middle third' : n === 1 ? 'bottom third' : '–');
+  const whoChip = p => { const w = p.who; return w && !w.stale && w.fcT === 3 && w.fbT === 3 ? '<span class="tag wchip" title="Foreign-driven stock with top-third foreign buying over 20 sessions. Watch only: pointed the right way in tests but never passed (Signal lab).">foreign buying · watch</span>' : ''; };
+  function whoHtml(p) {
+    const w = p.who;
+    if (!w) return '<p class="muted">No NeoBDM history for this stock yet.</p>';
+    const drv = w.fcT === 3 ? `<b>Foreign-driven.</b> On days foreigners were net buyers the price tended to rise with them (correlation ${w.fc.toFixed(2)} over 120 sessions, ${third(w.fcT)} of liquid stocks).`
+      : `<b>Not foreign-driven</b> (correlation ${w.fc.toFixed(2)}, ${third(w.fcT)}): foreign flow and the price have not moved together, so foreign buying or selling says little here.`;
+    const buy = w.fcT === 3 ? `Foreigners were net <b>${w.fb === 'buy' ? 'buyers' : w.fb === 'sell' ? 'sellers' : 'flat'}</b> over the last 20 sessions (${third(w.fbT)} among foreign-driven stocks).` : `Foreign flow over 20 sessions: net ${w.fb === 'buy' ? 'buying' : w.fb === 'sell' ? 'selling' : 'flat'} (context only for a stock like this).`;
+    const ret = w.rs == null ? '' : `Retail share of trading: <b>about ${w.rs}%</b> (${third(w.rsT)}).`;
+    const F = DATA.lab && DATA.lab.forward;
+    return `<div class="whobox"><p>${drv}</p><p>${buy}</p>${ret ? `<p>${ret}</p>` : ''}</div>
+      <p class="muted">Read from NeoBDM's foreign and retail groups (${esc(w.d)}${w.stale ? ', <b>stale</b>' : ''}). What the tests say: foreign buying inside foreign-driven stocks pointed the right way three times (+1.3% and +2.6% per 20 sessions over the bottom third) but never passed (p 0.10, 0.11), and retail-heavy stocks did <b>not</b> do worse. So this is context, not a reason to trade. A forward test${F ? ` (${F.dates} of ${F.needed} dates so far)` : ''} decides whether it becomes a "convinced" confirmation.</p>`;
+  }
+  function labHtml() {
+    const L = DATA.lab; if (!L) return '';
+    const st = s => `<span class="flag ${s === 'passed' ? 'up' : s === 'failed' ? 'down' : ''}">${s}</span>`;
+    const rows = [
+      ['Oversold bounce, 10 years (live rule)', 'failed', 'Lost money 2017-22; inside the noise of 20 shuffled histories'],
+      ['Dips in stocks in their own uptrend when the market filter is off', 'failed', 'p 0.35 against random stocks'],
+      ['Own-uptrend rule on 200 unseen stocks', 'failed', 'p 0.39'],
+      ['Momentum 10 (monthly winners)', 'passed', 'Holds without hindsight but small: +4.8%/yr vs −1.0%, drawdown −57%. Paper list (Momentum tab)'],
+      ['Retail-dominated stocks do worse', 'failed', L.flow2 ? `The opposite: the most retail-heavy third did ${pc(L.flow2.H1.spread, 1)} per 20 sessions vs the least` : ''],
+      ['Foreign flow predicts, on foreign-driven stocks', 'near miss', `${L.flow2 ? `${pc(L.flow2.H2.spread, 1)} per 20 sessions, p ${L.flow2.H2.p.toFixed(2)}` : ''}${L.rep ? `; replication on 200 new stocks ${pc(L.rep.replication.spread, 1)}, p ${L.rep.replication.p.toFixed(2)}` : ''}. Forward test ${L.forward ? `${L.forward.dates}/${L.forward.needed} dates` : 'running'}`],
+      ['Same foreign flow on stocks foreigners do not move (control)', 'as expected', L.flow2 ? `${pc(L.flow2.H2c.spread, 1)}, as predicted: no effect` : ''],
+      ['Bandarmetrics LPM (60-session change)', 'failed', L.flow2 ? `${pc(L.flow2.H3.spread, 1)}, p ${L.flow2.H3.p.toFixed(2)}` : ''],
+      ['NeoBDM flow tags, 2-year replay', 'failed', 'FLOW+ minus FLOW− −0.13% per 5 sessions'],
+    ];
+    return `<h2>Signal lab: every idea tested, and where it stands</h2>
+      <div class="card scroll"><table><thead><tr><th>Idea</th><th>Status</th><th>Evidence</th></tr></thead><tbody>${rows.map(r => `<tr><td>${esc(r[0])}</td><td>${st(r[1])}</td><td class="muted">${r[2]}</td></tr>`).join('')}</tbody></table></div>
+      <p class="muted">How a test works here (tools/study-lib.mjs): the rule and its pass bar are committed before the first run; samples are taken on dates 20 sessions apart so one move is never counted twice; the null shuffles the signal across stocks within each date; a pass needs p &lt; 0.05, t ≥ 2 and the same sign in both halves. A "convinced" badge only comes from a passed test.</p>`;
+  }
+
   // ---------- broker flow ----------
   let FLOWPH = 'ALL', FLOWQ = '', FLOWACT = false;
   function scorecardHtml(sc) {
@@ -380,7 +413,7 @@
   function cardHtml(p) {
     const h = p.headlines[0];
     return `<article class="pcard ${OPEN === p.ticker ? 'open' : ''}" data-t="${esc(p.ticker)}">
-      <div class="ptop"><div><b class="tk">${esc(p.ticker)}</b> <span class="act ${p.action}">${p.action}</span> ${tierHtml(p)} ${groupTag(p)}
+      <div class="ptop"><div><b class="tk">${esc(p.ticker)}</b> <span class="act ${p.action}">${p.action}</span> ${tierHtml(p)} ${groupTag(p)} ${whoChip(p)}
         <div class="nm">${esc(p.name)}${p.ownership ? ' · ' + esc(p.ownership.control) : ''}</div>
         <div class="pthesis">${thesisShort(p)}</div></div>
         <div class="pscore"><b>${p.score}</b><small>score</small></div></div>
@@ -397,7 +430,7 @@
     const h = p.headlines[0];
     const open = OPEN === p.ticker;
     return `<tr class="row ${open ? 'open' : ''}" data-t="${esc(p.ticker)}">
-      <td><span class="tk">${esc(p.ticker)}</span> ${groupTag(p)}<div class="nm">${esc(p.name)}${p.ownership ? " · " + esc(p.ownership.control) : ""}</div><div class="pthesis">${thesisShort(p)}</div></td>
+      <td><span class="tk">${esc(p.ticker)}</span> ${groupTag(p)} ${whoChip(p)}<div class="nm">${esc(p.name)}${p.ownership ? " · " + esc(p.ownership.control) : ""}</div><div class="pthesis">${thesisShort(p)}</div></td>
       <td><span class="act ${p.action}">${p.action}</span> ${tierHtml(p)}</td>
       <td><span class="score"><i style="width:${Math.round(p.score * 0.6)}px"></i><b>${p.score}</b></span></td>
       <td>${esc(p.setup)}</td><td class="n">${f0(p.close)}</td><td class="n">${p.live ? `${f0(p.live.price)} ${pc(p.live.chg)}` : '<span class="mute">–</span>'}</td><td class="n">${pc(p.chg1d)}</td><td class="n">${pc(p.chg5d)}</td>
@@ -909,7 +942,7 @@
 
   function detailHtml(p) {
     const parts = p.parts, max = { oversold: 80, support: 10, news: 10 };
-    const jump = [['s-lv', 'Levels'], ['s-news', 'News'], ['s-nb', 'NeoBDM'], ['s-bc', 'Big buyers\' cost'], ['s-bm', 'Bandarmetrics'], ['s-own', 'Owners'], ['s-earn', 'Earnings']];
+    const jump = [['s-lv', 'Levels'], ['s-news', 'News'], ['s-who', 'Who moves it'], ['s-nb', 'NeoBDM'], ['s-bc', 'Big buyers\' cost'], ['s-bm', 'Bandarmetrics'], ['s-own', 'Owners'], ['s-earn', 'Earnings']];
     return `<div id="s-chart">${quoteHtml(p)}${chartBoxHtml(p)}</div>${thesisHtml(p)}<nav class="jump">${jump.map(([id, l]) => `<button class="chip" data-jump="${id}">${l}</button>`).join('')}</nav><div class="dgrid" id="s-lv"><div>
       <div class="parts">${Object.keys(parts).map(k => `<div class="part"><span>${esc(k)}</span><div class="bar"><i style="width:${Math.min(100, (parts[k] / (max[k] || 10)) * 100)}%"></i></div><em>${parts[k]}</em></div>`).join('')}</div>
       <p class="muted">Score parts: oversold-ness (RSI, 5-day drop, distance under the 20d average) is the main driver of the score; support proximity and news are secondary. It ranked stocks in 2022-26 but did not beat noise over 10 years (Track record).</p></div>
@@ -925,6 +958,7 @@
         <h2>News</h2>
         ${p.headlines.length ? `<ul class="hl-list">${p.headlines.map(h => `<li><span class="tag ${esc(h.category)}">${esc(h.category)}</span><span><a href="${safeUrl(h.link)}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a><div class="muted">${ago(h.published)} · ${!h.direct ? 'sector backdrop, not scored' : h.recap ? 'price recap, not scored' : 'about this stock · ' + (h.sentiment > 0 ? 'supports' : h.sentiment < 0 ? 'risk' : 'neutral')}</div></span></li>`).join('')}</ul>` : '<p class="muted">No scored headlines in the last 7 days.</p>'}
         <button class="chip" data-news="${esc(p.ticker)}">All 30-day headlines for ${esc(p.ticker)} →</button>
+        <h2 id="s-who">Who moves it: foreign or retail?</h2>${whoHtml(p)}
         <h2 id="s-nb">NeoBDM flow</h2>${nbHtml(p)}
         <h2 id="s-bc">Who's buying, and at what cost</h2>${brokerCostHtml(p)}
         <h2 id="s-bm">Bandarmetrics read</h2>${bmHtml(p)}
@@ -1141,7 +1175,7 @@
   }
   function renderHow() {
     const m = DATA.meta;
-    $('#tab-how').innerHTML = `${coverageCardHtml(m.dataCoverage)}
+    $('#tab-how').innerHTML = `${labHtml()}${coverageCardHtml(m.dataCoverage)}
       <h2>What runs where</h2>
       <div class="steps">
         <div class="card"><h3>Google Sheet = control panel + journal</h3><p class="muted">Holds Universe (tickers, sectors, news aliases), Themes (news queries like Danantara / komisaris) and Config (target %, stop, liquidity). Also the Screener and News tabs you can sort, annotate and keep trade notes in.</p></div>

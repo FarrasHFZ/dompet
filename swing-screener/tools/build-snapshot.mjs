@@ -95,6 +95,8 @@ try { nbStudy = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'nb-study.jso
 try { nbHist = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'nb-history-tags.json'), 'utf8')); } catch { /* not run */ }
 const flowVeto = !!(nbStudy && nbStudy.vetoAdopted);
 // Broker cost lines (tools/broker-cost.mjs): refreshed per stock on a weekly rotation, so each carries its own date.
+// Who moves each stock (tools/flow-read.mjs, run in the evening task): foreign-driven?, foreign buying, retail share.
+const flowRead = (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'flow-read.json'), 'utf8')); } catch { return null; } })();
 let bcost = null;
 try { bcost = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'broker-cost-tags.json'), 'utf8')); } catch { /* not built */ }
 // Group rotation: today's read per group + the forward record of the "hot group" rule (tools/experiment-groups.mjs H4:
@@ -148,6 +150,7 @@ uni.forEach(u => {
   pk.bm = bmd && bmd.by[u.ticker] ? { ...bmd.by[u.ticker], stale: bmStale } : null;
   pk.flowHist = nbHist && nbHist.by[u.ticker] ? nbHist.by[u.ticker] : null;
   pk.group = groups && groups.byTicker[u.ticker] ? groups.byTicker[u.ticker] : null;
+  pk.who = flowRead && flowRead.by[u.ticker] ? { ...flowRead.by[u.ticker], stale: (NOW - new Date(flowRead.by[u.ticker].d + 'T10:00:00Z').getTime()) / 864e5 > 6 } : null;
   pk.brokerCost = bcost && bcost.by[u.ticker] ? { ...bcost.by[u.ticker], stale: (NOW - new Date(bcost.by[u.ticker].day + 'T10:00:00Z').getTime()) / 864e5 > 10 } : null;
   pk.untested = NEWSET.has(u.ticker);
   pk.thin = thin;
@@ -242,6 +245,8 @@ const out = {
   groups: groups ? { ...groups, byTicker: undefined, study: readJson('groups-study.json') } : null,
   // 10-year check (2026-10-10): no edge over shuffled prices; shown at the top of Track record.
   momentum: momentum ? { ...momentum, study: readJson('momentum-study.json'), pit: readJson('momentum-pit.json') } : null,
+  // Signal lab: hypotheses tested on 2026-10-10 and the live forward test of foreign flow.
+  lab: (() => { const f = readJson('flow2-study.json'), r = readJson('foreign-rep.json'); return { flow2: f ? { H1: f['H1 retail share (high = worse)'], H2: f['H2 foreign buying, high-fcorr stocks'], H2c: f['   control: foreign buying, low-fcorr stocks'], H3: f['H3 LPM 60-session change (z), all stocks'] } : null, rep: r, forward: readJson('flow-read-forward.json') }; })(),
   tenYear: { trend: readJson('trend-study.json'), own: readJson('own-holdout.json'), perm: readJson('permutation-study.json') },
   expansion: readJson('expand-study.json'), brokerCostStudy: readJson('brokercost-study.json'), brokerDirectory: readJson('broker-directory.json'), sizing: readJson('sizing-study.json'), research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
   flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json'), history: nbStudy, flowVeto,
