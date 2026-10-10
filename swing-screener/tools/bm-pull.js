@@ -21,6 +21,12 @@
     XMLHttpRequest.prototype.open = function (m, u) { this.__u = u; return O.apply(this, arguments); };
     XMLHttpRequest.prototype.setRequestHeader = function (k, v) { if (/authorization/i.test(k) && String(this.__u || '').includes('api.bandarmetrics.com')) window.__authKeep = v; return SH.apply(this, arguments); };
   }
+  // Pauses on a Web Worker timer: Chrome throttles a hidden tab's own timers to about one per minute.
+  if (!window.__wwait) {
+    const wk = new Worker(URL.createObjectURL(new Blob(['onmessage=e=>setTimeout(()=>postMessage(e.data.id),e.data.ms)'], { type: 'text/javascript' })));
+    const pend = {}; let seq = 0; wk.onmessage = e => { pend[e.data](); delete pend[e.data]; };
+    window.__wwait = ms => new Promise(r => { const id = ++seq; pend[id] = r; wk.postMessage({ id, ms }); });
+  }
   const IND = ['q3_200', 'momentum', 'volume_ratio', 'bai'];
   const open = () => new Promise((ok, no) => { const r = indexedDB.open('bmpull', 1); r.onupgradeneeded = () => r.result.createObjectStore('s'); r.onsuccess = () => ok(r.result); r.onerror = () => no(r.error); });
   const tx = (db, mode, fn) => new Promise((ok, no) => { const t = db.transaction('s', mode); const q = fn(t.objectStore('s')); t.oncomplete = () => ok(q && q.result); t.onerror = () => no(t.error); });
@@ -40,7 +46,7 @@
       if (bad) return { stopped: `${tk} ${bad.ind}: HTTP ${bad.s}`, added: n };
       const rec = {}; res.forEach(x => { rec[x.ind] = Array.isArray(x.j && x.j.data) ? x.j.data.map(p => [p.time, sig(p.value)]) : []; });
       await tx(db, 'readwrite', s => s.put(rec, tk)); n++;
-      await new Promise(r => setTimeout(r, 2500));
+      await (window.__wwait ? window.__wwait(2500) : new Promise(r => setTimeout(r, 2500)));
     }
     return { added: n, stored: (await tx(db, 'readonly', s => s.getAllKeys())).length, of: window.__bmTickers.length };
   };

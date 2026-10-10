@@ -13,7 +13,7 @@
   // News direction: +-0.5 deadband, so a stock with no real news reads neutral.
   const arrow = s => (s >= 0.5 ? '<span class="up">▲ supports</span>' : s <= -0.5 ? '<span class="down">▼ risk</span>' : '<span class="mute">• neutral</span>');
 
-  const TIER = { 'ACT+': 'Bounce candle + flow up', ACT: 'Bounce candle confirmed', 'ACT?': 'Bounce candle, but flow down', WAIT: 'Oversold, wait for a bounce candle', SKIP: 'Not traded: NeoBDM veto, or one of the 200 stocks where the bounce edge was not confirmed', PAUSE: 'Market filter: IHSG below its 200-day average, no new bounce trades' };
+  const TIER = { 'ACT+': 'Bounce candle + flow up', ACT: 'Bounce candle confirmed', 'ACT?': 'Bounce candle, but flow down', WAIT: 'Oversold, wait for a bounce candle', SKIP: 'Not traded: NeoBDM veto, or one of the 200 stocks where the bounce edge was not confirmed', PAUSE: 'Market filter: IHSG below its 200-day average, no new bounce trades', THIN: 'Oversold, but trades under Rp 5 B a day: too thin to trade', SUSP: 'No trading in the last 3 sessions: suspended or halted' };
   const tierHtml = p => (p.tier && p.tier !== 'WATCH' ? '<span class="tier t' + (p.tier === 'ACT+' ? 'P' : p.tier === 'ACT?' ? 'Q' : p.tier) + '" title="' + esc(TIER[p.tier]) + '">' + esc(p.tier) + '</span>' : '');
   // Conglomerate group label (tools/groups.mjs): short name, rank on hover; a click opens the Groups tab.
   const groupTag = p => {
@@ -37,7 +37,7 @@
   const bandHtml = b => { const x = BAND[b && b.band]; return x ? `<span class="${x[1]}">${x[0]}</span>` : '<span class="mute">–</span>'; };
   // Experimental BM accumulation score: today's rank (0-100) of the 60-session LPM trend. Held its direction out of
   // sample but did not clear the bar, so it is shown and forward-tested, never part of the badge.
-  const bmScoreHtml = s => (s == null ? '<span class="mute">–</span>' : `<b class="${s >= 67 ? 'up' : s <= 33 ? 'down' : ''}">${s}</b><span class="muted">/100</span>`);
+  const bmScoreHtml = s => (s == null ? '<span class="mute" title="Listed too recently: the score compares the 60-day LPM trend with the stock&#39;s own past year">too new</span>' : `<b class="${s >= 67 ? 'up' : s <= 33 ? 'down' : ''}">${s}</b><span class="muted">/100</span>`);
   const bmHtml = p => {
     const b = p.bm;
     if (!b) return '<p class="muted">No Bandarmetrics data for this ticker.</p>';
@@ -253,6 +253,13 @@
       })()}
     </svg>`;
   }
+  // Members' broker flow, summed: NeoBDM tags (FLOW+ / FLOW-) and Bandarmetrics LPM (rising / falling). Context only.
+  function flowMixHtml(f) {
+    if (!f || !f.nb) return '<span class="mute">–</span>';
+    const bar = (a, b, n) => `<span class="mix2" title="${a} up, ${b} down of ${n}"><i class="u" style="flex:${a}"></i><i class="z" style="flex:${Math.max(0, n - a - b)}"></i><i class="d" style="flex:${b}"></i></span>`;
+    const lean = f.accum - f.distrib + f.lpmUp - f.lpmDown;
+    return `<div class="fm"><small>NeoBDM</small>${bar(f.plus, f.minus, f.nb)}<span class="muted">${f.plus}+ / ${f.minus}−</span></div>${f.bm ? `<div class="fm"><small>LPM</small>${bar(f.lpmUp, f.lpmDown, f.bm)}<span class="muted">${f.lpmUp}↑ / ${f.lpmDown}↓</span></div>` : ''}<div class="${lean > 0 ? 'up' : lean < 0 ? 'down' : 'mute'}" style="font-size:11.5px">${lean > 0 ? 'leaning accumulation' : lean < 0 ? 'leaning distribution' : 'no lean'}</div>`;
+  }
   function renderGroups() {
     const el = $('#tab-groups'), G = DATA.groups;
     if (!G) { el.innerHTML = '<div class="card empty">No group data in this build (tools/groups.mjs).</div>'; return; }
@@ -267,11 +274,11 @@
     el.innerHTML = `
       <p class="muted">Indonesian traders often play a conglomerate's stocks together, "saham PP" (Prajogo Pangestu), "saham Haji Isam", Bakrie, MNC, and move on to another group after a while. Each group below is an equal-weight index of its listed companies (a stock counts only while it trades at least Rp 1 B a day). Every link is backed by the KSEI ≥1% shareholder list of ${esc(G.mapAsOf || '–')}; an asterisk marks a well-known link whose holding company is not named there. The map lives in <code>tools/groups-map.json</code>.</p>
       ${hot.length ? `<div class="note"><b>Hot right now:</b> ${hot.map(h => `${esc(nm(h.id))} jumped 10%+ in a week (${h.age === 0 ? 'today' : h.age + ' session' + (h.age === 1 ? '' : 's') + ' ago'})`).join('; ')}. ${h4 ? `In the 5-year test, groups after a jump like this beat the IHSG by ${pc(h4.avg, 1)} on average over the next 2 weeks (${pct1(h4.win)} of the time; ${h4.events} cases). A tendency, not a promise, and it is a momentum trade, not the oversold-bounce setup this screener trades.` : ''}</div>` : ''}
-      <div class="card scroll"><table><thead><tr><th class="n">#</th><th>Group</th><th>Now</th><th class="n">5 days</th><th class="n">20 days</th><th class="n">vs IHSG 20d</th><th class="n">60 days</th><th>Last 60 sessions</th><th class="n">Weeks top 3</th><th>Members</th></tr></thead><tbody>
+      <div class="card scroll"><table><thead><tr><th class="n">#</th><th>Group</th><th>Now</th><th class="n">5 days</th><th class="n">20 days</th><th class="n">vs IHSG 20d</th><th class="n">60 days</th><th>Last 60 sessions</th><th class="n">Weeks top 3</th><th>Big money in the group</th><th>Members</th></tr></thead><tbody>
       ${list.map(g => { const r = g.read || {}; return `<tr><td class="n">${G.rankNow[g.id] || '–'}</td><td><b>${esc(g.name)}</b><div class="nm">${esc(g.alias)}${r.active != null ? ` · ${r.active} trading` : ''}</div></td><td>${quadHtml(r.quad)}${hot.some(h => h.id === g.id) ? ' <span class="tag">hot</span>' : ''}</td>
-        <td class="n">${pc(r.r5)}</td><td class="n">${pc(r.r20)}</td><td class="n">${pc(r.rs)}</td><td class="n">${pc(r.r60)}</td><td>${sparkSvg(g.spark)}</td><td class="n">${g.weeksTop3 || '–'}</td>
+        <td class="n">${pc(r.r5)}</td><td class="n">${pc(r.r20)}</td><td class="n">${pc(r.rs)}</td><td class="n">${pc(r.r60)}</td><td>${sparkSvg(g.spark)}</td><td class="n">${g.weeksTop3 || '–'}</td><td>${flowMixHtml(g.flow)}</td>
         <td class="mem">${g.members.map(m => inPicks.has(m.tk) ? `<button class="chip sm" data-open="${esc(m.tk)}" title="${esc(m.evidence || m.note || 'known link')}">${esc(m.tk)}${m.soft ? '*' : ''}</button>` : `<span class="chip sm off" title="${esc(m.evidence || m.note || 'known link')} (outside the screener's 100)">${esc(m.tk)}${m.soft ? '*' : ''}</span>`).join('')}</td></tr>`; }).join('')}</tbody></table></div>
-      <p class="muted">Ranked by 20-session return versus the IHSG, groups with at least 2 trading members. Members in blue are in the screener's 100 and open the stock; hover a member for the KSEI holder that links it.</p>
+      <p class="muted">Ranked by 20-session return versus the IHSG, groups with at least 2 trading members. "Big money in the group" adds up the members' NeoBDM tags and Bandarmetrics LPM; context only (neither predicted bounces in the tests). Members in blue are in the screener's universe and open the stock; hover a member for the KSEI holder that links it.</p>
       <h2>Rotation map</h2>
       <p class="muted">Across: how much stronger than the IHSG the group was over 20 sessions. Up/down: whether that lead is growing or shrinking over the last week. Groups usually travel counter-clockwise: improving → leading → weakening → lagging. The tail is each group's path over the last 3 weeks.</p>
       <div class="card pad">${rotationSvg(G)}</div>
@@ -314,7 +321,7 @@
         <input type="search" id="pq" placeholder="Search ticker, name or sector" value="${esc(PQ)}" style="max-width:240px;margin-left:auto">
       </div>
       ${marketBanner()}
-      <p class="muted hint">ACT = oversold-bounce score ≥ ${DATA.meta.actScore}. Badges: <b>ACT</b> bounce candle seen, <b>WAIT</b> no bounce candle yet, <b>SKIP</b> not traded (NeoBDM veto, or one of the 200 stocks added in Oct 2026 where the edge failed its test), <b>PAUSE</b> market filter off. Broker flow no longer adds ACT+ / ACT?: two years of NeoBDM history showed it did not tell good bounces from bad ones (Broker flow tab). Few days have any; "none today" is a valid answer.</p>
+      <p class="muted hint">ACT = oversold-bounce score ≥ ${DATA.meta.actScore}. Badges: <b>ACT</b> bounce candle seen, <b>WAIT</b> no bounce candle yet, <b>SKIP</b> not traded (NeoBDM veto, or one of the 200 stocks added in Oct 2026 where the edge failed its test), <b>PAUSE</b> market filter off, <b>THIN</b> trades under Rp 5 B a day (shown, never traded). Broker flow no longer adds ACT+ / ACT?: two years of NeoBDM history showed it did not tell good bounces from bad ones (Broker flow tab). Few days have any; "none today" is a valid answer.</p>
       ${body}`;
     const toggle = t => { OPEN = OPEN === t ? null : t; renderPicks(); const d = $('#dcard'); if (OPEN && d) d.scrollIntoView({ block: MQ.matches ? 'nearest' : 'start', behavior: 'smooth' }); };
     el.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { FILTER = b.dataset.f; OPEN = null; renderPicks(); });
@@ -413,6 +420,8 @@
     const m = DATA.meta;
     if (p.score < m.actScore) return '<span class="mute">No setup today</span>';
     if (p.tier === 'SKIP') return p.untested ? '<span class="down">Oversold, but the edge is unproven on this stock</span>' : '<span class="down">Oversold, but vetoed (NeoBDM)</span>';
+    if (p.tier === 'SUSP') return '<span class="down">No trading for 3 sessions (suspended?)</span>';
+    if (p.tier === 'THIN') return '<span class="warn">Oversold, but too thinly traded</span>';
     if (p.tier === 'PAUSE') return '<span class="warn">Oversold, but the market filter says stand aside</span>';
     const go = `expecting <span class="up">▲ ${f0(p.target)}</span> in ${m.params.horizon}d`;
     return p.tier === 'WAIT' ? `<span class="warn">Wait for a bounce candle</span> · ${go}` : `<span class="up">Bounce setup live</span> · ${go}`;
@@ -446,18 +455,20 @@
 
     // 1. verdict (one line, plain)
     const verdict = !act ? `${p.ticker} is not a trade today.`
-      : tier === 'SKIP' ? `${p.ticker} looks oversold, but we skip it.`
+      : tier === 'SKIP' || tier === 'THIN' ? `${p.ticker} looks oversold, but we skip it.`
       : tier === 'PAUSE' ? `${p.ticker} has been sold hard, but the whole market is in a downtrend, so we stand aside.`
       : tier === 'WAIT' ? `${p.ticker} has been sold hard and may be near a bounce, but it is not a buy yet.`
       : `${p.ticker} has been sold hard and has just started to bounce: the setup we trade.`;
     const doNow = !act ? 'Nothing to do. Keep it on the radar only.'
+      : tier === 'SUSP' ? `Nothing to do: ${p.ticker} has not traded for at least 3 sessions (suspended or halted). The numbers below are from its last trading day.`
+      : tier === 'THIN' ? `Do not trade it. ${p.ticker} trades only about Rp ${p.valueB.toFixed(1)} B a day; below Rp 5 B a day the entry, stop and exit prices in the tests are not reliable fills, and a few lots move the price.`
       : tier === 'SKIP' && p.untested ? `Do not trade it. ${p.ticker} is one of the 200 stocks added in October 2026; on them the oversold bounce did not beat other stocks reliably, and adding them to the account turned +2.6% a year into −10%. Watch it only.`
       : tier === 'SKIP' ? 'Do not trade it: NeoBDM flags unusual activity (Pinky) or thin trading.'
       : tier === 'PAUSE' ? `Stand aside. The IHSG is below its 200-day average; in that condition oversold bounces failed often enough to cost money overall. Watch it, and act only when the market filter turns back on and a bounce candle appears.`
       : tier === 'WAIT' ? `Wait. Buy only after the first up day: a close above the previous day's high, or a green day closing above the previous close. Then buy at the next morning's open.`
       : `Buy at the next morning's open (around ${rp(px)}), with a stop and a target set straight away.`;
-    const cls = !act ? 'mute' : tier === 'SKIP' ? 'down' : tier === 'WAIT' || tier === 'PAUSE' ? 'warn' : 'up';
-    const live = act && tier !== 'SKIP' && tier !== 'PAUSE';
+    const cls = !act ? 'mute' : tier === 'SKIP' || tier === 'THIN' ? 'down' : tier === 'WAIT' || tier === 'PAUSE' ? 'warn' : 'up';
+    const live = act && tier !== 'SKIP' && tier !== 'PAUSE' && tier !== 'THIN' && tier !== 'SUSP';
 
     // 2. the story, in sentences
     const ab = v => Math.abs(v * 100).toFixed(1) + '%';
@@ -722,9 +733,25 @@
   }
 
   // ---------- how it works ----------
+  // Coverage per source over the whole universe (counted in the build).
+  function coverageCardHtml(c) {
+    if (!c) return '';
+    const N = c.universe, row = (label, n, note, neutral) => `<tr><td>${label}</td><td class="n"><b class="${neutral ? '' : n >= N ? 'up' : n >= N * 0.85 ? 'warn' : 'down'}">${n}</b> / ${N}</td><td><div class="meter"><i style="width:${Math.round(100 * n / N)}%"></i></div></td><td class="muted">${note}</td></tr>`;
+    const miss = (k, l) => (c.missing && c.missing[k] && c.missing[k].length ? `<p class="muted">${l} missing: ${c.missing[k].slice(0, 30).map(esc).join(', ')}${c.missing[k].length > 30 ? ' +' + (c.missing[k].length - 30) : ''}</p>` : '');
+    return `<h2>Data coverage: every stock, every source</h2><div class="card scroll"><table><thead><tr><th>Source</th><th class="n">Stocks</th><th style="min-width:120px"></th><th>Note</th></tr></thead><tbody>
+      ${row('Prices (Yahoo)', c.prices, 'daily bars, refreshed hourly')}
+      ${row('Scored and shown', c.scored, `${c.liquid} liquid enough to trade (≥ Rp 5 B a day); the rest show as THIN${c.suspended && c.suspended.length ? `; not trading now: ${c.suspended.map(esc).join(', ')}` : ''}`)}
+      ${row('Broker flow (NeoBDM)', c.neobdm, `${c.neobdm - c.neobdmPage} from the screener list, ${c.neobdmPage} from stock pages; ${c.neobdmFresh} fresh (≤ 5 days)`)}
+      ${row('Flow history strip', c.flowStrip, 'last 60 sessions, replayed then extended daily')}
+      ${row('Bandarmetrics', c.bm, `${c.bmScore} with an accumulation score${c.bmTooNew && c.bmTooNew.length ? ` (${c.bmTooNew.map(esc).join(', ')} listed too recently for one)` : ''}`)}
+      ${row('News (30 days)', c.news30d, 'stocks named in at least one headline; quiet small caps can have none, and new stocks fill in over a few hourly runs')}
+      ${row('Owners (KSEI ≥ 1%)', c.owners, 'monthly file')}
+      ${row('Conglomerate group', c.groups, 'complete: only stocks that belong to a mapped group', true)}
+      </tbody></table></div>${miss('prices', 'Prices')}${miss('neobdm', 'Broker flow')}${miss('bm', 'Bandarmetrics')}`;
+  }
   function renderHow() {
     const m = DATA.meta;
-    $('#tab-how').innerHTML = `
+    $('#tab-how').innerHTML = `${coverageCardHtml(m.dataCoverage)}
       <h2>What runs where</h2>
       <div class="steps">
         <div class="card"><h3>Google Sheet = control panel + journal</h3><p class="muted">Holds Universe (tickers, sectors, news aliases), Themes (news queries like Danantara / komisaris) and Config (target %, stop, liquidity). Also the Screener and News tabs you can sort, annotate and keep trade notes in.</p></div>

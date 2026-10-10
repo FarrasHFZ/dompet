@@ -123,7 +123,8 @@ uni.forEach(u => {
   if (!b) { skipped.push({ ticker: u.ticker, why: 'no data' }); return; }
   const a = api.analyse_(b, idx, cfg);
   if (!a) { skipped.push({ ticker: u.ticker, why: 'short history' }); return; }
-  if (a.avgValue / 1e9 < cfg.minValueB) { skipped.push({ ticker: u.ticker, why: 'illiquid' }); return; }
+  // Below the liquidity bar (Rp 5 B/day over 20 sessions): still scored and shown, tier THIN, never traded, not logged.
+  const thin = a.avgValue / 1e9 < cfg.minValueB;
   const nw = news[u.ticker];
   const d = b.d[b.d.length - 1]; if (!lastBar || d > lastBar) lastBar = d;
   const own = ownership && ownership.byTicker ? ownership.byTicker[u.ticker] : null;
@@ -140,12 +141,44 @@ uni.forEach(u => {
   pk.flowHist = nbHist && nbHist.by[u.ticker] ? nbHist.by[u.ticker] : null;
   pk.group = groups && groups.byTicker[u.ticker] ? groups.byTicker[u.ticker] : null;
   pk.untested = NEWSET.has(u.ticker);
-  pk.tier = tierOf(pk.score, api.ACT_SCORE, pk.confirm, ov, marketOk, flowVeto, pk.untested);
+  pk.thin = thin;
+  // No volume in the last 3 sessions: suspended (or halted). Shown, never traded.
+  pk.suspended = b.v.slice(-3).every(v => !v);
+  pk.tier = pk.suspended ? 'SUSP' : thin ? (pk.score >= api.ACT_SCORE ? 'THIN' : 'WATCH') : tierOf(pk.score, api.ACT_SCORE, pk.confirm, ov, marketOk, flowVeto, pk.untested);
   pk.filings = filings && filings.by[u.ticker] ? filings.by[u.ticker] : [];
   picks.push(pk);
 });
 picks.sort((x, y) => y.score - x.score);
-const market = api.marketRead_(picks, idx);
+const market = api.marketRead_(picks.filter(p => !p.thin), idx); // same definition as before: liquid stocks only
+// Big money per conglomerate group: members' NeoBDM tags and Bandarmetrics LPM direction, counted (context only).
+if (groups) {
+  const pb = Object.fromEntries(picks.map(p => [p.ticker, p]));
+  groups.groups.forEach(g => {
+    const ms = g.members.map(m => pb[m.tk]).filter(Boolean);
+    const nb = ms.filter(p => p.neobdm && !p.neobdm.stale), bm = ms.filter(p => p.bm && !p.bm.stale);
+    g.flow = { members: ms.length, nb: nb.length, plus: nb.filter(p => p.neobdm.tag === 'FLOW+').length, minus: nb.filter(p => p.neobdm.tag === 'FLOW-').length,
+      accum: nb.filter(p => p.neobdm.phase === 'ACCUMULATION' || p.neobdm.phase === 'MARKUP').length, distrib: nb.filter(p => p.neobdm.phase === 'DISTRIBUTION' || p.neobdm.phase === 'MARKDOWN').length,
+      bm: bm.length, lpmUp: bm.filter(p => p.bm.lpm === 'rising').length, lpmDown: bm.filter(p => p.bm.lpm === 'falling').length };
+  });
+}
+// Data coverage, counted (not assumed) per source over the whole universe: what the site can say about every stock.
+const newsTk = new Set(newsRows.flatMap(r => (r[5] ? String(r[5]).split(',') : [])));
+const covCount = f => uni.filter(f).length;
+const pkBy = Object.fromEntries(picks.map(p => [p.ticker, p]));
+const dataCoverage = {
+  universe: uni.length,
+  prices: covCount(u => px[u.ticker + '.JK']),
+  scored: picks.length, liquid: picks.filter(p => !p.thin).length, suspended: picks.filter(p => p.suspended).map(p => p.ticker),
+  bmTooNew: uni.filter(u => pkBy[u.ticker] && pkBy[u.ticker].bm && pkBy[u.ticker].bm.score == null).map(u => u.ticker),
+  neobdm: covCount(u => pkBy[u.ticker] && pkBy[u.ticker].neobdm), neobdmPage: covCount(u => pkBy[u.ticker] && pkBy[u.ticker].neobdm && pkBy[u.ticker].neobdm.source === 'chart'),
+  neobdmFresh: covCount(u => pkBy[u.ticker] && pkBy[u.ticker].neobdm && !pkBy[u.ticker].neobdm.stale),
+  flowStrip: covCount(u => pkBy[u.ticker] && pkBy[u.ticker].flowHist),
+  bm: covCount(u => pkBy[u.ticker] && pkBy[u.ticker].bm), bmScore: covCount(u => pkBy[u.ticker] && pkBy[u.ticker].bm && pkBy[u.ticker].bm.score != null),
+  news30d: covCount(u => newsTk.has(u.ticker)),
+  owners: covCount(u => pkBy[u.ticker] && pkBy[u.ticker].ownership), groups: covCount(u => pkBy[u.ticker] && pkBy[u.ticker].group),
+  missing: { prices: uni.filter(u => !px[u.ticker + '.JK']).map(u => u.ticker), neobdm: uni.filter(u => !(pkBy[u.ticker] && pkBy[u.ticker].neobdm)).map(u => u.ticker), bm: uni.filter(u => !(pkBy[u.ticker] && pkBy[u.ticker].bm)).map(u => u.ticker) },
+};
+console.log('data coverage', JSON.stringify({ ...dataCoverage, missing: Object.fromEntries(Object.entries(dataCoverage.missing).map(([k, v]) => [k, v.length])) }));
 market.idxLive = live['^JKSE'] || null;
 market.filter = { ok: marketOk, ihsg: idx ? idx[idx.length - 1] : null, sma200: ihsgSma200 };
 
@@ -160,7 +193,7 @@ try { existing = JSON.parse(fs.readFileSync(ledgerFile, 'utf8')); } catch { /* n
 if (!process.env.FAKE_NOW && (!existing || (existing.v || 1) < LEDGER_V)) {
   fs.writeFileSync(ledgerFile, JSON.stringify({
     v: LEDGER_V, asOf, cfg, regime: market.regime, breadth: market.breadth, marketOk,
-    picks: picks.map(p => ({ ticker: p.ticker, sector: p.sector, score: p.score, action: p.action, setup: p.setup, rsi: p.rsi, dist20Atr: p.dist20Atr, rr: p.rr, atrPct: p.atrPct, entry: p.entry, stop: p.stop, target: p.target, newsScore: p.newsScore, bmScore: p.bm && !p.bm.stale && p.bm.score != null ? p.bm.score : null, ...(p.untested ? { set: 'new' } : {}) })),
+    picks: picks.filter(p => !p.thin && !p.suspended).map(p => ({ ticker: p.ticker, sector: p.sector, score: p.score, action: p.action, setup: p.setup, rsi: p.rsi, dist20Atr: p.dist20Atr, rr: p.rr, atrPct: p.atrPct, entry: p.entry, stop: p.stop, target: p.target, newsScore: p.newsScore, bmScore: p.bm && !p.bm.stale && p.bm.score != null ? p.bm.score : null, ...(p.untested ? { set: 'new' } : {}) })),
   }));
 }
 const tracker = buildTracker({ ledger: readLedger(HIST), bars: px, horizon: cfg.horizon });
@@ -182,6 +215,7 @@ const na = path.join(ROOT, 'data', 'news-accuracy.json');
 const readJson = f => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'data', f), 'utf8')); } catch { return null; } };
 const out = {
   meta: {
+    dataCoverage,
     generatedAt: new Date().toISOString(), asOf,
     session: { state: sessionOpen ? 'open' : 'closed', note: sessionOpen ? "IDX is open: scores use the last completed close; live quotes are today's partial bar." : 'IDX is closed: scores use the latest close.' }, engine: 'oversold-v2', commit: (process.env.GITHUB_SHA || '').slice(0, 7), actScore: api.ACT_SCORE,
     params: cfg, universe: uni.length, ranked: picks.length, skipped, newsCount: newsRows.length, newsStatus, newsCoverage: coverage, sample: false,

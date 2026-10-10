@@ -32,7 +32,11 @@ for (const u of uni) {
   if (by[u.ticker] || !NB[u.ticker]) continue;
   // the evening task refreshes half of these pages per day, so a reading up to 4 calendar days old is accepted
   const g = NB[u.ticker].g, d = g && g.d.filter(x => x <= date).at(-1);
-  const t = d && (Date.parse(date) - Date.parse(d)) / 864e5 <= 4 ? chartTag(NB[u.ticker], bars[u.ticker + '.JK'], d) : null;
+  // A suspended stock has no sessions after its last trade: keep that last read, dated, instead of dropping it.
+  const b = bars[u.ticker + '.JK'], after = b && d ? b.d.map((x, i) => [x.toISOString().slice(0, 10), b.v[i]]).filter(([x]) => x > d && x <= date) : [];
+  const suspended = after.length > 0 && after.every(([, v]) => !v);
+  const t = d && ((Date.parse(date) - Date.parse(d)) / 864e5 <= 4 || suspended) ? chartTag(NB[u.ticker], b, d) : null;
+  if (t && suspended) t.note = `No trading since ${d} (suspended?). ` + t.note;
   if (t) { by[u.ticker] = d === date ? t : { ...t, asOf: d }; fromChart++; } else chartStale.push(u.ticker);
 }
 console.log(`page-derived labels: ${fromChart}${chartStale.length ? `; no page data for ${date}: ${chartStale.length} (${chartStale.slice(0, 8).join(', ')}${chartStale.length > 8 ? ', …' : ''})` : ''}`);

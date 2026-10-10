@@ -211,3 +211,9 @@ svg.spark { display: block; }
 .gtag { display: inline-block; min-height: 0; padding: 1px 7px; margin-left: 4px; font-size: 11px; font-weight: 600; line-height: 1.5; border-radius: 999px; border: 1px solid var(--accent); background: var(--soft); color: var(--accent); vertical-align: middle; cursor: pointer; }
 .gtag.hot { border-color: var(--warn); color: var(--warn); }
 .newmark { display: inline-block; margin-left: 4px; padding: 0 6px; font-size: 10.5px; line-height: 1.6; border-radius: 999px; border: 1px dashed var(--mute); color: var(--mute); vertical-align: middle; }
+.tier.tTHIN{background:#44403c;color:#e7e5e4}
+.fm { display: flex; align-items: center; gap: 6px; font-size: 11px; white-space: nowrap; }
+.fm small { width: 46px; color: var(--mute); }
+.mix2 { display: inline-flex; width: 70px; height: 7px; border-radius: 4px; overflow: hidden; background: var(--line); }
+.mix2 i { display: block; } .mix2 .u { background: var(--up); } .mix2 .d { background: var(--down); } .mix2 .z { background: var(--line); }
+.tier.tSUSP{background:#1f2937;color:#9ca3af;border:1px dashed #6b7280}
