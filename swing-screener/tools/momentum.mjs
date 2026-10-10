@@ -1,8 +1,8 @@
 // "Momentum 10", the paper-only second strategy (tools/experiment-momentum.mjs passed its pre-registered test).
 // On the last trading day of each month: among liquid stocks (Rp 5 B a day over 20 sessions, traded in each of the
 // last 3), rank by 12-1 month return (close 21 sessions ago / close 252 sessions ago - 1) and hold the top 10, equal
-// weight, from the next open to the next month's rebalance open; only while the IHSG closed above its 200-day average
-// on the rebalance day, else cash.
+// weight, from the next open to the next month's rebalance open. Since 2026-10-10 (owner's decision) it is held in
+// every month; the IHSG 200-day state is still logged (filterOn) as context and for measurement.
 // Forward record: one ledger file per rebalance in data/history-mom/ (committed by the end-of-day run), starting with
 // the first month-end after the rule was fixed (October 2026), so no list is ever picked with hindsight.
 import fs from 'node:fs';
@@ -60,7 +60,7 @@ export function momentumBook({ px, tickers, names, histDir, todayWib, live = {},
     const ia = idx.d.findIndex(d => iso(d) > L.rebalance), iz = end ? idx.d.findIndex(d => iso(d) > end) : -1;
     const ihsg = ia < 0 ? null : (iz > 0 ? idx.o[iz] : idx.c.at(-1)) / idx.o[ia] - 1;
     const momRet = mr.length ? mean(mr) - 2 * FEE : null;
-    return { month: L.rebalance.slice(0, 7), rebalance: L.rebalance, filterOn: L.filterOn, open: !end, picks: L.picks.map(p => p.t), momRet, traded: L.filterOn ? momRet : 0, ewRet: er.length ? mean(er) - 2 * FEE : null, ihsg };
+    return { month: L.rebalance.slice(0, 7), rebalance: L.rebalance, filterOn: L.filterOn, open: !end, picks: L.picks.map(p => p.t), momRet, traded: momRet, ewRet: er.length ? mean(er) - 2 * FEE : null, ihsg };
   });
   return { rebalance: lastDay, counted: lastDay.slice(0, 7) >= MOM_FROM, filterOn: filterAt(lastI), holdings: cur, record, from: MOM_FROM };
 }

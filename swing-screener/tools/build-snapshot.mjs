@@ -8,7 +8,7 @@ import { buildOwnership } from './ownership.mjs';
 import { fetchFundamentals } from './fundamentals.mjs';
 import { runAlerts } from './alerts.mjs';
 import { writeOhlc } from './ohlc.mjs';
-import { stockSignals } from './signals.mjs';
+import { stockSignals, callStats } from './signals.mjs';
 import { momentumBook } from './momentum.mjs';
 import { buildTracker, readLedger } from './tracker.mjs';
 import { loadNeobdm, tierOf } from './neobdm.mjs';
@@ -272,6 +272,8 @@ try {
   }
   const liveFrom = fs.readdirSync(HIST).filter(f => /^\d{4}-\d\d-\d\d\.json$/.test(f)).sort()[0];
   console.log(`signals: ${Object.values(signals).flat().filter(e => e.k === 'call').length} calls replayed in ${Date.now() - t0} ms`);
+  // Scorecard of the replayed calls, added to latest.json (written above) for the Track record tab.
+  try { const cs = callStats(signals), lp = path.join(OUT, 'latest.json'), L = JSON.parse(fs.readFileSync(lp, 'utf8')); L.callStats = cs; fs.writeFileSync(lp, JSON.stringify(L)); console.log(`call stats: ${cs.all.closed} closed, win ${(cs.all.winRate * 100).toFixed(0)}%, expectancy ${(cs.all.expectancy * 100).toFixed(2)}%, PF ${cs.all.profitFactor && cs.all.profitFactor.toFixed(2)}, account ${(cs.account.total * 100).toFixed(1)}% maxDD ${(cs.account.maxDD * 100).toFixed(1)}%`); } catch (e) { console.error('call stats failed', e.message); }
   await writeOhlc(rawPx, uni.map(u => u.ticker), { useCache: process.env.USE_CACHE === '1', signals, liveFrom: liveFrom ? liveFrom.slice(0, 10) : null });
 } catch (e) { console.error('ohlc failed', e.message); }
 

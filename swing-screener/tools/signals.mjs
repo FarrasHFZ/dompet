@@ -38,6 +38,8 @@ export function stockSignals(api, raw, nDone, idx, { cfg, untested = false, live
     const isLast = k === nDone - 1 && live;
     const score = isLast ? live.score : api.score_(a, 0);
     if (score < api.ACT_SCORE) { streak = false; continue; }
+    const sma200 = ii != null && ii >= 199 ? idx.c.slice(ii - 199, ii + 1).reduce((x, y) => x + y, 0) / 200 : null;
+    const dn = sma200 != null && idx.c[ii] <= sma200; // IHSG under its 200-day average: logged as context, not a gate
     let tier = isLast ? live.tier : null;
     if (!tier) {
       const confirm = raw.c[k] > raw.h[k - 1] || (raw.c[k] > raw.o[k] && raw.c[k] > raw.c[k - 1]);
@@ -50,9 +52,39 @@ export function stockSignals(api, raw, nDone, idx, { cfg, untested = false, live
       const r = resolve(raw, k, nDone, stop, a.target, cfg.horizon);
       busyUntil = r.j ?? Infinity;
       delete r.j;
-      ev.push({ d, k: 'call', s: score, stop, tp: a.target, ...r });
+      ev.push({ d, k: 'call', s: score, stop, tp: a.target, ...(dn ? { dn: 1 } : {}), ...r });
     } else if (!streak) ev.push({ d, k: 'radar', s: score, tier });
     streak = true;
   }
   return ev;
+}
+
+// Scorecard of the replayed ACT calls across all stocks: the numbers that decide whether a rule makes money.
+// Win rate alone misleads (many small wins can hide a few large losses), so it is read with the average win and loss,
+// the payoff ratio, profit factor and expectancy, and with an account: 10 equal slots (10% of equity each, the site's
+// sizing), each call taken if a slot is free on its signal day, realised at its exit, worst drawdown on closed trades.
+export function callStats(signals) {
+  const all = Object.entries(signals).flatMap(([t, ev]) => ev.filter(e => e.k === 'call').map(e => ({ t, ...e })));
+  const sum = calls => {
+    const cl = calls.filter(c => c.x && c.ret != null), w = cl.filter(c => c.ret > 0), l = cl.filter(c => c.ret <= 0);
+    const avg = a => (a.length ? a.reduce((s, c) => s + c.ret, 0) / a.length : null);
+    const gw = w.reduce((s, c) => s + c.ret, 0), gl = -l.reduce((s, c) => s + c.ret, 0);
+    let streak = 0, worstStreak = 0;
+    cl.slice().sort((a, b) => (a.x < b.x ? -1 : 1)).forEach(c => { streak = c.ret <= 0 ? streak + 1 : 0; worstStreak = Math.max(worstStreak, streak); });
+    const rets = cl.map(c => c.ret).sort((a, b) => a - b);
+    return { n: calls.length, closed: cl.length, open: calls.length - cl.length, tp: cl.filter(c => c.res === 'tp').length, sl: cl.filter(c => c.res === 'sl').length, time: cl.filter(c => c.res === 'time').length,
+      winRate: cl.length ? w.length / cl.length : null, avgWin: avg(w), avgLoss: avg(l), payoff: avg(w) != null && avg(l) ? avg(w) / -avg(l) : null,
+      profitFactor: gl ? gw / gl : null, expectancy: avg(cl), median: rets.length ? rets[rets.length >> 1] : null, worst: rets[0] ?? null, best: rets.at(-1) ?? null, worstStreak };
+  };
+  // account: 10 slots, chronological; equity changes when a trade closes
+  const cl = all.filter(c => c.x && c.ret != null).sort((a, b) => (a.d < b.d ? -1 : 1));
+  let eq = 1, peak = 1, dd = 0; const open = []; const months = {};
+  const close = upto => { open.sort((a, b) => (a.x < b.x ? -1 : 1)); while (open.length && open[0].x <= upto) { const p = open.shift(); eq += p.amt * p.ret; peak = Math.max(peak, eq); dd = Math.min(dd, eq / peak - 1); months[p.x.slice(0, 7)] = eq; } };
+  for (const c of cl) { close(c.d); if (open.length < 10 && !open.some(p => p.t === c.t)) open.push({ t: c.t, x: c.x, ret: c.ret, amt: eq / 10 }); }
+  close('9999');
+  const mv = Object.entries(months).sort(), mret = mv.map(([m, v], i) => [m, v / (i ? mv[i - 1][1] : 1) - 1]);
+  const byMonth = {}; all.forEach(c => { const m = c.d.slice(0, 7); (byMonth[m] = byMonth[m] || []).push(c); });
+  return { from: all.map(c => c.d).sort()[0] || null, all: sum(all), up: sum(all.filter(c => !c.dn)), down: sum(all.filter(c => c.dn)),
+    account: { slots: 10, total: eq - 1, maxDD: dd, monthsUp: mret.filter(x => x[1] > 0).length, months: mret.length, worstMonth: mret.length ? Math.min(...mret.map(x => x[1])) : null },
+    byMonth: Object.fromEntries(Object.entries(byMonth).sort().map(([m, a]) => [m, sum(a)])) };
 }

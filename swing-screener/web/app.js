@@ -121,21 +121,19 @@
       : pv.pass ? `<b>Hindsight check passed:</b> with each month's universe rebuilt from what was known then (top 100 by trading value among ${P.withHistory} IDX stocks), momentum still beat holding everything in both halves and beat random picks (p ${P.top100.null.p.toFixed(3)}). <b>But the edge is much smaller than the headline:</b> ${pc(P.top100.MOM10.cagr)} a year against ${pc(P.top100.EW.cagr)} for holding everything, ${pc(P.top100.MOM10.second)} a year in 2022-26, and a worst month-end drawdown of ${pc(P.top100.MOM10.mddMonthly, 0)}. It is a relative edge in a weak market, not a money machine.`
       : `<b>Hindsight check FAILED:</b> with each month's universe rebuilt from what was known then (top 100 by trading value among ${P.withHistory} IDX stocks), momentum did not beat ${!pv.A ? 'holding everything in both halves' : 'random picks reliably'} (p ${P.top100.null.p.toFixed(3)}). The strong backtest below most likely came from using today's stock list. Watch only.`;
     const hold = M.holdings || [];
-    const status = M.filterOn
-      ? `<b>Holding</b> the 10 below since the open after ${esc(M.rebalance)}.`
-      : `<b>Cash this month.</b> The IHSG was below its 200-day average on ${esc(M.rebalance)}, so the rule holds nothing. The list is shown for watching only.`;
+    const status = `<b>Holding</b> the 10 below since the open after ${esc(M.rebalance)}.${M.filterOn ? '' : ' The IHSG is below its 200-day average: momentum has done much worse in downtrends (+0.15% a month vs +1.49% in uptrends over 10 years), so size small.'}`;
     const rows = hold.map(h => `<tr data-open="${esc(h.t)}" class="row"><td class="n">${h.rank}</td><td><span class="tk">${esc(h.t)}</span><div class="nm">${esc(h.name)}</div></td><td class="n">${pc(h.mom, 0)}</td><td class="n">${f0(h.entry)}</td><td class="n">${f0(h.now)}</td><td class="n">${pc(h.ret)}</td></tr>`).join('');
-    const recRows = rec.slice().reverse().map(r => `<tr><td>${esc(month(r.rebalance))}${r.open ? ' <span class="tag">open</span>' : ''}</td><td>${r.filterOn ? 'invested' : '<span class="mute">cash</span>'}</td><td class="n">${pc(r.traded, 2)}</td><td class="n">${pc(r.momRet, 2)}</td><td class="n">${pc(r.ewRet, 2)}</td><td class="n">${pc(r.ihsg, 2)}</td><td class="muted">${r.picks.map(esc).join(', ')}</td></tr>`).join('');
+    const recRows = rec.slice().reverse().map(r => `<tr><td>${esc(month(r.rebalance))}${r.open ? ' <span class="tag">open</span>' : ''}</td><td>${r.filterOn ? 'above 200-day' : '<span class="warn">below 200-day</span>'}</td><td class="n">${pc(r.traded, 2)}</td><td class="n">${pc(r.momRet, 2)}</td><td class="n">${pc(r.ewRet, 2)}</td><td class="n">${pc(r.ihsg, 2)}</td><td class="muted">${r.picks.map(esc).join(', ')}</td></tr>`).join('');
     const bt = (lbl, x) => x ? `<tr><td>${lbl}</td><td class="n">${pc(x.MOM10.cagr)}</td><td class="n">${pc(x.MOM10.first)} / ${pc(x.MOM10.second)}</td><td class="n">${pc(x.EW.cagr)}</td><td class="n">${x.null ? pc(x.null.med) + ', p ' + x.null.p.toFixed(3) : '–'}</td><td class="n">${x.MOM10.dd != null ? pc(x.MOM10.dd, 0) : pc(x.MOM10.mddMonthly, 0) + ' (month-end)'}</td></tr>` : '';
     el.innerHTML = `
-      <div class="note"><b>Second strategy, paper only.</b> On the last trading day of each month, take the liquid stocks (Rp 5 B a day), rank them by their return over the past 12 months skipping the latest month, and hold the top 10 in equal amounts from the next open until the next month's rebalance. Only while the IHSG is above its 200-day average; otherwise cash. It passed a pre-registered 10-year test, but read the caveats below before trusting it.</div>
+      <div class="note"><b>Second strategy, paper only.</b> On the last trading day of each month, take the liquid stocks (Rp 5 B a day), rank them by their return over the past 12 months skipping the latest month, and hold the top 10 in equal amounts from the next open until the next month's rebalance, in every month (the 200-day filter was removed on 2026-10-10; the IHSG trend is shown as context). It passed a pre-registered 10-year test, but read the caveats below before trusting it.</div>
       <div class="note ${pv && !pv.pass ? 'warnnote' : ''}">${pitLine}</div>
       <h2>This month's list (${esc(month(M.rebalance))} rebalance)</h2>
       <div class="callbox">${status} Next rebalance: the last trading day of ${esc(month(new Date().toISOString().slice(0, 10)))}${M.filterOn ? '' : ''}; the new list appears here the evening it closes.${M.counted ? '' : ` This list was formed before the forward record starts (${esc(month(M.from + '-01'))} rebalance), so it is not counted.`}</div>
       <div class="card scroll"><table><thead><tr><th class="n">#</th><th>Stock</th><th class="n">12-1 month return</th><th class="n">Entry (open after rebalance)</th><th class="n">Now</th><th class="n">Since entry</th></tr></thead><tbody>${rows || '<tr><td colspan="6" class="empty">No liquid stock with a full year of history.</td></tr>'}</tbody></table></div>
       <p class="muted">Tap a row to open the stock page. Momentum lists are full of stocks that already ran hard (they are why they are on it); expect sharp pullbacks. Returns are before fees; the record below charges 0.2% to buy and 0.2% to sell.</p>
       <h2>Forward record (from the ${esc(month(M.from + '-01'))} rebalance)</h2>
-      ${rec.length ? `<div class="card scroll"><table><thead><tr><th>Month</th><th>Filter</th><th class="n">Rule result</th><th class="n">Top 10 (if held)</th><th class="n">All liquid stocks</th><th class="n">IHSG</th><th>Picks</th></tr></thead><tbody>${recRows}</tbody></table></div>` : '<p class="muted">Starts with the first month-end after the rule was fixed. Every list is saved on the evening it forms and scored at the next rebalance, so none is picked with hindsight.</p>'}
+      ${rec.length ? `<div class="card scroll"><table><thead><tr><th>Month</th><th>IHSG trend</th><th class="n">Rule result</th><th class="n">Top 10 (if held)</th><th class="n">All liquid stocks</th><th class="n">IHSG</th><th>Picks</th></tr></thead><tbody>${recRows}</tbody></table></div>` : '<p class="muted">Starts with the first month-end after the rule was fixed. Every list is saved on the evening it forms and scored at the next rebalance, so none is picked with hindsight.</p>'}
       ${S ? `<h2>Backtest, 2017-10 to 2026-08 (Yahoo, monthly)</h2>
       <div class="card scroll"><table><thead><tr><th>Stocks</th><th class="n">Top 10 / yr</th><th class="n">2017-22 / 2022-26</th><th class="n">All liquid, equal / yr</th><th class="n">10 random (median)</th><th class="n">Worst drawdown</th></tr></thead><tbody>
         ${bt('Tested 100 (today\'s list)', S.tested)}${bt('Unseen 200 (today\'s list)', S.holdout)}${P ? bt('Point in time, top 100 each month', P.top100) : ''}</tbody></table></div>
@@ -1134,11 +1132,30 @@
       <p class="muted">Why the earlier "real but relative edge" was wrong: it came from 2022-26, the period the rule was designed on, and from a test (beat other stocks on the same day) that also "passes" on shuffled prices, because it rewards picking volatile stocks and counts overlapping trades on one stock as separate evidence. Kelly sizing on 10 years of trades comes out at zero or below. The market filter still keeps the account mostly in cash during downtrends, and the live ledger below keeps running as a forward test.</p>`;
   }
 
+  // Scorecard of the replayed ACT calls (tools/signals.mjs callStats): read win rate WITH the size of wins and losses.
+  function callStatsHtml(cs) {
+    if (!cs || !cs.all) return '';
+    const r2 = x => (x == null ? '–' : x.toFixed(2)), wr = x => (x == null ? '–' : Math.round(x * 100) + '%');
+    const col = (lbl, s) => `<tr><td>${lbl}</td><td class="n">${s.closed}${s.open ? ` <span class="muted">+${s.open} open</span>` : ''}</td><td class="n">${wr(s.winRate)}</td><td class="n">${pc(s.avgWin)}</td><td class="n">${pc(s.avgLoss)}</td><td class="n">${r2(s.payoff)}</td><td class="n">${r2(s.profitFactor)}</td><td class="n"><b>${pc(s.expectancy, 2)}</b></td><td class="n">${pc(s.worst, 0)}</td><td class="n">${s.worstStreak}</td></tr>`;
+    const A = cs.account, months = Object.entries(cs.byMonth || {});
+    return `<h2>Convinced ACT calls: the scorecard (replayed since ${esc(cs.from || '–')})</h2>
+      <div class="market">
+        <div class="stat"><small>Win rate</small><b>${wr(cs.all.winRate)}</b><div class="muted">how often a trade made money</div></div>
+        <div class="stat"><small>Payoff (avg win ÷ avg loss)</small><b>${r2(cs.all.payoff)}</b><div class="muted">below 1: losses are bigger than wins</div></div>
+        <div class="stat"><small>Expectancy (avg per trade)</small><b>${pc(cs.all.expectancy, 2)}</b><div class="muted">after 0.4% fees</div></div>
+        <div class="stat"><small>Account, 10 positions of 10%</small><b>${pc(A.total, 1)}</b><div class="muted">worst drawdown ${pc(A.maxDD, 1)} · ${A.monthsUp} of ${A.months} months up</div></div>
+      </div>
+      <div class="card scroll"><table><thead><tr><th>Calls</th><th class="n">Closed</th><th class="n">Win rate</th><th class="n">Avg win</th><th class="n">Avg loss</th><th class="n">Payoff</th><th class="n">Profit factor</th><th class="n">Expectancy</th><th class="n">Worst</th><th class="n">Losing streak</th></tr></thead><tbody>
+        ${col('All', cs.all)}${col('IHSG above its 200-day average', cs.up)}${col('IHSG below it (downtrend)', cs.down)}</tbody></table></div>
+      ${months.length ? `<div class="card scroll"><table><thead><tr><th>Month called</th><th class="n">Calls</th><th class="n">Win rate</th><th class="n">Expectancy</th><th class="n">Stops hit</th><th class="n">Worst</th></tr></thead><tbody>${months.reverse().map(([m, s]) => `<tr><td>${esc(m)}</td><td class="n">${s.n}${s.open ? ` <span class="muted">(${s.open} open)</span>` : ''}</td><td class="n">${wr(s.winRate)}</td><td class="n">${pc(s.expectancy, 2)}</td><td class="n">${s.sl}</td><td class="n">${pc(s.worst, 0)}</td></tr>`).join('')}</tbody></table></div>` : ''}
+      <p class="muted"><b>How to read it.</b> Win rate alone misleads: a rule can win 6 trades in 10 and still lose money if each loss is three times a win. What decides money is <b>expectancy</b> (average result per trade = win rate × average win + loss rate × average loss), read with the <b>payoff</b> and <b>profit factor</b> (gross gains ÷ gross losses; above 1 makes money), and how deep the account falls on the way (<b>drawdown</b>), which sizing controls. Replayed with today's rules and neutral news, so before the live ledger these are not calls the site made at the time; the 200-day filter no longer gates calls (since 2026-10-10).</p>`;
+  }
+
   function renderScore() {
     const el = $('#tab-score'), bt = DATA.backtest, na = DATA.newsAccuracy;
     if (!bt) { el.innerHTML = '<div class="empty">No backtest summary in this data source.</div>'; return; }
     loadTrack();
-    el.innerHTML = `${tenYearHtml(DATA.tenYear)}
+    el.innerHTML = `${callStatsHtml(DATA.callStats)}${tenYearHtml(DATA.tenYear)}
       <h2>Does the score predict anything? Walk-forward backtest</h2>
       <p class="muted">${esc(bt.params.source)}, ${esc(bt.params.from)} to ${esc(bt.params.to)}. Each day the score uses only data up to that day; outcome = next 15 trading days with the plan's stop and +${bt.params.targetPct}% target.</p>
       <div class="two"><div class="card"><div class="pad"><b>Out-of-sample (2024-10 →)</b></div>${bucketTable(bt.outOfSample)}</div>
