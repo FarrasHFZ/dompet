@@ -170,6 +170,7 @@
       ['Same foreign flow on stocks foreigners do not move (control)', 'as expected', L.flow2 ? `${pc(L.flow2.H2c.spread, 1)}, as predicted: no effect` : ''],
       ['Bandarmetrics LPM (60-session change)', 'failed', L.flow2 ? `${pc(L.flow2.H3.spread, 1)}, p ${L.flow2.H3.p.toFixed(2)}` : ''],
       ['NeoBDM flow tags, 2-year replay', 'failed', 'FLOW+ minus FLOW− −0.13% per 5 sessions'],
+      ['Stock picking in bear months (IHSG under its 200-day average): 12-month winners, 3-month winners, calmest stocks, calm winners', 'failed', L.bear ? `None beat 10 random stocks (best: 3-month winners ${pc(L.bear.results.B2_MOM3.mean)} a month, p ${L.bear.results.B2_MOM3.p.toFixed(2)}). Surprise: in those ${L.bear.bearMonths} months the average liquid stock still made ${pc(L.bear.ewBear)} a month and the IHSG ${pc(L.bear.ihsgBear)}; the 200-day line did not predict a falling next month` : ''],
     ];
     return `<h2>Signal lab: every idea tested, and where it stands</h2>
       <div class="card scroll"><table><thead><tr><th>Idea</th><th>Status</th><th>Evidence</th></tr></thead><tbody>${rows.map(r => `<tr><td>${esc(r[0])}</td><td>${st(r[1])}</td><td class="muted">${r[2]}</td></tr>`).join('')}</tbody></table></div>

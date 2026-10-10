@@ -43,6 +43,7 @@ for (let m = 0; m + 1 < reb.length; m++) {
   for (const t of have) {
     const b = px[t + '.JK'], M = at[t], k = M.get(days[i]), a = M.get(e0), z = M.get(e1);
     if (k == null || a == null || z == null || k < 252 || b.c[k] < 50 || b.v.slice(k - 2, k + 1).some(v => !v)) continue;
+    if (!(b.o[a] > 0 && b.o[z] > 0) || b.c.slice(k - 252, k + 1).some(c => !(c > 0))) continue; // bad Yahoo bars (zero prices): skip, never guess
     const rets = []; for (let j = k - 59; j <= k; j++) rets.push(b.c[j] / b.c[j - 1] - 1);
     cand.push({ t, med: median(b.c.slice(k - 59, k + 1).map((c, j) => c * b.v[k - 59 + j])), m12: b.c[k - 21] / b.c[k - 252] - 1, m3: b.c[k - 5] / b.c[k - 63] - 1, vol: sd(rets), ret: b.o[z] / b.o[a] - 1 });
   }
@@ -63,6 +64,7 @@ function run(ms, pick) {
   let prev = new Set(), lastYm = null;
   return ms.map(m => {
     const ch = pick(m.rows), set = new Set(ch.map(x => x.t));
+    if (!ch.length) { prev = new Set(); lastYm = null; return { ym: m.ym, r: 0 }; } // no eligible stock that month: cash
     const contiguous = lastYm && (new Date(m.ym + '-01') - new Date(lastYm + '-01')) / 864e5 < 32;
     const held = contiguous ? prev : new Set();
     const newN = ch.filter(x => !held.has(x.t)).length, outN = [...held].filter(t => !set.has(t)).length;
@@ -72,6 +74,7 @@ function run(ms, pick) {
   });
 }
 const bear = months.filter(m => m.bear), bull = months.filter(m => !m.bear);
+console.log(`months with fewer than 30 eligible stocks: ${months.filter(m => m.rows.length < 30).map(m => m.ym + ' (' + m.rows.length + ')').join(', ') || 'none'}`);
 console.log(`${have.length} codes, ${months.length} months (${months[0].ym} .. ${months.at(-1).ym}): ${bear.length} bear, ${bull.length} bull`);
 const ew = run(bear, EW), ewBull = run(bull, EW);
 console.log(`bear months: IHSG ${pct(mean(bear.map(m => m.ihsg)))} a month, equal weight top-100 ${pct(mean(ew.map(x => x.r)))}; bull months: IHSG ${pct(mean(bull.map(m => m.ihsg)))}, EW ${pct(mean(ewBull.map(x => x.r)))}`);
