@@ -170,6 +170,7 @@
       ['Money Flow rising on an oversold stock (support) / Intensity spike (warning: selling not done)', 'forward test', `Looked helpful (t 1.8) / harmful (t −2.3) as side results; logged daily from 13 Oct, decided at 150 trades${L.bmForward ? ` (${L.bmForward.episodes} so far)` : ''}`],
       ['What comes before a rally (+10% in 10 sessions)? 20 drivers: price, volume, Bandarmetrics, NeoBDM groups', 'failed', L.rally ? `Discovery picked retail share, Volume Rotation and foreign buying (t 2.8 to 3.5); on the unseen year none confirmed (Volume Rotation flipped sign; retail share and foreign buying kept their direction, p 0.03, below the bar). Most recent rallies were not oversold: ${L.rally.recent.rallies} of ${L.rally.recent.of} stocks rose 10%+ in the last 10 sessions` : ''],
       ['Sideways base → accumulation (bandar / LPM / foreign) → breakout on volume', 'forward test', L.base ? `History: ${L.base.events} breakouts, excess ${pc(L.base.all.ex)}; with LPM rising ${pc(L.base.versions.lpm.with.ex)} vs ${pc(L.base.versions.lpm.without.ex)} (t ${L.base.versions.lpm.with.t.toFixed(1)}), bandar ${pc(L.base.versions.bandar.with.ex)}, foreign ${pc(L.base.versions.foreign.with.ex)}: none passed. Shown as a watch chip; forward test needs 60 breakouts per version${L.baseForward ? ` (${L.baseForward.events} so far)` : ''}` : ''],
+      ['Volume peaks (4× usual volume): candle type, bandar side, foreign side, filings', 'forward test', L.volume ? `${L.volume.spikes} spikes. Candle type: no signal (UP ${pc(L.volume.types.UP.x10)}, DOWN ${pc(L.volume.types.DOWN.x10)}, CHURN ${pc(L.volume.types.CHURN.x10)}). Bandar side: none. Foreign net buyer on the spike day ${pc(L.volume.foreign.buy)} vs seller ${pc(L.volume.foreign.sell)} (t ${L.volume.foreign.t.toFixed(1)}, 2024-26)${L.volumeStress ? `; IDX data 2022-24: ${pc(L.volumeStress.replication.gap)} gap, did not replicate; without the best 5%: ${pc(L.volumeStress.stress.s5)}` : ''}. Filings: within a day of ${L.volume.triggers ? pc(L.volume.triggers.spikesWithFiling, 0) : '–'} of spikes vs ${L.volume.triggers ? pc(L.volume.triggers.ordinaryDays, 0) : '–'} of ordinary days. Forward test needs 100 foreign-buy spikes${L.volumeForward ? ` (${L.volumeForward.buy} so far)` : ''}` : ''],
       ['Bandarmetrics LPM (60-session change)', 'failed', L.flow2 ? `${pc(L.flow2.H3.spread, 1)}, p ${L.flow2.H3.p.toFixed(2)}` : ''],
       ['NeoBDM flow tags, 2-year replay', 'failed', 'FLOW+ minus FLOW− −0.13% per 5 sessions'],
       ['Stock picking in bear months (IHSG under its 200-day average): 12-month winners, 3-month winners, calmest stocks, calm winners', 'failed', L.bear ? `None beat 10 random stocks (best: 3-month winners ${pc(L.bear.results.B2_MOM3.mean)} a month, p ${L.bear.results.B2_MOM3.p.toFixed(2)}). Surprise: in those ${L.bear.bearMonths} months the average liquid stock still made ${pc(L.bear.ewBear)} a month and the IHSG ${pc(L.bear.ihsgBear)}; the 200-day line did not predict a falling next month` : ''],
@@ -195,6 +196,7 @@
   }
 
   // ---------- speculation season + speculative breakouts (tools/spec.mjs; watch, forward-tested) ----------
+  const vChip = p => (p.vspike && p.vspike.f > 0 && !p.thin ? `<span class="tag wchip" title="Volume spike on ${esc(p.vspike.d)} (×${p.vspike.x}, ${esc(p.vspike.type)} candle) with foreigners net buying that day. Watch only: worked in 2024-26, not in 2022-24 (Signal lab).">foreign-backed volume spike · watch</span>` : '');
   const specChip = p => (p.spec ? `<span class="tag schip" title="Cheap, volatile stock breaking out. Lottery-like: a few big winners, most trades lose. Watch only (Breakout lab).">speculative breakout · ${DATA.spec && DATA.spec.on ? 'season ON' : 'season off'} · watch</span>` : '');
   function specBanner() {
     const S = DATA.spec; if (!S) return '';
@@ -451,7 +453,7 @@
   function cardHtml(p) {
     const h = p.headlines[0];
     return `<article class="pcard ${OPEN === p.ticker ? 'open' : ''}" data-t="${esc(p.ticker)}">
-      <div class="ptop"><div><b class="tk">${esc(p.ticker)}</b> <span class="act ${p.action}">${p.action}</span> ${tierHtml(p)} ${groupTag(p)} ${whoChip(p)} ${baseChip(p)} ${specChip(p)}
+      <div class="ptop"><div><b class="tk">${esc(p.ticker)}</b> <span class="act ${p.action}">${p.action}</span> ${tierHtml(p)} ${groupTag(p)} ${whoChip(p)} ${baseChip(p)} ${specChip(p)} ${vChip(p)}
         <div class="nm">${esc(p.name)}${p.ownership ? ' · ' + esc(p.ownership.control) : ''}</div>
         <div class="pthesis">${thesisShort(p)}</div></div>
         <div class="pscore"><b>${p.score}</b><small>score</small></div></div>
@@ -468,7 +470,7 @@
     const h = p.headlines[0];
     const open = OPEN === p.ticker;
     return `<tr class="row ${open ? 'open' : ''}" data-t="${esc(p.ticker)}">
-      <td><span class="tk">${esc(p.ticker)}</span> ${groupTag(p)} ${whoChip(p)} ${baseChip(p)} ${specChip(p)}<div class="nm">${esc(p.name)}${p.ownership ? " · " + esc(p.ownership.control) : ""}</div><div class="pthesis">${thesisShort(p)}</div></td>
+      <td><span class="tk">${esc(p.ticker)}</span> ${groupTag(p)} ${whoChip(p)} ${baseChip(p)} ${specChip(p)} ${vChip(p)}<div class="nm">${esc(p.name)}${p.ownership ? " · " + esc(p.ownership.control) : ""}</div><div class="pthesis">${thesisShort(p)}</div></td>
       <td><span class="act ${p.action}">${p.action}</span> ${tierHtml(p)}</td>
       <td><span class="score"><i style="width:${Math.round(p.score * 0.6)}px"></i><b>${p.score}</b></span></td>
       <td>${esc(p.setup)}</td><td class="n">${f0(p.close)}</td><td class="n">${p.live ? `${f0(p.live.price)} ${pc(p.live.chg)}` : '<span class="mute">–</span>'}</td><td class="n">${pc(p.chg1d)}</td><td class="n">${pc(p.chg5d)}</td>
@@ -501,7 +503,7 @@
   const TFS = [['1H', 'Hourly'], ['4H', '4-hour'], ['1D', 'Daily'], ['1W', 'Weekly']];
   const SHOW = { '1H': 56, '4H': 60, '1D': 120, '1W': 104 }; // bars in view when the chart opens
   let TF = TFS.some(t => t[0] === LS.get('chartTf')) ? LS.get('chartTf') : '1D';
-  let SHOWLV = LS.get('chartLv') !== '0', SHOWEV = LS.get('chartEv') !== '0';
+  let SHOWLV = LS.get('chartLv') !== '0', SHOWEV = LS.get('chartEv') !== '0', SHOWVS = LS.get('chartVs') !== '0';
   let lwcP = null, CHART = null;
   const OHLC = new Map();
   const loadLwc = () => lwcP || (lwcP = new Promise((ok, no) => {
@@ -531,6 +533,7 @@
   const barsFor = (j, tf) => (tf === '1H' ? j.h : tf === '4H' ? bucket(j.h, fourHKey) : tf === '1W' ? bucket(j.d, weekKey) : j.d) || [];
   const sma = (bars, n) => { const out = []; let s = 0; bars.forEach((b, i) => { s += b[4]; if (i >= n) s -= bars[i - n][4]; if (i >= n - 1) out.push({ time: b[0], value: s / n }); }); return out; };
   const lots = v => { const l = v / 100; return l >= 1e9 ? (l / 1e9).toFixed(2) + 'B' : l >= 1e6 ? (l / 1e6).toFixed(2) + 'M' : l >= 1e3 ? (l / 1e3).toFixed(1) + 'K' : Math.round(l) + ''; };
+  const rpShort = v => (v >= 1e12 ? (v / 1e12).toFixed(2) + ' T' : v >= 1e9 ? (v / 1e9).toFixed(1) + ' B' : v >= 1e6 ? (v / 1e6).toFixed(0) + ' M' : Math.round(v) + '');
   const levelsOf = p => [['Target', p.target, 'var(--accent)'], ['Resist', p.resistance, 'var(--down)'], ['Support', p.support, 'var(--up)'],
     ['Stop', p.action === 'ACT' && p.wideStop ? p.wideStop : p.stop, 'var(--warn)']];
 
@@ -544,11 +547,11 @@
   function chartBoxHtml(p) {
     return `<div class="sc">
       <div class="sc-bar"><div class="seg" role="group" aria-label="Candle interval">${TFS.map(([k, l]) => `<button data-tf="${k}" aria-pressed="${TF === k}" title="${l} candles">${k}</button>`).join('')}</div>
-        <span class="sc-tg"><button class="seg-t" data-ev aria-pressed="${SHOWEV}" title="Past ACT calls and their take-profit / stop-loss exits">Calls</button><button class="seg-t" data-lv aria-pressed="${SHOWLV}" title="Stop, target, support and resistance lines">Levels</button></span></div>
+        <span class="sc-tg"><button class="seg-t" data-vs aria-pressed="${SHOWVS}" title="Volume spikes (4x the usual volume): type, and whether foreigners / the bandar bought or sold that day">Spikes</button><button class="seg-t" data-ev aria-pressed="${SHOWEV}" title="Past ACT calls and their take-profit / stop-loss exits">Calls</button><button class="seg-t" data-lv aria-pressed="${SHOWLV}" title="Stop, target, support and resistance lines">Levels</button></span></div>
       <div class="sc-status"></div>
       <div class="sc-leg"></div><div class="sc-note"></div>
       <div class="sc-box">${chartSvg(p)}</div>
-      <div class="sc-key muted"><span class="kact">▲ ACT</span> convinced call, buy next open · <span class="krad">●</span> WAIT <span class="mute">●</span> PAUSE <span class="down">●</span> SKIP / THIN oversold, not a buy yet (tap or hover a bar for why) · <span class="up">▼ TP</span> <span class="down">▲ SL</span> <span class="mute">■ Exit</span> take profit, stop loss, 15-day exit · <span class="k20">━</span> MA20 <span class="k50">━</span> MA50 · volume in lots · times WIB · Yahoo prices, can lag · chart by <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">TradingView</a></div>
+      <div class="sc-key muted"><span class="kact">▲ ACT</span> convinced call, buy next open · <span class="krad">●</span> WAIT <span class="mute">●</span> PAUSE <span class="down">●</span> SKIP / THIN oversold, not a buy yet (tap or hover a bar for why) · <span class="up">▼ TP</span> <span class="down">▲ SL</span> <span class="mute">■ Exit</span> take profit, stop loss, 15-day exit · <span class="k20">━</span> MA20 <span class="k50">━</span> MA50 · volume bars in lots (left axis); value = close × volume · times WIB · Yahoo prices, can lag · chart by <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">TradingView</a></div>
       <div class="sc-calls"></div>
     </div>`;
   }
@@ -564,6 +567,8 @@
     lb.onclick = e => { e.stopPropagation(); SHOWLV = !SHOWLV; LS.set('chartLv', SHOWLV ? '1' : '0'); lb.setAttribute('aria-pressed', SHOWLV); mountChart(root, p); };
     const eb = $('[data-ev]', sc);
     eb.onclick = e => { e.stopPropagation(); SHOWEV = !SHOWEV; LS.set('chartEv', SHOWEV ? '1' : '0'); eb.setAttribute('aria-pressed', SHOWEV); mountChart(root, p); };
+    const vb = $('[data-vs]', sc);
+    vb.onclick = e => { e.stopPropagation(); SHOWVS = !SHOWVS; LS.set('chartVs', SHOWVS ? '1' : '0'); vb.setAttribute('aria-pressed', SHOWVS); mountChart(root, p); };
     const leg = $('.sc-leg', sc), box = $('.sc-box', sc), noteEl = $('.sc-note', sc);
     let L, j;
     try { [L, j] = await Promise.all([loadLwc(), loadOhlc(p.ticker)]); } catch {
@@ -582,10 +587,10 @@
       layout: { background: { color: 'transparent' }, textColor: v('--mute'), fontSize: 11, fontFamily: getComputedStyle(document.body).fontFamily },
       grid: { vertLines: { visible: false }, horzLines: { color: v('--line') } },
       rightPriceScale: { borderVisible: false, scaleMargins: { top: 0.08, bottom: 0.26 } },
+      leftPriceScale: { visible: true, borderVisible: false, scaleMargins: { top: 0.78, bottom: 0 } },
       timeScale: { borderVisible: false, timeVisible: intraday, secondsVisible: false, rightOffset: 3 },
       crosshair: { mode: 1 },
       handleScroll: { vertTouchDrag: false },
-      localization: { priceFormatter: x => Math.round(x).toLocaleString('en-US') },
     });
     // An open (or about to open) ACT trade draws its own entry / TP / SL instead of today's plan target and stop.
     const lastCall = (j.ev || []).filter(e => e.k === 'call').pop();
@@ -594,11 +599,11 @@
       .concat([['TP', openT.tp, 'var(--up)'], ['SL', openT.stop, 'var(--down)']], openT.entry ? [['Entry', openT.entry, 'var(--ink)']] : []) : levelsOf(p)) : [];
     const lvVals = lvList.map(l => l[1]).filter(x => x != null);
     // With Levels on, the price axis stretches to keep every level line above the volume bars.
-    const cs = chart.addCandlestickSeries({ upColor: up, downColor: dn, borderVisible: false, wickUpColor: up, wickDownColor: dn,
+    const cs = chart.addCandlestickSeries({ upColor: up, downColor: dn, borderVisible: false, wickUpColor: up, wickDownColor: dn, priceFormat: { type: 'custom', formatter: x => Math.round(x).toLocaleString('en-US'), minMove: 1 },
       autoscaleInfoProvider: base => { const r = base(); if (!r || !lvVals.length) return r; return { ...r, priceRange: { minValue: Math.min(r.priceRange.minValue, ...lvVals), maxValue: Math.max(r.priceRange.maxValue, ...lvVals) } }; } });
     cs.setData(bars.map(b => ({ time: b[0], open: b[1], high: b[2], low: b[3], close: b[4] })));
-    const vol = chart.addHistogramSeries({ priceScaleId: 'vol', priceFormat: { type: 'volume' }, lastValueVisible: false, priceLineVisible: false });
-    chart.priceScale('vol').applyOptions({ scaleMargins: { top: 0.8, bottom: 0 } });
+    // Volume on its own left axis, in lots (100 shares), so the bars have readable numbers.
+    const vol = chart.addHistogramSeries({ priceScaleId: 'left', priceFormat: { type: 'custom', formatter: v => lots(v), minMove: 1 }, lastValueVisible: true, priceLineVisible: false });
     vol.setData(bars.map(b => ({ time: b[0], value: b[5], color: (b[4] >= b[1] ? up : dn) + '55' })));
     [[20, v('--accent')], [50, v('--warn')]].forEach(([n, c]) => {
       const m = sma(bars, n);
@@ -607,12 +612,13 @@
     lvList.forEach(([t, val, c]) => { if (val != null) cs.createPriceLine({ price: val, color: v(c.slice(4, -1)), lineWidth: 1, lineStyle: t === 'Entry' ? 0 : 2, axisLabelVisible: true, title: t }); });
     const notes = callMarkers(cs, bars, j, { up, dn, acc: v('--accent'), warn: v('--warn'), mute: v('--mute') });
     callStatus($('.sc-status', sc), $('.sc-calls', sc), p, j);
+    spikeList($('.sc-calls', sc), j);
     chart.timeScale().setVisibleLogicalRange({ from: Math.max(0, bars.length - SHOW[TF]), to: bars.length + 2 });
     const legend = i => {
       const b = bars[i], prev = bars[i - 1];
       if (!b) return;
       const c = b[4] >= b[1] ? 'up' : 'down';
-      leg.innerHTML = `<span class="muted">${esc(when(b[0]))}${TF === '1W' ? ' wk' : ''}</span> O <b class="${c}">${f0(b[1])}</b> H <b class="${c}">${f0(b[2])}</b> L <b class="${c}">${f0(b[3])}</b> C <b class="${c}">${f0(b[4])}</b> ${prev ? pc(b[4] / prev[4] - 1, 2) : ''} <span class="muted">Vol ${lots(b[5])}</span>`;
+      leg.innerHTML = `<span class="muted">${esc(when(b[0]))}${TF === '1W' ? ' wk' : ''}</span> O <b class="${c}">${f0(b[1])}</b> H <b class="${c}">${f0(b[2])}</b> L <b class="${c}">${f0(b[3])}</b> C <b class="${c}">${f0(b[4])}</b> ${prev ? pc(b[4] / prev[4] - 1, 2) : ''} <span class="muted">Vol ${lots(b[5])} lots · Rp ${rpShort(b[4] * b[5])}</span>`;
       noteEl.textContent = notes.get(i) || '';
     };
     legend(bars.length - 1);
@@ -627,7 +633,7 @@
   // day's last bar; TP/SL sit on the first bar that touched the level. Returns bar index -> explanation for the legend.
   function callMarkers(cs, bars, j, col) {
     const notes = new Map();
-    if (!SHOWEV) { cs.setMarkers([]); return notes; }
+    if (!SHOWEV && !SHOWVS) { cs.setMarkers([]); return notes; }
     const intraday = TF === '1H' || TF === '4H', keyOf = TF === '1W' ? weekKey : d => d;
     const first = new Map(), last = new Map();
     bars.forEach((b, i) => { const k = intraday ? when(b[0]).slice(0, 10) : b[0]; if (!first.has(k)) first.set(k, i); last.set(k, i); });
@@ -639,7 +645,13 @@
     };
     const add = (i, t) => notes.set(i, (notes.has(i) ? notes.get(i) + ' · ' : '') + t);
     const M = [];
-    for (const e of j.ev || []) {
+    const SIDE = v => (v > 0 ? 'net BUY' : v < 0 ? 'net SELL' : 'flat');
+    if (SHOWVS) for (const s of j.sp || []) {
+      const i = at(s[0], true); if (i == null) continue;
+      M.push({ i, position: 'aboveBar', color: s[3] > 0 ? col.up : s[3] < 0 ? col.dn : col.mute, shape: 'circle', size: 0.6, text: 'V' });
+      add(i, `${s[0]}: volume spike ×${s[2]} (${s[1]} candle) · foreign ${SIDE(s[3])} · bandar ${SIDE(s[4])}`);
+    }
+    for (const e of (SHOWEV ? j.ev || [] : [])) {
       const rp = j.liveFrom && e.d >= j.liveFrom ? '' : ' (replayed)';
       const i = at(e.d, true);
       if (e.k === 'radar') {
@@ -656,6 +668,17 @@
     }
     cs.setMarkers(M.sort((a, b) => a.i - b.i).map(({ i, radar, ...m }) => ({ time: bars[i][0], ...m })));
     return notes;
+  }
+
+  // Volume peaks for this stock: type, who was buying (NeoBDM foreign / bandar side), and what followed (10 sessions).
+  function spikeList(el, j) {
+    const sp = (j.sp || []).slice(-10).reverse(); if (!sp.length) return;
+    const di = new Map(j.d.map((r, i) => [r[0], i]));
+    const after = d => { const k = di.get(d); return k == null || k + 11 >= j.d.length ? null : j.d[k + 11][1] / j.d[k + 1][1] - 1; };
+    const side = v => (v > 0 ? '<span class="up">buy</span>' : v < 0 ? '<span class="down">sell</span>' : '<span class="mute">–</span>');
+    const V = DATA.lab && DATA.lab.volumeStress;
+    el.insertAdjacentHTML('beforeend', `<details><summary>Volume peaks: the last ${sp.length} spikes (4× the usual volume)</summary><div class="scroll"><table><thead><tr><th>Date</th><th>Candle</th><th class="n">Volume ×</th><th>Foreign</th><th>Bandar</th><th class="n">Next 10 sessions</th></tr></thead><tbody>${sp.map(s => `<tr><td>${esc(s[0])}</td><td>${esc(s[1])}</td><td class="n">${s[2]}</td><td>${side(s[3])}</td><td>${side(s[4])}</td><td class="n">${pc(after(s[0]))}</td></tr>`).join('')}</tbody></table></div>
+      <p class="muted">What the tests say (Signal lab): the candle shape of a spike told nothing about the next weeks, and neither did the bandar's side. Spikes where foreigners were net buyers beat those where they sold by about 2.7% over 10 sessions in 2024-26 (t 3.0, confirmed on IDX's own foreign data for that period), but not in 2022-24, and the gap rests on a few big winners. So it is a watch signal with a forward test${V ? '' : ''}, not ACT.</p></details>`);
   }
 
   // Where the stock stands against its latest call, plus the list of past calls.

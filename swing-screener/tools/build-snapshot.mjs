@@ -154,7 +154,7 @@ uni.forEach(u => {
   pk.bm = bmd && bmd.by[u.ticker] ? { ...bmd.by[u.ticker], stale: bmStale } : null;
   pk.flowHist = nbHist && nbHist.by[u.ticker] ? nbHist.by[u.ticker] : null;
   pk.group = groups && groups.byTicker[u.ticker] ? groups.byTicker[u.ticker] : null;
-  pk.who = flowRead && flowRead.by[u.ticker] ? { ...flowRead.by[u.ticker], stale: (NOW - new Date(flowRead.by[u.ticker].d + 'T10:00:00Z').getTime()) / 864e5 > 6 } : null;
+  pk.who = flowRead && flowRead.by[u.ticker] ? { ...flowRead.by[u.ticker], sp: undefined, stale: (NOW - new Date(flowRead.by[u.ticker].d + 'T10:00:00Z').getTime()) / 864e5 > 6 } : null;
   // Sideways base (tools/experiment-base.mjs): the 40 sessions before today within a 25% range; breakout = today's close
   // above that range on 1.5x its average volume; coiling = still inside a 25% range including today. Accumulation
   // read over the base: bandar / foreign (NeoBDM, flow-read) and LPM rising (Bandarmetrics). Watch only: it failed its test.
@@ -164,6 +164,9 @@ uni.forEach(u => {
       const brk = inBase && b.c[k] > hiB && b.v[k] >= 1.5 * avgV, coil = loC > 0 && hiC / loC - 1 <= 0.25 && !brk;
       const acc = { bandar: pk.who && pk.who.ab != null ? pk.who.ab : null, foreign: pk.who && pk.who.af != null ? pk.who.af : null, lpm: pk.bm && !pk.bm.stale && pk.bm.l40 != null ? pk.bm.l40 : null };
       pk.base = brk || coil ? { brk, coil, hi: hiB, lo: loB, range: hiB / loB - 1, volx: avgV ? b.v[k] / avgV : null, acc } : null; } }
+  // Recent volume spike (last 3 sessions) with foreigners net buying that day: watch chip (tools/experiment-volume*.mjs).
+  { const sp = flowRead && flowRead.by[u.ticker] && flowRead.by[u.ticker].sp, last = sp && sp[sp.length - 1], n = b.d.length;
+    if (last && n > 3 && last[0] >= b.d[n - 3].toISOString().slice(0, 10)) pk.vspike = { d: last[0], type: last[1], x: last[2], f: last[3], m: last[4] }; }
   pk.brokerCost = bcost && bcost.by[u.ticker] ? { ...bcost.by[u.ticker], stale: (NOW - new Date(bcost.by[u.ticker].day + 'T10:00:00Z').getTime()) / 864e5 > 10 } : null;
   pk.untested = NEWSET.has(u.ticker);
   pk.thin = thin;
@@ -264,7 +267,7 @@ const out = {
   // 10-year check (2026-10-10): no edge over shuffled prices; shown at the top of Track record.
   momentum: momentum ? { ...momentum, study: readJson('momentum-study.json'), pit: readJson('momentum-pit.json') } : null,
   // Signal lab: hypotheses tested on 2026-10-10 and the live forward test of foreign flow.
-  lab: (() => { const f = readJson('flow2-study.json'), r = readJson('foreign-rep.json'); return { flow2: f ? { H1: f['H1 retail share (high = worse)'], H2: f['H2 foreign buying, high-fcorr stocks'], H2c: f['   control: foreign buying, low-fcorr stocks'], H3: f['H3 LPM 60-session change (z), all stocks'] } : null, rep: r, forward: readJson('flow-read-forward.json'), bear: readJson('bear-study.json'), bmPattern: readJson('bmpattern-study.json'), bmForward: readJson('bm-forward.json'), rally: readJson('rally-study.json'), base: readJson('base-study.json'), baseForward: readJson('base-forward.json') }; })(),
+  lab: (() => { const f = readJson('flow2-study.json'), r = readJson('foreign-rep.json'); return { flow2: f ? { H1: f['H1 retail share (high = worse)'], H2: f['H2 foreign buying, high-fcorr stocks'], H2c: f['   control: foreign buying, low-fcorr stocks'], H3: f['H3 LPM 60-session change (z), all stocks'] } : null, rep: r, forward: readJson('flow-read-forward.json'), bear: readJson('bear-study.json'), bmPattern: readJson('bmpattern-study.json'), bmForward: readJson('bm-forward.json'), rally: readJson('rally-study.json'), volume: readJson('volume-study.json'), volumeStress: readJson('volume-stress.json'), volumeForward: readJson('volume-forward.json'), base: readJson('base-study.json'), baseForward: readJson('base-forward.json') }; })(),
   spec: specNow ? { ...specNow, forward: specFwd, study: readJson('spec-study.json'), crack: (() => { const c = readJson('crack-study.json'); return c ? Object.fromEntries(Object.entries(c.tracks).map(([k, v]) => [k, { bestT: v.bestT, null95: v.null95 }])) : null; })() } : null,
   tenYear: { trend: readJson('trend-study.json'), own: readJson('own-holdout.json'), perm: readJson('permutation-study.json') },
   expansion: readJson('expand-study.json'), brokerCostStudy: readJson('brokercost-study.json'), brokerDirectory: readJson('broker-directory.json'), sizing: readJson('sizing-study.json'), research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
@@ -290,7 +293,7 @@ try {
   console.log(`signals: ${Object.values(signals).flat().filter(e => e.k === 'call').length} calls replayed in ${Date.now() - t0} ms`);
   // Scorecard of the replayed calls, added to latest.json (written above) for the Track record tab.
   try { const cs = callStats(signals), lp = path.join(OUT, 'latest.json'), L = JSON.parse(fs.readFileSync(lp, 'utf8')); L.callStats = cs; fs.writeFileSync(lp, JSON.stringify(L)); console.log(`call stats: ${cs.all.closed} closed, win ${(cs.all.winRate * 100).toFixed(0)}%, expectancy ${(cs.all.expectancy * 100).toFixed(2)}%, PF ${cs.all.profitFactor && cs.all.profitFactor.toFixed(2)}, account ${(cs.account.total * 100).toFixed(1)}% maxDD ${(cs.account.maxDD * 100).toFixed(1)}%`); } catch (e) { console.error('call stats failed', e.message); }
-  await writeOhlc(rawPx, uni.map(u => u.ticker), { useCache: process.env.USE_CACHE === '1', signals, liveFrom: liveFrom ? liveFrom.slice(0, 10) : null });
+  await writeOhlc(rawPx, uni.map(u => u.ticker), { useCache: process.env.USE_CACHE === '1', spikes: flowRead ? Object.fromEntries(Object.entries(flowRead.by).map(([t, v]) => [t, v.sp || []])) : {}, signals, liveFrom: liveFrom ? liveFrom.slice(0, 10) : null });
 } catch (e) { console.error('ohlc failed', e.message); }
 
 // Telegram digest (no-op unless TG_TOKEN / TG_CHAT_ID are set, or DRY_ALERTS=1). Never lets a failure break the build.
