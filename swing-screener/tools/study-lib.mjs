@@ -39,6 +39,8 @@ export function terciles(samples, { split, dir = 1, runs = 2000, minN = 9 } = {}
   return { dates: real.length, avgN: mean(real.map(x => x.n)), spread: m, t, p: hits / runs, first: mean(half(true)), second: mean(half(false)), nFirst: half(true).length, nSecond: half(false).length };
 }
 
-// Pass rule used by every pre-registered study built on this harness.
-export const passes = (r, dir = 1, alpha = 0.05) => r.p < alpha && dir * r.first > 0 && dir * r.second > 0;
+// Pass rule used by every pre-registered study built on this harness. The t-stat over non-overlapping dates is required
+// too: for signals that are a stable trait of a stock (volatility, retail share), within-date shuffling breaks the
+// persistence and makes the permutation null too narrow (found 2026-10-10: Volume Rotation p 0.001 with t only 1.7).
+export const passes = (r, dir = 1, alpha = 0.05, tMin = 2) => r.p < alpha && dir * r.t >= tMin && dir * r.first > 0 && dir * r.second > 0;
 export const fmt = (x, d = 2) => (x == null || !isFinite(x) ? '–' : (x >= 0 ? '+' : '') + (x * 100).toFixed(d) + '%');
