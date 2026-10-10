@@ -86,7 +86,7 @@ async function fetchWindow(q, from, to, ctx) {
 export function loadStore(file) {
   try {
     const j = JSON.parse(fs.readFileSync(file, 'utf8'));
-    if (j.rows) return { rows: j.rows.map(r => [new Date(r[0]), ...r.slice(1)]), backfill: j.backfill || {} };
+    if (j.rows) return { rows: j.rows.map(r => [new Date(r[0]), ...r.slice(1)]), backfill: j.backfill || {}, inc: j.inc || {} };
   } catch { /* none yet */ }
   return null;
 }
@@ -148,13 +148,21 @@ export async function refreshNewsStore(api, uni, { storeFile, legacyFile, hot = 
   // 2) Incremental top-up (last 2 days) for hot keys + themes, or everything on a full sweep.
   const inc = { left: budget.incremental };
   const hotSet = new Set(hot);
-  for (const k of keys) {
+  // With ~300 stocks one run's budget cannot top up every key, so themes and hot keys go first and the rest in order of
+  // their last top-up (oldest first): a full sweep then rotates through the universe instead of starving the tail.
+  store.inc = store.inc || {};
+  const order = keys.slice().sort((a, b) => {
+    const pa = a.key.startsWith('T:') ? 0 : hotSet.has(a.key) ? 1 : 2, pb = b.key.startsWith('T:') ? 0 : hotSet.has(b.key) ? 1 : 2;
+    return pa - pb || String(store.inc[a.key] || '').localeCompare(String(store.inc[b.key] || ''));
+  });
+  for (const k of order) {
     if (abort || inc.left <= 0) break;
     const isTheme = k.key.startsWith('T:');
     if (!(fullSweep || isTheme || hotSet.has(k.key))) continue;
     if (!pending.includes(k) || store.backfill[k.key] !== fmtDate(today)) {
       const ctx = await run(k, new Date(today.getTime() - 2 * DAY), inc);
       if (ctx.abort) abort = true;
+      else if (!ctx.cut) store.inc[k.key] = new Date().toISOString();
     }
   }
 
@@ -171,7 +179,7 @@ export async function refreshNewsStore(api, uni, { storeFile, legacyFile, hot = 
       : state === 'stale' ? `Google News refused every request from the build server; showing saved headlines (newest ${newest}).`
       : `${totals.fails} of ${totals.requests} news requests failed this run; the rest were merged with saved headlines.`,
   };
-  if (ok > 0 || totals.requests === 0) { fs.mkdirSync(path.dirname(storeFile), { recursive: true }); fs.writeFileSync(storeFile, JSON.stringify({ savedAt: new Date().toISOString(), backfill: store.backfill, rows })); }
+  if (ok > 0 || totals.requests === 0) { fs.mkdirSync(path.dirname(storeFile), { recursive: true }); fs.writeFileSync(storeFile, JSON.stringify({ savedAt: new Date().toISOString(), backfill: store.backfill, inc: store.inc, rows })); }
   rows.stats = { ...totals, fresh: fresh.length, seeded, backfilled: done, keys: keys.length };
   return { rows, status, backfill: store.backfill, keys: keys.length };
 }
