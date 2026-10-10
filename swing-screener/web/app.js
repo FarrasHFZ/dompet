@@ -222,6 +222,7 @@
       ${bmBtHtml(F.bm)}
       ${bmScoreBtHtml(F.bm && F.bm.scoreExperiment)}`;
     el.querySelectorAll('[data-ph]').forEach(b => b.onclick = () => { FLOWPH = b.dataset.ph; renderFlow(); });
+    { const q = $('#bdq', el); if (q) q.oninput = e => { const v = e.target.value.trim().toLowerCase(); el.querySelectorAll('#bdtab tbody tr').forEach(r => { r.hidden = v && !r.dataset.q.includes(v); }); }; }
     // A row opens that stock's full read in Picks.
     el.querySelectorAll('tr[data-open]').forEach(r => r.onclick = () => { OPEN = r.dataset.open; FILTER = 'ALL'; document.querySelector('[data-tab=picks]').click(); renderPicks(); const d = $('#dcard'); if (d) d.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
     $('#fact', el).onchange = e => { FLOWACT = e.target.checked; renderFlow(); };
@@ -518,16 +519,27 @@
       <p>Since the volume peak, ${who}. ${where}${c.status === 'unloading' ? ' But they are <b>unloading</b> now, so their cost is no longer a floor.' : ''}${c.supported ? ' <span class="tag">near a holding accumulator\'s cost</span>' : ''}</p>
       <p class="muted">From NeoBDM's daily per-broker inventory (each stock's 20 most active brokers), as of ${esc(c.day)}${c.stale ? ' <b>(stale)</b>' : ''}. Broker names from the IDX member list; classes and their evidence are in the Broker flow tab (broker directory). A cost line is a zone, not a promise: if they unload, it stops being support. ${DATA.brokerCostStudy ? 'Tested on one year of data: see the Broker flow tab.' : ''}</p></div>`;
   }
+  // Broker directory: ALL IDX brokers with the written class and the measured behaviour side by side, so the label can be
+  // audited. Check: retail should trade against big money, foreign with it, mixed neutral, local unconstrained.
+  function dirCheck(v) {
+    if (!v.measured) return ['not measurable', 'mute', 'Not among a stock\'s 20 most active brokers in at least 5 stocks.'];
+    const b = v.behaves || '', w = /with big money/.test(b), a = /against big money/.test(b);
+    if (v.cls === 'retail') return a ? ['agrees', 'up', 'Trades against big money, as a retail broker should.'] : w ? ['contradicts', 'down', 'Trades WITH big money: not retail-like.'] : ['weaker', 'warn', 'Leans retail but not clearly against big money.'];
+    if (v.cls === 'foreign') return w ? ['agrees', 'up', 'Trades with big money.'] : a ? ['contradicts', 'down', 'Trades AGAINST big money: not institution-like.'] : ['weaker', 'warn', 'Not clearly with big money.'];
+    if (v.cls === 'mixed') return !a && !w ? ['agrees', 'up', 'Neutral: a blend of crowd and institutions.'] : ['check', 'warn', 'Leans one way: may deserve another class.'];
+    return a ? ['check', 'warn', 'Trades against big money like retail: may be a retail-heavy house.'] : ['n/a', 'mute', 'Local houses are not constrained either way.'];
+  }
   function brokerDirHtml(d) {
     if (!d) return '';
-    const rows = Object.entries(d.by).filter(([, v]) => v.measured).sort((a, b) => b[1].measured.grossT - a[1].measured.grossT);
-    const rest = Object.entries(d.by).filter(([, v]) => !v.measured);
+    const all = Object.entries(d.by).sort((a, b) => ((b[1].measured && b[1].measured.grossT) || -1) - ((a[1].measured && a[1].measured.grossT) || -1));
+    const chk = all.map(([c, v]) => [c, v, dirCheck(v)]), meas = chk.filter(([, v]) => v.measured), ag = meas.filter(([, , k]) => k[0] === 'agrees').length, bad = meas.filter(([, , k]) => k[0] === 'contradicts').length;
     return `<h2>Broker directory: who is retail, who is big money</h2>
       <div class="card pad"><ul class="checks">${Object.entries(d.defs).map(([k, v]) => `<li>${bchip(k)} ${esc(v)}</li>`).join('')}</ul>
-      <p class="muted">Classes come from what each firm is, written down once. They were then checked against what each broker's money actually did: the correlation of its daily net buying with NeoBDM's foreign flow and its "Bandar" estimate, averaged over the stocks where it is among the 20 most active (one year, tested 100). Retail brokers trade <i>against</i> that money almost everywhere; the foreign desks trade <i>with</i> it. "Bandar" here is a behaviour, not a broker: in a given stock it is the non-retail broker doing most of the buying.</p></div>
-      <div class="card scroll"><table><thead><tr><th>Code</th><th>Broker</th><th>Class</th><th>Behaves</th><th class="n">With foreign</th><th class="n">With "Bandar"</th><th class="n">Stocks</th></tr></thead><tbody>
-      ${rows.map(([c, v]) => `<tr><td><b>${esc(c)}</b></td><td>${esc(v.name)}</td><td>${bchip(v.cls)}</td><td class="${/with/.test(v.behaves) ? 'up' : /against/.test(v.behaves) ? 'warn' : 'muted'}">${esc(v.behaves)}</td><td class="n">${v.measured.foreign.toFixed(2)}</td><td class="n">${v.measured.bandar.toFixed(2)}</td><td class="n">${v.measured.stocks}</td></tr>`).join('')}</tbody></table></div>
-      <p class="muted">Not often among a stock's 20 most active brokers (no measured behaviour), class from what the firm is: ${rest.map(([c, v]) => `${esc(c)} ${esc(v.name.replace(/ Sekuritas.*$/, ''))} (${v.cls})`).join(', ')}.</p>`;
+      <p class="muted">Classes come from what each firm is, written down once (<code>tools/broker-directory.mjs</code>). They were then checked against what each broker's money actually did: the correlation of its daily net buying with NeoBDM's foreign flow and its "Bandar" estimate, averaged over the stocks where it is among the 20 most active (one year, 300 stocks). <b>Audit: ${meas.length} brokers measurable, ${ag} agree with their class, ${bad} contradict it, the rest are weaker or neutral.</b> "Bandar" here is a behaviour, not a broker: in a given stock it is the non-retail broker doing most of the buying. The full table is also in <code>data/broker-directory.json</code>.</p>
+      <p><input type="search" id="bdq" placeholder="Filter by code, name or class" style="max-width:260px"></p></div>
+      <div class="card scroll"><table id="bdtab"><thead><tr><th>Code</th><th>Broker (IDX)</th><th>Class</th><th>Behaves</th><th class="n">With foreign</th><th class="n">With "Bandar"</th><th class="n">Stocks</th><th>Class vs behaviour</th></tr></thead><tbody>
+      ${chk.map(([c, v, k]) => `<tr data-q="${esc((c + ' ' + v.name + ' ' + v.cls).toLowerCase())}"><td><b>${esc(c)}</b></td><td>${esc(v.name)}</td><td>${bchip(v.cls)}</td><td class="${/with/.test(v.behaves || '') ? 'up' : /against/.test(v.behaves || '') ? 'warn' : 'muted'}">${esc(v.behaves || '–')}</td><td class="n">${v.measured ? v.measured.foreign.toFixed(2) : '–'}</td><td class="n">${v.measured ? v.measured.bandar.toFixed(2) : '–'}</td><td class="n">${v.measured ? v.measured.stocks : '–'}</td><td><span class="${k[1]}" title="${esc(k[2])}">${esc(k[0])}</span></td></tr>`).join('')}</tbody></table></div>
+      <p class="muted">Correlations run from −1 to +1: negative = the broker buys when the group sells. "Behaves" is <i>with big money</i> at an average of +0.15 or more, <i>against big money (retail-like)</i> at −0.20 or less, else neutral. To change a class, edit the lists in <code>tools/broker-directory.mjs</code> and run it again.</p>`;
   }
   function brokerCostStudyHtml(x) {
     if (!x) return '';
