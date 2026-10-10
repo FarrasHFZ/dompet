@@ -79,11 +79,14 @@ test('H2', 'price > 5% below the accumulators\' cost (A) vs within or above (B)'
 const ACC = S.filter(s => s.cr.netShare >= 0.05);
 test('H3', 'accumulators not unloading (A) vs unloading (B), accumulation >= 5%', 2.5, ACC, s => s.cr.status !== 'unloading', s => s.cr.status === 'unloading');
 const byConc = Object.fromEntries(['one broker', 'a few brokers', 'broad'].map(c => { const l = episodes(S.filter(s => s.cr.conc === c)); return [c, { n: l.length, avg: l.length ? mean(l.map(s => s.ret)) : null }]; }));
+// ADDED 2026-10-10 after the pre-registered tests above (descriptive only, no decision): who drives the buying.
+const byDriver = Object.fromEntries(['retail crowd', 'one local player (bandar-style)', 'one foreign institution', 'foreign institutions', 'local brokers', 'mixed'].map(c => { const l = episodes(S.filter(s => s.cr.driver === c)); return [c, { n: l.length, avg: l.length ? mean(l.map(s => s.ret)) : null, win: l.length ? mean(l.map(s => (s.ret > 0 ? 1 : 0))) : null }]; }));
+console.log('\n  descriptive (added later), by who drives the buying (episodes):', Object.entries(byDriver).map(([k, v]) => `${k} ${v.n} ${pc(v.avg)}`).join(' | '));
 console.log('\n  descriptive, by concentration (episodes):', Object.entries(byConc).map(([k, v]) => `${k} ${v.n} ${pc(v.avg)}`).join(' | '));
 const rk = a => { const o = a.map((v, i) => [v, i]).sort((p, q) => p[0] - q[0]); const r = []; o.forEach(([, i], k) => { r[i] = k; }); return r; };
 const corr = (x, y) => { const mx = mean(x), my = mean(y); let n = 0, a = 0, b = 0; for (let i = 0; i < x.length; i++) { n += (x[i] - mx) * (y[i] - my); a += (x[i] - mx) ** 2; b += (y[i] - my) ** 2; } return a && b ? n / Math.sqrt(a * b) : 0; };
 const icDays = Object.keys(IC).sort().filter((_, i) => i % 5 === 0), ics = icDays.map(d => IC[d]).filter(p => p.length >= 20).map(p => { const m = mean(p.map(x => x[1])); return corr(rk(p.map(x => x[0])), rk(p.map(x => x[1] - m))); });
 const icT = ics.length > 3 ? mean(ics) / (sdv(ics) / Math.sqrt(ics.length)) : null;
 console.log(`  descriptive, all stocks: rank IC of (price vs cost) with the next 5 sessions ${f2(mean(ics))} (t ${f2(icT)}, ${ics.length} non-overlapping sessions)`);
-fs.writeFileSync(path.join(ROOT, 'data', 'brokercost-study.json'), JSON.stringify({ asOf: new Date().toISOString().slice(0, 10), from: days[0], to: days.at(-1), signals: S.length, supported: S.filter(s => s.sup).length, results, byConc, ic: { mean: mean(ics), t: icT, n: ics.length } }));
+fs.writeFileSync(path.join(ROOT, 'data', 'brokercost-study.json'), JSON.stringify({ asOf: new Date().toISOString().slice(0, 10), from: days[0], to: days.at(-1), signals: S.length, supported: S.filter(s => s.sup).length, results, byConc, byDriver, ic: { mean: mean(ics), t: icT, n: ics.length } }));
 console.log('\nwrote data/brokercost-study.json');

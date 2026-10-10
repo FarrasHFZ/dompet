@@ -231,7 +231,7 @@ const out = {
   },
   // Broker-flow workflow: forward-test scorecard (tools/flow-forward.mjs) and the IDX foreign-flow backtest (tools/experiment-flow.mjs).
   groups: groups ? { ...groups, byTicker: undefined, study: readJson('groups-study.json') } : null,
-  expansion: readJson('expand-study.json'), brokerCostStudy: readJson('brokercost-study.json'), sizing: readJson('sizing-study.json'), research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
+  expansion: readJson('expand-study.json'), brokerCostStudy: readJson('brokercost-study.json'), brokerDirectory: readJson('broker-directory.json'), sizing: readJson('sizing-study.json'), research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
   flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json'), history: nbStudy, flowVeto,
     bm: { asOf: bmd ? bmd.asOf : null, stale: bmStale, experiment: readJson('bm-experiment.json'), scoreExperiment: readJson('bm-score-experiment.json') } },
   backtestHoldout:fs.existsSync(path.join(ROOT, 'data', 'backtest-holdout.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'backtest-holdout.json'), 'utf8')) : null,

@@ -22,9 +22,13 @@
   const dmy = d => `${String(d.getDate()).padStart(2, '0')} ${MON[d.getMonth()]} ${d.getFullYear()}`;
   const M = x => (x == null ? null : Math.round(+x / 1e4) / 100); // IDR -> million, 2 decimals
   async function topBrokers(tk, start, end) {
-    const html = await fetch(`/stock_detail/${tk}/`).then(r => r.text());
-    const tok = (html.match(/csrfmiddlewaretoken: '([^']+)'/) || [])[1]; if (!tok) throw new Error(tk + ' no csrf token (logged out?)');
-    await wait(3000);
+    // one CSRF token per session is enough (saves a page read per stock)
+    if (!window.__csrf) {
+      const html = await fetch(`/stock_detail/${tk}/`).then(r => r.text());
+      window.__csrf = (html.match(/csrfmiddlewaretoken: '([^']+)'/) || [])[1]; if (!window.__csrf) throw new Error(tk + ' no csrf token (logged out?)');
+      await wait(3000);
+    }
+    const tok = window.__csrf;
     const fd = new URLSearchParams({ tick: tk, start_date: dmy(start), end_date: dmy(end), event: 'load', foreign_only: 'false', domestic_only: 'false', net: 'false', csrfmiddlewaretoken: tok });
     const r = await fetch('/api/broker-summary', { method: 'POST', body: fd, headers: { 'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } });
     if (!r.ok) throw new Error(`${tk} broker-summary HTTP ${r.status}`);

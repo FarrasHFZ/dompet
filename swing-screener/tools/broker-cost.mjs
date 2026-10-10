@@ -10,14 +10,26 @@
 //   concentration: 'one broker' (top 1 has >= 50% of all net buying), 'a few' (top 3 >= 70%), else 'broad'
 //   status of the top 3 over the last 5 sessions: 'adding' (net >= +5% of their window net), 'unloading'
 //   (<= -25%), else 'holding'
-// CLI: node tools/broker-cost.mjs   -> data/broker-cost-tags.json (public: price levels, shares, broker TYPES) and
-//      data/broker-cost-local.json (git-ignored: with broker codes, paid data)
+// CLI: node tools/broker-cost.mjs   -> data/broker-cost-tags.json (public: price levels, shares, broker codes, names,
+//      classes; the user asked for broker names on 2026-10-10) and data/broker-cost-local.json (git-ignored: full detail)
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './lib.mjs';
-import { BROKER_TYPE } from './flow-model.mjs';
+import { classOf } from './broker-directory.mjs';
 
-export const brokerType = c => (BROKER_TYPE.foreign.includes(c) ? 'foreign' : BROKER_TYPE.retail.includes(c) ? 'retail' : 'local');
+// Broker class from the directory (tools/broker-directory.mjs): retail / foreign / mixed / local.
+export const brokerType = classOf;
+const NAMES = (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'tools', 'idx-brokers.json'), 'utf8')); } catch { return {}; } })();
+// Who drives the buying: the accumulators' shares by class. A single non-retail broker with half of all net buying is
+// the classic bandar footprint.
+export function driver(top, classShare) {
+  const sh = c => classShare[c] || 0, lead = top[0];
+  if (lead && lead.type !== 'retail' && lead.type !== 'mixed' && lead.share >= 0.5) return lead.type === 'foreign' ? 'one foreign institution' : 'one local player (bandar-style)';
+  if (sh('retail') >= 0.6) return 'retail crowd';
+  if (sh('foreign') >= 0.6) return 'foreign institutions';
+  if (sh('local') >= 0.6) return 'local brokers';
+  return 'mixed';
+}
 const LOOK = 60;
 
 export function costRead(rec, t) {
@@ -39,14 +51,17 @@ export function costRead(rec, t) {
   const cost = topBought ? (topValue * 1e6) / (topBought * 100) : null, last5 = top.reduce((s, r) => s + r.last5, 0);
   const share1 = acc[0].net / posNet, share3 = topNet / posNet;
   const close = rec.c[t];
-  return {
+  const out = {
     day: rec.d[t], peakDay: rec.d[peak], peakX: avgVol ? (rec.v[peak] || 0) / avgVol : null, days: t - peak + 1,
     cost, close, gap: cost && close ? close / cost - 1 : null,
     netShare: topNet / volLots, // top-3 accumulators' net lots as a share of all lots traded since the peak
     conc: share1 >= 0.5 ? 'one broker' : share3 >= 0.7 ? 'a few brokers' : 'broad',
     status: last5 >= 0.05 * topNet ? 'adding' : last5 <= -0.25 * topNet ? 'unloading' : 'holding',
-    top: top.map(r => ({ code: r.code, type: r.type, net: r.net, avg: r.avg, share: r.net / posNet })),
+    top: top.map(r => ({ code: r.code, name: NAMES[r.code] || null, type: r.type, net: r.net, avg: r.avg, share: r.net / posNet })),
   };
+  out.classShare = Object.fromEntries(['retail', 'foreign', 'mixed', 'local'].map(c => [c, +(acc.filter(r => r.type === c).reduce((s, r) => s + r.net, 0) / posNet).toFixed(3)]));
+  out.driver = driver(out.top, out.classShare);
+  return out;
 }
 
 // The rule the study tests (and the site marks): meaningful accumulation, not being unloaded, price near their cost.
@@ -61,8 +76,8 @@ if (process.argv[1] && path.basename(process.argv[1]) === 'broker-cost.mjs') {
     loc[tk] = r;
     pub[tk] = r.none ? { day: r.day || rec.d.at(-1), peakDay: r.peakDay, none: true } : {
       day: r.day, peakDay: r.peakDay, peakX: r.peakX && +r.peakX.toFixed(1), days: r.days, cost: Math.round(r.cost), gap: +r.gap.toFixed(4),
-      netShare: +r.netShare.toFixed(3), conc: r.conc, status: r.status, supported: supported(r),
-      top: r.top.map(x => ({ type: x.type, share: +x.share.toFixed(2), avg: x.avg && Math.round(x.avg) })), // no broker codes in public data
+      netShare: +r.netShare.toFixed(3), conc: r.conc, status: r.status, supported: supported(r), driver: r.driver, classShare: r.classShare,
+      top: r.top.map(x => ({ code: x.code, name: x.name, type: x.type, share: +x.share.toFixed(2), avg: x.avg && Math.round(x.avg) })),
     };
   }
   fs.writeFileSync(path.join(ROOT, 'data', 'broker-cost-tags.json'), JSON.stringify({ asOf, by: pub }));

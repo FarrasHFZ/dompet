@@ -229,3 +229,9 @@ svg.spark { display: block; }
 .sz-out small { display: block; color: var(--mute); font-size: 11px; } .sz-out b { display: block; font-size: 15px; } .sz-out .muted { font-size: 11.5px; }
 .sz-in input { background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 4px 8px; }
 .bcost .kv { margin-bottom: 8px; }
+.bchip { display: inline-block; padding: 0 7px; border-radius: 999px; font-size: 11px; font-weight: 600; border: 1px solid var(--line); }
+.bchip.warn { color: var(--warn); border-color: var(--warn); } .bchip.up { color: var(--up); border-color: var(--up); } .bchip.mute { color: var(--mute); }
+.drv { margin: 6px 0 10px; } .drv small { display: block; color: var(--mute); font-size: 11px; } .drv b { display: block; font-size: 16px; } .drv .muted { display: block; font-size: 12px; }
+.csplit { display: flex; height: 9px; border-radius: 5px; overflow: hidden; margin-top: 6px; background: var(--line); max-width: 420px; }
+.csplit i { display: block; } .c-retail { background: var(--warn); color: var(--warn); } .c-foreign { background: var(--up); color: var(--up); } .c-local { background: var(--accent); color: var(--accent); } .c-mixed { background: var(--mute); color: var(--mute); }
+.csplit-l span { background: none; } .csplit-l { font-size: 11.5px; margin-top: 3px; }

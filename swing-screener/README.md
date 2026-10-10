@@ -222,6 +222,18 @@ in (adding / holding / unloading over the last 5 sessions). Shown on every stock
 cost"), on the trade map, and in the coverage panel. Public data carries broker TYPES, not codes (codes stay in
 `data/broker-cost-local.json`). Refreshed on a weekly rotation (a fifth of the universe each evening, step A4c).
 
+**Broker names and classes** (`tools/broker-directory.mjs` -> `data/broker-directory.json`): official names from the
+IDX member list (`tools/idx-brokers.json`, 89 members). Classes are written down from what each firm is: retail
+(mass-market apps and bank brokers: XL Stockbit, XC Ajaib, PD Indo Premier, YP Mirae, SQ BCA, NI BNI, KK Phillip, EP MNC,
+CP KB Valbury, RO Pluang, GI Webull), foreign institutional (AK UBS, BK JP Morgan, ZP Maybank, KZ CLSA, RX Macquarie,
+DP DBS, ...), mixed (CC Mandiri, YU CGS: big retail and institutional books), local (all other local houses). Then
+checked against behaviour: each broker's daily net buying vs NeoBDM's foreign flow and Bandar estimate, averaged over the
+stocks where it is active. Retail brokers trade against that money (correlation -0.2 to -0.45), foreign desks with it
+(+0.14 to +0.5); CC Mandiri is neutral, hence "mixed". "Bandar" is treated as a behaviour, not a broker: per stock,
+the driver is "one local player (bandar-style)" when a single local non-retail broker did >= 50% of the net buying since
+the volume peak, "retail crowd" when retail brokers did >= 60%, etc. Names and codes are public on the site (the user
+asked for them on 2026-10-10).
+
 Pre-registered test (`tools/experiment-brokercost.mjs`, commit c4512c3, Jan-Sep 2026 signals on the tested 100):
 near a holding accumulator's cost vs the rest -2.32% vs -1.92%/trade (t -0.3) -> fail; >5% below their cost vs not
 -> fail; unloading almost never triggered. A falling market and ~50 vs 260 episodes: too little data to prove anything

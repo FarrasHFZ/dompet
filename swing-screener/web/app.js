@@ -211,6 +211,7 @@
         <td><span class="act ${p.action}">${p.action}</span> ${tierHtml(p)}</td></tr>`; }).join('') : '<tr><td colspan="13" class="empty">Nothing matches.</td></tr>'}</tbody></table></div>
       <h2>Does broker flow help? 2-year replay</h2>
       ${nbHistHtml(F.history)}
+      ${brokerDirHtml(DATA.brokerDirectory)}
       ${brokerCostStudyHtml(DATA.brokerCostStudy)}
       <h2>Forward test (live snapshots)</h2>
       <div class="note"><b>Why a forward test as well.</b> The replay cannot see NeoBDM's method-fit and dirty-tape flags, and NeoBDM could revise old data. So every trading day the full live snapshot is still saved and scored later, with the checklist below (fixed on 2026-10-09, before any result; t is corrected for overlapping holding periods).</div>
@@ -488,14 +489,20 @@
   }
   // Broker cost lines (tools/broker-cost.mjs): who accumulated since the last volume peak, at what average buy price,
   // and are they still holding. Broker TYPES only (codes stay local: paid data). Context; see the study in Broker flow.
-  const BTYPE = { foreign: 'foreign broker', local: 'local broker', retail: 'retail broker' };
+  const BTYPE = { foreign: 'foreign institution', local: 'local broker', retail: 'retail', mixed: 'mixed retail + institutional' };
+  const BCLS = { retail: ['retail', 'warn'], foreign: ['foreign', 'up'], local: ['local', ''], mixed: ['mixed', 'mute'] };
+  const DRIVER = { 'retail crowd': ['Retail crowd', 'warn', 'Most of the net buying comes from retail brokers (the apps and bank brokers individuals use).'], 'one local player (bandar-style)': ['One local player (bandar-style)', 'up', 'A single local, non-retail broker did half or more of all net buying: the classic bandar footprint.'], 'one foreign institution': ['One foreign institution', 'up', 'A single foreign institutional desk did half or more of all net buying.'], 'foreign institutions': ['Foreign institutions', 'up', 'Most of the net buying comes from foreign institutional desks.'], 'local brokers': ['Local brokers', '', 'Most of the net buying comes from several local, non-retail brokers.'], mixed: ['Mixed', 'mute', 'No group dominates the net buying.'] };
+  const bchip = c => { const x = BCLS[c] || [c, '']; return `<span class="bchip ${x[1]}">${esc(x[0])}</span>`; };
+  const splitBar = cs => !cs ? '' : `<div class="csplit" role="img" aria-label="Net buying by broker class">${['retail', 'mixed', 'local', 'foreign'].filter(k => cs[k] > 0.005).map(k => `<i class="c-${k}" style="flex:${cs[k]}" title="${k} ${Math.round(cs[k] * 100)}%"></i>`).join('')}</div><div class="muted csplit-l">${['retail', 'mixed', 'local', 'foreign'].filter(k => cs[k] > 0.005).map(k => `<span class="c-${k}">■</span> ${k} ${Math.round(cs[k] * 100)}%`).join(' · ')}</div>`;
   const BSTAT = { adding: ['still adding', 'up'], holding: ['holding', 'up'], unloading: ['unloading', 'down'] };
   function brokerCostHtml(p) {
     const c = p.brokerCost;
     if (!c) return '<p class="muted">No broker inventory for this stock yet (refreshed weekly on a rotation; new stocks fill in within a week).</p>';
     if (c.none) return `<p class="muted">No broker has been a net buyer since the volume peak of ${esc(c.peakDay)} among the 20 most active brokers. Nobody is accumulating.</p>`;
     const px = p.live ? p.live.price : p.close, gap = px / c.cost - 1, st = BSTAT[c.status] || [c.status, ''];
-    const who = c.conc === 'one broker' ? `<b>one broker</b> (a ${esc(BTYPE[c.top[0].type])}) did ${Math.round(c.top[0].share * 100)}% of all net buying` : c.conc === 'a few brokers' ? `<b>a few brokers</b> did most of the net buying (top 3: ${Math.round(c.top.reduce((s, x) => s + x.share, 0) * 100)}%)` : `the buying is <b>broad</b>: no single broker dominates`;
+    const lead = c.top[0], leadName = lead ? `${esc(lead.code)}${lead.name ? ' (' + esc(lead.name) + ')' : ''}` : '';
+    const who = c.conc === 'one broker' ? `<b>one broker</b>, ${leadName}, a ${esc(BTYPE[lead.type] || lead.type)} broker, did ${Math.round(lead.share * 100)}% of all net buying` : c.conc === 'a few brokers' ? `<b>a few brokers</b> did most of the net buying (top 3: ${Math.round(c.top.reduce((s, x) => s + x.share, 0) * 100)}%), led by ${leadName}` : `the buying is <b>broad</b>: no single broker dominates (largest: ${leadName}, ${Math.round(lead.share * 100)}%)`;
+    const dv = DRIVER[c.driver];
     const where = Math.abs(gap) <= 0.05 ? `Today's price is <b>near their cost</b> (${pc(gap, 1)}): the zone where accumulators usually defend.` : gap < 0 ? `Today's price is <b>${pc(-gap, 1).replace(/<[^>]+>/g, '')} below their cost</b>: they are under water, which either means they defend soon or are cutting.` : `Today's price is <b>${pc(gap, 1).replace(/<[^>]+>/g, '')} above their cost</b>: they are in profit, so their cost is a deeper support, not today's price.`;
     return `<div class="bcost">
       <div class="kv">
@@ -505,10 +512,22 @@
         <div><small>Are they still in?</small><b class="${st[1]}">${esc(st[0])}</b><div class="muted">their net over the last 5 sessions</div></div>
         <div><small>Size of the buying</small><b>${(c.netShare * 100).toFixed(1)}%</b><div class="muted">of all lots traded since the peak</div></div>
       </div>
-      <div class="scroll"><table><thead><tr><th>Accumulator</th><th class="n">Share of net buying</th><th class="n">Average buy price</th><th class="n">Now vs that price</th></tr></thead><tbody>
-        ${c.top.map((x, i) => `<tr><td>#${i + 1} ${esc(BTYPE[x.type] || x.type)}</td><td class="n">${Math.round(x.share * 100)}%</td><td class="n">${f0(x.avg)}</td><td class="n">${x.avg ? pc(px / x.avg - 1, 1) : '–'}</td></tr>`).join('')}</tbody></table></div>
+      ${dv ? `<div class="drv"><small>Who is driving the buying</small><b class="${dv[1]}">${esc(dv[0])}</b><span class="muted">${esc(dv[2])}</span>${splitBar(c.classShare)}</div>` : ''}
+      <div class="scroll"><table><thead><tr><th>Accumulator</th><th>Class</th><th class="n">Share of net buying</th><th class="n">Average buy price</th><th class="n">Now vs that price</th></tr></thead><tbody>
+        ${c.top.map((x, i) => `<tr><td><b>${esc(x.code || '#' + (i + 1))}</b> <span class="muted">${esc(x.name || '')}</span></td><td>${bchip(x.type)}</td><td class="n">${Math.round(x.share * 100)}%</td><td class="n">${f0(x.avg)}</td><td class="n">${x.avg ? pc(px / x.avg - 1, 1) : '–'}</td></tr>`).join('')}</tbody></table></div>
       <p>Since the volume peak, ${who}. ${where}${c.status === 'unloading' ? ' But they are <b>unloading</b> now, so their cost is no longer a floor.' : ''}${c.supported ? ' <span class="tag">near a holding accumulator\'s cost</span>' : ''}</p>
-      <p class="muted">From NeoBDM's daily per-broker inventory (each stock's 20 most active brokers), as of ${esc(c.day)}${c.stale ? ' <b>(stale)</b>' : ''}. A cost line is a zone, not a promise: if they unload, it stops being support. ${DATA.brokerCostStudy ? 'Tested on one year of data: see the Broker flow tab.' : ''}</p></div>`;
+      <p class="muted">From NeoBDM's daily per-broker inventory (each stock's 20 most active brokers), as of ${esc(c.day)}${c.stale ? ' <b>(stale)</b>' : ''}. Broker names from the IDX member list; classes and their evidence are in the Broker flow tab (broker directory). A cost line is a zone, not a promise: if they unload, it stops being support. ${DATA.brokerCostStudy ? 'Tested on one year of data: see the Broker flow tab.' : ''}</p></div>`;
+  }
+  function brokerDirHtml(d) {
+    if (!d) return '';
+    const rows = Object.entries(d.by).filter(([, v]) => v.measured).sort((a, b) => b[1].measured.grossT - a[1].measured.grossT);
+    const rest = Object.entries(d.by).filter(([, v]) => !v.measured);
+    return `<h2>Broker directory: who is retail, who is big money</h2>
+      <div class="card pad"><ul class="checks">${Object.entries(d.defs).map(([k, v]) => `<li>${bchip(k)} ${esc(v)}</li>`).join('')}</ul>
+      <p class="muted">Classes come from what each firm is, written down once. They were then checked against what each broker's money actually did: the correlation of its daily net buying with NeoBDM's foreign flow and its "Bandar" estimate, averaged over the stocks where it is among the 20 most active (one year, tested 100). Retail brokers trade <i>against</i> that money almost everywhere; the foreign desks trade <i>with</i> it. "Bandar" here is a behaviour, not a broker: in a given stock it is the non-retail broker doing most of the buying.</p></div>
+      <div class="card scroll"><table><thead><tr><th>Code</th><th>Broker</th><th>Class</th><th>Behaves</th><th class="n">With foreign</th><th class="n">With "Bandar"</th><th class="n">Stocks</th></tr></thead><tbody>
+      ${rows.map(([c, v]) => `<tr><td><b>${esc(c)}</b></td><td>${esc(v.name)}</td><td>${bchip(v.cls)}</td><td class="${/with/.test(v.behaves) ? 'up' : /against/.test(v.behaves) ? 'warn' : 'muted'}">${esc(v.behaves)}</td><td class="n">${v.measured.foreign.toFixed(2)}</td><td class="n">${v.measured.bandar.toFixed(2)}</td><td class="n">${v.measured.stocks}</td></tr>`).join('')}</tbody></table></div>
+      <p class="muted">Not often among a stock's 20 most active brokers (no measured behaviour), class from what the firm is: ${rest.map(([c, v]) => `${esc(c)} ${esc(v.name.replace(/ Sekuritas.*$/, ''))} (${v.cls})`).join(', ')}.</p>`;
   }
   function brokerCostStudyHtml(x) {
     if (!x) return '';
@@ -517,7 +536,7 @@
       <p class="muted">For every oversold signal from ${esc(x.from)} to ${esc(x.to)} (${x.signals.toLocaleString()} signal-days on the tested 100), the cost line was rebuilt with only the data known that day. Rules written and committed before the data was pulled.</p>
       <div class="card scroll"><table><thead><tr><th>Test (A vs B)</th><th class="n">A / B per trade</th><th class="n">Gap</th><th class="n">t, episodes</th><th class="n">t, by day</th><th class="n">Unseen</th><th class="n">1st / 2nd half</th><th>Result</th></tr></thead><tbody>
       ${x.results.map(r => `<tr><td>${esc(r.id)} ${esc(r.name.replace('  [PRIMARY]', ''))}</td><td class="n">${pc(r.avgA, 2)} / ${pc(r.avgB, 2)}</td><td class="n">${pc(r.gap, 2)}</td><td class="n">${t(r.t)}</td><td class="n">${t(r.tDay)}</td><td class="n">${pc(r.unseen, 2)}</td><td class="n">${pc(r.h1, 1)} / ${pc(r.h2, 1)}</td><td>${r.pass ? '<span class="up">pass</span>' : '<span class="mute">fail (bar ' + r.bar + ')</span>'}</td></tr>`).join('')}</tbody></table></div>
-      <p class="muted">By who is buying (episodes): ${Object.entries(x.byConc).map(([k, v]) => `${esc(k)} ${v.n} trades, ${pc(v.avg, 2)}`).join(' · ')}. Across all stocks, the price-vs-cost gap's rank correlation with the next 5 sessions: ${x.ic.mean == null ? '–' : x.ic.mean.toFixed(2)} (t ${t(x.ic.t)}). One year is a short test: a fail can mean too little data, not proof of nothing. The cost line is shown as context either way and never changes a badge.</p>`;
+      ${x.byDriver ? `<p class="muted"><b>By who drives the buying</b> (added after the tests, descriptive): ${Object.entries(x.byDriver).filter(([, v]) => v.n).map(([k, v]) => `${esc(k)} ${v.n} trades, ${pc(v.avg, 2)}`).join(' · ')}. Samples are small; nothing here is significant.</p>` : ''}<p class="muted">By who is buying (episodes): ${Object.entries(x.byConc).map(([k, v]) => `${esc(k)} ${v.n} trades, ${pc(v.avg, 2)}`).join(' · ')}. Across all stocks, the price-vs-cost gap's rank correlation with the next 5 sessions: ${x.ic.mean == null ? '–' : x.ic.mean.toFixed(2)} (t ${t(x.ic.t)}). One year is a short test: a fail can mean too little data, not proof of nothing. The cost line is shown as context either way and never changes a badge.</p>`;
   }
   function thesisShort(p) {
     const m = DATA.meta;
