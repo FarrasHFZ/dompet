@@ -40,9 +40,8 @@ export function stockSignals(api, raw, nDone, idx, { cfg, untested = false, live
     if (score < api.ACT_SCORE) { streak = false; continue; }
     let tier = isLast ? live.tier : null;
     if (!tier) {
-      const sma = ii != null && ii >= 199 ? idx.c.slice(ii - 199, ii + 1).reduce((x, y) => x + y, 0) / 200 : null;
       const confirm = raw.c[k] > raw.h[k - 1] || (raw.c[k] > raw.o[k] && raw.c[k] > raw.c[k - 1]);
-      tier = a.avgValue / 1e9 < cfg.minValueB ? 'THIN' : untested ? 'SKIP' : sma != null && idx.c[ii] <= sma ? 'PAUSE' : !confirm ? 'WAIT' : 'ACT';
+      tier = a.avgValue / 1e9 < cfg.minValueB ? 'THIN' : untested ? 'SKIP' : !confirm ? 'WAIT' : 'ACT'; // no market-filter gate since 2026-10-10 (owner's decision)
     }
     if (k <= busyUntil) { streak = true; continue; } // already holding this stock
     const d = dayOf(raw.d[k]);

@@ -78,8 +78,8 @@ export function buildMessages({ api, picks, newsRows, meta, market, state, watch
   // Market filter flip (the switch that decides whether ANY bounce trade is allowed): announce both directions once.
   const f = market.filter;
   if (!out.first && f && f.sma200 && state.lastFilter != null && state.lastFilter !== f.ok) {
-    head.push(f.ok ? `🟢 <b>Market filter is ON again.</b> IHSG ${Math.round(f.ihsg)} closed above its 200-day average (${Math.round(f.sma200)}). Bounce setups can show ACT again from the next session (paper only: no edge shown over 10 years).`
-      : `🔴 <b>Market filter turned OFF.</b> IHSG ${Math.round(f.ihsg)} closed below its 200-day average (${Math.round(f.sma200)}). Stand aside from new bounce trades; open ones keep their stops.`);
+    head.push(f.ok ? `🟢 <b>Market filter is ON again.</b> IHSG ${Math.round(f.ihsg)} closed above its 200-day average (${Math.round(f.sma200)}). Context only: it no longer gates ACT, but bounces in uptrends have held up better.`
+      : `🔴 <b>Market filter turned OFF.</b> IHSG ${Math.round(f.ihsg)} closed below its 200-day average (${Math.round(f.sma200)}). Context only (it no longer gates ACT): in tests, bounce trades in downtrends had deeper losses, so size small.`);
   }
   if (out.first) {
     head.push(`✅ <b>IDX Swing Screener alerts connected.</b>\nACT now: ${acts.length} stocks; top ${Math.min(10, acts.length)}: ${acts.slice(0, 10).join(', ') || 'none'}. Regime: ${esc(market.regime)}.\nYou'll get new risk / commissioner / insider / government-investment / corporate-action headlines for ACT picks${watchlist.length ? ' and your watchlist (' + watchlist.join(', ') + ')' : ''}. Edit swing-screener/data/watchlist.json to add stocks.`);

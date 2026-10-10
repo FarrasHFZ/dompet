@@ -49,6 +49,9 @@ const idx = px['^JKSE'] ? px['^JKSE'].c : null;
 // Market filter (tools/experiment-v4.mjs, walk-forward): new bounce trades only while IHSG is above its 200-day average.
 const ihsgSma200 = idx && idx.length >= 200 ? idx.slice(-200).reduce((s, x) => s + x, 0) / 200 : null;
 const marketOk = ihsgSma200 == null ? true : idx[idx.length - 1] > ihsgSma200;
+// 2026-10-10, owner's decision: the 200-day market filter no longer gates ACT (it stays as context and in the ledger,
+// so its effect keeps being measured). Momentum 10 keeps its own filter (tools/momentum.mjs).
+export const MARKET_FILTER_GATES_ACT = false;
 if (!uni.some(u => px[u.ticker + '.JK'])) throw new Error('no price data fetched');
 
 // Hot stocks get news every run (hourly); the rest on a 6-hourly full sweep. Hot = most liquid 30 from the last published
@@ -156,7 +159,7 @@ uni.forEach(u => {
   pk.thin = thin;
   // No volume in the last 3 sessions: suspended (or halted). Shown, never traded.
   pk.suspended = b.v.slice(-3).every(v => !v);
-  pk.tier = pk.suspended ? 'SUSP' : thin ? (pk.score >= api.ACT_SCORE ? 'THIN' : 'WATCH') : tierOf(pk.score, api.ACT_SCORE, pk.confirm, ov, marketOk, flowVeto, pk.untested);
+  pk.tier = pk.suspended ? 'SUSP' : thin ? (pk.score >= api.ACT_SCORE ? 'THIN' : 'WATCH') : tierOf(pk.score, api.ACT_SCORE, pk.confirm, ov, MARKET_FILTER_GATES_ACT ? marketOk : true, flowVeto, pk.untested);
   pk.filings = filings && filings.by[u.ticker] ? filings.by[u.ticker] : [];
   picks.push(pk);
 });
@@ -195,7 +198,7 @@ console.log('data coverage', JSON.stringify({ ...dataCoverage, missing: Object.f
 market.idxLive = live['^JKSE'] || null;
 // sma200 four weeks ago: how fast the bar the IHSG must clear is moving (for the 'how far to ON' gauge)
 const sma200ago = idx && idx.length >= 220 ? idx.slice(-220, -20).reduce((a, x) => a + x, 0) / 200 : null;
-market.filter = { ok: marketOk, ihsg: idx ? idx[idx.length - 1] : null, sma200: ihsgSma200, sma200ago, positions: (readJsonSafe('sizing-study.json') || {}).rule?.max || 5 };
+market.filter = { ok: marketOk, gates: MARKET_FILTER_GATES_ACT, ihsg: idx ? idx[idx.length - 1] : null, sma200: ihsgSma200, sma200ago, positions: (readJsonSafe('sizing-study.json') || {}).rule?.max || 5 };
 
 // ---- forward-test ledger + live track record ----
 const asOf = lastBar.toISOString().slice(0, 10);
