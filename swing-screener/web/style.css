@@ -235,3 +235,40 @@ svg.spark { display: block; }
 .csplit { display: flex; height: 9px; border-radius: 5px; overflow: hidden; margin-top: 6px; background: var(--line); max-width: 420px; }
 .csplit i { display: block; } .c-retail { background: var(--warn); color: var(--warn); } .c-foreign { background: var(--up); color: var(--up); } .c-local { background: var(--accent); color: var(--accent); } .c-mixed { background: var(--mute); color: var(--mute); }
 .csplit-l span { background: none; } .csplit-l { font-size: 11.5px; margin-top: 3px; }
+
+/* Stock chart: price header, interval switch, candles (app.js mountChart) */
+.quote{margin:2px 0 6px}
+.qpx{font-size:28px;line-height:1.15;font-variant-numeric:tabular-nums;margin-right:8px}
+.qchg{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.sc{margin-bottom:14px}
+.sc-bar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:8px 0 6px}
+.seg{display:inline-flex;background:var(--line);border-radius:9px;padding:2px;gap:2px}
+.seg button{background:transparent;border:0;color:var(--mute);padding:4px 13px;border-radius:7px;font-size:12.5px;font-weight:600;min-height:30px}
+.seg button[aria-pressed=true]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.18)}
+.seg-t{background:transparent;color:var(--mute);border:1px solid var(--line);font-size:12px;padding:4px 10px;min-height:30px}
+.seg-t[aria-pressed=true]{color:var(--accent);border-color:var(--accent)}
+.sc-leg{font-size:12px;font-variant-numeric:tabular-nums;min-height:19px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc-leg b{font-weight:600;margin-right:3px}
+.sc-box.live{height:360px;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden;touch-action:pan-y}
+.sc-key{font-size:11.5px;margin-top:4px}.k20{color:var(--accent)}.k50{color:var(--warn)}
+html.noscroll,html.noscroll body{overflow:hidden}
+@media (max-width:760px){
+  .sc-box.live{height:min(56vh,340px);border-left:0;border-right:0;border-radius:0;margin:0 -12px}
+  .seg{flex:1}.seg button{flex:1}
+  .sc-leg{white-space:normal;min-height:38px}
+  /* A stock opens as its own page, like a broker app */
+  .detailcard.sheet{position:fixed;inset:0;z-index:30;margin:0;border:0;border-radius:0;overflow-y:auto;overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;padding:0 12px calc(20px + env(safe-area-inset-bottom))}
+  .sheet .dhead{position:sticky;top:0;z-index:3;background:var(--card);margin:0 -12px 6px;padding:max(8px,env(safe-area-inset-top)) 12px 8px;
+    border-bottom:1px solid var(--line);flex-wrap:nowrap;align-items:center}
+  .sheet .dhead button{margin-left:0}
+  .back{font-size:26px;line-height:1;padding:0 12px 2px;border:0}
+}
+/* Call markers: status box, hover note, past calls */
+.sc-tg{display:inline-flex;gap:6px}
+.sc-note{font-size:12px;color:var(--accent);min-height:17px}
+.callbox{border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:7px 10px;margin:4px 0 6px;font-size:13px;background:var(--card)}
+.flag{display:inline-block;border-radius:5px;padding:0 7px;font-weight:700;font-size:12px;background:var(--line)}
+.flag.up{background:var(--act);color:var(--actInk)}.flag.down{background:var(--skip);color:var(--skipInk)}
+.kact{color:var(--accent)}.krad{color:var(--warn)}
+.sc-calls details{margin-top:8px}.sc-calls summary{cursor:pointer;font-weight:600;font-size:13px}

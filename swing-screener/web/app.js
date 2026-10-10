@@ -309,10 +309,12 @@
     const q = PQ.trim().toLowerCase();
     const list = (FILTER === 'ALL' ? P : P.filter(p => p.action === FILTER)).filter(p => !q || p.ticker.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.sector.toLowerCase().includes(q));
     const sel = P.find(x => x.ticker === OPEN);
-    const detail = s => `<div class="card pad detailcard" id="dcard"><div class="dhead"><b class="tk">${esc(s.ticker)}</b> <span class="muted">${esc(s.name)} · ${esc(s.sector)}</span><button class="ghost" id="dclose">Close</button></div>${detailHtml(s)}</div>`;
+    const detail = s => MQ.matches
+      ? `<div class="card pad detailcard sheet" id="dcard" role="dialog" aria-label="${esc(s.ticker)}"><div class="dhead"><button class="ghost back" id="dclose" aria-label="Back to the list">‹</button><div><b class="tk">${esc(s.ticker)}</b> <span class="act ${s.action}">${s.action}</span><div class="nm">${esc(s.name)} · ${esc(s.sector)}</div></div></div>${detailHtml(s)}</div>`
+      : `<div class="card pad detailcard" id="dcard"><div class="dhead"><b class="tk">${esc(s.ticker)}</b> <span class="muted">${esc(s.name)} · ${esc(s.sector)}</span><button class="ghost" id="dclose">Close</button></div>${detailHtml(s)}</div>`;
     const empty = '<div class="card empty">Nothing in this filter today.</div>';
     const body = MQ.matches
-      ? `<div class="cards">${list.length ? list.map(p => cardHtml(p) + (p.ticker === OPEN ? detail(p) : '')).join('') : empty}</div>`
+      ? `<div class="cards">${list.length ? list.map(cardHtml).join('') : empty}</div>${sel ? detail(sel) : ''}`
       : `${sel ? detail(sel) : ''}<div class="card scroll"><table>
         <thead><tr><th>Ticker</th><th>Action</th><th>Score</th><th>Setup</th><th class="n">Close</th><th class="n">Live</th><th class="n">1D</th><th class="n">5D</th><th class="n">RSI</th><th class="n">vs SMA20</th><th class="n">Stop</th><th class="n">Target</th><th class="n">R/R</th><th>News</th><th>Top headline</th></tr></thead>
         <tbody>${list.length ? list.map(rowHtml).join('') : '<tr><td colspan="15" class="empty">Nothing in this filter today.</td></tr>'}</tbody>
@@ -326,16 +328,21 @@
       ${marketBanner()}
       <p class="muted hint">ACT = oversold-bounce score ≥ ${DATA.meta.actScore}. Badges: <b>ACT</b> bounce candle seen, <b>WAIT</b> no bounce candle yet, <b>SKIP</b> not traded (NeoBDM veto, or one of the 200 stocks added in Oct 2026 where the edge failed its test), <b>PAUSE</b> market filter off, <b>THIN</b> trades under Rp 5 B a day (shown, never traded). Broker flow no longer adds ACT+ / ACT?: two years of NeoBDM history showed it did not tell good bounces from bad ones (Broker flow tab). Few days have any; "none today" is a valid answer.</p>
       ${body}`;
-    const toggle = t => { OPEN = OPEN === t ? null : t; renderPicks(); const d = $('#dcard'); if (OPEN && d) d.scrollIntoView({ block: MQ.matches ? 'nearest' : 'start', behavior: 'smooth' }); };
+    // Phone: the stock opens as its own full-screen page; the back gesture closes it.
+    const toggle = t => { OPEN = OPEN === t ? null : t; if (OPEN && MQ.matches) history.pushState({ sheet: OPEN }, ''); renderPicks(); const d = $('#dcard'); if (OPEN && d && !MQ.matches) d.scrollIntoView({ block: 'start', behavior: 'smooth' }); };
     el.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { FILTER = b.dataset.f; OPEN = null; renderPicks(); });
     el.querySelectorAll('tr.row, .pcard').forEach(n => n.onclick = e => { if (e.target.closest('a, .gtag')) return; toggle(n.dataset.t); });
     el.querySelectorAll('.gtag').forEach(b => b.onclick = e => { e.stopPropagation(); document.querySelector('[data-tab=groups]').click(); window.scrollTo(0, 0); });
     bindSizer(el);
-    const dc = $('#dclose', el); if (dc) dc.onclick = () => { OPEN = null; renderPicks(); };
+    const dc = $('#dclose', el); if (dc) dc.onclick = () => { if (history.state && history.state.sheet) history.back(); else { OPEN = null; renderPicks(); } };
+    document.documentElement.classList.toggle('noscroll', !!(sel && MQ.matches));
+    if (sel) mountChart($('#dcard', el), sel); else dropChart();
     el.querySelectorAll('[data-jump]').forEach(b => b.onclick = e => { e.stopPropagation(); const t = document.getElementById(b.dataset.jump); if (t) t.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
     const pq = $('#pq', el); if (pq) pq.oninput = e => { PQ = e.target.value; const pos = e.target.selectionStart; renderPicks(); const i = $('#pq'); i.focus(); i.setSelectionRange(pos, pos); };
     el.querySelectorAll('[data-news]').forEach(b => b.onclick = () => { NEWSPERIOD = '30d'; NEWSQ = b.dataset.news; NEWSCAT = 'ALL'; NEWSLIMIT = 120; renderNews(); document.querySelector('[data-tab=news]').click(); });
   }
+
+  window.addEventListener('popstate', () => { if (OPEN && MQ.matches) { OPEN = null; renderPicks(); } });
 
   // Phone layout: one card per stock instead of a 15-column table.
   function cardHtml(p) {
@@ -382,6 +389,196 @@
       ${lines}<path d="${line}" fill="none" stroke="var(--ink)" stroke-width="1.8"/>
       <circle cx="${x(p.spark.length - 1)}" cy="${y(p.close)}" r="3.5" fill="var(--accent)"/>
       <text x="${L}" y="${H - 4}">${esc(p.sparkFrom)}</text><text x="${W - R - 54}" y="${H - 4}">${esc(p.sparkTo)}</text></svg>`;
+  }
+
+  // ---------- stock chart: candles + volume, 1H / 4H / 1D / 1W like a broker app ----------
+  // TradingView Lightweight Charts, loaded on first open. Candle files come from tools/ohlc.mjs (daily ~2y, hourly ~3mo;
+  // 4H and weekly are merged here). Offline or before the first build, the SVG close-line stays in place.
+  const LWC_URL = 'https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js';
+  const TFS = [['1H', 'Hourly'], ['4H', '4-hour'], ['1D', 'Daily'], ['1W', 'Weekly']];
+  const SHOW = { '1H': 56, '4H': 60, '1D': 120, '1W': 104 }; // bars in view when the chart opens
+  let TF = TFS.some(t => t[0] === LS.get('chartTf')) ? LS.get('chartTf') : '1D';
+  let SHOWLV = LS.get('chartLv') !== '0', SHOWEV = LS.get('chartEv') !== '0';
+  let lwcP = null, CHART = null;
+  const OHLC = new Map();
+  const loadLwc = () => lwcP || (lwcP = new Promise((ok, no) => {
+    const s = document.createElement('script');
+    s.src = LWC_URL; s.crossOrigin = 'anonymous';
+    s.onload = () => ok(window.LightweightCharts);
+    s.onerror = () => { lwcP = null; s.remove(); no(new Error('chart library')); };
+    document.head.appendChild(s);
+  }));
+  const loadOhlc = t => {
+    if (!OHLC.has(t)) OHLC.set(t, fetch(`data/ohlc/${encodeURIComponent(t)}.json?t=${Math.floor(Date.now() / 600000)}`)
+      .then(r => { if (!r.ok) throw new Error('no chart file'); return r.json(); })
+      .catch(e => { OHLC.delete(t); throw e; }));
+    return OHLC.get(t);
+  };
+  // Rows are [time, o, h, l, c, v], oldest first; merges consecutive rows that share a bucket key.
+  const bucket = (rows, keyOf) => {
+    const out = [];
+    for (const r of rows) {
+      const k = keyOf(r[0]), b = out[out.length - 1];
+      if (b && b[0] === k) { b[2] = Math.max(b[2], r[2]); b[3] = Math.min(b[3], r[3]); b[4] = r[4]; b[5] += r[5]; } else out.push([k, r[1], r[2], r[3], r[4], r[5]]);
+    }
+    return out;
+  };
+  const weekKey = d => { const t = new Date(d + 'T00:00:00Z'); t.setUTCDate(t.getUTCDate() - ((t.getUTCDay() + 6) % 7)); return t.toISOString().slice(0, 10); };
+  const fourHKey = s => { const day = s - (s % 86400), h = Math.floor((s % 86400) / 3600); return day + (h < 13 ? 9 : 13) * 3600; }; // IDX session 1 / session 2
+  const barsFor = (j, tf) => (tf === '1H' ? j.h : tf === '4H' ? bucket(j.h, fourHKey) : tf === '1W' ? bucket(j.d, weekKey) : j.d) || [];
+  const sma = (bars, n) => { const out = []; let s = 0; bars.forEach((b, i) => { s += b[4]; if (i >= n) s -= bars[i - n][4]; if (i >= n - 1) out.push({ time: b[0], value: s / n }); }); return out; };
+  const lots = v => { const l = v / 100; return l >= 1e9 ? (l / 1e9).toFixed(2) + 'B' : l >= 1e6 ? (l / 1e6).toFixed(2) + 'M' : l >= 1e3 ? (l / 1e3).toFixed(1) + 'K' : Math.round(l) + ''; };
+  const levelsOf = p => [['Target', p.target, 'var(--accent)'], ['Resist', p.resistance, 'var(--down)'], ['Support', p.support, 'var(--up)'],
+    ['Stop', p.action === 'ACT' && p.wideStop ? p.wideStop : p.stop, 'var(--warn)']];
+
+  function quoteHtml(p) {
+    const px = p.live ? p.live.price : p.close, ch = p.live ? p.live.chg : p.chg1d;
+    const cls = ch > 0 ? 'up' : ch < 0 ? 'down' : '', d = ch == null ? null : px - px / (1 + ch);
+    return `<div class="quote"><b class="qpx">${f0(px)}</b><span class="qchg ${cls}">${d == null ? '' : (d > 0 ? '+' : '') + f0(d)} (${ch == null ? '–' : (ch > 0 ? '+' : '') + (ch * 100).toFixed(2) + '%'})</span>
+      <div class="muted">${p.live ? 'Live, today' + (p.live.high ? ` · H ${f0(p.live.high)} L ${f0(p.live.low)}` : '') : 'Close ' + esc(DATA.meta.asOf)} · RSI ${p.rsi == null ? '–' : p.rsi.toFixed(0)} · Rp ${p.valueB.toFixed(0)} B a day</div></div>`;
+  }
+
+  function chartBoxHtml(p) {
+    return `<div class="sc">
+      <div class="sc-bar"><div class="seg" role="group" aria-label="Candle interval">${TFS.map(([k, l]) => `<button data-tf="${k}" aria-pressed="${TF === k}" title="${l} candles">${k}</button>`).join('')}</div>
+        <span class="sc-tg"><button class="seg-t" data-ev aria-pressed="${SHOWEV}" title="Past ACT calls and their take-profit / stop-loss exits">Calls</button><button class="seg-t" data-lv aria-pressed="${SHOWLV}" title="Stop, target, support and resistance lines">Levels</button></span></div>
+      <div class="sc-status"></div>
+      <div class="sc-leg"></div><div class="sc-note"></div>
+      <div class="sc-box">${chartSvg(p)}</div>
+      <div class="sc-key muted"><span class="kact">▲ ACT</span> convinced call, buy next open · <span class="krad">●</span> WAIT <span class="mute">●</span> PAUSE <span class="down">●</span> SKIP / THIN oversold, not a buy yet (tap or hover a bar for why) · <span class="up">▼ TP</span> <span class="down">▲ SL</span> <span class="mute">■ Exit</span> take profit, stop loss, 15-day exit · <span class="k20">━</span> MA20 <span class="k50">━</span> MA50 · volume in lots · times WIB · Yahoo prices, can lag · chart by <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">TradingView</a></div>
+      <div class="sc-calls"></div>
+    </div>`;
+  }
+
+  function dropChart() { if (CHART) { CHART.remove(); CHART = null; } }
+
+  async function mountChart(root, p) {
+    dropChart();
+    const sc = root && $('.sc', root);
+    if (!sc) return;
+    sc.querySelectorAll('[data-tf]').forEach(b => b.onclick = e => { e.stopPropagation(); TF = b.dataset.tf; LS.set('chartTf', TF); sc.querySelectorAll('[data-tf]').forEach(x => x.setAttribute('aria-pressed', x === b)); mountChart(root, p); });
+    const lb = $('[data-lv]', sc);
+    lb.onclick = e => { e.stopPropagation(); SHOWLV = !SHOWLV; LS.set('chartLv', SHOWLV ? '1' : '0'); lb.setAttribute('aria-pressed', SHOWLV); mountChart(root, p); };
+    const eb = $('[data-ev]', sc);
+    eb.onclick = e => { e.stopPropagation(); SHOWEV = !SHOWEV; LS.set('chartEv', SHOWEV ? '1' : '0'); eb.setAttribute('aria-pressed', SHOWEV); mountChart(root, p); };
+    const leg = $('.sc-leg', sc), box = $('.sc-box', sc), noteEl = $('.sc-note', sc);
+    let L, j;
+    try { [L, j] = await Promise.all([loadLwc(), loadOhlc(p.ticker)]); } catch {
+      leg.innerHTML = '<span class="muted">Candles unavailable (offline, or the chart file is not built yet). Showing the last 90 closes.</span>';
+      return;
+    }
+    if (!sc.isConnected || OPEN !== p.ticker) return;
+    const bars = barsFor(j, TF);
+    if (bars.length < 2) { leg.innerHTML = `<span class="muted">Yahoo has no ${TF === '1H' || TF === '4H' ? 'hourly' : ''} bars for ${esc(p.ticker)}. Try 1D.</span>`; return; }
+    dropChart();
+    box.innerHTML = ''; box.classList.add('live');
+    const css = getComputedStyle(document.documentElement), v = n => css.getPropertyValue(n).trim();
+    const up = v('--up'), dn = v('--down'), intraday = TF === '1H' || TF === '4H';
+    const chart = CHART = L.createChart(box, {
+      autoSize: true,
+      layout: { background: { color: 'transparent' }, textColor: v('--mute'), fontSize: 11, fontFamily: getComputedStyle(document.body).fontFamily },
+      grid: { vertLines: { visible: false }, horzLines: { color: v('--line') } },
+      rightPriceScale: { borderVisible: false, scaleMargins: { top: 0.08, bottom: 0.26 } },
+      timeScale: { borderVisible: false, timeVisible: intraday, secondsVisible: false, rightOffset: 3 },
+      crosshair: { mode: 1 },
+      handleScroll: { vertTouchDrag: false },
+      localization: { priceFormatter: x => Math.round(x).toLocaleString('en-US') },
+    });
+    // An open (or about to open) ACT trade draws its own entry / TP / SL instead of today's plan target and stop.
+    const lastCall = (j.ev || []).filter(e => e.k === 'call').pop();
+    const openT = lastCall && (lastCall.res === 'open' || lastCall.res === 'pending') ? lastCall : null;
+    const lvList = SHOWLV ? (openT ? levelsOf(p).filter(l => l[0] === 'Resist' || l[0] === 'Support')
+      .concat([['TP', openT.tp, 'var(--up)'], ['SL', openT.stop, 'var(--down)']], openT.entry ? [['Entry', openT.entry, 'var(--ink)']] : []) : levelsOf(p)) : [];
+    const lvVals = lvList.map(l => l[1]).filter(x => x != null);
+    // With Levels on, the price axis stretches to keep every level line above the volume bars.
+    const cs = chart.addCandlestickSeries({ upColor: up, downColor: dn, borderVisible: false, wickUpColor: up, wickDownColor: dn,
+      autoscaleInfoProvider: base => { const r = base(); if (!r || !lvVals.length) return r; return { ...r, priceRange: { minValue: Math.min(r.priceRange.minValue, ...lvVals), maxValue: Math.max(r.priceRange.maxValue, ...lvVals) } }; } });
+    cs.setData(bars.map(b => ({ time: b[0], open: b[1], high: b[2], low: b[3], close: b[4] })));
+    const vol = chart.addHistogramSeries({ priceScaleId: 'vol', priceFormat: { type: 'volume' }, lastValueVisible: false, priceLineVisible: false });
+    chart.priceScale('vol').applyOptions({ scaleMargins: { top: 0.8, bottom: 0 } });
+    vol.setData(bars.map(b => ({ time: b[0], value: b[5], color: (b[4] >= b[1] ? up : dn) + '55' })));
+    [[20, v('--accent')], [50, v('--warn')]].forEach(([n, c]) => {
+      const m = sma(bars, n);
+      if (m.length) chart.addLineSeries({ color: c, lineWidth: 1, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false }).setData(m);
+    });
+    lvList.forEach(([t, val, c]) => { if (val != null) cs.createPriceLine({ price: val, color: v(c.slice(4, -1)), lineWidth: 1, lineStyle: t === 'Entry' ? 0 : 2, axisLabelVisible: true, title: t }); });
+    const notes = callMarkers(cs, bars, j, { up, dn, acc: v('--accent'), warn: v('--warn'), mute: v('--mute') });
+    callStatus($('.sc-status', sc), $('.sc-calls', sc), p, j);
+    chart.timeScale().setVisibleLogicalRange({ from: Math.max(0, bars.length - SHOW[TF]), to: bars.length + 2 });
+    const legend = i => {
+      const b = bars[i], prev = bars[i - 1];
+      if (!b) return;
+      const c = b[4] >= b[1] ? 'up' : 'down';
+      leg.innerHTML = `<span class="muted">${esc(when(b[0]))}${TF === '1W' ? ' wk' : ''}</span> O <b class="${c}">${f0(b[1])}</b> H <b class="${c}">${f0(b[2])}</b> L <b class="${c}">${f0(b[3])}</b> C <b class="${c}">${f0(b[4])}</b> ${prev ? pc(b[4] / prev[4] - 1, 2) : ''} <span class="muted">Vol ${lots(b[5])}</span>`;
+      noteEl.textContent = notes.get(i) || '';
+    };
+    legend(bars.length - 1);
+    chart.subscribeCrosshairMove(e => legend(e.logical == null ? bars.length - 1 : Math.max(0, Math.min(bars.length - 1, Math.round(e.logical)))));
+  }
+
+  const when = t => (typeof t === 'string' ? t : new Date(t * 1000).toISOString().slice(0, 16).replace('T', ' '));
+  const retTxt = r => (r > 0 ? '+' : '') + (r * 100).toFixed(1) + '%';
+  const RES = { tp: 'TP hit', sl: 'SL hit', time: '15-day exit' };
+
+  // Puts every past call on the candles (tools/signals.mjs). Calls fire after the close, so on 1H/4H they sit on the
+  // day's last bar; TP/SL sit on the first bar that touched the level. Returns bar index -> explanation for the legend.
+  function callMarkers(cs, bars, j, col) {
+    const notes = new Map();
+    if (!SHOWEV) { cs.setMarkers([]); return notes; }
+    const intraday = TF === '1H' || TF === '4H', keyOf = TF === '1W' ? weekKey : d => d;
+    const first = new Map(), last = new Map();
+    bars.forEach((b, i) => { const k = intraday ? when(b[0]).slice(0, 10) : b[0]; if (!first.has(k)) first.set(k, i); last.set(k, i); });
+    const at = (day, end, hit) => {
+      const k = keyOf(day), i = (end ? last : first).get(k);
+      if (i == null || !intraday || !hit) return i;
+      for (let n = first.get(k); n <= last.get(k); n++) if (hit(bars[n])) return n;
+      return i;
+    };
+    const add = (i, t) => notes.set(i, (notes.has(i) ? notes.get(i) + ' · ' : '') + t);
+    const M = [];
+    for (const e of j.ev || []) {
+      const rp = j.liveFrom && e.d >= j.liveFrom ? '' : ' (replayed)';
+      const i = at(e.d, true);
+      if (e.k === 'radar') {
+        if (i != null) { if (!M.some(m => m.i === i && m.radar)) M.push({ i, radar: 1, position: 'belowBar', color: e.tier === 'WAIT' ? col.warn : e.tier === 'PAUSE' ? col.mute : col.dn, shape: 'circle', size: 0.7 }); add(i, `${e.d}: oversold (score ${e.s}) but ${e.tier}, not a buy yet${rp}`); }
+        continue;
+      }
+      if (i != null) { M.push({ i, position: 'belowBar', color: col.acc, shape: 'arrowUp', text: 'ACT' }); add(i, `${e.d}: ACT call, score ${e.s}${rp}. Buy next open${e.entry ? ' (' + f0(e.entry) + ')' : ''}, stop ${f0(e.stop)}, target ${f0(e.tp)}`); }
+      if (!e.x) continue;
+      const xi = at(e.x, false, e.res === 'tp' ? b => b[2] >= e.tp : e.res === 'sl' ? b => b[3] <= e.stop : null);
+      if (xi == null) continue;
+      const tp = e.res === 'tp', sl = e.res === 'sl';
+      M.push({ i: xi, position: sl ? 'belowBar' : 'aboveBar', color: tp ? col.up : sl ? col.dn : col.mute, shape: tp ? 'arrowDown' : sl ? 'arrowUp' : 'square', text: (tp ? 'TP ' : sl ? 'SL ' : 'Exit ') + retTxt(e.ret) });
+      add(xi, `${e.x}: ${RES[e.res]} at ${f0(e.xp)}, ${retTxt(e.ret)} after fees${e.today ? ' (touched today, live)' : ''}${rp}`);
+    }
+    cs.setMarkers(M.sort((a, b) => a.i - b.i).map(({ i, radar, ...m }) => ({ time: bars[i][0], ...m })));
+    return notes;
+  }
+
+  // Where the stock stands against its latest call, plus the list of past calls.
+  function callStatus(el, listEl, p, j) {
+    const ev = j.ev || [], calls = ev.filter(e => e.k === 'call'), c = calls[calls.length - 1], last = ev[ev.length - 1];
+    const px = p.live ? p.live.price : p.close, days = j.d.map(r => r[0]), recent = d => !!d && days.indexOf(d) >= days.length - 11;
+    let h = '';
+    if (c && c.res === 'pending') h = `<b>ACT call on ${esc(c.d)}:</b> buy at the next open. Stop ${f0(c.stop)}, target ${f0(c.tp)}.`;
+    else if (c && c.res === 'open') {
+      const toTp = c.tp / px - 1, toSl = c.stop / px - 1;
+      const near = toTp <= 0.02 ? ' <span class="flag up">near TP</span>' : toSl >= -0.02 ? ' <span class="flag down">near SL</span>' : '';
+      h = `<b>Open ACT trade</b> from ${esc(c.d)}: entry ${f0(c.entry)}, now ${pc(px / c.entry - 1)}${near}. TP ${f0(c.tp)} (${retTxt(toTp)} away) · SL ${f0(c.stop)} (${retTxt(toSl)} away) · day ${c.age} of 15.`;
+    } else if (c && recent(c.x)) {
+      h = `<span class="flag ${c.res === 'tp' ? 'up' : c.res === 'sl' ? 'down' : ''}">${RES[c.res]}</span> on ${esc(c.x)} at ${f0(c.xp)}: ${retTxt(c.ret)} after fees${c.today ? ' (touched today, live: not final)' : ''}. Called ${esc(c.d)}, entry ${f0(c.entry)}.`;
+    } else if (last && last.k === 'radar' && recent(last.d) && p.score >= DATA.meta.actScore) {
+      h = `<b>Oversold since ${esc(last.d)}</b> (badge ${esc(p.tier || last.tier)}): not a buy yet.`;
+    }
+    el.innerHTML = h ? `<div class="callbox">${h}</div>` : '';
+    const n = r => calls.filter(e => e.res === r).length, closed = calls.filter(e => e.x);
+    const spells = ev.filter(e => e.k === 'radar').length;
+    listEl.innerHTML = calls.length
+      ? `<details><summary>${calls.length} ACT call${calls.length === 1 ? '' : 's'} on ${esc(p.ticker)} in the chart window: ${n('tp')} TP, ${n('sl')} SL, ${n('time')} timed out${closed.length ? ', average ' + retTxt(closed.reduce((s, e) => s + e.ret, 0) / closed.length) + ' after fees' : ''}</summary>
+      <div class="scroll"><table><thead><tr><th>Called</th><th class="n">Score</th><th class="n">Entry</th><th class="n">Stop</th><th class="n">Target</th><th>Result</th></tr></thead><tbody>
+      ${calls.slice().reverse().map(e => `<tr><td>${esc(e.d)}${j.liveFrom && e.d >= j.liveFrom ? ' <span class="tag">live</span>' : ''}</td><td class="n">${e.s}</td><td class="n">${f0(e.entry)}</td><td class="n">${f0(e.stop)}</td><td class="n">${f0(e.tp)}</td><td>${e.x ? `<span class="${e.ret > 0 ? 'up' : 'down'}">${RES[e.res]} ${esc(e.x)}, ${retTxt(e.ret)}</span>` : e.res === 'open' ? 'open' : 'buy next open'}</td></tr>`).join('')}</tbody></table></div>
+      <p class="muted">Before ${esc(j.liveFrom || 'the live ledger')} these calls are replayed with today's rules and neutral news (there is no news or NeoBDM history to replay), so they are not calls the site actually made at the time. Entry is the next open; one trade per stock at a time. Plus ${spells} oversold spell${spells === 1 ? '' : 's'} that never got an ACT badge.</p></details>`
+      : `<p class="muted">No ACT call on ${esc(p.ticker)} in the chart window${spells ? ` (${spells} oversold spell${spells === 1 ? '' : 's'} that never got an ACT badge, mostly market filter off)` : ''}.</p>`;
   }
 
   function ownHtml(o) {
@@ -680,8 +877,8 @@
 
   function detailHtml(p) {
     const parts = p.parts, max = { oversold: 80, support: 10, news: 10 };
-    const jump = [['s-chart', 'Chart & levels'], ['s-news', 'News'], ['s-nb', 'NeoBDM'], ['s-bc', 'Big buyers\' cost'], ['s-bm', 'Bandarmetrics'], ['s-own', 'Owners'], ['s-earn', 'Earnings']];
-    return `${thesisHtml(p)}<nav class="jump">${jump.map(([id, l]) => `<button class="chip" data-jump="${id}">${l}</button>`).join('')}</nav><div class="dgrid" id="s-chart"><div>${chartSvg(p)}
+    const jump = [['s-lv', 'Levels'], ['s-news', 'News'], ['s-nb', 'NeoBDM'], ['s-bc', 'Big buyers\' cost'], ['s-bm', 'Bandarmetrics'], ['s-own', 'Owners'], ['s-earn', 'Earnings']];
+    return `<div id="s-chart">${quoteHtml(p)}${chartBoxHtml(p)}</div>${thesisHtml(p)}<nav class="jump">${jump.map(([id, l]) => `<button class="chip" data-jump="${id}">${l}</button>`).join('')}</nav><div class="dgrid" id="s-lv"><div>
       <div class="parts">${Object.keys(parts).map(k => `<div class="part"><span>${esc(k)}</span><div class="bar"><i style="width:${Math.min(100, (parts[k] / (max[k] || 10)) * 100)}%"></i></div><em>${parts[k]}</em></div>`).join('')}</div>
       <p class="muted">Score parts: oversold-ness (RSI, 5-day drop, distance under the 20d average) is the backtested driver; support proximity and news are secondary.</p></div>
       <div><div class="kv">

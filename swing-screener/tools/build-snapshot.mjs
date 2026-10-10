@@ -7,6 +7,8 @@ import { refreshNewsStore, newsCoverage, archiveForWeb } from './news.mjs';
 import { buildOwnership } from './ownership.mjs';
 import { fetchFundamentals } from './fundamentals.mjs';
 import { runAlerts } from './alerts.mjs';
+import { writeOhlc } from './ohlc.mjs';
+import { stockSignals } from './signals.mjs';
 import { buildTracker, readLedger } from './tracker.mjs';
 import { loadNeobdm, tierOf } from './neobdm.mjs';
 import { loadGroups, groupSeries, groupSummary, groupReadAt } from './groups.mjs';
@@ -40,6 +42,7 @@ function splitLive(sym, b) {
   const cut = a => a.slice(0, n - 1);
   return { d: cut(b.d), o: cut(b.o), h: cut(b.h), l: cut(b.l), c: cut(b.c), v: cut(b.v) };
 }
+const rawPx = { ...px }; // chart files keep today's partial bar
 Object.keys(px).forEach(k => { px[k] = splitLive(k, px[k]); });
 const idx = px['^JKSE'] ? px['^JKSE'].c : null;
 // Market filter (tools/experiment-v4.mjs, walk-forward): new bounce trades only while IHSG is above its 200-day average.
@@ -240,6 +243,20 @@ const out = {
 fs.writeFileSync(path.join(OUT, 'latest.json'), JSON.stringify(out));
 console.log(`snapshot ${asOf}: ${picks.length} ranked (${picks.filter(p => p.action === 'ACT').length} ACT), ${skipped.length} skipped, ${newsRows.length} headlines, ${Math.round(fs.statSync(path.join(OUT, 'latest.json')).size / 1024)} KB`);
 picks.slice(0, 8).forEach(p => console.log(`${p.ticker} ${p.score} ${p.action} ${p.setup} rsi ${p.rsi && p.rsi.toFixed(0)} news ${p.newsScore}`));
+
+// Candle files for the stock chart (1H/4H/1D/1W). A Yahoo hiccup here only costs the chart, never the snapshot.
+// Chart markers: every past ACT call / oversold-but-not-ACT day with its outcome, replayed with the live rules.
+try {
+  const signals = {}, t0 = Date.now(), byT = new Map(picks.map(p => [p.ticker, p]));
+  for (const u of uni) {
+    const sym = u.ticker + '.JK', pk = byT.get(u.ticker);
+    if (!rawPx[sym] || !px[sym] || !px['^JKSE']) continue;
+    signals[u.ticker] = stockSignals(api, rawPx[sym], px[sym].c.length, px['^JKSE'], { cfg, untested: NEWSET.has(u.ticker), live: pk ? { score: pk.score, tier: pk.tier } : null });
+  }
+  const liveFrom = fs.readdirSync(HIST).filter(f => /^\d{4}-\d\d-\d\d\.json$/.test(f)).sort()[0];
+  console.log(`signals: ${Object.values(signals).flat().filter(e => e.k === 'call').length} calls replayed in ${Date.now() - t0} ms`);
+  await writeOhlc(rawPx, uni.map(u => u.ticker), { useCache: process.env.USE_CACHE === '1', signals, liveFrom: liveFrom ? liveFrom.slice(0, 10) : null });
+} catch (e) { console.error('ohlc failed', e.message); }
 
 // Telegram digest (no-op unless TG_TOKEN / TG_CHAT_ID are set, or DRY_ALERTS=1). Never lets a failure break the build.
 if (!process.env.FAKE_NOW) { try { await runAlerts({ api, picks, newsRows, meta: out.meta, market, tracker }); } catch (e) { console.error('alerts failed', e.message); } }

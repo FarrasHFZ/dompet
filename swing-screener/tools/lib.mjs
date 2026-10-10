@@ -34,9 +34,9 @@ export function expansionTickers() {
 
 export const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-// Yahoo daily bars -> column-oriented bars (same shape as the Sheet path).
-export async function fetchYahoo(symbol, range = '5y') {
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${range}&interval=1d`;
+// Yahoo bars (daily by default, '60m' for the hourly chart) -> column-oriented bars (same shape as the Sheet path).
+export async function fetchYahoo(symbol, range = '5y', interval = '1d') {
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${range}&interval=${interval}`;
   for (let attempt = 0; attempt < 3; attempt++) {
     const r = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
     if (r.status === 429) { await sleep(1500 * (attempt + 1)); continue; }

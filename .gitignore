@@ -29,3 +29,5 @@ swing-screener/data/idx-announcements.json
 swing-screener/data/nb-history.json
 swing-screener/data/nb-inventory.json
 swing-screener/data/broker-cost-local.json
+# Chart candle files are rebuilt by every Pages run (tools/ohlc.mjs)
+swing-screener/web/data/ohlc/

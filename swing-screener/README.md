@@ -263,6 +263,16 @@ What you get (one digest per run, only new items, never repeated): new risk / co
 ## On your phone
 Open https://farrashfz.github.io/dompet/screener/ and install it: iPhone Safari → Share → *Add to Home Screen*; Android Chrome → menu → *Install app*. It opens full-screen with its own icon, a bottom tab bar and one card per stock, and shows the last data when offline. This is a web app (PWA), not an App Store app.
 
+## Stock chart and call markers
+Tapping a stock opens its page (full screen on a phone) with a candle chart: 1H / 4H / 1D / 1W, volume, MA20 / MA50, and
+the plan levels. Each Pages run writes `web/data/ohlc/<TICKER>.json` (`tools/ohlc.mjs`: ~2 years daily, ~3 months hourly
+from Yahoo; 4H and weekly are merged in the browser; not committed). `tools/signals.mjs` replays the live rules over the
+daily bars and marks every **ACT call** (buy next open, wide stop, plan target, 15 sessions), its **TP / SL / 15-day exit**,
+and each **oversold spell that never got an ACT badge** (WAIT / PAUSE / SKIP / THIN). The newest day uses the live badge;
+earlier days use neutral news and no NeoBDM veto, so they are replays, not calls the site made at the time. An open trade
+draws its own entry / TP / SL lines and a status box ("near TP" / "near SL" within 2%). Chart only: nothing here changes a
+score. `node tools/ohlc-local.mjs` builds the files from cached prices for a local preview.
+
 ## Out-of-sample check
 `HOLDOUT=1 node tools/backtest.mjs` runs the same score on 40 IDX stocks that were not used to design it (`tools/holdout-universe.json`). The edge replicates but smaller (top bucket +0.9% vs 0.0% baseline, IC 0.08), and expectancy after stops and fees is about zero.
 
