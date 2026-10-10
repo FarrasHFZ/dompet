@@ -278,3 +278,4 @@ html.noscroll,html.noscroll body{overflow:hidden}
 .whobox p{margin:6px 0}
 .tag.wchip{background:var(--soft);color:var(--accent);border:1px dashed var(--accent)}
 .tag.bchip{background:var(--watch);color:var(--watchInk);border:1px dashed var(--warn)}
+.tag.schip{background:var(--skip);color:var(--skipInk);border:1px dashed var(--down)}

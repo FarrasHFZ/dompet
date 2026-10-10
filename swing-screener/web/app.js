@@ -194,6 +194,26 @@
       <p class="muted">Watch only. ${ev}</p>`;
   }
 
+  // ---------- speculation season + speculative breakouts (tools/spec.mjs; watch, forward-tested) ----------
+  const specChip = p => (p.spec ? `<span class="tag schip" title="Cheap, volatile stock breaking out. Lottery-like: a few big winners, most trades lose. Watch only (Breakout lab).">speculative breakout · ${DATA.spec && DATA.spec.on ? 'season ON' : 'season off'} · watch</span>` : '');
+  function specBanner() {
+    const S = DATA.spec; if (!S) return '';
+    return `<div class="note ${S.on ? '' : 'warnnote'}"><b>Speculation season: ${S.on ? 'ON' : 'OFF'}.</b> Cheap, volatile breakouts that resolved over the last 60 sessions did ${pc(S.meter)} against the market (${S.events} trades). ${S.on ? 'In past seasons like this they kept paying on average, but through a few huge winners: most single trades still lost.' : 'Outside seasons they have lost money.'} ${S.today.length ? `Today: ${S.today.map(esc).join(', ')}.` : 'No speculative breakout today.'} Watch only; see Breakout lab.</div>`;
+  }
+  function breakoutLabHtml() {
+    const S = DATA.spec; if (!S) return '';
+    const C = S.crack || {}, X = S.study, F = S.forward;
+    return `<h2>Breakout lab: what we searched, and what we found</h2>
+      <div class="card scroll"><table><thead><tr><th>Step</th><th>Result</th></tr></thead><tbody>
+        <tr><td>Search ~30 breakout features (technical, Bandarmetrics, NeoBDM bandar / foreign / retail) and their best pairs, in 3 data tracks</td><td>${Object.entries(C).map(([k, v]) => `${k}: best t ${v.bestT.toFixed(2)} vs ${v.null95.toFixed(2)} for the best of 100 searches on shuffled outcomes`).join('; ')}. <b>No pattern beat chance.</b></td></tr>
+        <tr><td>The one theme that recurred: breakouts in cheap (&lt; Rp ${SPEC_PRICE}), volatile stocks. Frozen and tested once on unseen data</td><td>${X ? `2026: ${pc(X.A.ex)} excess (n ${X.A.n}); 612 never-used stocks: ${pc(X.B.ex)} (t ${X.B.t.toFixed(1)}), ${pc(X.stress.trim)} without the best 5%. <b>Failed.</b>` : ''}</td></tr>
+        <tr><td>Why: it is a season, not a pattern</td><td>${X ? Object.entries(X.byYear).filter(([, v]) => v.n >= 10).map(([y, v]) => `${y} ${pc(v.ex, 1)}`).join(' · ') : ''}. It pays in speculative manias (2021, late 2025) and loses otherwise; even then most single trades lose.</td></tr>
+        <tr><td>Forward test (speculative breakouts while the season is ON)</td><td>${F ? `${F.events} of ${F.needed} events${F.events ? `, excess ${pc(F.ex)}, t ${F.t.toFixed(2)}` : ''}` : 'starts 13 Oct'}. Becomes an ACT setup only with t ≥ 2 and a basket positive after fees.</td></tr>
+      </tbody></table></div>
+      <p class="muted">Why the search was tested against itself: try enough patterns and the best one always looks great. Rerunning the identical search on outcomes reshuffled within each date shows how good "great" looks by pure chance; here the real best never cleared it.</p>`;
+  }
+  const SPEC_PRICE = 854;
+
   // ---------- broker flow ----------
   let FLOWPH = 'ALL', FLOWQ = '', FLOWACT = false;
   function scorecardHtml(sc) {
@@ -390,7 +410,7 @@
     const P = DATA.picks;
     const cnt = a => P.filter(p => p.action === a).length;
     const q = PQ.trim().toLowerCase();
-    const list = (FILTER === 'ALL' ? P : FILTER === 'BASE' ? P.filter(baseOn) : P.filter(p => p.action === FILTER)).filter(p => !q || p.ticker.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.sector.toLowerCase().includes(q));
+    const list = (FILTER === 'ALL' ? P : FILTER === 'BASE' ? P.filter(p => baseOn(p) || p.spec) : P.filter(p => p.action === FILTER)).filter(p => !q || p.ticker.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.sector.toLowerCase().includes(q));
     const sel = P.find(x => x.ticker === OPEN);
     const detail = s => MQ.matches
       ? `<div class="card pad detailcard sheet" id="dcard" role="dialog" aria-label="${esc(s.ticker)}"><div class="dhead"><button class="ghost back" id="dclose" aria-label="Back to the list">‹</button><div><b class="tk">${esc(s.ticker)}</b> <span class="act ${s.action}">${s.action}</span><div class="nm">${esc(s.name)} · ${esc(s.sector)}</div></div></div>${detailHtml(s)}</div>`
@@ -408,7 +428,7 @@
           .map(([v, l]) => `<button class="chip" data-f="${v}" aria-pressed="${FILTER === v}">${l}</button>`).join('')}
         <input type="search" id="pq" placeholder="Search ticker, name or sector" value="${esc(PQ)}" style="max-width:240px;margin-left:auto">
       </div>
-      ${marketBanner()}
+      ${marketBanner()}${specBanner()}
       <p class="muted hint">ACT = oversold-bounce score ≥ ${DATA.meta.actScore}. Badges: <b>ACT</b> bounce candle seen, <b>WAIT</b> no bounce candle yet, <b>SKIP</b> not traded (NeoBDM veto, or one of the 200 stocks added in Oct 2026 where the edge failed its test), <b>THIN</b> trades under Rp 5 B a day (shown, never traded). The IHSG 200-day filter no longer blocks ACT (since 2026-10-10); a downtrend is shown as context. Broker flow no longer adds ACT+ / ACT?: two years of NeoBDM history showed it did not tell good bounces from bad ones (Broker flow tab). Few days have any; "none today" is a valid answer. <b>Paper only:</b> a 10-year check found no edge over random noise (Track record).</p>
       ${body}`;
     // Phone: the stock opens as its own full-screen page; the back gesture closes it.
@@ -431,7 +451,7 @@
   function cardHtml(p) {
     const h = p.headlines[0];
     return `<article class="pcard ${OPEN === p.ticker ? 'open' : ''}" data-t="${esc(p.ticker)}">
-      <div class="ptop"><div><b class="tk">${esc(p.ticker)}</b> <span class="act ${p.action}">${p.action}</span> ${tierHtml(p)} ${groupTag(p)} ${whoChip(p)} ${baseChip(p)}
+      <div class="ptop"><div><b class="tk">${esc(p.ticker)}</b> <span class="act ${p.action}">${p.action}</span> ${tierHtml(p)} ${groupTag(p)} ${whoChip(p)} ${baseChip(p)} ${specChip(p)}
         <div class="nm">${esc(p.name)}${p.ownership ? ' · ' + esc(p.ownership.control) : ''}</div>
         <div class="pthesis">${thesisShort(p)}</div></div>
         <div class="pscore"><b>${p.score}</b><small>score</small></div></div>
@@ -448,7 +468,7 @@
     const h = p.headlines[0];
     const open = OPEN === p.ticker;
     return `<tr class="row ${open ? 'open' : ''}" data-t="${esc(p.ticker)}">
-      <td><span class="tk">${esc(p.ticker)}</span> ${groupTag(p)} ${whoChip(p)} ${baseChip(p)}<div class="nm">${esc(p.name)}${p.ownership ? " · " + esc(p.ownership.control) : ""}</div><div class="pthesis">${thesisShort(p)}</div></td>
+      <td><span class="tk">${esc(p.ticker)}</span> ${groupTag(p)} ${whoChip(p)} ${baseChip(p)} ${specChip(p)}<div class="nm">${esc(p.name)}${p.ownership ? " · " + esc(p.ownership.control) : ""}</div><div class="pthesis">${thesisShort(p)}</div></td>
       <td><span class="act ${p.action}">${p.action}</span> ${tierHtml(p)}</td>
       <td><span class="score"><i style="width:${Math.round(p.score * 0.6)}px"></i><b>${p.score}</b></span></td>
       <td>${esc(p.setup)}</td><td class="n">${f0(p.close)}</td><td class="n">${p.live ? `${f0(p.live.price)} ${pc(p.live.chg)}` : '<span class="mute">–</span>'}</td><td class="n">${pc(p.chg1d)}</td><td class="n">${pc(p.chg5d)}</td>
@@ -1213,7 +1233,7 @@
   }
   function renderHow() {
     const m = DATA.meta;
-    $('#tab-how').innerHTML = `${labHtml()}${coverageCardHtml(m.dataCoverage)}
+    $('#tab-how').innerHTML = `${labHtml()}${breakoutLabHtml()}${coverageCardHtml(m.dataCoverage)}
       <h2>What runs where</h2>
       <div class="steps">
         <div class="card"><h3>Google Sheet = control panel + journal</h3><p class="muted">Holds Universe (tickers, sectors, news aliases), Themes (news queries like Danantara / komisaris) and Config (target %, stop, liquidity). Also the Screener and News tabs you can sort, annotate and keep trade notes in.</p></div>

@@ -10,6 +10,7 @@ import { runAlerts } from './alerts.mjs';
 import { writeOhlc } from './ohlc.mjs';
 import { stockSignals, callStats } from './signals.mjs';
 import { momentumBook } from './momentum.mjs';
+import { specRead, specForward } from './spec.mjs';
 import { buildTracker, readLedger } from './tracker.mjs';
 import { loadNeobdm, tierOf } from './neobdm.mjs';
 import { loadGroups, groupSeries, groupSummary, groupReadAt } from './groups.mjs';
@@ -213,17 +214,22 @@ market.filter = { ok: marketOk, gates: MARKET_FILTER_GATES_ACT, ihsg: idx ? idx[
 const asOf = lastBar.toISOString().slice(0, 10);
 // Every ranked stock is logged once per signal day (first run after the close), so later news can never rewrite the
 // signal. Logging ALL stocks, not just ACT, gives the control group that makes a win rate meaningful.
+// Speculation season + today's speculative breakouts (tools/spec.mjs): watch only, forward-tested.
+let specNow = null;
+try { specNow = specRead(px, uni.map(u => u.ticker)); if (specNow) { const tset = new Set(specNow.today); picks.forEach(p => { if (tset.has(p.ticker)) p.spec = true; }); console.log(`spec: season ${specNow.on ? 'ON' : 'OFF'} (${specNow.events} resolved, meter ${specNow.meter == null ? '-' : (specNow.meter * 100).toFixed(2) + '%'}), today ${specNow.today.join(', ') || 'none'}`); } } catch (e) { console.error('spec failed', e.message); }
 const ledgerFile = path.join(HIST, `${asOf}.json`);
 const LEDGER_V = 2; // v2 adds sector/RSI/regime for pattern analysis and logs the whole universe
 let existing = null;
 try { existing = JSON.parse(fs.readFileSync(ledgerFile, 'utf8')); } catch { /* none */ }
 if (!process.env.FAKE_NOW && (!existing || (existing.v || 1) < LEDGER_V)) {
   fs.writeFileSync(ledgerFile, JSON.stringify({
-    v: LEDGER_V, asOf, cfg, regime: market.regime, breadth: market.breadth, marketOk,
-    picks: picks.filter(p => !p.thin && !p.suspended).map(p => ({ ticker: p.ticker, sector: p.sector, score: p.score, action: p.action, setup: p.setup, rsi: p.rsi, dist20Atr: p.dist20Atr, rr: p.rr, atrPct: p.atrPct, entry: p.entry, stop: p.stop, target: p.target, newsScore: p.newsScore, bmScore: p.bm && !p.bm.stale && p.bm.score != null ? p.bm.score : null, ...(p.bm && !p.bm.stale && p.bm.mf != null ? { bmMf: p.bm.mf } : {}), ...(p.bm && !p.bm.stale && p.bm.is != null ? { bmInt: p.bm.is } : {}), ...(p.base ? { base: p.base.brk ? 'brk' : 'coil', acc: ['bandar', 'lpm', 'foreign'].filter(x => p.base.acc[x]).map(x => x[0].toUpperCase()).join('') } : {}), atr: p.atrPct && p.entry ? +(p.atrPct * p.entry).toFixed(2) : null, ...(p.untested ? { set: 'new' } : {}) })),
+    v: LEDGER_V, asOf, cfg, regime: market.regime, breadth: market.breadth, marketOk, specOn: !!(specNow && specNow.on),
+    picks: picks.filter(p => !p.thin && !p.suspended).map(p => ({ ticker: p.ticker, sector: p.sector, score: p.score, action: p.action, setup: p.setup, rsi: p.rsi, dist20Atr: p.dist20Atr, rr: p.rr, atrPct: p.atrPct, entry: p.entry, stop: p.stop, target: p.target, newsScore: p.newsScore, bmScore: p.bm && !p.bm.stale && p.bm.score != null ? p.bm.score : null, ...(p.bm && !p.bm.stale && p.bm.mf != null ? { bmMf: p.bm.mf } : {}), ...(p.bm && !p.bm.stale && p.bm.is != null ? { bmInt: p.bm.is } : {}), ...(p.spec ? { spec: 1 } : {}), ...(p.base ? { base: p.base.brk ? 'brk' : 'coil', acc: ['bandar', 'lpm', 'foreign'].filter(x => p.base.acc[x]).map(x => x[0].toUpperCase()).join('') } : {}), atr: p.atrPct && p.entry ? +(p.atrPct * p.entry).toFixed(2) : null, ...(p.untested ? { set: 'new' } : {}) })),
   }));
 }
 const tracker = buildTracker({ ledger: readLedger(HIST), bars: px, horizon: cfg.horizon });
+let specFwd = null;
+try { specFwd = specForward(fs.readdirSync(HIST).filter(f => /^\d{4}-\d\d-\d\d\.json$/.test(f)).sort().map(f => { const j = JSON.parse(fs.readFileSync(path.join(HIST, f), 'utf8')); return { day: f.slice(0, 10), specOn: j.specOn, picks: j.picks || [] }; }), px); } catch (e) { console.error('spec forward failed', e.message); }
 fs.writeFileSync(path.join(OUT, 'tracker.json'), JSON.stringify(tracker));
 const replayFile = path.join(ROOT, 'data', 'replay-tracker.json');
 if (fs.existsSync(replayFile)) fs.copyFileSync(replayFile, path.join(OUT, 'replay-tracker.json'));
@@ -259,6 +265,7 @@ const out = {
   momentum: momentum ? { ...momentum, study: readJson('momentum-study.json'), pit: readJson('momentum-pit.json') } : null,
   // Signal lab: hypotheses tested on 2026-10-10 and the live forward test of foreign flow.
   lab: (() => { const f = readJson('flow2-study.json'), r = readJson('foreign-rep.json'); return { flow2: f ? { H1: f['H1 retail share (high = worse)'], H2: f['H2 foreign buying, high-fcorr stocks'], H2c: f['   control: foreign buying, low-fcorr stocks'], H3: f['H3 LPM 60-session change (z), all stocks'] } : null, rep: r, forward: readJson('flow-read-forward.json'), bear: readJson('bear-study.json'), bmPattern: readJson('bmpattern-study.json'), bmForward: readJson('bm-forward.json'), rally: readJson('rally-study.json'), base: readJson('base-study.json'), baseForward: readJson('base-forward.json') }; })(),
+  spec: specNow ? { ...specNow, forward: specFwd, study: readJson('spec-study.json'), crack: (() => { const c = readJson('crack-study.json'); return c ? Object.fromEntries(Object.entries(c.tracks).map(([k, v]) => [k, { bestT: v.bestT, null95: v.null95 }])) : null; })() } : null,
   tenYear: { trend: readJson('trend-study.json'), own: readJson('own-holdout.json'), perm: readJson('permutation-study.json') },
   expansion: readJson('expand-study.json'), brokerCostStudy: readJson('brokercost-study.json'), brokerDirectory: readJson('broker-directory.json'), sizing: readJson('sizing-study.json'), research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
   flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json'), history: nbStudy, flowVeto,
