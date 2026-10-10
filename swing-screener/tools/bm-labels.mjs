@@ -57,6 +57,7 @@ for (const u of uni) {
   { const zc = (arr, k, w) => { if (k < w + 250) return null; const ch = []; for (let j = k - 250; j <= k; j += 5) if (arr[j] != null && arr[j - w] != null) ch.push(arr[j] - arr[j - w]); if (ch.length < 30 || arr[k] == null || arr[k - w] == null) return null; const m = ch.reduce((a, x) => a + x, 0) / ch.length, sdv = Math.sqrt(ch.reduce((a, x) => a + (x - m) ** 2, 0) / ch.length); return sdv ? (arr[k] - arr[k - w] - m) / sdv : null; };
     const zm = zc(s.m, t, 20), iw = s.i.slice(Math.max(0, t - 122), t - 2).filter(x => x != null).sort((a, b) => a - b), im = Math.max(...s.i.slice(t - 2, t + 1).filter(x => x != null));
     if (zm != null) by[u.ticker].mf = zm > 0;
+    const z40 = zc(s.l, t, 40); if (z40 != null) by[u.ticker].l40 = z40 > 0.5; // LPM rising over a 40-session base (experiment-base.mjs)
     if (iw.length >= 90 && isFinite(im)) by[u.ticker].is = im >= iw[Math.floor(iw.length * 0.8)]; }
   if (r.lpm60z != null) lpm60[u.ticker] = r.lpm60z;
   if (day > asOf) asOf = day;

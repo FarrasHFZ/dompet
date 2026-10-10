@@ -169,6 +169,7 @@
       ['Bandarmetrics accumulation pattern on oversold stocks (LPM up while price falls + Money Flow or Intensity), all 300, bear markets included', 'failed', L.bmPattern ? `The opposite: with the pattern ${pc(L.bmPattern.primary.mA)} a trade, without ${pc(L.bmPattern.primary.mB)}` : ''],
       ['Money Flow rising on an oversold stock (support) / Intensity spike (warning: selling not done)', 'forward test', `Looked helpful (t 1.8) / harmful (t −2.3) as side results; logged daily from 13 Oct, decided at 150 trades${L.bmForward ? ` (${L.bmForward.episodes} so far)` : ''}`],
       ['What comes before a rally (+10% in 10 sessions)? 20 drivers: price, volume, Bandarmetrics, NeoBDM groups', 'failed', L.rally ? `Discovery picked retail share, Volume Rotation and foreign buying (t 2.8 to 3.5); on the unseen year none confirmed (Volume Rotation flipped sign; retail share and foreign buying kept their direction, p 0.03, below the bar). Most recent rallies were not oversold: ${L.rally.recent.rallies} of ${L.rally.recent.of} stocks rose 10%+ in the last 10 sessions` : ''],
+      ['Sideways base → accumulation (bandar / LPM / foreign) → breakout on volume', 'forward test', L.base ? `History: ${L.base.events} breakouts, excess ${pc(L.base.all.ex)}; with LPM rising ${pc(L.base.versions.lpm.with.ex)} vs ${pc(L.base.versions.lpm.without.ex)} (t ${L.base.versions.lpm.with.t.toFixed(1)}), bandar ${pc(L.base.versions.bandar.with.ex)}, foreign ${pc(L.base.versions.foreign.with.ex)}: none passed. Shown as a watch chip; forward test needs 60 breakouts per version${L.baseForward ? ` (${L.baseForward.events} so far)` : ''}` : ''],
       ['Bandarmetrics LPM (60-session change)', 'failed', L.flow2 ? `${pc(L.flow2.H3.spread, 1)}, p ${L.flow2.H3.p.toFixed(2)}` : ''],
       ['NeoBDM flow tags, 2-year replay', 'failed', 'FLOW+ minus FLOW− −0.13% per 5 sessions'],
       ['Stock picking in bear months (IHSG under its 200-day average): 12-month winners, 3-month winners, calmest stocks, calm winners', 'failed', L.bear ? `None beat 10 random stocks (best: 3-month winners ${pc(L.bear.results.B2_MOM3.mean)} a month, p ${L.bear.results.B2_MOM3.p.toFixed(2)}). Surprise: in those ${L.bear.bearMonths} months the average liquid stock still made ${pc(L.bear.ewBear)} a month and the IHSG ${pc(L.bear.ihsgBear)}; the 200-day line did not predict a falling next month` : ''],
@@ -176,6 +177,21 @@
     return `<h2>Signal lab: every idea tested, and where it stands</h2>
       <div class="card scroll"><table><thead><tr><th>Idea</th><th>Status</th><th>Evidence</th></tr></thead><tbody>${rows.map(r => `<tr><td>${esc(r[0])}</td><td>${st(r[1])}</td><td class="muted">${r[2]}</td></tr>`).join('')}</tbody></table></div>
       <p class="muted">How a test works here (tools/study-lib.mjs): the rule and its pass bar are committed before the first run; samples are taken on dates 20 sessions apart so one move is never counted twice; the null shuffles the signal across stocks within each date; a pass needs p &lt; 0.05, t ≥ 2 and the same sign in both halves. A "convinced" badge only comes from a passed test.</p>`;
+  }
+
+  // ---------- sideways base -> accumulation -> breakout (watch; tools/experiment-base.mjs failed, forward-tested) ----------
+  const accList = a => (a ? [a.bandar && 'bandar', a.lpm && 'LPM', a.foreign && 'foreign'].filter(Boolean) : []);
+  const baseOn = p => p.base && !p.thin && !p.suspended && (p.base.brk || accList(p.base.acc).length); // liquid only, as tested
+  const baseChip = p => { const B = p.base; if (!baseOn(p)) return ''; const a = accList(B.acc);
+    return `<span class="tag bchip" title="Watch only: base breakouts did not beat the market in a 9-year test (Signal lab).">${B.brk ? 'breakout from base' : 'coiling'}${a.length ? ' · ' + a.join('+') + ' accumulating' : ''} · watch</span>`; };
+  function baseHtml(p) {
+    const B = p.base, S = DATA.lab && DATA.lab.base, F = DATA.lab && DATA.lab.baseForward;
+    const ev = S ? `In a 9-year test (${S.events} breakouts from a 40-session base), breakouts did no better than the market (excess ${pc(S.all.ex)}); with LPM rising during the base they did ${pc(S.versions.lpm.with.ex)} vs ${pc(S.versions.lpm.without.ex)} without, pointing the right way but not significant (t ${S.versions.lpm.with.t.toFixed(1)}); bandar and foreign accumulation did not help. A forward test${F ? ` (${F.events} breakouts so far, needs 60 per version)` : ''} decides whether it becomes an ACT setup.` : '';
+    if (!B) return `<p class="muted">Not in a sideways base now (the last 40 sessions moved more than 25%, or no base). ${ev}</p>`;
+    const a = B.acc || {}, yn = v => (v == null ? '<span class="mute">no data</span>' : v ? '<span class="up">yes</span>' : '<span class="mute">no</span>');
+    return `<div class="whobox"><p>${B.brk ? `<b>Breakout today.</b> The close cleared the 40-session base high of ${f0(B.hi)} on ${B.volx ? B.volx.toFixed(1) + '×' : 'high'} the base's average volume.` : `<b>Coiling in a sideways base</b> between ${f0(B.lo)} and ${f0(B.hi)} (${(B.range * 100).toFixed(0)}% range over 40 sessions). A close above ${f0(B.hi)} on 1.5× volume would be the breakout.`}</p>
+      <p>Accumulation during the base: bandar ${yn(a.bandar)} · LPM rising ${yn(a.lpm)} · foreign ${yn(a.foreign)}</p></div>
+      <p class="muted">Watch only. ${ev}</p>`;
   }
 
   // ---------- broker flow ----------
@@ -374,7 +390,7 @@
     const P = DATA.picks;
     const cnt = a => P.filter(p => p.action === a).length;
     const q = PQ.trim().toLowerCase();
-    const list = (FILTER === 'ALL' ? P : P.filter(p => p.action === FILTER)).filter(p => !q || p.ticker.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.sector.toLowerCase().includes(q));
+    const list = (FILTER === 'ALL' ? P : FILTER === 'BASE' ? P.filter(baseOn) : P.filter(p => p.action === FILTER)).filter(p => !q || p.ticker.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.sector.toLowerCase().includes(q));
     const sel = P.find(x => x.ticker === OPEN);
     const detail = s => MQ.matches
       ? `<div class="card pad detailcard sheet" id="dcard" role="dialog" aria-label="${esc(s.ticker)}"><div class="dhead"><button class="ghost back" id="dclose" aria-label="Back to the list">‹</button><div><b class="tk">${esc(s.ticker)}</b> <span class="act ${s.action}">${s.action}</span><div class="nm">${esc(s.name)} · ${esc(s.sector)}</div></div></div>${detailHtml(s)}</div>`
@@ -388,7 +404,7 @@
       </table></div>`;
     el.innerHTML = `
       <div class="chips" role="group" aria-label="Filter">
-        ${[['ACT', `ACT (${cnt('ACT')})`], ['WATCH', `Watch (${cnt('WATCH')})`], ['ALL', `All (${P.length})`]]
+        ${[['ACT', `ACT (${cnt('ACT')})`], ['WATCH', `Watch (${cnt('WATCH')})`], ['BASE', `Base / breakout (${P.filter(baseOn).length})`], ['ALL', `All (${P.length})`]]
           .map(([v, l]) => `<button class="chip" data-f="${v}" aria-pressed="${FILTER === v}">${l}</button>`).join('')}
         <input type="search" id="pq" placeholder="Search ticker, name or sector" value="${esc(PQ)}" style="max-width:240px;margin-left:auto">
       </div>
@@ -415,7 +431,7 @@
   function cardHtml(p) {
     const h = p.headlines[0];
     return `<article class="pcard ${OPEN === p.ticker ? 'open' : ''}" data-t="${esc(p.ticker)}">
-      <div class="ptop"><div><b class="tk">${esc(p.ticker)}</b> <span class="act ${p.action}">${p.action}</span> ${tierHtml(p)} ${groupTag(p)} ${whoChip(p)}
+      <div class="ptop"><div><b class="tk">${esc(p.ticker)}</b> <span class="act ${p.action}">${p.action}</span> ${tierHtml(p)} ${groupTag(p)} ${whoChip(p)} ${baseChip(p)}
         <div class="nm">${esc(p.name)}${p.ownership ? ' · ' + esc(p.ownership.control) : ''}</div>
         <div class="pthesis">${thesisShort(p)}</div></div>
         <div class="pscore"><b>${p.score}</b><small>score</small></div></div>
@@ -432,7 +448,7 @@
     const h = p.headlines[0];
     const open = OPEN === p.ticker;
     return `<tr class="row ${open ? 'open' : ''}" data-t="${esc(p.ticker)}">
-      <td><span class="tk">${esc(p.ticker)}</span> ${groupTag(p)} ${whoChip(p)}<div class="nm">${esc(p.name)}${p.ownership ? " · " + esc(p.ownership.control) : ""}</div><div class="pthesis">${thesisShort(p)}</div></td>
+      <td><span class="tk">${esc(p.ticker)}</span> ${groupTag(p)} ${whoChip(p)} ${baseChip(p)}<div class="nm">${esc(p.name)}${p.ownership ? " · " + esc(p.ownership.control) : ""}</div><div class="pthesis">${thesisShort(p)}</div></td>
       <td><span class="act ${p.action}">${p.action}</span> ${tierHtml(p)}</td>
       <td><span class="score"><i style="width:${Math.round(p.score * 0.6)}px"></i><b>${p.score}</b></span></td>
       <td>${esc(p.setup)}</td><td class="n">${f0(p.close)}</td><td class="n">${p.live ? `${f0(p.live.price)} ${pc(p.live.chg)}` : '<span class="mute">–</span>'}</td><td class="n">${pc(p.chg1d)}</td><td class="n">${pc(p.chg5d)}</td>
@@ -944,7 +960,7 @@
 
   function detailHtml(p) {
     const parts = p.parts, max = { oversold: 80, support: 10, news: 10 };
-    const jump = [['s-lv', 'Levels'], ['s-news', 'News'], ['s-who', 'Who moves it'], ['s-nb', 'NeoBDM'], ['s-bc', 'Big buyers\' cost'], ['s-bm', 'Bandarmetrics'], ['s-own', 'Owners'], ['s-earn', 'Earnings']];
+    const jump = [['s-lv', 'Levels'], ['s-news', 'News'], ['s-who', 'Who moves it'], ['s-base', 'Base'], ['s-nb', 'NeoBDM'], ['s-bc', 'Big buyers\' cost'], ['s-bm', 'Bandarmetrics'], ['s-own', 'Owners'], ['s-earn', 'Earnings']];
     return `<div id="s-chart">${quoteHtml(p)}${chartBoxHtml(p)}</div>${thesisHtml(p)}<nav class="jump">${jump.map(([id, l]) => `<button class="chip" data-jump="${id}">${l}</button>`).join('')}</nav><div class="dgrid" id="s-lv"><div>
       <div class="parts">${Object.keys(parts).map(k => `<div class="part"><span>${esc(k)}</span><div class="bar"><i style="width:${Math.min(100, (parts[k] / (max[k] || 10)) * 100)}%"></i></div><em>${parts[k]}</em></div>`).join('')}</div>
       <p class="muted">Score parts: oversold-ness (RSI, 5-day drop, distance under the 20d average) is the main driver of the score; support proximity and news are secondary. It ranked stocks in 2022-26 but did not beat noise over 10 years (Track record).</p></div>
@@ -961,6 +977,7 @@
         ${p.headlines.length ? `<ul class="hl-list">${p.headlines.map(h => `<li><span class="tag ${esc(h.category)}">${esc(h.category)}</span><span><a href="${safeUrl(h.link)}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a><div class="muted">${ago(h.published)} · ${!h.direct ? 'sector backdrop, not scored' : h.recap ? 'price recap, not scored' : 'about this stock · ' + (h.sentiment > 0 ? 'supports' : h.sentiment < 0 ? 'risk' : 'neutral')}</div></span></li>`).join('')}</ul>` : '<p class="muted">No scored headlines in the last 7 days.</p>'}
         <button class="chip" data-news="${esc(p.ticker)}">All 30-day headlines for ${esc(p.ticker)} →</button>
         <h2 id="s-who">Who moves it: foreign or retail?</h2>${whoHtml(p)}
+        <h2 id="s-base">Sideways base → accumulation → breakout?</h2>${baseHtml(p)}
         <h2 id="s-nb">NeoBDM flow</h2>${nbHtml(p)}
         <h2 id="s-bc">Who's buying, and at what cost</h2>${brokerCostHtml(p)}
         <h2 id="s-bm">Bandarmetrics read</h2>${bmHtml(p)}

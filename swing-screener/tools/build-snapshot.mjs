@@ -154,6 +154,15 @@ uni.forEach(u => {
   pk.flowHist = nbHist && nbHist.by[u.ticker] ? nbHist.by[u.ticker] : null;
   pk.group = groups && groups.byTicker[u.ticker] ? groups.byTicker[u.ticker] : null;
   pk.who = flowRead && flowRead.by[u.ticker] ? { ...flowRead.by[u.ticker], stale: (NOW - new Date(flowRead.by[u.ticker].d + 'T10:00:00Z').getTime()) / 864e5 > 6 } : null;
+  // Sideways base (tools/experiment-base.mjs): the 40 sessions before today within a 25% range; breakout = today's close
+  // above that range on 1.5x its average volume; coiling = still inside a 25% range including today. Accumulation
+  // read over the base: bandar / foreign (NeoBDM, flow-read) and LPM rising (Bandarmetrics). Watch only: it failed its test.
+  { const n = b.c.length, k = n - 1;
+    if (n > 45) { const hiB = Math.max(...b.h.slice(k - 40, k)), loB = Math.min(...b.l.slice(k - 40, k)), hiC = Math.max(hiB, b.h[k]), loC = Math.min(loB, b.l[k]);
+      const avgV = b.v.slice(k - 40, k).reduce((s, x) => s + x, 0) / 40, inBase = loB > 0 && hiB / loB - 1 <= 0.25;
+      const brk = inBase && b.c[k] > hiB && b.v[k] >= 1.5 * avgV, coil = loC > 0 && hiC / loC - 1 <= 0.25 && !brk;
+      const acc = { bandar: pk.who && pk.who.ab != null ? pk.who.ab : null, foreign: pk.who && pk.who.af != null ? pk.who.af : null, lpm: pk.bm && !pk.bm.stale && pk.bm.l40 != null ? pk.bm.l40 : null };
+      pk.base = brk || coil ? { brk, coil, hi: hiB, lo: loB, range: hiB / loB - 1, volx: avgV ? b.v[k] / avgV : null, acc } : null; } }
   pk.brokerCost = bcost && bcost.by[u.ticker] ? { ...bcost.by[u.ticker], stale: (NOW - new Date(bcost.by[u.ticker].day + 'T10:00:00Z').getTime()) / 864e5 > 10 } : null;
   pk.untested = NEWSET.has(u.ticker);
   pk.thin = thin;
@@ -211,7 +220,7 @@ try { existing = JSON.parse(fs.readFileSync(ledgerFile, 'utf8')); } catch { /* n
 if (!process.env.FAKE_NOW && (!existing || (existing.v || 1) < LEDGER_V)) {
   fs.writeFileSync(ledgerFile, JSON.stringify({
     v: LEDGER_V, asOf, cfg, regime: market.regime, breadth: market.breadth, marketOk,
-    picks: picks.filter(p => !p.thin && !p.suspended).map(p => ({ ticker: p.ticker, sector: p.sector, score: p.score, action: p.action, setup: p.setup, rsi: p.rsi, dist20Atr: p.dist20Atr, rr: p.rr, atrPct: p.atrPct, entry: p.entry, stop: p.stop, target: p.target, newsScore: p.newsScore, bmScore: p.bm && !p.bm.stale && p.bm.score != null ? p.bm.score : null, ...(p.bm && !p.bm.stale && p.bm.mf != null ? { bmMf: p.bm.mf } : {}), ...(p.bm && !p.bm.stale && p.bm.is != null ? { bmInt: p.bm.is } : {}), atr: p.atrPct && p.entry ? +(p.atrPct * p.entry).toFixed(2) : null, ...(p.untested ? { set: 'new' } : {}) })),
+    picks: picks.filter(p => !p.thin && !p.suspended).map(p => ({ ticker: p.ticker, sector: p.sector, score: p.score, action: p.action, setup: p.setup, rsi: p.rsi, dist20Atr: p.dist20Atr, rr: p.rr, atrPct: p.atrPct, entry: p.entry, stop: p.stop, target: p.target, newsScore: p.newsScore, bmScore: p.bm && !p.bm.stale && p.bm.score != null ? p.bm.score : null, ...(p.bm && !p.bm.stale && p.bm.mf != null ? { bmMf: p.bm.mf } : {}), ...(p.bm && !p.bm.stale && p.bm.is != null ? { bmInt: p.bm.is } : {}), ...(p.base ? { base: p.base.brk ? 'brk' : 'coil', acc: ['bandar', 'lpm', 'foreign'].filter(x => p.base.acc[x]).map(x => x[0].toUpperCase()).join('') } : {}), atr: p.atrPct && p.entry ? +(p.atrPct * p.entry).toFixed(2) : null, ...(p.untested ? { set: 'new' } : {}) })),
   }));
 }
 const tracker = buildTracker({ ledger: readLedger(HIST), bars: px, horizon: cfg.horizon });
@@ -249,7 +258,7 @@ const out = {
   // 10-year check (2026-10-10): no edge over shuffled prices; shown at the top of Track record.
   momentum: momentum ? { ...momentum, study: readJson('momentum-study.json'), pit: readJson('momentum-pit.json') } : null,
   // Signal lab: hypotheses tested on 2026-10-10 and the live forward test of foreign flow.
-  lab: (() => { const f = readJson('flow2-study.json'), r = readJson('foreign-rep.json'); return { flow2: f ? { H1: f['H1 retail share (high = worse)'], H2: f['H2 foreign buying, high-fcorr stocks'], H2c: f['   control: foreign buying, low-fcorr stocks'], H3: f['H3 LPM 60-session change (z), all stocks'] } : null, rep: r, forward: readJson('flow-read-forward.json'), bear: readJson('bear-study.json'), bmPattern: readJson('bmpattern-study.json'), bmForward: readJson('bm-forward.json'), rally: readJson('rally-study.json') }; })(),
+  lab: (() => { const f = readJson('flow2-study.json'), r = readJson('foreign-rep.json'); return { flow2: f ? { H1: f['H1 retail share (high = worse)'], H2: f['H2 foreign buying, high-fcorr stocks'], H2c: f['   control: foreign buying, low-fcorr stocks'], H3: f['H3 LPM 60-session change (z), all stocks'] } : null, rep: r, forward: readJson('flow-read-forward.json'), bear: readJson('bear-study.json'), bmPattern: readJson('bmpattern-study.json'), bmForward: readJson('bm-forward.json'), rally: readJson('rally-study.json'), base: readJson('base-study.json'), baseForward: readJson('base-forward.json') }; })(),
   tenYear: { trend: readJson('trend-study.json'), own: readJson('own-holdout.json'), perm: readJson('permutation-study.json') },
   expansion: readJson('expand-study.json'), brokerCostStudy: readJson('brokercost-study.json'), brokerDirectory: readJson('broker-directory.json'), sizing: readJson('sizing-study.json'), research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
   flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json'), history: nbStudy, flowVeto,

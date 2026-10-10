@@ -38,7 +38,9 @@ for (const t of U) {
   const fcorr = corr(net.slice(-W), ret.slice(-W)); if (fcorr == null) continue;
   const v20 = val.slice(-20).reduce((s, x) => s + x, 0);
   const pi = g.pi ? g.pi.slice(-20).filter(x => x != null) : [];
-  rows.push({ t, asOf: g.d.at(-1), fcorr, f20: v20 ? raw.slice(-20).reduce((s, x) => s + x, 0) / v20 : 0, retail: pi.length >= 15 ? 1 - mean(pi) : null, liquid: v20 / 20 >= 5e9 });
+  // accumulation over the last 40 sessions (tools/experiment-base.mjs): group net buying >= 2% of traded value
+  const v40 = val.slice(-40).reduce((s, x) => s + x, 0), acc = key => { const a = g[key]; if (!a || a.length < 41 || a.at(-1) == null || a.at(-41) == null || !v40) return null; return (a.at(-1) - a.at(-41)) * 1e9 / v40 >= 0.02; };
+  rows.push({ ab: acc('m'), af: acc('f'), t, asOf: g.d.at(-1), fcorr, f20: v20 ? raw.slice(-20).reduce((s, x) => s + x, 0) / v20 : 0, retail: pi.length >= 15 ? 1 - mean(pi) : null, liquid: v20 / 20 >= 5e9 });
 }
 // thirds among liquid stocks
 const liq = rows.filter(r => r.liquid);
@@ -51,7 +53,7 @@ rows.forEach(r => { r.f20T = r.fcorrT === 3 && r.liquid ? ter(r.f20, cb) : null;
 const asOf = rows.map(r => r.asOf).sort().at(-1);
 const out = { asOf, built: new Date().toISOString(), cuts: { fcorr: cf.map(x => +x.toFixed(2)) }, by: {} };
 // retail share to the nearest 5%: NeoBDM is paid data, only coarse reads are published
-for (const r of rows) out.by[r.t] = { d: r.asOf, fc: +r.fcorr.toFixed(2), fcT: r.fcorrT, fb: r.f20 > 0.005 ? 'buy' : r.f20 < -0.005 ? 'sell' : 'flat', fbT: r.f20T, rs: r.retail == null ? null : Math.round(r.retail * 20) * 5, rsT: r.retailT, liq: r.liquid };
+for (const r of rows) out.by[r.t] = { d: r.asOf, fc: +r.fcorr.toFixed(2), fcT: r.fcorrT, fb: r.f20 > 0.005 ? 'buy' : r.f20 < -0.005 ? 'sell' : 'flat', fbT: r.f20T, rs: r.retail == null ? null : Math.round(r.retail * 20) * 5, rsT: r.retailT, liq: r.liquid, ab: r.ab, af: r.af };
 fs.writeFileSync(path.join(ROOT, 'data', 'flow-read.json'), JSON.stringify(out));
 const histDir = path.join(ROOT, 'data', 'flow-read-history');
 fs.mkdirSync(histDir, { recursive: true });
