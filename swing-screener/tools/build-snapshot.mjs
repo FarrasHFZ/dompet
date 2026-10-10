@@ -208,7 +208,7 @@ try { existing = JSON.parse(fs.readFileSync(ledgerFile, 'utf8')); } catch { /* n
 if (!process.env.FAKE_NOW && (!existing || (existing.v || 1) < LEDGER_V)) {
   fs.writeFileSync(ledgerFile, JSON.stringify({
     v: LEDGER_V, asOf, cfg, regime: market.regime, breadth: market.breadth, marketOk,
-    picks: picks.filter(p => !p.thin && !p.suspended).map(p => ({ ticker: p.ticker, sector: p.sector, score: p.score, action: p.action, setup: p.setup, rsi: p.rsi, dist20Atr: p.dist20Atr, rr: p.rr, atrPct: p.atrPct, entry: p.entry, stop: p.stop, target: p.target, newsScore: p.newsScore, bmScore: p.bm && !p.bm.stale && p.bm.score != null ? p.bm.score : null, ...(p.untested ? { set: 'new' } : {}) })),
+    picks: picks.filter(p => !p.thin && !p.suspended).map(p => ({ ticker: p.ticker, sector: p.sector, score: p.score, action: p.action, setup: p.setup, rsi: p.rsi, dist20Atr: p.dist20Atr, rr: p.rr, atrPct: p.atrPct, entry: p.entry, stop: p.stop, target: p.target, newsScore: p.newsScore, bmScore: p.bm && !p.bm.stale && p.bm.score != null ? p.bm.score : null, ...(p.bm && !p.bm.stale && p.bm.mf != null ? { bmMf: p.bm.mf } : {}), ...(p.bm && !p.bm.stale && p.bm.is != null ? { bmInt: p.bm.is } : {}), atr: p.atrPct && p.entry ? +(p.atrPct * p.entry).toFixed(2) : null, ...(p.untested ? { set: 'new' } : {}) })),
   }));
 }
 const tracker = buildTracker({ ledger: readLedger(HIST), bars: px, horizon: cfg.horizon });
@@ -246,7 +246,7 @@ const out = {
   // 10-year check (2026-10-10): no edge over shuffled prices; shown at the top of Track record.
   momentum: momentum ? { ...momentum, study: readJson('momentum-study.json'), pit: readJson('momentum-pit.json') } : null,
   // Signal lab: hypotheses tested on 2026-10-10 and the live forward test of foreign flow.
-  lab: (() => { const f = readJson('flow2-study.json'), r = readJson('foreign-rep.json'); return { flow2: f ? { H1: f['H1 retail share (high = worse)'], H2: f['H2 foreign buying, high-fcorr stocks'], H2c: f['   control: foreign buying, low-fcorr stocks'], H3: f['H3 LPM 60-session change (z), all stocks'] } : null, rep: r, forward: readJson('flow-read-forward.json'), bear: readJson('bear-study.json') }; })(),
+  lab: (() => { const f = readJson('flow2-study.json'), r = readJson('foreign-rep.json'); return { flow2: f ? { H1: f['H1 retail share (high = worse)'], H2: f['H2 foreign buying, high-fcorr stocks'], H2c: f['   control: foreign buying, low-fcorr stocks'], H3: f['H3 LPM 60-session change (z), all stocks'] } : null, rep: r, forward: readJson('flow-read-forward.json'), bear: readJson('bear-study.json'), bmPattern: readJson('bmpattern-study.json'), bmForward: readJson('bm-forward.json') }; })(),
   tenYear: { trend: readJson('trend-study.json'), own: readJson('own-holdout.json'), perm: readJson('permutation-study.json') },
   expansion: readJson('expand-study.json'), brokerCostStudy: readJson('brokercost-study.json'), brokerDirectory: readJson('broker-directory.json'), sizing: readJson('sizing-study.json'), research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
   flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json'), history: nbStudy, flowVeto,
