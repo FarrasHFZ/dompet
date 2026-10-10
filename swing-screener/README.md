@@ -239,8 +239,11 @@ Open https://farrashfz.github.io/dompet/screener/ and install it: iPhone Safari 
   drawdown -13% -> -38%. So their setups are tiered **SKIP** (marked "new"), they are never announced on Telegram, and the
   ledger logs them with `set: 'new'` so the live record stays the tested 100 (their own record is kept separately).
   They still feed groups, news and the rankings. About half trade under Rp 5 B/day and are skipped as illiquid by the engine.
-  NeoBDM and Bandarmetrics pulls still cover the original 100 (the `swing-100` list in the NeoBDM account). The Sheet path
-  does not know about the SKIP rule yet.
+  Broker flow for them comes from their NeoBDM **stock pages** (`tools/nb-pages.mjs`): the Transaction Chart gives each
+  group's cumulative net value, which reproduces the screener columns, so the same flow model labels them without
+  changing the `swing-100` list in the NeoBDM account (200 page reads in the evening task, step A4b). Labels say
+  "stock page" because method-fit, dirty-tape and Pinky flags are not on the page. Bandarmetrics still covers the
+  original 100. The Sheet path does not know about the SKIP rule yet.
 - **News: a rolling 35-day archive**, 30 days shown. One Google News query returns at most ~100 items, which for an active stock covers only 2-3 weeks, so `tools/news.mjs` splits each query into date windows and halves any window that hits the cap, down to single days. First runs back-fill the month in resumable chunks (progress survives in the CI cache and in the published `data/news-30d.json`); after that hot stocks (top 30 by liquidity, ACT picks, watchlist) and themes refresh hourly and everything every 6 hours.
 - Coverage is measured, not assumed: the News tab shows headlines per day, stocks with news, and which stocks are thin.
 - Limit: this is what Google News indexes, not every Indonesian outlet. Scoring still uses only the last 7 days (with decay); the month is for context and search.

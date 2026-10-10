@@ -203,7 +203,7 @@
       </div>
       <div class="card scroll"><table><thead><tr><th>Ticker</th><th>Flow</th><th>Last 60 sessions</th><th>Phase</th><th>Big money 20d / 5d</th><th>Bandar 20d</th><th>Foreign 5d / 20d</th><th>Retail 20d</th><th>Transfer</th><th>BM read</th><th>BM score</th><th>Rotation</th><th>Pick</th></tr></thead><tbody>
       ${list.length ? list.map(p => { const n = p.neobdm; return `<tr class="row" data-open="${esc(p.ticker)}" title="Open ${esc(p.ticker)}"><td><b class="tk">${esc(p.ticker)}</b><div class="nm">${esc(p.sector)}</div></td>
-        <td><span class="tag ${n.tag === 'AVOID' ? 'RISK' : ''}">${esc(n.tag)}</span></td><td>${stripHtml(p.flowHist, false)}</td><td>${phaseHtml(n.phase)}${p.flowHist && p.flowHist.ph === n.phase ? `<div class="muted">${p.flowHist.phDays} sessions</div>` : ''}${n.turn ? `<div class="muted">${esc(n.turn)}</div>` : ''}</td>
+        <td><span class="tag ${n.tag === 'AVOID' ? 'RISK' : ''}">${esc(n.tag)}</span>${n.source === 'chart' ? '<div class="muted" title="Outside the NeoBDM screener list: read from the stock page Transaction Chart; method-fit and dirty-tape flags not available">stock page</div>' : ''}</td><td>${stripHtml(p.flowHist, false)}</td><td>${phaseHtml(n.phase)}${p.flowHist && p.flowHist.ph === n.phase ? `<div class="muted">${p.flowHist.phDays} sessions</div>` : ''}${n.turn ? `<div class="muted">${esc(n.turn)}</div>` : ''}</td>
         <td>${dirHtml(n.bigMoney && n.bigMoney.d20)} / ${dirHtml(n.bigMoney && n.bigMoney.d5)}</td>
         <td>${g(p, 'm', 'd20')}</td><td>${g(p, 'f', 'd5')} / ${g(p, 'f', 'd20')}</td><td>${g(p, 'z', 'd20')}</td>
         <td class="muted">${esc(n.retail)}${n.dirty ? '<div class="down">dirty tape</div>' : ''}</td>

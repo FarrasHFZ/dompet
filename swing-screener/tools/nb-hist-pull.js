@@ -91,8 +91,11 @@
         const html = await r.text();
         const tok = (html.match(/csrfmiddlewaretoken: '([^']+)'/) || [])[1];
         const rec = { g: parseGroups(html), inv: null };
-        await wait(2500 + Math.random() * 1500);
-        if (tok) { const br = await topBrokers(tk, tok, start, end); await wait(2500 + Math.random() * 1500); rec.inv = await inventory(tk, br, start, end); }
+        // pages-only runs are the daily ones on top of the screener pull: slower, since 400+ fast reads in one day got a 429
+        await wait(window.__nbhGroupsOnly ? 6000 + Math.random() * 3000 : 2500 + Math.random() * 1500);
+        // window.__nbhGroupsOnly = true: the Transaction Chart page only (1 read per stock), as the daily pull of the
+        // stocks outside the NeoBDM 'swing-100' list does.
+        if (tok && !window.__nbhGroupsOnly) { const br = await topBrokers(tk, tok, start, end); await wait(2500 + Math.random() * 1500); rec.inv = await inventory(tk, br, start, end); }
         await tx(db, 'readwrite', s => s.put(rec, tk)); n++;
       } catch (e) { return { stopped: e.message, added: n }; }
     }

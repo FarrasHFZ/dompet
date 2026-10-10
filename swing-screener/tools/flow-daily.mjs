@@ -9,6 +9,7 @@ import path from 'node:path';
 import { loadEngine, universe, loadPrices, ROOT } from './lib.mjs';
 import { snapToTags } from './neobdm.mjs';
 import { readSnaps, scoreSnaps } from './flow-forward.mjs';
+import { chartTag, chartStrip } from './nb-pages.mjs';
 
 const DATA = path.join(ROOT, 'data'), SNAP = path.join(DATA, 'neobdm-snap');
 const files = fs.existsSync(SNAP) ? fs.readdirSync(SNAP).filter(f => /^\d{4}-\d{2}-\d{2}\.json$/.test(f)).sort() : [];
@@ -21,6 +22,20 @@ if (!raw.complete || n < 95) { console.error(`Snapshot ${date} is incomplete (${
 if (ageDays > 4) console.warn(`Warning: newest snapshot is ${date} (${ageDays.toFixed(0)} days old). The site will mark it stale after 5 days.`);
 
 const { by } = snapToTags(path.join(SNAP, newest));
+const api = loadEngine(), uni = universe(api);
+const bars = await loadPrices(uni.map(u => u.ticker + '.JK'), '2y', process.env.REFRESH !== '1');
+// Stocks outside the NeoBDM 'swing-100' list: labels from their stock pages (tools/nb-pages.mjs), same model, when the
+// page data in data/nb-history.json reaches the snapshot date.
+const NBH = path.join(DATA, 'nb-history.json'), NB = fs.existsSync(NBH) ? JSON.parse(fs.readFileSync(NBH, 'utf8')) : {};
+let fromChart = 0, chartStale = [];
+for (const u of uni) {
+  if (by[u.ticker] || !NB[u.ticker]) continue;
+  // the evening task refreshes half of these pages per day, so a reading up to 4 calendar days old is accepted
+  const g = NB[u.ticker].g, d = g && g.d.filter(x => x <= date).at(-1);
+  const t = d && (Date.parse(date) - Date.parse(d)) / 864e5 <= 4 ? chartTag(NB[u.ticker], bars[u.ticker + '.JK'], d) : null;
+  if (t) { by[u.ticker] = d === date ? t : { ...t, asOf: d }; fromChart++; } else chartStale.push(u.ticker);
+}
+console.log(`page-derived labels: ${fromChart}${chartStale.length ? `; no page data for ${date}: ${chartStale.length} (${chartStale.slice(0, 8).join(', ')}${chartStale.length > 8 ? ', …' : ''})` : ''}`);
 fs.writeFileSync(path.join(DATA, `neobdm-tags-${date}.json`), JSON.stringify(by));
 fs.readdirSync(DATA).filter(f => /^neobdm-tags-\d{4}-\d{2}-\d{2}\.json$/.test(f) && f !== `neobdm-tags-${date}.json`).forEach(f => fs.unlinkSync(path.join(DATA, f)));
 // Extend the per-stock 60-session tag strip (data/nb-history-tags.json, from tools/experiment-nb.mjs) with today's tag.
@@ -30,17 +45,19 @@ if (fs.existsSync(HT)) {
   if (date > ht.asOf) {
     for (const [tk, t] of Object.entries(by)) {
       const h = ht.by[tk]; if (!h) continue;
+      if (h.d1 >= date) continue;
       h.t = (h.t + ({ 'FLOW+': '+', 'FLOW-': '-', 'FLOW~': '~' }[t.tag] || '?')).slice(-60);
       h.phDays = t.phase === h.ph ? (h.phDays || 0) + 1 : 1; h.ph = t.phase; h.d1 = date;
     }
-    ht.asOf = date; fs.writeFileSync(HT, JSON.stringify(ht));
+    ht.asOf = date;
   }
+  // first time a page-derived stock appears: build its strip from the page history
+  for (const tk of Object.keys(by)) if (!ht.by[tk] && NB[tk]) { const st = chartStrip(NB[tk], bars[tk + '.JK']); if (st) ht.by[tk] = st; }
+  fs.writeFileSync(HT, JSON.stringify(ht));
 }
 const cnt = {}; Object.values(by).forEach(t => { cnt[t.tag] = (cnt[t.tag] || 0) + 1; });
 console.log(`labels ${date}: ${n} stocks`, JSON.stringify(cnt));
 
-const api = loadEngine(), uni = universe(api);
-const bars = await loadPrices(uni.map(u => u.ticker + '.JK'), '2y', process.env.REFRESH !== '1');
 const sc = scoreSnaps(readSnaps(), bars);
 fs.writeFileSync(path.join(DATA, 'flow-scorecard.json'), JSON.stringify({ ...sc, asOf: new Date().toISOString() }));
 const s5 = sc.horizons[5].spread;
