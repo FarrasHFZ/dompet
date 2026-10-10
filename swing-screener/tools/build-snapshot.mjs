@@ -234,6 +234,8 @@ const out = {
   },
   // Broker-flow workflow: forward-test scorecard (tools/flow-forward.mjs) and the IDX foreign-flow backtest (tools/experiment-flow.mjs).
   groups: groups ? { ...groups, byTicker: undefined, study: readJson('groups-study.json') } : null,
+  // 10-year check (2026-10-10): no edge over shuffled prices; shown at the top of Track record.
+  tenYear: { trend: readJson('trend-study.json'), own: readJson('own-holdout.json'), perm: readJson('permutation-study.json') },
   expansion: readJson('expand-study.json'), brokerCostStudy: readJson('brokercost-study.json'), brokerDirectory: readJson('broker-directory.json'), sizing: readJson('sizing-study.json'), research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
   flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json'), history: nbStudy, flowVeto,
     bm: { asOf: bmd ? bmd.asOf : null, stale: bmStale, experiment: readJson('bm-experiment.json'), scoreExperiment: readJson('bm-score-experiment.json') } },

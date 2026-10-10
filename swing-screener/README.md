@@ -25,6 +25,18 @@ Personal swing-trade screener for IDX stocks. Live: https://farrashfz.github.io/
 
 Without the Sheet, everything still runs from GitHub. The Sheet is worth keeping as the place you edit the universe and news themes, and as a notebook. Both paths emit the same JSON shape.
 
+## 10-year check, 2026-10-10: no edge shown (supersedes the claims below)
+
+- `tools/experiment-trend.mjs` (10y Yahoo, tested 100): the live rule lost money in 2017-22 (-0.76%/trade, PF 0.80)
+  and made +0.53%/trade in 2022-26, the period it was designed on. Kelly on 10 years is below zero.
+- `tools/experiment-permutation.mjs`: non-overlapping live trades, real -0.27%/trade vs 20 shuffled histories
+  (-0.58%..+1.17%); 70% of shuffles did at least as well. The "beats other stocks on the same day" test used before
+  also passes on shuffled prices (`tools/experiment-timing.mjs`), so it measured stock type and overlap, not timing.
+- Pre-registered and failed: trading own-uptrend dips while the filter is off; the own-uptrend rule on the 200 unseen
+  stocks (`tools/experiment-own.mjs`).
+- So ACT calls are paper trades. The market filter mostly keeps the account in cash in downtrends; the live ledger
+  keeps running as a forward test.
+
 ## What the measurements say (tools/backtest.mjs, tools/news-score.mjs)
 
 27 liquid IDX stocks, 5 years of daily bars, walk-forward (score uses only past data), outcome = next 15 trading days.

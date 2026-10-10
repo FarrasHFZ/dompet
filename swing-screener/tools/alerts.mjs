@@ -78,7 +78,7 @@ export function buildMessages({ api, picks, newsRows, meta, market, state, watch
   // Market filter flip (the switch that decides whether ANY bounce trade is allowed): announce both directions once.
   const f = market.filter;
   if (!out.first && f && f.sma200 && state.lastFilter != null && state.lastFilter !== f.ok) {
-    head.push(f.ok ? `🟢 <b>Market filter is ON again.</b> IHSG ${Math.round(f.ihsg)} closed above its 200-day average (${Math.round(f.sma200)}). New bounce trades are allowed from the next session: ACT setups stop showing PAUSE.`
+    head.push(f.ok ? `🟢 <b>Market filter is ON again.</b> IHSG ${Math.round(f.ihsg)} closed above its 200-day average (${Math.round(f.sma200)}). Bounce setups can show ACT again from the next session (paper only: no edge shown over 10 years).`
       : `🔴 <b>Market filter turned OFF.</b> IHSG ${Math.round(f.ihsg)} closed below its 200-day average (${Math.round(f.sma200)}). Stand aside from new bounce trades; open ones keep their stops.`);
   }
   if (out.first) {
