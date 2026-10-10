@@ -108,7 +108,39 @@
       <div class="stat"><small>IHSG RSI(14) · 20d</small><b>${k.idxRsi == null ? '–' : k.idxRsi.toFixed(0)} · ${k.idxChg20d == null ? '–' : (k.idxChg20d * 100).toFixed(1) + '%'}</b></div>`;
     const ns = m.newsStatus;
     $('#banner').innerHTML = ns && ns.state !== 'ok' ? `<div class="note"><b>News ${esc(ns.state)}.</b> ${esc(ns.note)}</div>` : '';
-    renderPicks(); renderFlow(); renderGroups(); renderNews(); renderScore(); renderHow();
+    renderPicks(); renderMomentum(); renderFlow(); renderGroups(); renderNews(); renderScore(); renderHow();
+  }
+
+  // ---------- Momentum 10 (paper-only second strategy, tools/momentum.mjs) ----------
+  function renderMomentum() {
+    const el = $('#tab-mom'), M = DATA.momentum;
+    if (!M) { el.innerHTML = '<div class="empty">Momentum list not built in this data source yet.</div>'; return; }
+    const S = M.study, P = M.pit, pv = P && P.verdict, rec = M.record || [];
+    const month = d => new Date(d + 'T00:00:00Z').toLocaleString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+    const pitLine = !P ? '<b>Hindsight check: still running.</b> Until it reports, treat the backtest numbers below as too good.'
+      : pv.pass ? `<b>Hindsight check passed:</b> with each month's universe rebuilt from what was known then (top 100 by trading value among ${P.withHistory} IDX stocks), momentum still beat holding everything in both halves and beat random picks (p ${P.top100.null.p.toFixed(3)}). <b>But the edge is much smaller than the headline:</b> ${pc(P.top100.MOM10.cagr)} a year against ${pc(P.top100.EW.cagr)} for holding everything, ${pc(P.top100.MOM10.second)} a year in 2022-26, and a worst month-end drawdown of ${pc(P.top100.MOM10.mddMonthly, 0)}. It is a relative edge in a weak market, not a money machine.`
+      : `<b>Hindsight check FAILED:</b> with each month's universe rebuilt from what was known then (top 100 by trading value among ${P.withHistory} IDX stocks), momentum did not beat ${!pv.A ? 'holding everything in both halves' : 'random picks reliably'} (p ${P.top100.null.p.toFixed(3)}). The strong backtest below most likely came from using today's stock list. Watch only.`;
+    const hold = M.holdings || [];
+    const status = M.filterOn
+      ? `<b>Holding</b> the 10 below since the open after ${esc(M.rebalance)}.`
+      : `<b>Cash this month.</b> The IHSG was below its 200-day average on ${esc(M.rebalance)}, so the rule holds nothing. The list is shown for watching only.`;
+    const rows = hold.map(h => `<tr data-open="${esc(h.t)}" class="row"><td class="n">${h.rank}</td><td><span class="tk">${esc(h.t)}</span><div class="nm">${esc(h.name)}</div></td><td class="n">${pc(h.mom, 0)}</td><td class="n">${f0(h.entry)}</td><td class="n">${f0(h.now)}</td><td class="n">${pc(h.ret)}</td></tr>`).join('');
+    const recRows = rec.slice().reverse().map(r => `<tr><td>${esc(month(r.rebalance))}${r.open ? ' <span class="tag">open</span>' : ''}</td><td>${r.filterOn ? 'invested' : '<span class="mute">cash</span>'}</td><td class="n">${pc(r.traded, 2)}</td><td class="n">${pc(r.momRet, 2)}</td><td class="n">${pc(r.ewRet, 2)}</td><td class="n">${pc(r.ihsg, 2)}</td><td class="muted">${r.picks.map(esc).join(', ')}</td></tr>`).join('');
+    const bt = (lbl, x) => x ? `<tr><td>${lbl}</td><td class="n">${pc(x.MOM10.cagr)}</td><td class="n">${pc(x.MOM10.first)} / ${pc(x.MOM10.second)}</td><td class="n">${pc(x.EW.cagr)}</td><td class="n">${x.null ? pc(x.null.med) + ', p ' + x.null.p.toFixed(3) : '–'}</td><td class="n">${x.MOM10.dd != null ? pc(x.MOM10.dd, 0) : pc(x.MOM10.mddMonthly, 0) + ' (month-end)'}</td></tr>` : '';
+    el.innerHTML = `
+      <div class="note"><b>Second strategy, paper only.</b> On the last trading day of each month, take the liquid stocks (Rp 5 B a day), rank them by their return over the past 12 months skipping the latest month, and hold the top 10 in equal amounts from the next open until the next month's rebalance. Only while the IHSG is above its 200-day average; otherwise cash. It passed a pre-registered 10-year test, but read the caveats below before trusting it.</div>
+      <div class="note ${pv && !pv.pass ? 'warnnote' : ''}">${pitLine}</div>
+      <h2>This month's list (${esc(month(M.rebalance))} rebalance)</h2>
+      <div class="callbox">${status} Next rebalance: the last trading day of ${esc(month(new Date().toISOString().slice(0, 10)))}${M.filterOn ? '' : ''}; the new list appears here the evening it closes.${M.counted ? '' : ` This list was formed before the forward record starts (${esc(month(M.from + '-01'))} rebalance), so it is not counted.`}</div>
+      <div class="card scroll"><table><thead><tr><th class="n">#</th><th>Stock</th><th class="n">12-1 month return</th><th class="n">Entry (open after rebalance)</th><th class="n">Now</th><th class="n">Since entry</th></tr></thead><tbody>${rows || '<tr><td colspan="6" class="empty">No liquid stock with a full year of history.</td></tr>'}</tbody></table></div>
+      <p class="muted">Tap a row to open the stock page. Momentum lists are full of stocks that already ran hard (they are why they are on it); expect sharp pullbacks. Returns are before fees; the record below charges 0.2% to buy and 0.2% to sell.</p>
+      <h2>Forward record (from the ${esc(month(M.from + '-01'))} rebalance)</h2>
+      ${rec.length ? `<div class="card scroll"><table><thead><tr><th>Month</th><th>Filter</th><th class="n">Rule result</th><th class="n">Top 10 (if held)</th><th class="n">All liquid stocks</th><th class="n">IHSG</th><th>Picks</th></tr></thead><tbody>${recRows}</tbody></table></div>` : '<p class="muted">Starts with the first month-end after the rule was fixed. Every list is saved on the evening it forms and scored at the next rebalance, so none is picked with hindsight.</p>'}
+      ${S ? `<h2>Backtest, 2017-10 to 2026-08 (Yahoo, monthly)</h2>
+      <div class="card scroll"><table><thead><tr><th>Stocks</th><th class="n">Top 10 / yr</th><th class="n">2017-22 / 2022-26</th><th class="n">All liquid, equal / yr</th><th class="n">10 random (median)</th><th class="n">Worst drawdown</th></tr></thead><tbody>
+        ${bt('Tested 100 (today\'s list)', S.tested)}${bt('Unseen 200 (today\'s list)', S.holdout)}${P ? bt('Point in time, top 100 each month', P.top100) : ''}</tbody></table></div>
+      <p class="muted"><b>Caveats.</b> (1) The first two rows use today's most-traded stocks, so stocks that later became big winners are in the list from the start: that flatters momentum (the last row removes that by rebuilding the universe every month from what was known then). (2) Stocks delisted before 2026 have no Yahoo data and are missing everywhere. (3) Drawdowns near −50% even with the market filter. (4) On the unseen 200 it lost to simply holding everything in 2022-26. Rules and pass bars were written down before each run (tools/experiment-momentum.mjs, experiment-momentum-pit.mjs).</p>` : ''}`;
+    el.querySelectorAll('tr[data-open]').forEach(r => r.onclick = () => { OPEN = r.dataset.open; FILTER = 'ALL'; document.querySelector('[data-tab=picks]').click(); if (MQ.matches) history.pushState({ sheet: OPEN }, ''); renderPicks(); const d = $('#dcard'); if (d && !MQ.matches) d.scrollIntoView({ block: 'start', behavior: 'smooth' }); });
   }
 
   // ---------- broker flow ----------

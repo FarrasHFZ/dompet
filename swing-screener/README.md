@@ -37,6 +37,19 @@ Without the Sheet, everything still runs from GitHub. The Sheet is worth keeping
 - So ACT calls are paper trades. The market filter mostly keeps the account in cash in downtrends; the live ledger
   keeps running as a forward test.
 
+## Momentum 10: the paper-only second strategy (Momentum tab)
+
+Monthly: liquid stocks (Rp 5 B a day), rank by 12-1 month return, hold the top 10 equal weight from the next open to
+the next rebalance, only while the IHSG is above its 200-day average. 0.2% fee each side.
+- `tools/experiment-momentum.mjs` (pre-registered, passed): today's 100 +28.5%/yr vs equal weight +5.9%; unseen 200
+  +8.5% vs +3.6% (p 0.089). Both use today's stock lists, which flatters momentum.
+- `tools/experiment-momentum-pit.mjs` (pre-registered hindsight check, passed): each month's universe rebuilt from all
+  909 IDX codes with Yahoo history (top 100 by 60-day median traded value then): +4.8%/yr vs equal weight -1.0%,
+  random p 0.013, but -2.3%/yr in 2022-26 and a -57% worst month-end drawdown. A relative edge, not a money machine.
+  Delisted stocks are still missing.
+- `tools/momentum.mjs` builds the list on every run; the end-of-day run commits one ledger per month-end to
+  `data/history-mom/` starting with the October 2026 rebalance, scored at the next rebalance (forward record).
+
 ## What the measurements say (tools/backtest.mjs, tools/news-score.mjs)
 
 27 liquid IDX stocks, 5 years of daily bars, walk-forward (score uses only past data), outcome = next 15 trading days.

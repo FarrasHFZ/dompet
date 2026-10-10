@@ -9,6 +9,7 @@ import { fetchFundamentals } from './fundamentals.mjs';
 import { runAlerts } from './alerts.mjs';
 import { writeOhlc } from './ohlc.mjs';
 import { stockSignals } from './signals.mjs';
+import { momentumBook } from './momentum.mjs';
 import { buildTracker, readLedger } from './tracker.mjs';
 import { loadNeobdm, tierOf } from './neobdm.mjs';
 import { loadGroups, groupSeries, groupSummary, groupReadAt } from './groups.mjs';
@@ -213,6 +214,11 @@ const replayFile = path.join(ROOT, 'data', 'replay-tracker.json');
 if (fs.existsSync(replayFile)) fs.copyFileSync(replayFile, path.join(OUT, 'replay-tracker.json'));
 console.log(`tracker: ${tracker.signalDays} signal day(s), ACT closed ${tracker.act.n} (open ${tracker.act.open}), control closed ${tracker.control.n}`);
 
+// Momentum 10 (tools/momentum.mjs): the paper-only second strategy, its current list and forward record.
+let momentum = null;
+try { momentum = momentumBook({ px, tickers: uni.map(u => u.ticker), names: Object.fromEntries(uni.map(u => [u.ticker, u.name])), histDir: path.join(ROOT, 'data', 'history-mom'), todayWib, live, write: !process.env.FAKE_NOW }); } catch (e) { console.error('momentum failed', e.message); }
+if (momentum) console.log(`momentum: list of ${momentum.rebalance} (filter ${momentum.filterOn ? 'on' : 'off'}), ${momentum.record.length} recorded month(s)`);
+
 const bt = fs.existsSync(path.join(ROOT, 'data', 'backtest-summary.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'backtest-summary.json'), 'utf8')) : null;
 // latest.json carries the last 7 days (fast first paint); the 30-day archive is a separate file loaded on demand.
 const weekAgo = Date.now() - 7 * 864e5;
@@ -235,6 +241,7 @@ const out = {
   // Broker-flow workflow: forward-test scorecard (tools/flow-forward.mjs) and the IDX foreign-flow backtest (tools/experiment-flow.mjs).
   groups: groups ? { ...groups, byTicker: undefined, study: readJson('groups-study.json') } : null,
   // 10-year check (2026-10-10): no edge over shuffled prices; shown at the top of Track record.
+  momentum: momentum ? { ...momentum, study: readJson('momentum-study.json'), pit: readJson('momentum-pit.json') } : null,
   tenYear: { trend: readJson('trend-study.json'), own: readJson('own-holdout.json'), perm: readJson('permutation-study.json') },
   expansion: readJson('expand-study.json'), brokerCostStudy: readJson('brokercost-study.json'), brokerDirectory: readJson('broker-directory.json'), sizing: readJson('sizing-study.json'), research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
   flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json'), history: nbStudy, flowVeto,
