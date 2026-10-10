@@ -46,8 +46,10 @@ export function overlay(n) {
 // marketOk: IHSG above its 200-day average (tools/experiment-v4.mjs: chosen on 2022-10..2024-09, confirmed on 2024-10..:
 // second-half CAGR +6.3% vs 0.0%, max drawdown -12.7% vs -36.8%). Below it, oversold setups are paused, not traded.
 // flowVeto: set only when tools/experiment-nb.mjs (2-year NeoBDM replay, pre-registered) adopted it; FLOW- then skips.
-export function tierOf(score, actScore, confirm, ov, marketOk = true, flowVeto = false) {
+// untested: one of the 200 stocks added 2026-10-10; tools/experiment-expand.mjs (pre-registered) found no edge on them.
+export function tierOf(score, actScore, confirm, ov, marketOk = true, flowVeto = false, untested = false) {
   if (score < actScore) return 'WATCH';
+  if (untested) return 'SKIP';
   if (ov.tag === 'AVOID') return 'SKIP';
   if (flowVeto && ov.tag === 'FLOW-') return 'SKIP';
   if (!marketOk) return 'PAUSE';

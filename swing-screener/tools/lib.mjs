@@ -24,6 +24,14 @@ export function universe(api) {
   }));
 }
 
+// The 200 stocks added on 2026-10-10 (rows after the "expansion" marker in UNIVERSE_SEED). tools/experiment-expand.mjs
+// found the bounce edge does NOT hold on them, so they are shown but never traded, and kept out of the live record.
+export function expansionTickers() {
+  const src = fs.readFileSync(path.join(ROOT, 'apps-script', 'Code.gs'), 'utf8'), at = src.indexOf('// ---- expansion 2026-10-10');
+  if (at < 0) return new Set();
+  return new Set([...src.slice(at, src.indexOf('\n];', at)).matchAll(/\['([A-Z0-9]{4,})',/g)].map(m => m[1]));
+}
+
 export const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 // Yahoo daily bars -> column-oriented bars (same shape as the Sheet path).

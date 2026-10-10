@@ -13,13 +13,14 @@
   // News direction: +-0.5 deadband, so a stock with no real news reads neutral.
   const arrow = s => (s >= 0.5 ? '<span class="up">▲ supports</span>' : s <= -0.5 ? '<span class="down">▼ risk</span>' : '<span class="mute">• neutral</span>');
 
-  const TIER = { 'ACT+': 'Bounce candle + flow up', ACT: 'Bounce candle confirmed', 'ACT?': 'Bounce candle, but flow down', WAIT: 'Oversold, wait for a bounce candle', SKIP: 'NeoBDM veto', PAUSE: 'Market filter: IHSG below its 200-day average, no new bounce trades' };
+  const TIER = { 'ACT+': 'Bounce candle + flow up', ACT: 'Bounce candle confirmed', 'ACT?': 'Bounce candle, but flow down', WAIT: 'Oversold, wait for a bounce candle', SKIP: 'Not traded: NeoBDM veto, or one of the 200 stocks where the bounce edge was not confirmed', PAUSE: 'Market filter: IHSG below its 200-day average, no new bounce trades' };
   const tierHtml = p => (p.tier && p.tier !== 'WATCH' ? '<span class="tier t' + (p.tier === 'ACT+' ? 'P' : p.tier === 'ACT?' ? 'Q' : p.tier) + '" title="' + esc(TIER[p.tier]) + '">' + esc(p.tier) + '</span>' : '');
   // Conglomerate group label (tools/groups.mjs): short name, rank on hover; a click opens the Groups tab.
   const groupTag = p => {
-    const g = p.group; if (!g) return '';
+    const nm = p.untested ? '<span class="newmark" title="One of the 200 stocks added in Oct 2026: shown, not traded (Track record)">new</span>' : '';
+    const g = p.group; if (!g) return nm;
     const short = g.id === 'bumn' ? 'BUMN' : String(g.alias || g.name).replace(/^saham /, '');
-    return `<button class="gtag${g.hot ? ' hot' : ''}" data-group="${esc(g.id)}" title="${esc(g.name)} group: #${g.rank || '–'} of ${g.of} by 20-day strength${g.hot ? ', jumped 10%+ in a week recently' : ''}. Click for the Groups tab.">${esc(short)}</button>`;
+    return `${nm}<button class="gtag${g.hot ? ' hot' : ''}" data-group="${esc(g.id)}" title="${esc(g.name)} group: #${g.rank || '–'} of ${g.of} by 20-day strength${g.hot ? ', jumped 10%+ in a week recently' : ''}. Click for the Groups tab.">${esc(short)}</button>`;
   };
   const flowF = x => (x == null ? '–' : (x > 0 ? '+' : '') + x.toFixed(1) + 'B');
   // Broker flow (NeoBDM, derived labels only). Groups in the order a trader reads them: big money first, retail last.
@@ -313,7 +314,7 @@
         <input type="search" id="pq" placeholder="Search ticker, name or sector" value="${esc(PQ)}" style="max-width:240px;margin-left:auto">
       </div>
       ${marketBanner()}
-      <p class="muted hint">ACT = oversold-bounce score ≥ ${DATA.meta.actScore}. Badges: <b>ACT</b> bounce candle seen, <b>WAIT</b> no bounce candle yet, <b>SKIP</b> NeoBDM veto (Pinky or illiquid), <b>PAUSE</b> market filter off. Broker flow no longer adds ACT+ / ACT?: two years of NeoBDM history showed it did not tell good bounces from bad ones (Broker flow tab). Few days have any; "none today" is a valid answer.</p>
+      <p class="muted hint">ACT = oversold-bounce score ≥ ${DATA.meta.actScore}. Badges: <b>ACT</b> bounce candle seen, <b>WAIT</b> no bounce candle yet, <b>SKIP</b> not traded (NeoBDM veto, or one of the 200 stocks added in Oct 2026 where the edge failed its test), <b>PAUSE</b> market filter off. Broker flow no longer adds ACT+ / ACT?: two years of NeoBDM history showed it did not tell good bounces from bad ones (Broker flow tab). Few days have any; "none today" is a valid answer.</p>
       ${body}`;
     const toggle = t => { OPEN = OPEN === t ? null : t; renderPicks(); const d = $('#dcard'); if (OPEN && d) d.scrollIntoView({ block: MQ.matches ? 'nearest' : 'start', behavior: 'smooth' }); };
     el.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { FILTER = b.dataset.f; OPEN = null; renderPicks(); });
@@ -411,7 +412,7 @@
   function thesisShort(p) {
     const m = DATA.meta;
     if (p.score < m.actScore) return '<span class="mute">No setup today</span>';
-    if (p.tier === 'SKIP') return '<span class="down">Oversold, but vetoed (NeoBDM)</span>';
+    if (p.tier === 'SKIP') return p.untested ? '<span class="down">Oversold, but the edge is unproven on this stock</span>' : '<span class="down">Oversold, but vetoed (NeoBDM)</span>';
     if (p.tier === 'PAUSE') return '<span class="warn">Oversold, but the market filter says stand aside</span>';
     const go = `expecting <span class="up">▲ ${f0(p.target)}</span> in ${m.params.horizon}d`;
     return p.tier === 'WAIT' ? `<span class="warn">Wait for a bounce candle</span> · ${go}` : `<span class="up">Bounce setup live</span> · ${go}`;
@@ -450,6 +451,7 @@
       : tier === 'WAIT' ? `${p.ticker} has been sold hard and may be near a bounce, but it is not a buy yet.`
       : `${p.ticker} has been sold hard and has just started to bounce: the setup we trade.`;
     const doNow = !act ? 'Nothing to do. Keep it on the radar only.'
+      : tier === 'SKIP' && p.untested ? `Do not trade it. ${p.ticker} is one of the 200 stocks added in October 2026; on them the oversold bounce did not beat other stocks reliably, and adding them to the account turned +2.6% a year into −10%. Watch it only.`
       : tier === 'SKIP' ? 'Do not trade it: NeoBDM flags unusual activity (Pinky) or thin trading.'
       : tier === 'PAUSE' ? `Stand aside. The IHSG is below its 200-day average; in that condition oversold bounces failed often enough to cost money overall. Watch it, and act only when the market filter turns back on and a bounce candle appears.`
       : tier === 'WAIT' ? `Wait. Buy only after the first up day: a close above the previous day's high, or a green day closing above the previous close. Then buy at the next morning's open.`
@@ -501,7 +503,7 @@
       <div class="th-checks"><div><small>Drives the badge (backtested)</small><ul class="th-list">
         ${row(act, 'Oversold', `score ${p.score} vs ${m.actScore}`)}
         ${act ? row(p.confirm ? true : null, 'Bounce candle', p.confirm ? 'seen' : 'not yet') : ''}
-        ${act ? row(tier !== 'SKIP', 'No NeoBDM veto', tier === 'SKIP' ? 'Pinky or illiquid' : 'clear') : ''}
+        ${act ? (p.untested ? row(false, 'Tested universe', 'no: one of the 200 added stocks, edge not confirmed') : row(tier !== 'SKIP', 'No NeoBDM veto', tier === 'SKIP' ? 'Pinky or illiquid' : 'clear')) : ''}
       </ul></div>
       <div><small>Context (tested, no proven edge)</small><ul class="th-list">${ctx.join('')}</ul></div></div>
       <p class="muted">Backtest, 5 years × 100 stocks: oversold + bounce candle + wide stop ≈ +1% per trade, target hit ≈ 50%, vs −0.7% for non-oversold stocks on the same days. Buying oversold stocks before the bounce candle did not make money.</p>
@@ -688,6 +690,16 @@
       <p class="muted">E = company filings on IDX, F = fundamentals from Stockbit (only numbers already published on the signal day), X = exit rules. An idea is adopted only if it holds counting each stock episode once, grouped by day, on the 73 stocks the score was not built on, and in both halves of the period.</p>`;
   }
 
+  // Universe 100 -> 300 (tools/experiment-expand.mjs): the pre-registered holdout test on the 200 added stocks.
+  function expansionHtml(x) {
+    if (!x) return '';
+    const n = x.newStocks, o = x.original, P = x.portfolio, t = v => (v == null ? '–' : v.toFixed(1));
+    const ns = DATA.trackerSummary && DATA.trackerSummary.newSet;
+    return `<h2>The 200 stocks added in October 2026: shown, not traded</h2>
+      <div class="card scroll"><table><thead><tr><th>Stocks</th><th class="n">Live-rule trades</th><th class="n">Avg per trade</th><th class="n">Other stocks, same days</th><th class="n">Gap</th><th class="n">t</th><th class="n">By day</th><th class="n">1st / 2nd half</th><th>Result</th></tr></thead><tbody>
+      ${[['Original 100', o], ['New 200', n]].map(([l, r]) => `<tr><td>${l}</td><td class="n">${r.episodes}</td><td class="n">${pc(r.avgLive, 2)}</td><td class="n">${pc(r.avgCtrl, 2)}</td><td class="n">${pc(r.gap, 2)}</td><td class="n">${t(r.t)}</td><td class="n">${pc(r.gapDay, 2)}</td><td class="n">${pc(r.h1, 1)} / ${pc(r.h2, 1)}</td><td>${r.pass ? '<span class="up">pass</span>' : '<span class="down">fail</span>'}</td></tr>`).join('')}</tbody></table></div>
+      <p class="muted">The universe grew from 100 to 300 stocks (the next 200 by median traded value, excluding suspended and sub-Rp 50 stocks). The rules were never tuned on the new 200, so they were a clean test, written down before it ran (${esc(x.from)} to ${esc(x.to)}). The bounce edge did <b>not</b> hold there: the gap over other stocks was smaller, not significant, and negative day by day. As an account (5 positions, market filter), adding them turned ${pc(P.original.cagr, 1)} a year into ${pc(P.all.cagr, 1)}, worst drawdown ${pc(P.original.mdd, 0)} to ${pc(P.all.mdd, 0)}. So their oversold setups show as <b>SKIP</b>, they are kept out of the live record below, and they still count for groups, news and broker flow.${ns && ns.act && ns.act.n ? ` Their own live record so far: ${ns.act.n} ACT setups closed, ${pc(ns.act.avgNet, 2)} average.` : ''}</p>`;
+  }
   function renderScore() {
     const el = $('#tab-score'), bt = DATA.backtest, na = DATA.newsAccuracy;
     if (!bt) { el.innerHTML = '<div class="empty">No backtest summary in this data source.</div>'; return; }
@@ -699,6 +711,7 @@
       <div class="card"><div class="pad"><b>In-sample (before 2024-10)</b></div>${bucketTable(bt.inSample)}</div></div>
       ${DATA.backtestHoldout ? `<h2>Stocks it was NOT designed on</h2><div class="card"><div class="pad"><b>${DATA.backtestHoldout.params.tickers} other IDX stocks</b>, same rules, no re-tuning</div>${bucketTable(DATA.backtestHoldout.all)}</div><p class="muted">The edge replicates but is smaller, and after stops and fees the average trade is about zero. Treat ACT as a shortlist, not a signal to buy blindly.</p>` : ''}
       <div class="note"><b>Read it honestly.</b> The v1 score (trend, momentum, breakout chasing) scored <i>negative</i> in this test, so it was replaced by an oversold-bounce score. The new score ranks better, but a +1% average 15-day move is small, and in the 13-month replay with realistic entries, stops and fees the average ACT trade still lost money. The earlier idea that the edge lives in broad selloffs did not hold up there (see the regime table). ${bt.caveats.map(esc).join(' ')}</div>
+      ${expansionHtml(DATA.expansion)}
       ${researchHtml(DATA.research)}
       <h2>Live track record: does it actually hit its targets?</h2>
       <div id="trackbox"><div class="card empty">Loading…</div></div>

@@ -2,7 +2,7 @@
 // Also appends today's picks to data/history/ (forward-test ledger) and scores older entries against what happened.
 import fs from 'node:fs';
 import path from 'node:path';
-import { loadEngine, universe, loadPrices, ROOT } from './lib.mjs';
+import { loadEngine, universe, loadPrices, ROOT, expansionTickers } from './lib.mjs';
 import { refreshNewsStore, newsCoverage, archiveForWeb } from './news.mjs';
 import { buildOwnership } from './ownership.mjs';
 import { fetchFundamentals } from './fundamentals.mjs';
@@ -14,6 +14,7 @@ import { loadGroups, groupSeries, groupSummary, groupReadAt } from './groups.mjs
 const cfg = { targetPct: +(process.env.TARGET || 8), horizon: +(process.env.HORIZON || 15), stopMult: +(process.env.STOPMULT || 2.5), minValueB: 5 };
 const api = loadEngine();
 const uni = universe(api);
+const NEWSET = expansionTickers(); // 200 stocks added 2026-10-10: shown, never traded (tools/experiment-expand.mjs)
 const OUT = path.join(ROOT, 'web', 'data');
 const HIST = path.join(ROOT, 'data', 'history');
 fs.mkdirSync(OUT, { recursive: true });
@@ -138,7 +139,8 @@ uni.forEach(u => {
   pk.bm = bmd && bmd.by[u.ticker] ? { ...bmd.by[u.ticker], stale: bmStale } : null;
   pk.flowHist = nbHist && nbHist.by[u.ticker] ? nbHist.by[u.ticker] : null;
   pk.group = groups && groups.byTicker[u.ticker] ? groups.byTicker[u.ticker] : null;
-  pk.tier = tierOf(pk.score, api.ACT_SCORE, pk.confirm, ov, marketOk, flowVeto);
+  pk.untested = NEWSET.has(u.ticker);
+  pk.tier = tierOf(pk.score, api.ACT_SCORE, pk.confirm, ov, marketOk, flowVeto, pk.untested);
   pk.filings = filings && filings.by[u.ticker] ? filings.by[u.ticker] : [];
   picks.push(pk);
 });
@@ -158,7 +160,7 @@ try { existing = JSON.parse(fs.readFileSync(ledgerFile, 'utf8')); } catch { /* n
 if (!process.env.FAKE_NOW && (!existing || (existing.v || 1) < LEDGER_V)) {
   fs.writeFileSync(ledgerFile, JSON.stringify({
     v: LEDGER_V, asOf, cfg, regime: market.regime, breadth: market.breadth, marketOk,
-    picks: picks.map(p => ({ ticker: p.ticker, sector: p.sector, score: p.score, action: p.action, setup: p.setup, rsi: p.rsi, dist20Atr: p.dist20Atr, rr: p.rr, atrPct: p.atrPct, entry: p.entry, stop: p.stop, target: p.target, newsScore: p.newsScore, bmScore: p.bm && !p.bm.stale && p.bm.score != null ? p.bm.score : null })),
+    picks: picks.map(p => ({ ticker: p.ticker, sector: p.sector, score: p.score, action: p.action, setup: p.setup, rsi: p.rsi, dist20Atr: p.dist20Atr, rr: p.rr, atrPct: p.atrPct, entry: p.entry, stop: p.stop, target: p.target, newsScore: p.newsScore, bmScore: p.bm && !p.bm.stale && p.bm.score != null ? p.bm.score : null, ...(p.untested ? { set: 'new' } : {}) })),
   }));
 }
 const tracker = buildTracker({ ledger: readLedger(HIST), bars: px, horizon: cfg.horizon });
@@ -187,11 +189,11 @@ const out = {
   },
   // Broker-flow workflow: forward-test scorecard (tools/flow-forward.mjs) and the IDX foreign-flow backtest (tools/experiment-flow.mjs).
   groups: groups ? { ...groups, byTicker: undefined, study: readJson('groups-study.json') } : null,
-  research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
+  expansion: readJson('expand-study.json'), research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
   flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json'), history: nbStudy, flowVeto,
     bm: { asOf: bmd ? bmd.asOf : null, stale: bmStale, experiment: readJson('bm-experiment.json'), scoreExperiment: readJson('bm-score-experiment.json') } },
   backtestHoldout:fs.existsSync(path.join(ROOT, 'data', 'backtest-holdout.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'backtest-holdout.json'), 'utf8')) : null,
-  newsAccuracy: fs.existsSync(na) ? JSON.parse(fs.readFileSync(na, 'utf8')) : null, market, picks, news: newsOut, ownership: ownership ? { asOf: ownership.asOf, note: ownership.note } : null, backtest: bt, trackerSummary: { signalDays: tracker.signalDays, act: tracker.act, control: tracker.control, open: tracker.open.length, rules: tracker.rules },
+  newsAccuracy: fs.existsSync(na) ? JSON.parse(fs.readFileSync(na, 'utf8')) : null, market, picks, news: newsOut, ownership: ownership ? { asOf: ownership.asOf, note: ownership.note } : null, backtest: bt, trackerSummary: { signalDays: tracker.signalDays, act: tracker.act, control: tracker.control, newSet: tracker.newSet, open: tracker.open.length, rules: tracker.rules },
 };
 fs.writeFileSync(path.join(OUT, 'latest.json'), JSON.stringify(out));
 console.log(`snapshot ${asOf}: ${picks.length} ranked (${picks.filter(p => p.action === 'ACT').length} ACT), ${skipped.length} skipped, ${newsRows.length} headlines, ${Math.round(fs.statSync(path.join(OUT, 'latest.json')).size / 1024)} KB`);

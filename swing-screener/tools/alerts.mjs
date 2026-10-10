@@ -19,7 +19,7 @@ export function buildMessages({ api, picks, newsRows, meta, market, state, watch
   const out = { lines: [], seenAdd: [], first: !state.initialised };
   const interest = new Map(); // ticker -> pick
   // In a broad selloff dozens of stocks are ACT; only the 10 best (plus your watchlist) earn news alerts.
-  picks.filter(p => p.action === 'ACT').slice(0, 10).forEach(p => interest.set(p.ticker, p));
+  picks.filter(p => p.action === 'ACT' && !p.untested).slice(0, 10).forEach(p => interest.set(p.ticker, p));
   picks.forEach(p => { if (watchlist.includes(p.ticker)) interest.set(p.ticker, p); });
   const sectors = new Set([...interest.values()].map(p => p.sector));
   const seen = new Set(state.seenNews || []);
@@ -64,7 +64,7 @@ export function buildMessages({ api, picks, newsRows, meta, market, state, watch
   if (kept.length > shown.length) out.lines.push(`<i>+${kept.length - shown.length} more in the News tab</i>`);
 
   // Signal-day change
-  const acts = picks.filter(p => p.action === 'ACT').map(p => p.ticker);
+  const acts = picks.filter(p => p.action === 'ACT' && !p.untested).map(p => p.ticker); // the 200 untested stocks are never announced
   const dayChanged = state.lastSignalDay && state.lastSignalDay !== meta.asOf;
   const head = [];
   if (!out.first && dayChanged) {

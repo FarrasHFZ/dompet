@@ -83,12 +83,15 @@ export function oneAtATime(ts) {
 }
 
 export function buildTracker({ ledger, bars, horizon = 15, previousResolved = [] }) {
-  const trades = [];
+  // Picks logged with set 'new' (the 200 stocks added 2026-10-10, never traded) are scored separately, so the main
+  // record stays the tested universe and stays comparable with its first days.
+  const trades = [], newTrades = [];
   ledger.forEach(day => day.picks.forEach(p => {
     const b = bars[p.ticker + '.JK'];
     if (!b) return;
-    trades.push(resolveTrade({ ...p, regime: day.regime }, day.asOf, b, horizon));
+    (p.set === 'new' ? newTrades : trades).push(resolveTrade({ ...p, regime: day.regime }, day.asOf, b, horizon));
   }));
+  const newSet = { act: agg(oneAtATime(newTrades.filter(t => t.action === 'ACT'))), control: agg(oneAtATime(newTrades.filter(t => t.action !== 'ACT'))) };
   const resolved = trades.filter(t => ['win', 'loss', 'timeout'].includes(t.status));
   const rawAct = trades.filter(t => t.action === 'ACT'), rawRest = trades.filter(t => t.action !== 'ACT');
   const act = oneAtATime(rawAct), rest = oneAtATime(rawRest), uniq = act.concat(rest);
@@ -100,7 +103,7 @@ export function buildTracker({ ledger, bars, horizon = 15, previousResolved = []
   return {
     asOf: new Date().toISOString(), horizon, fee: FEE, signalDays: ledger.length,
     rules: 'Entry next session open; plan stop/target as price levels; 15 trading days; a bar touching both counts as a loss; gaps fill at the open; net of 0.4% fees.',
-    act: agg(act), control: agg(rest), all: agg(uniq), rawSignals: { act: rawAct.length, control: rawRest.length }, pendingAct: rawAct.filter(x => x.status === 'pending').length,
+    act: agg(act), control: agg(rest), all: agg(uniq), newSet, rawSignals: { act: rawAct.length, control: rawRest.length }, pendingAct: rawAct.filter(x => x.status === 'pending').length,
     byScore: groupBy(uniq, t => bucket(t.score)),
     bySetup: groupBy(uniq, t => t.setup, 5), bySector: groupBy(act, t => t.sector, 3), byRegime: groupBy(act, t => t.regime, 3),
     byRsi: groupBy(act, t => rsiBand(t.rsi), 3),

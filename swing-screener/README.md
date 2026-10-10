@@ -231,7 +231,16 @@ Open https://farrashfz.github.io/dompet/screener/ and install it: iPhone Safari 
 `HOLDOUT=1 node tools/backtest.mjs` runs the same score on 40 IDX stocks that were not used to design it (`tools/holdout-universe.json`). The edge replicates but smaller (top bucket +0.9% vs 0.0% baseline, IC 0.08), and expectancy after stops and fees is about zero.
 
 ## Universe and news coverage
-- **Universe: 100 stocks** (`UNIVERSE_SEED` in `apps-script/Code.gs`). The score was designed on 27 of them (`tools/design-universe.json`); the other 73 are out-of-sample (`HOLDOUT=1 node tools/backtest.mjs`).
+- **Universe: 300 stocks** (`UNIVERSE_SEED` in `apps-script/Code.gs`). The score was designed on 27 of the original 100 (`tools/design-universe.json`); the other 73 are out-of-sample (`HOLDOUT=1 node tools/backtest.mjs`).
+- **The 200 added on 2026-10-10** (`tools/expand-universe.mjs`: next 200 by median traded value over 120 sessions, no stock with
+  more than 5 zero-volume sessions or a price under Rp 50; sector from Yahoo's industry with hand fixes) were a clean holdout.
+  Pre-registered test (`tools/experiment-expand.mjs`, commit e1018d8): live rule vs other stocks +0.83%/trade, t 1.4,
+  negative by day -> **fail** (original 100: +1.07%, t 3.0, pass). As an account, adding them turned +2.6%/yr into -10.2%,
+  drawdown -13% -> -38%. So their setups are tiered **SKIP** (marked "new"), they are never announced on Telegram, and the
+  ledger logs them with `set: 'new'` so the live record stays the tested 100 (their own record is kept separately).
+  They still feed groups, news and the rankings. About half trade under Rp 5 B/day and are skipped as illiquid by the engine.
+  NeoBDM and Bandarmetrics pulls still cover the original 100 (the `swing-100` list in the NeoBDM account). The Sheet path
+  does not know about the SKIP rule yet.
 - **News: a rolling 35-day archive**, 30 days shown. One Google News query returns at most ~100 items, which for an active stock covers only 2-3 weeks, so `tools/news.mjs` splits each query into date windows and halves any window that hits the cap, down to single days. First runs back-fill the month in resumable chunks (progress survives in the CI cache and in the published `data/news-30d.json`); after that hot stocks (top 30 by liquidity, ACT picks, watchlist) and themes refresh hourly and everything every 6 hours.
 - Coverage is measured, not assumed: the News tab shows headlines per day, stocks with news, and which stocks are thin.
 - Limit: this is what Google News indexes, not every Indonesian outlet. Scoring still uses only the last 7 days (with decay); the month is for context and search.
