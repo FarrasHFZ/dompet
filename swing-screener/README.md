@@ -213,6 +213,20 @@ and -12.7% vs -36.8% drawdown -> adopted (tier PAUSE when off). Full period with
 Robustness: every window (100-250 days) and position count (3/5/8) cut drawdown; returns are noisier. Not adopted but
 noted: more, smaller positions (8) helped in every variant.
 
+## Big buyers' cost lines (`tools/broker-cost.mjs`, context only)
+From NeoBDM's per-broker inventory (`tools/nb-inv-pull.js` -> `data/nb-inventory.json`, local; 1 year, each stock's 20
+most active brokers by gross value): find the highest-volume session of the last 60, then per broker since that peak the
+net lots and the average BUY price. The cost line = average buy price of the top 3 net buyers; plus who they are
+(one broker / a few / broad, and broker type), how big the buying is (share of lots traded) and whether they are still
+in (adding / holding / unloading over the last 5 sessions). Shown on every stock page ("Who's buying, and at what
+cost"), on the trade map, and in the coverage panel. Public data carries broker TYPES, not codes (codes stay in
+`data/broker-cost-local.json`). Refreshed on a weekly rotation (a fifth of the universe each evening, step A4c).
+
+Pre-registered test (`tools/experiment-brokercost.mjs`, commit c4512c3, Jan-Sep 2026 signals on the tested 100):
+near a holding accumulator's cost vs the rest -2.32% vs -1.92%/trade (t -0.3) -> fail; >5% below their cost vs not
+-> fail; unloading almost never triggered. A falling market and ~50 vs 260 episodes: too little data to prove anything
+either way. So it never changes a badge; it is the "who and at what price" context for your own conviction.
+
 ## Position count (adopted 2026-10-10, `tools/experiment-sizing.mjs`)
 Walk-forward, pre-registered (commit before the run): candidates max 3 / 5 / 8 / 10 equal-weight positions and a
 risk-based variant (1.5% of equity at the stop, max 8), all with the market filter and 4.5% idle cash, live rule on the

@@ -90,6 +90,9 @@ let nbStudy = null, nbHist = null;
 try { nbStudy = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'nb-study.json'), 'utf8')); } catch { /* not run */ }
 try { nbHist = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'nb-history-tags.json'), 'utf8')); } catch { /* not run */ }
 const flowVeto = !!(nbStudy && nbStudy.vetoAdopted);
+// Broker cost lines (tools/broker-cost.mjs): refreshed per stock on a weekly rotation, so each carries its own date.
+let bcost = null;
+try { bcost = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'broker-cost-tags.json'), 'utf8')); } catch { /* not built */ }
 // Group rotation: today's read per group + the forward record of the "hot group" rule (tools/experiment-groups.mjs H4:
 // after a group index jumps >= 10% in 5 sessions it beat the IHSG over the next 10, in the 5-year test). Events after the
 // pre-registration date are scored here from prices, so the live record builds itself.
@@ -141,6 +144,7 @@ uni.forEach(u => {
   pk.bm = bmd && bmd.by[u.ticker] ? { ...bmd.by[u.ticker], stale: bmStale } : null;
   pk.flowHist = nbHist && nbHist.by[u.ticker] ? nbHist.by[u.ticker] : null;
   pk.group = groups && groups.byTicker[u.ticker] ? groups.byTicker[u.ticker] : null;
+  pk.brokerCost = bcost && bcost.by[u.ticker] ? { ...bcost.by[u.ticker], stale: (NOW - new Date(bcost.by[u.ticker].day + 'T10:00:00Z').getTime()) / 864e5 > 10 } : null;
   pk.untested = NEWSET.has(u.ticker);
   pk.thin = thin;
   // No volume in the last 3 sessions: suspended (or halted). Shown, never traded.
@@ -174,6 +178,7 @@ const dataCoverage = {
   neobdm: covCount(u => pkBy[u.ticker] && pkBy[u.ticker].neobdm), neobdmPage: covCount(u => pkBy[u.ticker] && pkBy[u.ticker].neobdm && pkBy[u.ticker].neobdm.source === 'chart'),
   neobdmFresh: covCount(u => pkBy[u.ticker] && pkBy[u.ticker].neobdm && !pkBy[u.ticker].neobdm.stale),
   flowStrip: covCount(u => pkBy[u.ticker] && pkBy[u.ticker].flowHist),
+  brokerCost: covCount(u => pkBy[u.ticker] && pkBy[u.ticker].brokerCost),
   bm: covCount(u => pkBy[u.ticker] && pkBy[u.ticker].bm), bmScore: covCount(u => pkBy[u.ticker] && pkBy[u.ticker].bm && pkBy[u.ticker].bm.score != null),
   news30d: covCount(u => newsTk.has(u.ticker)),
   owners: covCount(u => pkBy[u.ticker] && pkBy[u.ticker].ownership), groups: covCount(u => pkBy[u.ticker] && pkBy[u.ticker].group),
@@ -226,7 +231,7 @@ const out = {
   },
   // Broker-flow workflow: forward-test scorecard (tools/flow-forward.mjs) and the IDX foreign-flow backtest (tools/experiment-flow.mjs).
   groups: groups ? { ...groups, byTicker: undefined, study: readJson('groups-study.json') } : null,
-  expansion: readJson('expand-study.json'), sizing: readJson('sizing-study.json'), research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
+  expansion: readJson('expand-study.json'), brokerCostStudy: readJson('brokercost-study.json'), sizing: readJson('sizing-study.json'), research: readJson('v4-study.json'), filingsAsOf: filings ? filings.asOf : null,
   flow: { asOf: nbd ? nbd.asOf : null, stale: nbStale, scorecard: readJson('flow-scorecard.json'), foreignBacktest: readJson('flow-experiment.json'), history: nbStudy, flowVeto,
     bm: { asOf: bmd ? bmd.asOf : null, stale: bmStale, experiment: readJson('bm-experiment.json'), scoreExperiment: readJson('bm-score-experiment.json') } },
   backtestHoldout:fs.existsSync(path.join(ROOT, 'data', 'backtest-holdout.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'backtest-holdout.json'), 'utf8')) : null,

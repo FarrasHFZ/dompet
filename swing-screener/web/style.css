@@ -228,3 +228,4 @@ svg.spark { display: block; }
 .sz-out { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px 14px; align-items: end; }
 .sz-out small { display: block; color: var(--mute); font-size: 11px; } .sz-out b { display: block; font-size: 15px; } .sz-out .muted { font-size: 11.5px; }
 .sz-in input { background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 4px 8px; }
+.bcost .kv { margin-bottom: 8px; }

@@ -211,6 +211,7 @@
         <td><span class="act ${p.action}">${p.action}</span> ${tierHtml(p)}</td></tr>`; }).join('') : '<tr><td colspan="13" class="empty">Nothing matches.</td></tr>'}</tbody></table></div>
       <h2>Does broker flow help? 2-year replay</h2>
       ${nbHistHtml(F.history)}
+      ${brokerCostStudyHtml(DATA.brokerCostStudy)}
       <h2>Forward test (live snapshots)</h2>
       <div class="note"><b>Why a forward test as well.</b> The replay cannot see NeoBDM's method-fit and dirty-tape flags, and NeoBDM could revise old data. So every trading day the full live snapshot is still saved and scored later, with the checklist below (fixed on 2026-10-09, before any result; t is corrected for overlapping holding periods).</div>
       ${scorecardHtml(F.scorecard)}
@@ -485,6 +486,39 @@
     el.querySelectorAll('[data-close]').forEach(b => b.onclick = () => { const book = paperBook(), t = book[+b.dataset.close], p = DATA.picks.find(x => x.ticker === t.tk), now = p ? (p.live ? p.live.price : p.close) : t.entry; t.closed = { px: now, day: DATA.meta.asOf, why: now <= t.stop ? 'stop' : now >= t.target ? 'target' : 'closed' }; savePaper(book); renderScore(); });
     el.querySelectorAll('[data-del]').forEach(b => b.onclick = () => { const book = paperBook(); book.splice(+b.dataset.del, 1); savePaper(book); renderScore(); });
   }
+  // Broker cost lines (tools/broker-cost.mjs): who accumulated since the last volume peak, at what average buy price,
+  // and are they still holding. Broker TYPES only (codes stay local: paid data). Context; see the study in Broker flow.
+  const BTYPE = { foreign: 'foreign broker', local: 'local broker', retail: 'retail broker' };
+  const BSTAT = { adding: ['still adding', 'up'], holding: ['holding', 'up'], unloading: ['unloading', 'down'] };
+  function brokerCostHtml(p) {
+    const c = p.brokerCost;
+    if (!c) return '<p class="muted">No broker inventory for this stock yet (refreshed weekly on a rotation; new stocks fill in within a week).</p>';
+    if (c.none) return `<p class="muted">No broker has been a net buyer since the volume peak of ${esc(c.peakDay)} among the 20 most active brokers. Nobody is accumulating.</p>`;
+    const px = p.live ? p.live.price : p.close, gap = px / c.cost - 1, st = BSTAT[c.status] || [c.status, ''];
+    const who = c.conc === 'one broker' ? `<b>one broker</b> (a ${esc(BTYPE[c.top[0].type])}) did ${Math.round(c.top[0].share * 100)}% of all net buying` : c.conc === 'a few brokers' ? `<b>a few brokers</b> did most of the net buying (top 3: ${Math.round(c.top.reduce((s, x) => s + x.share, 0) * 100)}%)` : `the buying is <b>broad</b>: no single broker dominates`;
+    const where = Math.abs(gap) <= 0.05 ? `Today's price is <b>near their cost</b> (${pc(gap, 1)}): the zone where accumulators usually defend.` : gap < 0 ? `Today's price is <b>${pc(-gap, 1).replace(/<[^>]+>/g, '')} below their cost</b>: they are under water, which either means they defend soon or are cutting.` : `Today's price is <b>${pc(gap, 1).replace(/<[^>]+>/g, '')} above their cost</b>: they are in profit, so their cost is a deeper support, not today's price.`;
+    return `<div class="bcost">
+      <div class="kv">
+        <div><small>Volume peak</small><b>${esc(c.peakDay)}</b><div class="muted">${c.peakX ? c.peakX + '× normal volume, ' : ''}${c.days} sessions ago</div></div>
+        <div><small>Big buyers' average cost</small><b>${f0(c.cost)}</b><div class="muted">top 3 net buyers since the peak</div></div>
+        <div><small>Price vs their cost</small><b class="${Math.abs(gap) <= 0.05 ? 'up' : gap < 0 ? 'down' : ''}">${pc(gap, 1)}</b><div class="muted">now ${f0(px)}</div></div>
+        <div><small>Are they still in?</small><b class="${st[1]}">${esc(st[0])}</b><div class="muted">their net over the last 5 sessions</div></div>
+        <div><small>Size of the buying</small><b>${(c.netShare * 100).toFixed(1)}%</b><div class="muted">of all lots traded since the peak</div></div>
+      </div>
+      <div class="scroll"><table><thead><tr><th>Accumulator</th><th class="n">Share of net buying</th><th class="n">Average buy price</th><th class="n">Now vs that price</th></tr></thead><tbody>
+        ${c.top.map((x, i) => `<tr><td>#${i + 1} ${esc(BTYPE[x.type] || x.type)}</td><td class="n">${Math.round(x.share * 100)}%</td><td class="n">${f0(x.avg)}</td><td class="n">${x.avg ? pc(px / x.avg - 1, 1) : '–'}</td></tr>`).join('')}</tbody></table></div>
+      <p>Since the volume peak, ${who}. ${where}${c.status === 'unloading' ? ' But they are <b>unloading</b> now, so their cost is no longer a floor.' : ''}${c.supported ? ' <span class="tag">near a holding accumulator\'s cost</span>' : ''}</p>
+      <p class="muted">From NeoBDM's daily per-broker inventory (each stock's 20 most active brokers), as of ${esc(c.day)}${c.stale ? ' <b>(stale)</b>' : ''}. A cost line is a zone, not a promise: if they unload, it stops being support. ${DATA.brokerCostStudy ? 'Tested on one year of data: see the Broker flow tab.' : ''}</p></div>`;
+  }
+  function brokerCostStudyHtml(x) {
+    if (!x) return '';
+    const t = v => (v == null ? '–' : v.toFixed(1)), R = id => x.results.find(r => r.id === id) || {};
+    return `<h2>Big buyers' cost: does it help the bounce? (1 year)</h2>
+      <p class="muted">For every oversold signal from ${esc(x.from)} to ${esc(x.to)} (${x.signals.toLocaleString()} signal-days on the tested 100), the cost line was rebuilt with only the data known that day. Rules written and committed before the data was pulled.</p>
+      <div class="card scroll"><table><thead><tr><th>Test (A vs B)</th><th class="n">A / B per trade</th><th class="n">Gap</th><th class="n">t, episodes</th><th class="n">t, by day</th><th class="n">Unseen</th><th class="n">1st / 2nd half</th><th>Result</th></tr></thead><tbody>
+      ${x.results.map(r => `<tr><td>${esc(r.id)} ${esc(r.name.replace('  [PRIMARY]', ''))}</td><td class="n">${pc(r.avgA, 2)} / ${pc(r.avgB, 2)}</td><td class="n">${pc(r.gap, 2)}</td><td class="n">${t(r.t)}</td><td class="n">${t(r.tDay)}</td><td class="n">${pc(r.unseen, 2)}</td><td class="n">${pc(r.h1, 1)} / ${pc(r.h2, 1)}</td><td>${r.pass ? '<span class="up">pass</span>' : '<span class="mute">fail (bar ' + r.bar + ')</span>'}</td></tr>`).join('')}</tbody></table></div>
+      <p class="muted">By who is buying (episodes): ${Object.entries(x.byConc).map(([k, v]) => `${esc(k)} ${v.n} trades, ${pc(v.avg, 2)}`).join(' · ')}. Across all stocks, the price-vs-cost gap's rank correlation with the next 5 sessions: ${x.ic.mean == null ? '–' : x.ic.mean.toFixed(2)} (t ${t(x.ic.t)}). One year is a short test: a fail can mean too little data, not proof of nothing. The cost line is shown as context either way and never changes a badge.</p>`;
+  }
   function thesisShort(p) {
     const m = DATA.meta;
     if (p.score < m.actScore) return '<span class="mute">No setup today</span>';
@@ -497,7 +531,8 @@
   }
 
   function tradeMapSvg(p, stop, px, stretch) {
-    const pts = [['Wrong below', stop, 'var(--down)'], ['Now', px, 'var(--ink)'], ['Target', p.target, 'var(--up)']].concat(stretch ? [['Stretch', stretch, 'var(--up)']] : []);
+    const bc = p.brokerCost && !p.brokerCost.none && !p.brokerCost.stale && p.brokerCost.cost > stop * 0.97 && p.brokerCost.cost < (stretch || p.target) * 1.03 ? p.brokerCost.cost : null;
+    const pts = [['Wrong below', stop, 'var(--down)'], ['Now', px, 'var(--ink)'], ['Target', p.target, 'var(--up)']].concat(stretch ? [['Stretch', stretch, 'var(--up)']] : []).concat(bc ? [['Big buyers\' cost', bc, 'var(--accent)']] : []);
     const lo = Math.min(...pts.map(x => x[1])), hi = Math.max(...pts.map(x => x[1])), W = MQ.matches ? 340 : 600, L = MQ.matches ? 34 : 40, R = MQ.matches ? 34 : 40;
     const x = v => L + ((v - lo) / (hi - lo || 1)) * (W - L - R);
     const pc = v => (v / px - 1 >= 0 ? '+' : '') + ((v / px - 1) * 100).toFixed(1) + '%';
@@ -578,6 +613,7 @@
     if (big) ctx.push(row(null, 'Big money (NeoBDM)', `${big} over 20 days${nb.phase ? ', phase ' + nb.phase.toLowerCase() : ''}; no edge in a 2-year replay`));
     if (bm) ctx.push(row(bm.lpm === 'rising' ? true : bm.lpm === 'falling' ? 'warn' : null, 'LPM (Bandarmetrics)', bm.quiet ? 'rising while price fell (quiet accumulation)' : bm.lpm));
     if (bm && bm.score != null) ctx.push(row(bm.score >= 67 ? true : bm.score <= 33 ? 'warn' : null, 'Accumulation score (experimental)', `${bm.score}/100, 60-day LPM trend vs other stocks`));
+    if (p.brokerCost && !p.brokerCost.none) { const g = (p.live ? p.live.price : p.close) / p.brokerCost.cost - 1; ctx.push(row(p.brokerCost.status === 'unloading' ? 'warn' : Math.abs(g) <= 0.05 ? true : null, 'Big buyers\' cost', `${f0(p.brokerCost.cost)} (${(g * 100).toFixed(1)}% from here), ${p.brokerCost.conc}, ${p.brokerCost.status}`)); }
     ctx.push(row(p.newsScore >= 0.5 ? true : p.newsScore <= -0.5 ? 'warn' : null, 'Stock news', `score ${p.newsScore > 0 ? '+' : ''}${p.newsScore} (own headlines only)${p.newsBackdrop ? `; sector backdrop ${p.newsBackdrop > 0 ? '+' : ''}${p.newsBackdrop}, not scored` : ''}`));
     if (act && p.resistance && p.resistance < p.target) ctx.push(row('warn', 'Resistance', `${f0(p.resistance)} sits below the target`));
     if (act && p.rr != null && p.rr < 1) ctx.push(row('warn', 'Reward vs risk', `${p.rr.toFixed(1)} : 1 with the plan stop`));
@@ -613,7 +649,7 @@
 
   function detailHtml(p) {
     const parts = p.parts, max = { oversold: 80, support: 10, news: 10 };
-    const jump = [['s-chart', 'Chart & levels'], ['s-news', 'News'], ['s-nb', 'NeoBDM'], ['s-bm', 'Bandarmetrics'], ['s-own', 'Owners'], ['s-earn', 'Earnings']];
+    const jump = [['s-chart', 'Chart & levels'], ['s-news', 'News'], ['s-nb', 'NeoBDM'], ['s-bc', 'Big buyers\' cost'], ['s-bm', 'Bandarmetrics'], ['s-own', 'Owners'], ['s-earn', 'Earnings']];
     return `${thesisHtml(p)}<nav class="jump">${jump.map(([id, l]) => `<button class="chip" data-jump="${id}">${l}</button>`).join('')}</nav><div class="dgrid" id="s-chart"><div>${chartSvg(p)}
       <div class="parts">${Object.keys(parts).map(k => `<div class="part"><span>${esc(k)}</span><div class="bar"><i style="width:${Math.min(100, (parts[k] / (max[k] || 10)) * 100)}%"></i></div><em>${parts[k]}</em></div>`).join('')}</div>
       <p class="muted">Score parts: oversold-ness (RSI, 5-day drop, distance under the 20d average) is the backtested driver; support proximity and news are secondary.</p></div>
@@ -630,6 +666,7 @@
         ${p.headlines.length ? `<ul class="hl-list">${p.headlines.map(h => `<li><span class="tag ${esc(h.category)}">${esc(h.category)}</span><span><a href="${safeUrl(h.link)}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a><div class="muted">${ago(h.published)} · ${!h.direct ? 'sector backdrop, not scored' : h.recap ? 'price recap, not scored' : 'about this stock · ' + (h.sentiment > 0 ? 'supports' : h.sentiment < 0 ? 'risk' : 'neutral')}</div></span></li>`).join('')}</ul>` : '<p class="muted">No scored headlines in the last 7 days.</p>'}
         <button class="chip" data-news="${esc(p.ticker)}">All 30-day headlines for ${esc(p.ticker)} →</button>
         <h2 id="s-nb">NeoBDM flow</h2>${nbHtml(p)}
+        <h2 id="s-bc">Who's buying, and at what cost</h2>${brokerCostHtml(p)}
         <h2 id="s-bm">Bandarmetrics read</h2>${bmHtml(p)}
         <h2 id="s-own">Who owns it</h2>${ownHtml(p.ownership)}
         <h2 id="s-earn">Earnings (P&L)</h2>${fundHtml(p.fundamentals)}</div></div>`;
@@ -820,6 +857,7 @@
       ${row('Scored and shown', c.scored, `${c.liquid} liquid enough to trade (≥ Rp 5 B a day); the rest show as THIN${c.suspended && c.suspended.length ? `; not trading now: ${c.suspended.map(esc).join(', ')}` : ''}`)}
       ${row('Broker flow (NeoBDM)', c.neobdm, `${c.neobdm - c.neobdmPage} from the screener list, ${c.neobdmPage} from stock pages; ${c.neobdmFresh} fresh (≤ 5 days)`)}
       ${row('Flow history strip', c.flowStrip, 'last 60 sessions, replayed then extended daily')}
+      ${c.brokerCost != null ? row('Big buyers&#39; cost', c.brokerCost, 'per-broker inventory, refreshed on a weekly rotation (a fifth of the stocks each evening)') : ''}
       ${row('Bandarmetrics', c.bm, `${c.bmScore} with an accumulation score${c.bmTooNew && c.bmTooNew.length ? ` (${c.bmTooNew.map(esc).join(', ')} listed too recently for one)` : ''}`)}
       ${row('News (30 days)', c.news30d, 'stocks named in at least one headline; quiet small caps can have none, and new stocks fill in over a few hourly runs')}
       ${row('Owners (KSEI ≥ 1%)', c.owners, 'monthly file')}
