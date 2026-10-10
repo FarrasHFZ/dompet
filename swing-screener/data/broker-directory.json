@@ -1,0 +1,786 @@
+{
+ "asOf": "2026-10-10",
+ "source": "IDX member list (Profil Anggota Bursa) + NeoBDM broker inventory, 1 year",
+ "defs": {
+  "retail": "Mass-market broker: the online apps and bank brokers most individual investors use. Their clients are many small accounts, so their net buying is the crowd.",
+  "foreign": "Foreign institutional desk (global or regional house): funds and foreign investors.",
+  "mixed": "Large full-service house with both a big retail base and institutional clients: its net flow is a blend.",
+  "local": "Local securities house: local institutions, high-net-worth clients and proprietary desks. A single local broker doing most of the buying in a stock is the classic \"bandar\" footprint."
+ },
+ "by": {
+  "XC": {
+   "name": "Ajaib Sekuritas Asia",
+   "cls": "retail",
+   "measured": {
+    "stocks": 164,
+    "grossT": 235.5,
+    "foreign": -0.38,
+    "bandar": -0.38,
+    "retail": -0.03
+   },
+   "behaves": "against big money (retail-like)"
+  },
+  "PP": {
+   "name": "Aldiracita Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "YO": {
+   "name": "Amantara Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "ID": {
+   "name": "Anugerah Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "SH": {
+   "name": "Artha Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "DX": {
+   "name": "Bahana Sekuritas",
+   "cls": "local",
+   "measured": {
+    "stocks": 11,
+    "grossT": 17.3,
+    "foreign": -0.03,
+    "bandar": 0.05,
+    "retail": 0.01
+   },
+   "behaves": "neutral"
+  },
+  "SQ": {
+   "name": "BCA Sekuritas",
+   "cls": "retail",
+   "measured": {
+    "stocks": 133,
+    "grossT": 156.8,
+    "foreign": -0.3,
+    "bandar": -0.28,
+    "retail": 0.03
+   },
+   "behaves": "against big money (retail-like)"
+  },
+  "AR": {
+   "name": "Binaartha Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "GA": {
+   "name": "BNC Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "NI": {
+   "name": "BNI Sekuritas",
+   "cls": "retail",
+   "measured": {
+    "stocks": 140,
+    "grossT": 120.9,
+    "foreign": -0.22,
+    "bandar": -0.15,
+    "retail": -0.05
+   },
+   "behaves": "neutral"
+  },
+  "OD": {
+   "name": "BRI Danareksa Sekuritas",
+   "cls": "local",
+   "measured": {
+    "stocks": 100,
+    "grossT": 57.2,
+    "foreign": -0.18,
+    "bandar": -0.12,
+    "retail": -0.01
+   },
+   "behaves": "neutral"
+  },
+  "RF": {
+   "name": "Buana Capital Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "ZR": {
+   "name": "Bumiputera Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "YU": {
+   "name": "CGS International Sekuritas Indonesia",
+   "cls": "mixed",
+   "measured": {
+    "stocks": 120,
+    "grossT": 362.5,
+    "foreign": 0.02,
+    "bandar": 0.02,
+    "retail": -0.06
+   },
+   "behaves": "neutral"
+  },
+  "KI": {
+   "name": "Ciptadana Sekuritas Asia",
+   "cls": "local",
+   "measured": {
+    "stocks": 13,
+    "grossT": 9.3,
+    "foreign": -0.09,
+    "bandar": 0.07,
+    "retail": -0.02
+   },
+   "behaves": "neutral"
+  },
+  "KZ": {
+   "name": "CLSA Sekuritas Indonesia",
+   "cls": "foreign",
+   "measured": {
+    "stocks": 45,
+    "grossT": 106.4,
+    "foreign": 0.22,
+    "bandar": 0.2,
+    "retail": -0.18
+   },
+   "behaves": "with big money"
+  },
+  "PF": {
+   "name": "Danasakti Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "II": {
+   "name": "Danatama Makmur Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "DP": {
+   "name": "DBS Vickers Sekuritas Indonesia",
+   "cls": "foreign",
+   "measured": null,
+   "behaves": null
+  },
+  "TS": {
+   "name": "Dwidana Sakti Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "ES": {
+   "name": "Ekokapital Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "SA": {
+   "name": "Elit Sukses Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "BS": {
+   "name": "Equity Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "AO": {
+   "name": "Erdikha Elit Sekuritas",
+   "cls": "local",
+   "measured": {
+    "stocks": 16,
+    "grossT": 2.2,
+    "foreign": -0.09,
+    "bandar": -0.15,
+    "retail": 0.36
+   },
+   "behaves": "neutral"
+  },
+  "EL": {
+   "name": "Evergreen Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "PC": {
+   "name": "FAC Sekuritas Indonesia",
+   "cls": "local",
+   "measured": {
+    "stocks": 9,
+    "grossT": 1.4,
+    "foreign": -0.1,
+    "bandar": -0.15,
+    "retail": 0.27
+   },
+   "behaves": "neutral"
+  },
+  "FO": {
+   "name": "Forte Global Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "AF": {
+   "name": "Harita Kencana Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "HP": {
+   "name": "Henan Putihrai Sekuritas",
+   "cls": "local",
+   "measured": {
+    "stocks": 6,
+    "grossT": 7.2,
+    "foreign": -0.01,
+    "bandar": -0.04,
+    "retail": 0.56
+   },
+   "behaves": "neutral"
+  },
+  "RB": {
+   "name": "INA Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "IU": {
+   "name": "Indo Capital Sekuritas",
+   "cls": "local",
+   "measured": {
+    "stocks": 5,
+    "grossT": 0.6,
+    "foreign": -0.12,
+    "bandar": -0.01,
+    "retail": 0.26
+   },
+   "behaves": "neutral"
+  },
+  "IH": {
+   "name": "Indo Harvest Sekuritas",
+   "cls": "local",
+   "measured": {
+    "stocks": 8,
+    "grossT": 1,
+    "foreign": -0.09,
+    "bandar": -0.24,
+    "retail": 0.22
+   },
+   "behaves": "neutral"
+  },
+  "PD": {
+   "name": "Indo Premier Sekuritas",
+   "cls": "retail",
+   "measured": {
+    "stocks": 180,
+    "grossT": 307.7,
+    "foreign": -0.25,
+    "bandar": -0.19,
+    "retail": -0.04
+   },
+   "behaves": "against big money (retail-like)"
+  },
+  "IC": {
+   "name": "Integrity Capital Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "BF": {
+   "name": "Inti Fikasa Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "IT": {
+   "name": "Inti Teladan Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "IN": {
+   "name": "Investindo Nusantara Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "BK": {
+   "name": "J.P. Morgan Sekuritas Indonesia",
+   "cls": "foreign",
+   "measured": {
+    "stocks": 117,
+    "grossT": 319.2,
+    "foreign": 0.38,
+    "bandar": 0.15,
+    "retail": -0.15
+   },
+   "behaves": "with big money"
+  },
+  "DU": {
+   "name": "KAF Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "AI": {
+   "name": "Kay Hian Sekuritas",
+   "cls": "foreign",
+   "measured": {
+    "stocks": 5,
+    "grossT": 3.9,
+    "foreign": 0.11,
+    "bandar": 0.01,
+    "retail": 0.06
+   },
+   "behaves": "neutral"
+  },
+  "CP": {
+   "name": "KB Valbury Sekuritas",
+   "cls": "retail",
+   "measured": {
+    "stocks": 129,
+    "grossT": 166.6,
+    "foreign": -0.09,
+    "bandar": -0.09,
+    "retail": 0.04
+   },
+   "behaves": "neutral"
+  },
+  "HD": {
+   "name": "KGI Sekuritas Indonesia",
+   "cls": "foreign",
+   "measured": {
+    "stocks": 11,
+    "grossT": 23.5,
+    "foreign": -0.11,
+    "bandar": -0.08,
+    "retail": 0.18
+   },
+   "behaves": "neutral"
+  },
+  "AG": {
+   "name": "Kiwoom Sekuritas Indonesia",
+   "cls": "foreign",
+   "measured": {
+    "stocks": 8,
+    "grossT": 1.9,
+    "foreign": -0.04,
+    "bandar": -0.1,
+    "retail": 0.33
+   },
+   "behaves": "neutral"
+  },
+  "BQ": {
+   "name": "Korea Investment And Sekuritas Indonesia",
+   "cls": "foreign",
+   "measured": {
+    "stocks": 38,
+    "grossT": 6,
+    "foreign": -0.05,
+    "bandar": -0.13,
+    "retail": 0.19
+   },
+   "behaves": "neutral"
+  },
+  "TF": {
+   "name": "Laba Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "YJ": {
+   "name": "Lotus Andalan Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "RX": {
+   "name": "Macquarie Sekuritas Indonesia",
+   "cls": "foreign",
+   "measured": {
+    "stocks": 34,
+    "grossT": 94.4,
+    "foreign": 0.41,
+    "bandar": 0.33,
+    "retail": -0.24
+   },
+   "behaves": "with big money"
+  },
+  "PI": {
+   "name": "Magenta Kapital Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "DD": {
+   "name": "Makindo Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "CC": {
+   "name": "Mandiri Sekuritas",
+   "cls": "mixed",
+   "measured": {
+    "stocks": 190,
+    "grossT": 780.9,
+    "foreign": 0.17,
+    "bandar": -0.04,
+    "retail": -0.16
+   },
+   "behaves": "neutral"
+  },
+  "ZP": {
+   "name": "Maybank Sekuritas Indonesia",
+   "cls": "foreign",
+   "measured": {
+    "stocks": 152,
+    "grossT": 533.9,
+    "foreign": 0.31,
+    "bandar": 0.09,
+    "retail": -0.14
+   },
+   "behaves": "with big money"
+  },
+  "CD": {
+   "name": "Mega Capital Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "MU": {
+   "name": "Minna Padi Investama Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "YP": {
+   "name": "Mirae Asset Sekuritas Indonesia",
+   "cls": "retail",
+   "measured": {
+    "stocks": 188,
+    "grossT": 457.6,
+    "foreign": -0.33,
+    "bandar": -0.32,
+    "retail": 0.06
+   },
+   "behaves": "against big money (retail-like)"
+  },
+  "EP": {
+   "name": "MNC Sekuritas",
+   "cls": "retail",
+   "measured": {
+    "stocks": 21,
+    "grossT": 5.4,
+    "foreign": 0,
+    "bandar": -0.11,
+    "retail": -0.07
+   },
+   "behaves": "neutral"
+  },
+  "OK": {
+   "name": "Net Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "XA": {
+   "name": "NH Korindo Sekuritas Indonesia",
+   "cls": "foreign",
+   "measured": {
+    "stocks": 26,
+    "grossT": 8.1,
+    "foreign": -0.05,
+    "bandar": 0.13,
+    "retail": 0.48
+   },
+   "behaves": "neutral"
+  },
+  "TP": {
+   "name": "OCBC Sekuritas Indonesia",
+   "cls": "foreign",
+   "measured": {
+    "stocks": 15,
+    "grossT": 15.9,
+    "foreign": -0.03,
+    "bandar": -0.07,
+    "retail": 0.24
+   },
+   "behaves": "neutral"
+  },
+  "AP": {
+   "name": "Pacific Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "PG": {
+   "name": "Panca Global Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "GR": {
+   "name": "Panin Sekuritas",
+   "cls": "local",
+   "measured": {
+    "stocks": 56,
+    "grossT": 12,
+    "foreign": -0.12,
+    "bandar": -0.13,
+    "retail": -0.02
+   },
+   "behaves": "neutral"
+  },
+  "PS": {
+   "name": "Paramitra Alfa Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "KK": {
+   "name": "Phillip Sekuritas Indonesia",
+   "cls": "retail",
+   "measured": {
+    "stocks": 93,
+    "grossT": 37.3,
+    "foreign": -0.2,
+    "bandar": -0.24,
+    "retail": -0.08
+   },
+   "behaves": "against big money (retail-like)"
+  },
+  "AT": {
+   "name": "Phintraco Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "PO": {
+   "name": "Pilarmas Investindo Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "RO": {
+   "name": "Pluang Maju Sekuritas",
+   "cls": "retail",
+   "measured": null,
+   "behaves": null
+  },
+  "RG": {
+   "name": "Profindo Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "LS": {
+   "name": "Reliance Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "DR": {
+   "name": "RHB Sekuritas Indonesia",
+   "cls": "foreign",
+   "measured": {
+    "stocks": 22,
+    "grossT": 4.8,
+    "foreign": -0.03,
+    "bandar": -0.09,
+    "retail": 0.01
+   },
+   "behaves": "neutral"
+  },
+  "IF": {
+   "name": "Samuel Sekuritas Indonesia",
+   "cls": "local",
+   "measured": {
+    "stocks": 10,
+    "grossT": 11.8,
+    "foreign": -0.15,
+    "bandar": 0.17,
+    "retail": -0.09
+   },
+   "behaves": "neutral"
+  },
+  "MG": {
+   "name": "Semesta Indovest Sekuritas",
+   "cls": "local",
+   "measured": {
+    "stocks": 102,
+    "grossT": 257.3,
+    "foreign": 0,
+    "bandar": 0.05,
+    "retail": 0.53
+   },
+   "behaves": "neutral"
+  },
+  "AH": {
+   "name": "Shinhan Sekuritas Indonesia",
+   "cls": "foreign",
+   "measured": null,
+   "behaves": null
+  },
+  "DH": {
+   "name": "Sinarmas Sekuritas",
+   "cls": "local",
+   "measured": {
+    "stocks": 9,
+    "grossT": 2.6,
+    "foreign": -0.28,
+    "bandar": -0.3,
+    "retail": 0.15
+   },
+   "behaves": "against big money (retail-like)"
+  },
+  "XL": {
+   "name": "Stockbit Sekuritas Digital",
+   "cls": "retail",
+   "measured": {
+    "stocks": 190,
+    "grossT": 818.3,
+    "foreign": -0.44,
+    "bandar": -0.34,
+    "retail": -0.04
+   },
+   "behaves": "against big money (retail-like)"
+  },
+  "AZ": {
+   "name": "Sucor Sekuritas",
+   "cls": "local",
+   "measured": {
+    "stocks": 73,
+    "grossT": 89.6,
+    "foreign": -0.14,
+    "bandar": -0.05,
+    "retail": -0.03
+   },
+   "behaves": "neutral"
+  },
+  "AD": {
+   "name": "Sukadana Prima Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "SS": {
+   "name": "Supra Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "SF": {
+   "name": "Surya Fajar Sekuritas",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "LG": {
+   "name": "Trimegah Sekuritas Indonesia",
+   "cls": "local",
+   "measured": {
+    "stocks": 81,
+    "grossT": 110.5,
+    "foreign": -0.13,
+    "bandar": 0.05,
+    "retail": -0.01
+   },
+   "behaves": "neutral"
+  },
+  "BR": {
+   "name": "Trust Sekuritas",
+   "cls": "local",
+   "measured": {
+    "stocks": 11,
+    "grossT": 4.3,
+    "foreign": 0.01,
+    "bandar": -0.08,
+    "retail": 0.48
+   },
+   "behaves": "neutral"
+  },
+  "QA": {
+   "name": "Tuntun Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "AK": {
+   "name": "UBS Sekuritas Indonesia",
+   "cls": "foreign",
+   "measured": {
+    "stocks": 185,
+    "grossT": 866.2,
+    "foreign": 0.57,
+    "bandar": 0.22,
+    "retail": -0.16
+   },
+   "behaves": "with big money"
+  },
+  "BB": {
+   "name": "Verdhana Sekuritas Indonesia",
+   "cls": "local",
+   "measured": {
+    "stocks": 54,
+    "grossT": 71.9,
+    "foreign": 0.13,
+    "bandar": 0.19,
+    "retail": -0.15
+   },
+   "behaves": "with big money"
+  },
+  "MI": {
+   "name": "Victoria Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "FZ": {
+   "name": "Waterfront Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  },
+  "GI": {
+   "name": "Webull Sekuritas Indonesia",
+   "cls": "retail",
+   "measured": null,
+   "behaves": null
+  },
+  "YB": {
+   "name": "Yakin Bertumbuh Sekuritas",
+   "cls": "local",
+   "measured": {
+    "stocks": 32,
+    "grossT": 14.3,
+    "foreign": -0.13,
+    "bandar": -0.11,
+    "retail": 0.21
+   },
+   "behaves": "neutral"
+  },
+  "FS": {
+   "name": "Yuanta Sekuritas Indonesia",
+   "cls": "foreign",
+   "measured": null,
+   "behaves": null
+  },
+  "RS": {
+   "name": "Yulie Sekuritas Indonesia",
+   "cls": "local",
+   "measured": null,
+   "behaves": null
+  }
+ }
+}
