@@ -1,0 +1,50 @@
+{
+ "real 2017-10": {
+  "n": 359,
+  "mean": -0.007642368513535592,
+  "sameDayRandomStock": -0.0064633355520711125,
+  "pStock": 0.642,
+  "sameStockRandomDay": -0.005242079065643655,
+  "pTiming": 0.688
+ },
+ "real 2022-10": {
+  "n": 268,
+  "mean": 0.0052787167912022965,
+  "sameDayRandomStock": -0.002705399262015893,
+  "pStock": 0.036,
+  "sameStockRandomDay": -0.009215011459880075,
+  "pTiming": 0.002
+ },
+ "real all": {
+  "n": 627,
+  "mean": -0.0021194803769012138,
+  "sameDayRandomStock": -0.0049674817574716715,
+  "pStock": 0.162,
+  "sameStockRandomDay": -0.006542221003802776,
+  "pTiming": 0.094
+ },
+ "shuffled 2017-10": {
+  "n": 629,
+  "mean": -0.00609257204083703,
+  "sameDayRandomStock": -0.004342798999097792,
+  "pStock": 0.685,
+  "sameStockRandomDay": -0.0028978773771740234,
+  "pTiming": 0.813
+ },
+ "shuffled 2022-10": {
+  "n": 793,
+  "mean": 0.0049221180974448695,
+  "sameDayRandomStock": -0.002088896177108589,
+  "pStock": 0.014,
+  "sameStockRandomDay": -0.004260403011738089,
+  "pTiming": 0.007
+ },
+ "shuffled all": {
+  "n": 1422,
+  "mean": 0.00004993800111623513,
+  "sameDayRandomStock": -0.0030241804416982153,
+  "pStock": 0.087,
+  "sameStockRandomDay": -0.0017720956321659407,
+  "pTiming": 0.23
+ }
+}
