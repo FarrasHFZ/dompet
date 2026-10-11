@@ -1,0 +1,1489 @@
+{
+ "asOf": "2026-10-11",
+ "from": "2023-07-01",
+ "to": "2026-08-31",
+ "stocks": 100,
+ "filings": 399,
+ "h1": {
+  "n": 139,
+  "pending": 0,
+  "ex": -0.019163584091784012,
+  "t": -1.5353410459023304,
+  "months": 34,
+  "first": -0.03296856147270266,
+  "second": -0.005941915614284473,
+  "win": 0.3597122302158273,
+  "control": -0.0041863015662432605,
+  "pass": false
+ },
+ "control": {
+  "n": 2085,
+  "ex": -0.0041863015662432605
+ },
+ "notQuiet": {
+  "n": 94,
+  "pending": 0,
+  "ex": 0.015560850523024396,
+  "t": 0.6563546982264411,
+  "months": 30,
+  "first": 0.010684807078361537,
+  "second": 0.020436893967687254,
+  "win": 0.3829787234042553,
+  "control": null,
+  "pass": false
+ },
+ "byClass": {
+  "contract": {
+   "n": 11,
+   "pending": 0,
+   "ex": -0.02765174750986139,
+   "t": -1.5528774464101534,
+   "months": 9,
+   "first": -0.012749261934775333,
+   "second": -0.04007048548909976,
+   "win": 0.36363636363636365,
+   "control": null,
+   "pass": false
+  },
+  "acquisition": {
+   "n": 27,
+   "pending": 0,
+   "ex": -0.035182413724658725,
+   "t": -1.8389138358400325,
+   "months": 19,
+   "first": -0.01623518574104343,
+   "second": -0.05277626828087293,
+   "win": 0.2962962962962963,
+   "control": null,
+   "pass": false
+  },
+  "control": {
+   "n": 26,
+   "pending": 0,
+   "ex": 0.0071407112250425325,
+   "t": 0.45301872762712675,
+   "months": 18,
+   "first": -0.006439909090575942,
+   "second": 0.020721331540661008,
+   "win": 0.34615384615384615,
+   "control": null,
+   "pass": false
+  },
+  "new-business": {
+   "n": 17,
+   "pending": 0,
+   "ex": -0.0018069200203815422,
+   "t": 0.07851188981959151,
+   "months": 11,
+   "first": 0.024705148140183653,
+   "second": -0.025373202829772828,
+   "win": 0.4117647058823529,
+   "control": null,
+   "pass": false
+  },
+  "buyback": {
+   "n": 58,
+   "pending": 0,
+   "ex": -0.026975597363592004,
+   "t": -1.9543858103176557,
+   "months": 23,
+   "first": -0.05396067266005088,
+   "second": 0.000009477932866871227,
+   "win": 0.3793103448275862,
+   "control": null,
+   "pass": false
+  }
+ },
+ "events": [
+  {
+   "t": "PGAS",
+   "day": "2023-07-07",
+   "entry": "2023-07-10",
+   "cls": "contract",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": 0.034572726283401314
+  },
+  {
+   "t": "ENRG",
+   "day": "2023-07-31",
+   "entry": "2023-08-01",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.004348888803059675
+  },
+  {
+   "t": "ERAA",
+   "day": "2023-08-30",
+   "entry": "2023-08-31",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.07377620319738534
+  },
+  {
+   "t": "INDY",
+   "day": "2023-09-25",
+   "entry": "2023-09-26",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.1243226921221107
+  },
+  {
+   "t": "JARR",
+   "day": "2023-09-29",
+   "entry": "2023-10-02",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.10177204796850617
+  },
+  {
+   "t": "PGAS",
+   "day": "2023-10-03",
+   "entry": "2023-10-04",
+   "cls": "contract",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.016811065560546616
+  },
+  {
+   "t": "INTP",
+   "day": "2023-10-17",
+   "entry": "2023-10-18",
+   "cls": "contract",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.03851187804525211
+  },
+  {
+   "t": "UNTR",
+   "day": "2023-10-18",
+   "entry": "2023-10-19",
+   "cls": "control",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.08366261525010928
+  },
+  {
+   "t": "INTP",
+   "day": "2023-12-01",
+   "entry": "2023-12-04",
+   "cls": "contract",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.044320945023271316
+  },
+  {
+   "t": "BYAN",
+   "day": "2023-12-04",
+   "entry": "2023-12-05",
+   "cls": "control",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.013046749820580017
+  },
+  {
+   "t": "UNTR",
+   "day": "2023-12-04",
+   "entry": "2023-12-05",
+   "cls": "control",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": 0.015359569856120137
+  },
+  {
+   "t": "EXCL",
+   "day": "2023-12-05",
+   "entry": "2023-12-06",
+   "cls": "new-business",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.009966129740310584
+  },
+  {
+   "t": "PGAS",
+   "day": "2023-12-21",
+   "entry": "2023-12-22",
+   "cls": "contract",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.0013248526717920686
+  },
+  {
+   "t": "EXCL",
+   "day": "2024-01-08",
+   "entry": "2024-01-09",
+   "cls": "new-business",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.12160954334901496
+  },
+  {
+   "t": "NISP",
+   "day": "2024-01-24",
+   "entry": "2024-01-25",
+   "cls": "control",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.09680076097196534
+  },
+  {
+   "t": "ASII",
+   "day": "2024-03-21",
+   "entry": "2024-03-22",
+   "cls": "new-business",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.03394208377610053
+  },
+  {
+   "t": "ENRG",
+   "day": "2024-03-26",
+   "entry": "2024-03-27",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.03758996435273185
+  },
+  {
+   "t": "EMTK",
+   "day": "2024-03-27",
+   "entry": "2024-03-28",
+   "cls": "control",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.06123531599177773
+  },
+  {
+   "t": "INDY",
+   "day": "2024-03-29",
+   "entry": "2024-04-01",
+   "cls": "control",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.03363742581052192
+  },
+  {
+   "t": "ANTM",
+   "day": "2024-04-01",
+   "entry": "2024-04-02",
+   "cls": "new-business",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.023610923072126155
+  },
+  {
+   "t": "AMRT",
+   "day": "2024-04-05",
+   "entry": "2024-04-16",
+   "cls": "new-business",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.041049524642001775
+  },
+  {
+   "t": "INTP",
+   "day": "2024-04-05",
+   "entry": "2024-04-16",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.2235942346124185
+  },
+  {
+   "t": "KLBF",
+   "day": "2024-04-05",
+   "entry": "2024-04-16",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.05112003162458541
+  },
+  {
+   "t": "SRTG",
+   "day": "2024-04-05",
+   "entry": "2024-04-16",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": 0.008749295901082465
+  },
+  {
+   "t": "ADRO",
+   "day": "2024-04-08",
+   "entry": "2024-04-16",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.04335959326060816
+  },
+  {
+   "t": "NISP",
+   "day": "2024-05-02",
+   "entry": "2024-05-03",
+   "cls": "control",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.02989076509647294
+  },
+  {
+   "t": "GOTO",
+   "day": "2024-05-03",
+   "entry": "2024-05-06",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.09764376192790515
+  },
+  {
+   "t": "ASSA",
+   "day": "2024-05-21",
+   "entry": "2024-05-22",
+   "cls": "new-business",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.10922831003078307
+  },
+  {
+   "t": "INDY",
+   "day": "2024-05-21",
+   "entry": "2024-05-22",
+   "cls": "control",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.031629995424041456
+  },
+  {
+   "t": "TOWR",
+   "day": "2024-06-05",
+   "entry": "2024-06-06",
+   "cls": "control",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.015744670275935364
+  },
+  {
+   "t": "GOTO",
+   "day": "2024-06-07",
+   "entry": "2024-06-10",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.17073098363074132
+  },
+  {
+   "t": "NISP",
+   "day": "2024-06-11",
+   "entry": "2024-06-12",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.007984734841333434
+  },
+  {
+   "t": "INCO",
+   "day": "2024-07-02",
+   "entry": "2024-07-03",
+   "cls": "control",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.11913960799700687
+  },
+  {
+   "t": "NISP",
+   "day": "2024-07-31",
+   "entry": "2024-08-01",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.020045503139843407
+  },
+  {
+   "t": "BSDE",
+   "day": "2024-08-01",
+   "entry": "2024-08-02",
+   "cls": "control",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.20151339123040168
+  },
+  {
+   "t": "HRUM",
+   "day": "2024-08-09",
+   "entry": "2024-08-12",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": 0.06644578280405648
+  },
+  {
+   "t": "PGAS",
+   "day": "2024-08-12",
+   "entry": "2024-08-13",
+   "cls": "contract",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.10248558950620068
+  },
+  {
+   "t": "TOWR",
+   "day": "2024-08-23",
+   "entry": "2024-08-26",
+   "cls": "control",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.01054995982817307
+  },
+  {
+   "t": "NISP",
+   "day": "2024-09-02",
+   "entry": "2024-09-03",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.06058480535798654
+  },
+  {
+   "t": "BBCA",
+   "day": "2024-09-03",
+   "entry": "2024-09-04",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.026142835677704576
+  },
+  {
+   "t": "JSMR",
+   "day": "2024-09-12",
+   "entry": "2024-09-13",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.02997684902202718
+  },
+  {
+   "t": "BBNI",
+   "day": "2024-09-17",
+   "entry": "2024-09-18",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.0766033198454896
+  },
+  {
+   "t": "MEDC",
+   "day": "2024-09-20",
+   "entry": "2024-09-23",
+   "cls": "control",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.030344775293226496
+  },
+  {
+   "t": "PGAS",
+   "day": "2024-10-08",
+   "entry": "2024-10-09",
+   "cls": "contract",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.0022133545202874865
+  },
+  {
+   "t": "JSMR",
+   "day": "2024-10-15",
+   "entry": "2024-10-16",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.015256590220738053
+  },
+  {
+   "t": "MEDC",
+   "day": "2024-10-22",
+   "entry": "2024-10-23",
+   "cls": "control",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.10015944060998105
+  },
+  {
+   "t": "BSDE",
+   "day": "2024-10-24",
+   "entry": "2024-10-25",
+   "cls": "control",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.13462632376297207
+  },
+  {
+   "t": "ERAA",
+   "day": "2024-10-29",
+   "entry": "2024-10-30",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.010335244404956138
+  },
+  {
+   "t": "EXCL",
+   "day": "2024-12-11",
+   "entry": "2024-12-12",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.052197112439107594
+  },
+  {
+   "t": "BSDE",
+   "day": "2024-12-16",
+   "entry": "2024-12-17",
+   "cls": "control",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.04974216382736831
+  },
+  {
+   "t": "INTP",
+   "day": "2024-12-30",
+   "entry": "2025-01-02",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.22642101915075472
+  },
+  {
+   "t": "ERAA",
+   "day": "2024-12-31",
+   "entry": "2025-01-02",
+   "cls": "contract",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.07697745794248752
+  },
+  {
+   "t": "BBTN",
+   "day": "2025-01-20",
+   "entry": "2025-01-21",
+   "cls": "control",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.11141666258812595
+  },
+  {
+   "t": "TOWR",
+   "day": "2025-01-20",
+   "entry": "2025-01-21",
+   "cls": "control",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.05510997659062107
+  },
+  {
+   "t": "BSDE",
+   "day": "2025-02-04",
+   "entry": "2025-02-05",
+   "cls": "control",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.019915515658132224
+  },
+  {
+   "t": "PGAS",
+   "day": "2025-02-06",
+   "entry": "2025-02-07",
+   "cls": "contract",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.00026436411898841244
+  },
+  {
+   "t": "NISP",
+   "day": "2025-02-11",
+   "entry": "2025-02-12",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.026449163573213516
+  },
+  {
+   "t": "ERAA",
+   "day": "2025-02-13",
+   "entry": "2025-02-14",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.1824027989647562
+  },
+  {
+   "t": "UNTR",
+   "day": "2025-03-12",
+   "entry": "2025-03-13",
+   "cls": "new-business",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.008929763365756838
+  },
+  {
+   "t": "SIDO",
+   "day": "2025-03-17",
+   "entry": "2025-03-18",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": 0.0028022171990060504
+  },
+  {
+   "t": "BREN",
+   "day": "2025-03-21",
+   "entry": "2025-03-24",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.11246393248993838
+  },
+  {
+   "t": "BRPT",
+   "day": "2025-03-21",
+   "entry": "2025-03-24",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.07239301050412264
+  },
+  {
+   "t": "CUAN",
+   "day": "2025-03-21",
+   "entry": "2025-03-24",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.0661676361936421
+  },
+  {
+   "t": "EXCL",
+   "day": "2025-03-21",
+   "entry": "2025-03-24",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.18222794428934833
+  },
+  {
+   "t": "MEDC",
+   "day": "2025-03-21",
+   "entry": "2025-03-24",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.06314075144086886
+  },
+  {
+   "t": "ULTJ",
+   "day": "2025-03-21",
+   "entry": "2025-03-24",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.10330034085402187
+  },
+  {
+   "t": "HEAL",
+   "day": "2025-03-23",
+   "entry": "2025-03-24",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.0634028996260885
+  },
+  {
+   "t": "BBCA",
+   "day": "2025-03-25",
+   "entry": "2025-03-26",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.04887061977102228
+  },
+  {
+   "t": "INCO",
+   "day": "2025-03-26",
+   "entry": "2025-03-27",
+   "cls": "control",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.0273101941768569
+  },
+  {
+   "t": "MYOR",
+   "day": "2025-03-26",
+   "entry": "2025-03-27",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.006204242298427115
+  },
+  {
+   "t": "ADRO",
+   "day": "2025-04-08",
+   "entry": "2025-04-09",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.09102721375671344
+  },
+  {
+   "t": "INTP",
+   "day": "2025-04-14",
+   "entry": "2025-04-15",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.10890958323396988
+  },
+  {
+   "t": "ISAT",
+   "day": "2025-04-14",
+   "entry": "2025-04-15",
+   "cls": "new-business",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.2007270676349085
+  },
+  {
+   "t": "PGAS",
+   "day": "2025-04-14",
+   "entry": "2025-04-15",
+   "cls": "contract",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.10230323539539449
+  },
+  {
+   "t": "SMGR",
+   "day": "2025-04-15",
+   "entry": "2025-04-16",
+   "cls": "new-business",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.083671543786974
+  },
+  {
+   "t": "AMMN",
+   "day": "2025-04-30",
+   "entry": "2025-05-02",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.03776313747025242
+  },
+  {
+   "t": "BDMN",
+   "day": "2025-04-30",
+   "entry": "2025-05-02",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.07028843411435229
+  },
+  {
+   "t": "MEDC",
+   "day": "2025-05-05",
+   "entry": "2025-05-06",
+   "cls": "control",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.15190704191995755
+  },
+  {
+   "t": "ADRO",
+   "day": "2025-05-14",
+   "entry": "2025-05-15",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.01951996318749298
+  },
+  {
+   "t": "EXCL",
+   "day": "2025-05-14",
+   "entry": "2025-05-15",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.06135427353026217
+  },
+  {
+   "t": "SMGR",
+   "day": "2025-05-21",
+   "entry": "2025-05-22",
+   "cls": "new-business",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.03876817939268636
+  },
+  {
+   "t": "SIDO",
+   "day": "2025-06-20",
+   "entry": "2025-06-23",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.061293540272744015
+  },
+  {
+   "t": "ULTJ",
+   "day": "2025-06-24",
+   "entry": "2025-06-25",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.10285034047415484
+  },
+  {
+   "t": "TOWR",
+   "day": "2025-06-30",
+   "entry": "2025-07-01",
+   "cls": "control",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.2726840484506118
+  },
+  {
+   "t": "BUKA",
+   "day": "2025-07-03",
+   "entry": "2025-07-04",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.1543033992743048
+  },
+  {
+   "t": "BFIN",
+   "day": "2025-08-01",
+   "entry": "2025-08-04",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.029565257513241898
+  },
+  {
+   "t": "KLBF",
+   "day": "2025-09-02",
+   "entry": "2025-09-03",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.1345290805057774
+  },
+  {
+   "t": "MEDC",
+   "day": "2025-09-04",
+   "entry": "2025-09-08",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.12439693844208623
+  },
+  {
+   "t": "UNTR",
+   "day": "2025-09-15",
+   "entry": "2025-09-16",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.1434230121324687
+  },
+  {
+   "t": "ITMG",
+   "day": "2025-09-18",
+   "entry": "2025-09-19",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.09940023324918368
+  },
+  {
+   "t": "SIDO",
+   "day": "2025-09-22",
+   "entry": "2025-09-23",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.02293580961685681
+  },
+  {
+   "t": "BDMN",
+   "day": "2025-10-01",
+   "entry": "2025-10-02",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": 0.003246056378146213
+  },
+  {
+   "t": "BBCA",
+   "day": "2025-10-20",
+   "entry": "2025-10-21",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": 0.022473988186011984
+  },
+  {
+   "t": "UNTR",
+   "day": "2025-10-30",
+   "entry": "2025-10-31",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.015860223184718115
+  },
+  {
+   "t": "AMRT",
+   "day": "2025-12-05",
+   "entry": "2025-12-08",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.0035485771618446044
+  },
+  {
+   "t": "KLBF",
+   "day": "2025-12-12",
+   "entry": "2025-12-15",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.03187722687439101
+  },
+  {
+   "t": "TPIA",
+   "day": "2026-01-01",
+   "entry": "2026-01-02",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.07545939604542531
+  },
+  {
+   "t": "HRUM",
+   "day": "2026-01-02",
+   "entry": "2026-01-05",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.008671816669294771
+  },
+  {
+   "t": "ASII",
+   "day": "2026-01-15",
+   "entry": "2026-01-19",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.016955518294673573
+  },
+  {
+   "t": "ERAA",
+   "day": "2026-01-22",
+   "entry": "2026-01-23",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.05264286830923925
+  },
+  {
+   "t": "UNTR",
+   "day": "2026-01-22",
+   "entry": "2026-01-23",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.13086456827006976
+  },
+  {
+   "t": "BBCA",
+   "day": "2026-01-28",
+   "entry": "2026-01-29",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": 0.018414056739569522
+  },
+  {
+   "t": "BBHI",
+   "day": "2026-01-29",
+   "entry": "2026-01-30",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.03874338727981997
+  },
+  {
+   "t": "BBNI",
+   "day": "2026-01-29",
+   "entry": "2026-01-30",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.06722709079905198
+  },
+  {
+   "t": "HEAL",
+   "day": "2026-01-29",
+   "entry": "2026-01-30",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.062483973893657
+  },
+  {
+   "t": "TPIA",
+   "day": "2026-02-03",
+   "entry": "2026-02-04",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.14282789015294345
+  },
+  {
+   "t": "BFIN",
+   "day": "2026-02-20",
+   "entry": "2026-02-23",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.020360082123442313
+  },
+  {
+   "t": "NISP",
+   "day": "2026-02-24",
+   "entry": "2026-02-25",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": 0.050840552039353795
+  },
+  {
+   "t": "MIKA",
+   "day": "2026-03-06",
+   "entry": "2026-03-09",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.09997320128350974
+  },
+  {
+   "t": "TOBA",
+   "day": "2026-03-10",
+   "entry": "2026-03-11",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.08136752784004823
+  },
+  {
+   "t": "PGEO",
+   "day": "2026-03-13",
+   "entry": "2026-03-16",
+   "cls": "new-business",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.010516312687362764
+  },
+  {
+   "t": "KLBF",
+   "day": "2026-04-01",
+   "entry": "2026-04-02",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.1274810322016824
+  },
+  {
+   "t": "SMRA",
+   "day": "2026-04-02",
+   "entry": "2026-04-06",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.09451132234490471
+  },
+  {
+   "t": "ERAA",
+   "day": "2026-04-06",
+   "entry": "2026-04-07",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.08296348674712903
+  },
+  {
+   "t": "TOWR",
+   "day": "2026-04-06",
+   "entry": "2026-04-07",
+   "cls": "new-business",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.0515402209273104
+  },
+  {
+   "t": "INTP",
+   "day": "2026-04-07",
+   "entry": "2026-04-08",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.030227029209951288
+  },
+  {
+   "t": "INET",
+   "day": "2026-04-10",
+   "entry": "2026-04-13",
+   "cls": "new-business",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.07353069888772039
+  },
+  {
+   "t": "MTEL",
+   "day": "2026-04-17",
+   "entry": "2026-04-20",
+   "cls": "new-business",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": 0.09811300600844175
+  },
+  {
+   "t": "MIKA",
+   "day": "2026-04-30",
+   "entry": "2026-05-04",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": 0.02006734460591486
+  },
+  {
+   "t": "GOTO",
+   "day": "2026-05-11",
+   "entry": "2026-05-12",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": 0.12487921795795454
+  },
+  {
+   "t": "INET",
+   "day": "2026-05-12",
+   "entry": "2026-05-13",
+   "cls": "new-business",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.14675810197004707
+  },
+  {
+   "t": "TOWR",
+   "day": "2026-05-18",
+   "entry": "2026-05-19",
+   "cls": "new-business",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.06406790573877964
+  },
+  {
+   "t": "MYOR",
+   "day": "2026-05-20",
+   "entry": "2026-05-21",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": 0.02517232125603032
+  },
+  {
+   "t": "PGAS",
+   "day": "2026-05-20",
+   "entry": "2026-05-21",
+   "cls": "new-business",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.08221662464633005
+  },
+  {
+   "t": "NCKL",
+   "day": "2026-05-22",
+   "entry": "2026-05-25",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.0010411131001595228
+  },
+  {
+   "t": "ERAA",
+   "day": "2026-05-29",
+   "entry": "2026-06-02",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": 0.029110978318331898
+  },
+  {
+   "t": "NISP",
+   "day": "2026-06-04",
+   "entry": "2026-06-05",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.022927229338180758
+  },
+  {
+   "t": "ASII",
+   "day": "2026-06-10",
+   "entry": "2026-06-11",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.019296911526427228
+  },
+  {
+   "t": "BBRI",
+   "day": "2026-06-12",
+   "entry": "2026-06-15",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.0016199886063490681
+  },
+  {
+   "t": "GOTO",
+   "day": "2026-06-18",
+   "entry": "2026-06-19",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.016288672415188495
+  },
+  {
+   "t": "MTEL",
+   "day": "2026-06-26",
+   "entry": "2026-06-29",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": true,
+   "bottom": true,
+   "ex": -0.1324306901734542
+  },
+  {
+   "t": "PTBA",
+   "day": "2026-06-30",
+   "entry": "2026-07-01",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.08916391616272994
+  },
+  {
+   "t": "UNTR",
+   "day": "2026-07-01",
+   "entry": "2026-07-02",
+   "cls": "buyback",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.002283414273392112
+  },
+  {
+   "t": "TOWR",
+   "day": "2026-07-03",
+   "entry": "2026-07-06",
+   "cls": "control",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.0065475162542006915
+  },
+  {
+   "t": "INET",
+   "day": "2026-07-23",
+   "entry": "2026-07-24",
+   "cls": "control",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.36553724391722514
+  },
+  {
+   "t": "PTRO",
+   "day": "2026-07-23",
+   "entry": "2026-07-24",
+   "cls": "contract",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.043292360310783165
+  },
+  {
+   "t": "NISP",
+   "day": "2026-07-29",
+   "entry": "2026-07-30",
+   "cls": "control",
+   "quiet": true,
+   "sideways": true,
+   "bottom": false,
+   "ex": -0.09721930863178804
+  },
+  {
+   "t": "TOWR",
+   "day": "2026-08-03",
+   "entry": "2026-08-04",
+   "cls": "control",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": 0.026675689487131088
+  },
+  {
+   "t": "TPIA",
+   "day": "2026-08-21",
+   "entry": "2026-08-24",
+   "cls": "acquisition",
+   "quiet": true,
+   "sideways": false,
+   "bottom": true,
+   "ex": -0.07255312845025733
+  }
+ ]
+}
