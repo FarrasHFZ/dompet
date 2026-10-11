@@ -1188,7 +1188,7 @@
     const big = H.filter(h => h.type !== 'retail'), inP = big.filter(h => h.pl > 0).length, lead = big[0];
     const sum = lead ? `The biggest non-retail position built in the data is <b>${esc(lead.code)}</b>${lead.name ? ` (${esc(lead.name)})` : ''}: about ${lotsTxt(lead.lots)} lots (${rpB(lead.lots * 100 * px / 1e9)}) at an average ${f0(lead.avg)}, so <b class="${lead.pl >= 0 ? 'up' : 'down'}">${lead.pl >= 0 ? 'in profit' : 'at a loss'} ${pc(lead.pl, 1).replace(/<[^>]+>/g, '')}</b> today. ${inP} of ${big.length} non-retail holders shown are in profit.` : 'Only retail brokers hold a built-up position here.';
     const sold = P.sellers.length ? `Biggest unloaders since their own peak: ${P.sellers.map(s => `<b>${esc(s.code)}</b> ${bchip(s.type)} ${lotsTxt(s.lots)} lots since ${esc(s.since)}`).join(' · ')}.` : '';
-    return `<h4>Broker positions now: how much they hold, at what cost, profit or loss</h4>
+    return `<h4>Over the whole year of data: each broker's position since its own low point</h4>
       <div class="scroll"><table><thead><tr><th>Broker</th><th>Class</th><th class="n">Lots held</th><th class="n">Worth now</th><th class="n">Avg cost</th><th class="n">P/L</th><th class="n">Days of volume</th><th>Built since</th><th class="n">Last 20 sessions</th></tr></thead><tbody>
       ${H.map(h => `<tr><td><b>${esc(h.code)}</b> <span class="muted">${esc(h.name || '')}</span></td><td>${bchip(h.type)}</td><td class="n">${lotsTxt(h.lots)}</td><td class="n">${rpB(h.lots * 100 * px / 1e9)}</td><td class="n">${f0(h.avg)}</td>
         <td class="n"><b class="${h.pl >= 0 ? 'up' : 'down'}">${pc(h.pl, 1)}</b><div class="muted">${h.plB >= 0 ? '+' : '−'}${rpB(Math.abs(h.plB))}</div></td><td class="n">${h.days ?? '–'}</td><td>${h.fromStart ? `≤ ${esc(P.from)} <span class="muted" title="Its inventory low is the first day of data: the real position may be bigger">(maybe more)</span>` : esc(h.since)}</td>
@@ -1198,8 +1198,26 @@
   }
   function brokerCostHtml(p) {
     const c = p.brokerCost;
-    if (c && c.pos) return brokerPosHtml(p, c) + `<h4>Since the volume peak</h4>` + brokerCostCore(p, c);
-    return brokerCostCore(p, c);
+    const head = sincePeakHtml(p, c);
+    if (c && c.pos) return head + brokerCostCore(p, c) + brokerPosHtml(p, c);
+    return head + brokerCostCore(p, c);
+  }
+  // The direct answer: when was the volume peak, and since that day how many lots do the net buyers still hold, at what
+  // average price, in profit or at a loss (tools/broker-cost.mjs costRead "since").
+  const fmtDay = d => { const x = new Date(d + 'T00:00:00Z'); return x.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }); };
+  function sincePeakHtml(p, c) {
+    if (!c || c.none || !c.since || !c.since.brokers.length) return '';
+    const S = c.since, px = p.live ? p.live.price : p.close, pl = S.avg ? px / S.avg - 1 : null;
+    const row = h => { const g = px / h.avg - 1; return `<tr><td><b>${esc(h.code)}</b> ${bchip(h.type)}<div class="muted" style="font-size:11.5px;white-space:normal">${esc(h.name || '')}</div></td><td class="n"><b>${lotsTxt(h.lots)} lots</b><div class="muted">${rpB(h.lots * 100 * px / 1e9)}</div></td><td class="n"><b>${f0(h.avg)}</b></td><td class="n"><b class="${g >= 0 ? 'up' : 'down'}">${pc(g, 1)}</b><div class="muted">${g >= 0 ? '+' : '−'}${rpB(Math.abs(h.lots * 100 * (px - h.avg) / 1e9))}</div></td></tr>`; };
+    return `<div class="peak-box" style="margin-bottom:14px">
+      <div class="kv">
+        <div><small>Volume peak happened on</small><b>${esc(fmtDay(c.peakDay))}</b><div class="muted">${c.days} sessions ago${c.peakX ? ` · ${c.peakX}× the 60-session average volume` : ''}</div></div>
+        <div><small>Since that day, net buyers still hold</small><b>${lotsTxt(S.lots)} lots</b><div class="muted">${(S.lots * 100).toLocaleString('en-US')} shares · ${rpB(S.lots * 100 * px / 1e9)} at today's price</div></div>
+        <div><small>At an average price of</small><b>${f0(S.avg)}</b><div class="muted">weighted over all net buyers</div></div>
+        <div><small>So today they are</small><b class="${pl >= 0 ? 'up' : 'down'}">${pl >= 0 ? 'in profit' : 'at a loss'} ${pc(pl, 1)}</b><div class="muted">price now ${f0(px)}</div></div>
+      </div>
+      <div class="scroll" style="margin-top:10px"><table><thead><tr><th>Broker</th><th class="n">Still holding</th><th class="n">Avg price</th><th class="n">P/L</th></tr></thead><tbody>${S.brokers.map(row).join('')}</tbody></table></div>
+      <p class="muted"><b>Volume peak</b> = the session with the highest total volume in the last 60 sessions (buying and selling volume are the same number: every lot has a buyer and a seller; no minimum multiple is required). <b>Still holding</b> = the broker's lots bought minus lots sold from that day to ${esc(c.day)}, for brokers that bought more than they sold. <b>Average price</b> = the running cost of those lots (a net-buying day adds lots at that day's average buy price; a net-selling day removes lots without changing the average). Only the stock's ~20 most active brokers; a broker code is a desk for many clients. Context, not a tested signal.</p></div>`;
   }
   function brokerCostCore(p, c) {
     if (!c) return '<p class="muted">No broker inventory for this stock yet (refreshed weekly on a rotation; new stocks fill in within a week).</p>';

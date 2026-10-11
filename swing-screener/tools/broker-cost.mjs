@@ -42,7 +42,14 @@ export function costRead(rec, t) {
     let b = 0, v = 0, s = 0, last5 = 0;
     for (let k = peak; k <= t; k++) { b += bl[k] || 0; v += bv[k] || 0; s += sl[k] || 0; }
     for (let k = Math.max(peak, t - 4); k <= t; k++) last5 += (bl[k] || 0) - (sl[k] || 0);
-    return { code, type: brokerType(code), net: b - s, bought: b, value: v, avg: b ? (v * 1e6) / (b * 100) : null, last5 };
+    // Still held since the peak, and its cost: walk the days from the peak, netted per day; a net-buying day adds lots
+    // at that day's average buy price, a net-selling day removes lots and keeps the average (as posRead does).
+    let L = 0, A = 0;
+    for (let k = peak; k <= t; k++) {
+      const n = (bl[k] || 0) - (sl[k] || 0);
+      if (n > 0 && bl[k]) { const pb = (bv[k] * 1e6) / (bl[k] * 100); A = (L * A + n * pb) / (L + n); L += n; } else if (n < 0) L = Math.max(0, L + n);
+    }
+    return { code, type: brokerType(code), net: b - s, bought: b, value: v, avg: b ? (v * 1e6) / (b * 100) : null, last5, held: L, heldAvg: L > 0 ? A : null };
   });
   const acc = rows.filter(r => r.net > 0).sort((a, b) => b.net - a.net);
   if (!acc.length || !volLots) return { peakDay: rec.d[peak], days: t - peak + 1, none: true };
@@ -59,6 +66,12 @@ export function costRead(rec, t) {
     status: last5 >= 0.05 * topNet ? 'adding' : last5 <= -0.25 * topNet ? 'unloading' : 'holding',
     top: top.map(r => ({ code: r.code, name: NAMES[r.code] || null, type: r.type, net: r.net, avg: r.avg, share: r.net / posNet })),
   };
+  // Every broker that is a net buyer since the peak: lots still held = its net since the peak (capped by the running
+  // holding), at the running average cost of what it holds. Net sellers since the peak hold nothing bought after it.
+  const hold = rows.filter(r => r.net > 0 && r.heldAvg).map(r => ({ ...r, held: Math.min(r.held, r.net) })).sort((a, b) => b.held - a.held); // net buyers since the peak only
+  const hTot = hold.reduce((s, r) => s + r.held, 0);
+  out.since = { lots: hTot, avg: hTot ? hold.reduce((s, r) => s + r.held * r.heldAvg, 0) / hTot : null,
+    brokers: hold.slice(0, 8).map(r => ({ code: r.code, name: NAMES[r.code] || null, type: r.type, lots: r.held, avg: r.heldAvg, net: r.net })) };
   out.classShare = Object.fromEntries(['retail', 'foreign', 'mixed', 'local'].map(c => [c, +(acc.filter(r => r.type === c).reduce((s, r) => s + r.net, 0) / posNet).toFixed(3)]));
   out.driver = driver(out.top, out.classShare);
   return out;
@@ -115,6 +128,8 @@ if (process.argv[1] && path.basename(process.argv[1]) === 'broker-cost.mjs') {
       netShare: +r.netShare.toFixed(3), conc: r.conc, status: r.status, supported: supported(r), driver: r.driver, classShare: r.classShare,
       top: r.top.map(x => ({ code: x.code, name: x.name, type: x.type, share: +x.share.toFixed(2), avg: x.avg && Math.round(x.avg) })),
     };
+    if (r.since) pub[tk].since = { lots: Math.round(r.since.lots), avg: r.since.avg && Math.round(r.since.avg),
+      brokers: r.since.brokers.map(x => ({ code: x.code, name: x.name, type: x.type, lots: Math.round(x.lots), avg: Math.round(x.avg), net: Math.round(x.net) })) };
     const ps = posRead(rec);
     if (ps) pub[tk].pos = ps;
   }

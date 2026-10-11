@@ -479,7 +479,8 @@ td.mem{min-width:180px}
   @keyframes slideup{from{transform:translateY(14px);opacity:.6}to{transform:none;opacity:1}}
   .sp-head{padding:10px 12px;padding-top:max(10px,env(safe-area-inset-top))}
   .sp-in{padding:12px 12px calc(30px + env(safe-area-inset-bottom))}
-  .sp-tabs{margin:12px -12px 0;padding:0 6px;top:calc(57px + env(safe-area-inset-top))}
+  .sp-tabs{margin:12px -12px 0;padding:0 6px;top:calc(57px + env(safe-area-inset-top));flex-wrap:wrap;overflow-x:visible}
+  .sp-tabs button{padding:9px 9px;font-size:13px}
   .sp-quote .big{font-size:30px}
   .sp-quote{flex-wrap:nowrap;align-items:flex-start}
   .verdict-pill{margin-left:auto;align-items:flex-end}
@@ -524,3 +525,4 @@ table.hmap td.hm{text-align:center;min-width:120px;font-variant-numeric:tabular-
 .ck{list-style:none;padding:0;margin:0;display:grid;gap:6px}
 .ck li{display:flex;gap:8px;align-items:flex-start}
 .ck .ic{width:16px;flex:none;font-weight:700}
+@media (max-width:760px){.peak-box table td,.peak-box table th{padding-left:5px;padding-right:5px}.peak-box table th{font-size:10.5px;white-space:normal}.peak-box .bchip{font-size:10px}}
