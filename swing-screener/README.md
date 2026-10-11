@@ -21,7 +21,7 @@ Personal swing-trade screener for IDX stocks. Live: https://farrashfz.github.io/
 | `apps-script/Code.gs` | Sheet glue: menu, GOOGLEFINANCE fetch, Screener tab, Telegram digest, `doGet` JSON API. |
 | Google Sheet | Control panel (Universe, Themes, Config) + readable output + your notes. |
 | `tools/` | Node scripts: snapshot build, backtest, news scoring, ownership. |
-| `web/` | Static web app (no build step). Reads `data/latest.json`, or your Sheet's `doGet` URL. |
+| `web/` | Static web app (no build step), laid out like a broker app: Market home (IHSG, convinced ACT cards, sector treemap, movers), Screener list with the stock page docked beside it (phones: bottom nav, full-screen stock page), and per stock a Thesis built from its own data (stance, arguments for and against with their evidence level, plan, watch list), its Calls with days to TP / SL, Bandarmology, Key stats and News. Search with `/`. Reads `data/latest.json`, or your Sheet's `doGet` URL. |
 
 Without the Sheet, everything still runs from GitHub. The Sheet is worth keeping as the place you edit the universe and news themes, and as a notebook. Both paths emit the same JSON shape.
 
@@ -107,7 +107,7 @@ Known limits: `IDX:COMPOSITE` for IHSG in GOOGLEFINANCE is unverified; GOOGLEFIN
     node tools/news-score.mjs          # classifier accuracy vs hand labels
     node tools/ownership.mjs           # refresh data/ownership.json
     node tools/mock-sheet-test.mjs     # smoke-test the Apps Script entry points
-    node tools/serve.mjs               # preview web/ on :5174
+    node tools/serve.mjs               # preview web/ on :5174 (LIVE_DATA=1 PORT=5175: today's data from the published site)
     node tools/flow-daily.mjs          # NeoBDM snapshot -> public flow labels + forward-test scorecard
     node tools/experiment-flow.mjs     # 4-year IDX foreign-flow backtest of ACT
 

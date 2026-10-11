@@ -1,5 +1,5 @@
 // Screener service worker. App shell: instant open, works offline. Data: network first, last copy when offline.
-const CACHE = 'screener-v2';
+const CACHE = 'screener-v3';
 const SHELL = ['./', 'index.html', 'style.css', 'app.js', 'config.js', 'manifest.webmanifest', 'icon.svg', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {
