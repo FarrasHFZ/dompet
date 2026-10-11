@@ -1,0 +1,121 @@
+{
+ "asOf": "2026-10-11",
+ "lines": [
+  "== T100",
+  "L live                       n  1227  mean +0.12%  win +58%  TP +48%",
+  "W5 window                    n  3165  mean -0.40%  win +54%  TP +43%",
+  "  W5 extra (not L day)       n  2088  mean -0.72%  win +51%  TP +39%",
+  "W5H low held                 n  2904  mean -0.43%  win +53%  TP +43%",
+  "  W5 low not held            n  1103  mean -0.31%  win +54%  TP +42%",
+  "== N200",
+  "L live                       n   648  mean -0.20%  win +61%  TP +57%",
+  "W5 window                    n  1584  mean -0.84%  win +57%  TP +53%",
+  "  W5 extra (not L day)       n  1016  mean -1.15%  win +56%  TP +51%",
+  "W5H low held                 n  1395  mean -0.90%  win +57%  TP +52%",
+  "  W5 low not held            n   610  mean -0.73%  win +57%  TP +52%",
+  "== O613",
+  "L live                       n   648  mean -1.41%  win +58%  TP +56%",
+  "W5 window                    n  1576  mean -1.33%  win +55%  TP +52%",
+  "  W5 extra (not L day)       n   997  mean -1.34%  win +54%  TP +50%",
+  "W5H low held                 n  1351  mean -1.23%  win +57%  TP +53%",
+  "  W5 low not held            n   673  mean -1.39%  win +55%  TP +50%",
+  "== RECENT",
+  "L live                       n  1113  mean +0.09%  win +59%  TP +51%",
+  "W5 window                    n  2757  mean -0.47%  win +56%  TP +47%",
+  "  W5 extra (not L day)       n  1782  mean -0.78%  win +54%  TP +45%",
+  "W5H low held                 n  2500  mean -0.39%  win +56%  TP +47%",
+  "  W5 low not held            n   962  mean -0.60%  win +55%  TP +46%",
+  "PASS A1 W5 trades >= 1.5x L in O613 and RECENT: [2.4321,2.4771]",
+  "fail A2 extra W5 trades mean >= L mean, O613 and RECENT: [0.0007,-0.0087]",
+  "fail A3 A2 difference >= -0.5 pt in both O613 halves: [0.012,-0.007]",
+  "FAIL: window rule does not replace the same-day rule",
+  "fail unlock 200: N200 W5 -0.84% vs O613 W5 -1.33%",
+  "fail low held: O613 +0.16% (t 0.28), RECENT +0.21%"
+ ],
+ "summary": {
+  "T100": {
+   "L": 1227,
+   "W5": 3165,
+   "mL": 0.00124232914787062,
+   "mW": -0.003981314796702136,
+   "mX": -0.007216374572351632,
+   "mH": -0.004277820524363293,
+   "mNH": -0.0030629309812036693,
+   "tH": -0.39844074045633554,
+   "H": 2904,
+   "X": 2088
+  },
+  "N200": {
+   "L": 648,
+   "W5": 1584,
+   "mL": -0.0020135387393974556,
+   "mW": -0.008396509903948439,
+   "mX": -0.011533231229154258,
+   "mH": -0.009018952784706068,
+   "mNH": -0.007263741904319377,
+   "tH": -0.3144891921142554,
+   "H": 1395,
+   "X": 1016
+  },
+  "O613": {
+   "L": 648,
+   "W5": 1576,
+   "mL": -0.014132714429513553,
+   "mW": -0.013309409034705873,
+   "mX": -0.013421602537561573,
+   "mH": -0.012301890720461933,
+   "mNH": -0.013895093561754437,
+   "tH": 0.28203830012488373,
+   "H": 1351,
+   "X": 997
+  },
+  "RECENT": {
+   "L": 1113,
+   "W5": 2757,
+   "mL": 0.0009003766872201689,
+   "mW": -0.004663610629926669,
+   "mX": -0.007795056761598629,
+   "mH": -0.003914223316623011,
+   "mNH": -0.005971438278972851,
+   "tH": 0.5386287898440366,
+   "H": 2500,
+   "X": 1782
+  }
+ },
+ "checks": [
+  {
+   "id": "A1",
+   "rule": "W5 trades >= 1.5x L in O613 and RECENT",
+   "ok": true,
+   "value": [
+    2.432098765432099,
+    2.477088948787062
+   ]
+  },
+  {
+   "id": "A2",
+   "rule": "extra W5 trades mean >= L mean, O613 and RECENT",
+   "ok": false,
+   "value": [
+    0.0007111118919519797,
+    -0.008695433448818797
+   ]
+  },
+  {
+   "id": "A3",
+   "rule": "A2 difference >= -0.5 pt in both O613 halves",
+   "ok": false,
+   "value": [
+    0.012042136700893342,
+    -0.007030251063649392
+   ]
+  }
+ ],
+ "adopt": false,
+ "unlock200": false,
+ "lowHeld": false,
+ "halves": [
+  0.012042136700893342,
+  -0.007030251063649392
+ ]
+}

@@ -248,6 +248,7 @@
       ['Volume peaks (4× usual volume): candle type, bandar side, foreign side, filings', 'forward test', L.volume ? `${L.volume.spikes} spikes. Candle type: no signal (UP ${pc(L.volume.types.UP.x10)}, DOWN ${pc(L.volume.types.DOWN.x10)}, CHURN ${pc(L.volume.types.CHURN.x10)}). Bandar side: none. Foreign net buyer on the spike day ${pc(L.volume.foreign.buy)} vs seller ${pc(L.volume.foreign.sell)} (t ${L.volume.foreign.t.toFixed(1)}, 2024-26)${L.volumeStress ? `; IDX data 2022-24: ${pc(L.volumeStress.replication.gap)} gap, did not replicate; without the best 5%: ${pc(L.volumeStress.stress.s5)}` : ''}. Filings: within a day of ${L.volume.triggers ? pc(L.volume.triggers.spikesWithFiling, 0) : '–'} of spikes vs ${L.volume.triggers ? pc(L.volume.triggers.ordinaryDays, 0) : '–'} of ordinary days. Forward test needs 100 foreign-buy spikes${L.volumeForward ? ` (${L.volumeForward.buy} so far)` : ''}` : ''],
       ['Buy the bottom? Stocks low in their 2-year range, sideways "bottom bases", bottom bases with volume buying (OBV), 913 stocks', 'failed', L.bottoms ? `The opposite of an edge. Low in range: ${pc(L.bottoms.tests.H1.d, 1)} / ${pc(L.bottoms.tests.H1.c1, 1)} / ${pc(L.bottoms.tests.H1.c2, 1)} per 20 sessions vs the top third (discovery / 613 never-used stocks / since 2022). Bottom bases on the 613: ${pc(L.bottoms.tests.H3.c1, 1)} a month vs the market (t ${L.bottoms.tests.H3.c1t.toFixed(1)}); with OBV buying ${pc(L.bottoms.tests.H5.c1, 1)} (t ${L.bottoms.tests.H5.c1t.toFixed(1)}). Volume buying on flat prices looked good on the 300 (t ${L.bottoms.tests.H4.dt.toFixed(1)}) and vanished on the 613. Pre-registered 2026-10-12` : ''],
       ['16-trait scan (momentum, reversal, volatility, lottery, OBV, volume trend, size, trend quality, near-high...)', 'failed', L.scan ? `None passes (bar p < 0.003, then t ≥ 2 on the 613). Closest: small liquid stocks ${pc(L.scan['T12 small size'].d, 1)} / ${pc(L.scan['T12 small size'].c1, 1)} / ${pc(L.scan['T12 small size'].c2, 1)} (positive everywhere, not significant out of sample). Near-the-high and above-the-200-day work since 2022 (t ${L.scan['T1 pos1y high'].c2t.toFixed(1)}, ${L.scan['T9 above 200'].c2t.toFixed(1)}) but not in 2017-21: a regime, not a rule` : ''],
+      ['Fix for few ACT calls: count a bounce candle up to 5 sessions after the oversold day (the score falls ~30 points on the bounce day itself)', 'failed', L.actWindow ? `More calls (${L.actWindow.summary.O613.W5} vs ${L.actWindow.summary.O613.L} on the 613 never-used stocks), but the late bounces are worse: since 2022 the extra calls made ${pc(L.actWindow.summary.RECENT.mX, 2)} a trade vs ${pc(L.actWindow.summary.RECENT.mL, 2)} for same-day calls. Unlocking the 200 SKIP stocks: failed (${pc(L.actWindow.summary.N200.mW, 2)} a trade). "Low held" on the bounce day: ${pc(L.actWindow.summary.O613.mH - L.actWindow.summary.O613.mNH, 2)}, t ${L.actWindow.summary.O613.tH.toFixed(1)}, failed. Pre-registered 2026-10-12` : ''],
       ['Bandarmetrics LPM (60-session change)', 'failed', L.flow2 ? `${pc(L.flow2.H3.spread, 1)}, p ${L.flow2.H3.p.toFixed(2)}` : ''],
       ['NeoBDM flow tags, 2-year replay', 'failed', 'FLOW+ minus FLOW− −0.13% per 5 sessions'],
       ['Payoff: 80 exits (stop, target, hold, early exit) on the bounce entries, picked on 2017-22', 'failed', DATA.payoff && DATA.payoff.study ? `Pick ${DATA.payoff.study.pick} fell apart out of sample; capped stops were the worst; the +8% target was the weak part` : ''],
@@ -2007,6 +2008,20 @@
       </div>` : ''}`;
   }
 
+
+  // Why so few convinced ACT calls (tools/diagnose-act.mjs + tools/experiment-act-window.mjs, 2026-10-12).
+  function fewActHtml() {
+    const W = DATA.lab && DATA.lab.actWindow; if (!W) return '';
+    const S = W.summary;
+    return `<h3>Why so few ACT calls? Each suspect, checked</h3>
+      <div class="card pad">
+        <p><b>1. The rule fights itself (the biggest cap).</b> ACT needs the oversold score ≥ 65 <i>and</i> a bounce candle on the same day, but a bounce lifts RSI and the 5-day return, so the score drops about 30 points that very day. Over the last two years only 1,116 of 2,879 bounce candles right after an oversold day still scored 65, and two thirds of oversold spells on the tested stocks never became ACT; most bounced 1-5 sessions later at a score near 29.</p>
+        <p><b>2. Two thirds of the list can never be ACT.</b> The 200 stocks added in October 2026 are SKIP because the bounce failed its test on them.</p>
+        <p><b>3. The target is not it.</b> +8% decides the outcome, not the count: about half of ACT trades hit it. Smaller and ATR-based targets were tested in the 80-exit payoff study and did not help.</p>
+        <p><b>Was fixing 1 and 2 the answer? Tested, pre-registered: no.</b> Allowing the bounce up to 5 sessions late gives about 2.4× the calls, but the late ones are worse: ${pc(S.RECENT.mX, 2)} a trade since 2022 against ${pc(S.RECENT.mL, 2)} for same-day calls, and ${pc(S.O613.mX, 2)} on the 613 never-used stocks. The 200 SKIP stocks made ${pc(S.N200.mW, 2)} a trade. So the strict same-day rule is not an accident: it filters out the bounces that fade. The real limit is the stocks themselves: on stocks the rule was not built on, every version loses (${pc(S.O613.mL, 2)} a trade), and the trait scans found that weakness on IDX tends to continue. More ACT badges would mean more losing calls, so the rule stays as it is and stays paper-only.</p>
+      </div>`;
+  }
+
   // "Is this cherry-picked?": the checks a reader can do, computed from the call list itself. Calls bunch on market-wide
   // bounce days, so the honest count of independent bets is the number of signal DAYS, not calls.
   function honestyHtml(cs) {
@@ -2069,6 +2084,7 @@
       </div>
       <div class="card scroll"><table><thead><tr><th>Calls</th><th class="n">Closed</th><th class="n">Win rate</th><th class="n">Avg win</th><th class="n">Avg loss</th><th class="n">Payoff</th><th class="n">Profit factor</th><th class="n">Expectancy</th><th class="n">Worst</th><th class="n">Losing streak</th></tr></thead><tbody>
         ${col('All', cs.all)}${col('IHSG above its 200-day average', cs.up)}${col('IHSG below it (downtrend)', cs.down)}</tbody></table></div>
+      ${fewActHtml()}
       ${honestyHtml(cs)}
       ${recentCallsHtml(cs)}
       ${months.length ? `<h3>By month</h3><div class="card scroll"><table><thead><tr><th>Month called</th><th class="n">Calls</th><th class="n">Win rate</th><th class="n">Expectancy</th><th class="n">Stops hit</th><th class="n">Worst</th></tr></thead><tbody>${months.reverse().map(([m, s]) => `<tr><td>${esc(m)}</td><td class="n">${s.n}${s.open ? ` <span class="muted">(${s.open} open)</span>` : ''}</td><td class="n">${wr(s.winRate)}</td><td class="n">${pc(s.expectancy, 2)}</td><td class="n">${s.sl}</td><td class="n">${pc(s.worst, 0)}</td></tr>`).join('')}</tbody></table></div>` : ''}
