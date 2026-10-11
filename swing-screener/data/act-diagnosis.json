@@ -1,0 +1,27 @@
+{
+ "asOf": "2026-10-11",
+ "from": "2024-10-01",
+ "lines": [
+  "ACT FUNNEL on the 300, 2024-10-01 .. 2026-10-09 (neutral news, replay rules)",
+  "  stock-days 137429; liquid 79001; score >= 65 7319; on the 100 tested stocks 4154; ACT (bounce candle the same day) 611",
+  "  stocks the badge can never reach: 200 of 300 (the 200 added 2026-10-10 are SKIP by rule)",
+  "  oversold episodes (score >= 65 run): 2201; on tested stocks 1293; of those with an ACT 421 (+33%)",
+  "  tested episodes with NO ACT whose first bounce candle came 1-5 sessions AFTER the score fell under 65: 841; score on that bounce day avg 29.0",
+  "  bounce candles right after an oversold day (prev score >= 65): 2879; of those still >= 65 on the bounce day 1116; avg score drop on the bounce day -30.3 points",
+  "  bounce candles with any of the last 5 days >= 65: 5316 (vs same-day ACT 1126)",
+  "TARGET: 576 ACT trades; +8% hit +53%, stop +11%, time +36%; mean +0.52%",
+  "  best high within 15 sessions (MFE): reached +3% +78%, +5% +67%, +8% +44%, +12% +13%",
+  "RALLIES: 1331 rally starts (20-day closing low, then +8% within 15 sessions); on tested stocks 735",
+  "  flagged score >= 65 within 3 sessions: +62%; ACT within 3 sessions (tested only): +24%; score at the low avg 59",
+  "  rally starts whose low scored < 50: +25% (the oversold score never sees them)"
+ ],
+ "funnel": {
+  "stockDays": 137429,
+  "liquid": 79001,
+  "radar": 7319,
+  "radarTested": 4154,
+  "act": 611
+ },
+ "episodes": 2201,
+ "episodesTested": 1293
+}
