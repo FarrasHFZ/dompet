@@ -3,12 +3,17 @@
 import { sleep } from './lib.mjs';
 
 const TYPES = 'quarterlyTotalRevenue,quarterlyNetIncome,quarterlyStockholdersEquity';
+// Valuation inputs (same request): ~4 fiscal years of revenue, profit, cash flow, EBITDA and balance sheet, plus the
+// latest quarter's share count, debt and cash. Values are in the report currency (rupiah, or US$ for some issuers).
+const ANNUAL = ['TotalRevenue', 'NetIncome', 'FreeCashFlow', 'OperatingCashFlow', 'CapitalExpenditure', 'EBITDA', 'TotalDebt', 'CashAndCashEquivalents', 'StockholdersEquity', 'OrdinarySharesNumber'];
+const QBAL = ['OrdinarySharesNumber', 'TotalDebt', 'CashAndCashEquivalents'];
+const ALL = [TYPES, ...ANNUAL.map(k => 'annual' + k), ...QBAL.map(k => 'quarterly' + k)].join(',');
 
 export async function fetchFundamentals(tickers) {
   const out = {};
   for (const t of tickers) {
     try {
-      const r = await fetch(`https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/${t}.JK?type=${TYPES}&period1=1609459200&period2=${Math.floor(Date.now() / 1000) + 86400 * 30}`, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+      const r = await fetch(`https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/${t}.JK?type=${ALL}&period1=1483228800&period2=${Math.floor(Date.now() / 1000) + 86400 * 30}`, { headers: { 'User-Agent': 'Mozilla/5.0' } });
       if (!r.ok) { out[t] = null; continue; }
       const res = ((await r.json()).timeseries || {}).result || [];
       const g = k => { const x = res.find(y => y.meta.type[0] === k); return (x && x[k]) || []; };
@@ -18,6 +23,12 @@ export async function fetchFundamentals(tickers) {
       put(rev, 'rev'); put(ni, 'ni'); put(eq, 'equity');
       const q = [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date)).slice(-5);
       out[t] = q.length ? summarize(q) : null;
+      // annual rows by fiscal year, and the latest balance-sheet quarter
+      const yrs = new Map();
+      for (const k of ANNUAL) g('annual' + k).forEach(p => { if (!p) return; const y = p.asOfDate.slice(0, 4); yrs.set(y, { ...(yrs.get(y) || { y }), [k]: p.reportedValue.raw }); });
+      const lastOf = k => { const a = g('quarterly' + k).filter(Boolean); return a.length ? a[a.length - 1].reportedValue.raw : null; };
+      const years = [...yrs.values()].sort((a, b) => a.y.localeCompare(b.y)).slice(-5);
+      if (out[t] && years.length) out[t].val = { years, shares: lastOf('OrdinarySharesNumber') || (years.at(-1) || {}).OrdinarySharesNumber || null, debt: lastOf('TotalDebt'), cash: lastOf('CashAndCashEquivalents') };
     } catch { out[t] = null; }
     await sleep(150);
   }

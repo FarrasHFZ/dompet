@@ -585,6 +585,9 @@
       <div class="sec-head"><h2>Market map</h2><div class="seg" role="group" aria-label="Change over">${[['1d', 'Today'], ['5d', '5 days'], ['20d', '20 days']].map(([v, l]) => `<button data-map="${v}" aria-pressed="${MAPBY === v}">${l}</button>`).join('')}</div></div>
       <div class="tmapbox" id="tmap"></div>
       <div class="tm-legend"><span>Box size = traded value (√Rp/day), grouped by sector · colour = change</span><i style="background:${heatCol(-0.05)}"></i><i style="background:${heatCol(-0.01)}"></i><i style="background:var(--card2)"></i><i style="background:${heatCol(0.01)}"></i><i style="background:${heatCol(0.05)}"></i><span>tap a box to open the stock</span></div>
+      ${(() => { const B = DATA.picks.flatMap(p => bigOf(p).map(x => ({ ...x, p }))).sort((a, b) => b.d.localeCompare(a.d)).slice(0, 8);
+        return B.length ? `<div class="sec-head"><h2>Big filings</h2><span class="muted">last 45 days, read from IDX · tap for the Catalyst tab</span></div>
+        <div class="card"><ul class="hl-list" style="padding:6px 12px">${B.map(x => `<li class="mrow" data-cat="${esc(x.t)}" style="cursor:pointer">${avatar(x.t)}<div class="mid"><b>${esc(x.t)}</b> <span class="${(DIRS[x.dir] || DIRS['?'])[1]}" style="font-size:12px">${(DIRS[x.dir] || DIRS['?'])[0]}</span> <span class="muted">${esc(x.d.slice(0, 10))}</span><div>${esc(x.head)}</div></div></li>`).join('')}</ul></div>` : ''; })()}
       <div class="sec-head"><h2>Movers</h2><span class="muted">liquid stocks (≥ Rp 5 B a day), ${k.idxLive ? 'live' : 'last close'}</span></div>
       <div class="movers">${moverList('Top gainers', up, p => pc(chOf(p), 2))}${moverList('Top losers', dn, p => pc(chOf(p), 2))}${moverList('Most traded', act, p => `<span class="muted">Rp ${f0(p.valueB)} B</span>`)}</div>
       ${marketBanner()}${specBanner()}`;
@@ -594,6 +597,7 @@
     if (renderHome.ro) { renderHome.ro.disconnect(); const b = $('#tmap', el); if (b) renderHome.ro.observe(b); }
     el.querySelectorAll('[data-map]').forEach(b => b.onclick = () => { MAPBY = b.dataset.map; LS.set('mapBy', MAPBY); el.querySelectorAll('[data-map]').forEach(x => x.setAttribute('aria-pressed', x === b)); draw(); });
     el.querySelectorAll('[data-goto]').forEach(b => b.onclick = () => { FILTER = b.dataset.goto; LS.set('pfilter', FILTER); go('picks'); });
+    el.querySelectorAll('[data-cat]').forEach(b => b.onclick = () => { SUB = 'cat'; openStock(b.dataset.cat); });
     el.querySelectorAll('[data-tabgo]').forEach(b => b.onclick = () => go(b.dataset.tabgo));
     bindOpen(el);
   }
@@ -606,6 +610,7 @@
     ['STAR', '★ Watchlist', p => WL.has(p.ticker)],
     ['SIG', 'Watch signals', p => baseOn(p) || !!p.spec || whoOn(p) || vOn(p)],
     ['MOM', 'Momentum 10', p => !!momOf(p.ticker)],
+    ['BIG', 'Big filing', p => bigOf(p).length > 0],
     ['ALL', 'All', () => true],
   ];
   // Per-stock replayed ACT record (build-snapshot p.calls). Win rate and average only rank stocks with 3+ closed calls:
@@ -760,6 +765,8 @@
     b.dataset.j = j ? '1' : '0';
     b.innerHTML = SUB === 'thesis' ? thesisHtml(p, j) : SUB === 'calls' ? callsHtml(p, j) : SUB === 'flow' ? flowSubHtml(p, j) : SUB === 'cat' ? catalystHtml(p) : SUB === 'fund' ? fundSubHtml(p) : newsSubHtml(p);
     bindSizer(b); bindOpen(b);
+    b.querySelectorAll('[data-vopt]').forEach(x => x.onchange = () => { const v = x.value.trim(); VOPT[x.dataset.vopt] = v === '' ? (x.dataset.vopt === 'g1' ? null : VDEF[x.dataset.vopt]) : +v / 100; LS.set('valopt', JSON.stringify(VOPT)); const y = b.scrollTop; renderSub(p); b.scrollTop = y; });
+    const vr = b.querySelector('[data-vreset]'); if (vr) vr.onclick = () => { VOPT = { ...VDEF }; LS.set('valopt', '{}'); renderSub(p); };
     const cp = b.querySelector('[data-copy-prompt]');
     if (cp) cp.onclick = async () => { const t = catalystPrompt(p); try { await navigator.clipboard.writeText(t); cp.textContent = 'Copied: paste it into Claude'; } catch { const ta = b.querySelector('#catPrompt'); ta.hidden = false; ta.select(); cp.textContent = 'Select all and copy the text below'; } };
     b.querySelectorAll('[data-news]').forEach(x => x.onclick = () => { NEWSPERIOD = '30d'; NEWSQ = x.dataset.news; NEWSCAT = 'ALL'; NEWSLIMIT = 120; renderNews(); go('news'); });
@@ -1550,6 +1557,108 @@
     dividend: ['Dividend', 'Paid from earnings or from a one-off sale?'],
     report: ['Financial report', 'Read the notes (catatan atas LK), not just profit: debt terms, business combinations, related parties.'],
   };
+  // ---------- Valuation (Catalyst tab) ----------
+  // Inputs: Yahoo annual results and the latest balance sheet (build-snapshot fundamentals.val), converted to rupiah
+  // per share. Models: a 10-year free-cash-flow DCF (non-financials), justified P/B and P/E from ROE (all), and
+  // sector-median P/E, P/B and EV/EBITDA across the 300 stocks. A model is skipped, with the reason, when its input
+  // is missing or negative. The assumptions are editable on the page and stored in this browser only.
+  const FIN = new Set(['Banking']);
+  const VDEF = { r: 0.115, coe: 0.125, gT: 0.04, g1: null };
+  let VOPT = (() => { try { return { ...VDEF, ...JSON.parse(LS.get('valopt') || '{}') }; } catch { return { ...VDEF }; } })();
+  const med = a => { const b = a.filter(x => x != null && isFinite(x)).sort((x, y) => x - y); return b.length ? (b.length % 2 ? b[b.length >> 1] : (b[b.length / 2 - 1] + b[b.length / 2]) / 2) : null; };
+  function valBase(p) {
+    const f = p.fundamentals, v = f && f.val;
+    if (!v || !v.shares || !v.years || !v.years.length) return null;
+    const Q = f.quarters || [], Y = v.years, last = Y[Y.length - 1];
+    const usd = Math.abs((Q.length ? Q[Q.length - 1].equity : last.StockholdersEquity) || 0) < 2e10, fx = usd ? DATA.meta.usdIdr || null : 1;
+    if (!fx) return null;
+    const sh = v.shares, eqNow = (Q.length && Q[Q.length - 1].equity) || last.StockholdersEquity;
+    const ni = f.niTtm != null ? f.niTtm : last.NetIncome;
+    const fcfs = Y.map(y => (y.FreeCashFlow != null ? y.FreeCashFlow : y.OperatingCashFlow != null && y.CapitalExpenditure != null ? y.OperatingCashFlow + y.CapitalExpenditure : null)).filter(x => x != null);
+    const roes = Y.slice(-3).filter(y => y.NetIncome != null && y.StockholdersEquity > 0).map(y => y.NetIncome / y.StockholdersEquity);
+    const revs = Y.filter(y => y.TotalRevenue > 0), cagr = revs.length >= 3 ? Math.pow(revs[revs.length - 1].TotalRevenue / revs[0].TotalRevenue, 1 / (revs.length - 1)) - 1 : null;
+    const ebitda = last.EBITDA != null ? last.EBITDA : null;
+    return { usd, fx, sh, fin: FIN.has(p.sector), px: p.live ? p.live.price : p.close,
+      eps: ni != null ? (ni * fx) / sh : null, bvps: eqNow ? (eqNow * fx) / sh : null,
+      fcf: fcfs.length ? med(fcfs.slice(-3)) * fx : null, fcfAll: fcfs.map(x => x * fx), fcfNeg: fcfs.filter(x => x < 0).length,
+      roe: roes.length ? roes.reduce((s, x) => s + x, 0) / roes.length : null, cagr,
+      netDebt: v.debt != null || v.cash != null ? ((v.debt || 0) - (v.cash || 0)) * fx : null, ebitda: ebitda != null ? ebitda * fx : null, years: Y.length, lastY: last.y };
+  }
+  // Sector medians of the multiples, once per data load.
+  let PEER = null, PEER_AT = null;
+  function peers() {
+    if (PEER && PEER_AT === DATA.meta.generatedAt) return PEER;
+    const by = {};
+    for (const q of DATA.picks) {
+      const b = valBase(q); if (!b) continue;
+      const mc = b.px * b.sh, x = (by[q.sector] = by[q.sector] || { pe: [], pb: [], ev: [] });
+      if (b.eps > 0) { const pe = b.px / b.eps; if (pe < 80) x.pe.push(pe); }
+      if (b.bvps > 0) { const pb = b.px / b.bvps; if (pb < 30) x.pb.push(pb); }
+      if (!b.fin && b.ebitda > 0 && b.netDebt != null) { const ev = (mc + b.netDebt) / b.ebitda; if (ev > 0 && ev < 60) x.ev.push(ev); }
+    }
+    const all = { pe: Object.values(by).flatMap(x => x.pe), pb: Object.values(by).flatMap(x => x.pb), ev: Object.values(by).flatMap(x => x.ev) };
+    PEER = {}; for (const [s, x] of Object.entries(by)) PEER[s] = { pe: x.pe.length >= 4 ? med(x.pe) : med(all.pe), pb: x.pb.length >= 4 ? med(x.pb) : med(all.pb), ev: x.ev.length >= 4 ? med(x.ev) : med(all.ev), n: x.pe.length, wide: x.pe.length < 4 };
+    PEER_AT = DATA.meta.generatedAt;
+    return PEER;
+  }
+  // 10-year DCF: growth g1 for years 1-5, fading in a straight line to gT by year 10, terminal value at gT.
+  function dcfPrice(b, r, gT, g1) {
+    if (!(b.fcf > 0) || r <= gT) return null;
+    let cf = b.fcf, pv = 0;
+    for (let t = 1; t <= 10; t++) { const g = t <= 5 ? g1 : g1 + (gT - g1) * (t - 5) / 5; cf *= 1 + g; pv += cf / Math.pow(1 + r, t); }
+    const tv = (cf * (1 + gT)) / (r - gT) / Math.pow(1 + r, 10);
+    return (pv + tv - (b.netDebt || 0)) / b.sh;
+  }
+  const g1Of = b => (VOPT.g1 != null ? VOPT.g1 : b.cagr == null ? 0.05 : Math.max(0, Math.min(0.15, b.cagr)));
+  function valModels(p) {
+    const b = valBase(p); if (!b) return null;
+    const P = peers()[p.sector] || {}, { r, coe, gT } = VOPT, g1 = g1Of(b), out = [];
+    const add = (k, name, v, how, why) => out.push({ k, name, v: v != null && isFinite(v) && v > 0 ? v : null, how, why });
+    if (b.fin) add('dcf', 'DCF (free cash flow)', null, '', 'not used for banks: their cash flow is deposits and loans, not free cash');
+    else add('dcf', 'DCF (free cash flow)', dcfPrice(b, r, gT, g1), `FCF ${rpS(b.fcf)} (median of the last 3 years), ${pctS(g1)} growth for 5 years fading to ${pctS(gT)}, discounted at ${pctS(r)}, minus net debt ${rpS(b.netDebt || 0)}`, b.fcf == null ? 'no cash-flow data' : b.fcf <= 0 ? 'free cash flow is negative: a DCF cannot value it' : '');
+    const pbJ = b.roe != null && b.roe > gT ? (b.roe - gT) / (coe - gT) : null;
+    add('pbj', 'Justified P/B (ROE)', pbJ && b.bvps > 0 ? pbJ * b.bvps : null, pbJ ? `ROE ${pctS(b.roe)} (3-year average) vs cost of equity ${pctS(coe)}: fair P/B ${pbJ.toFixed(2)}× book ${f0(b.bvps)}` : '', b.roe == null ? 'no ROE' : b.roe <= gT ? `ROE ${pctS(b.roe)} is below growth: it destroys value at book` : '');
+    const peJ = b.roe != null && b.roe > gT ? ((1 - gT / b.roe) * (1 + gT)) / (coe - gT) : null;
+    add('pej', 'Justified P/E (ROE)', peJ && b.eps > 0 ? peJ * b.eps : null, peJ ? `fair P/E ${peJ.toFixed(1)}× (pays out ${pctS(1 - gT / b.roe)} to grow ${pctS(gT)}) × EPS ${f0(b.eps)}` : '', b.eps <= 0 ? 'loss-making: no P/E' : '');
+    add('pe', 'Sector P/E', P.pe && b.eps > 0 ? P.pe * b.eps : null, P.pe ? `${p.sector}${P.wide ? ' (few peers: all 300 used)' : ''} median ${P.pe.toFixed(1)}× × EPS ${f0(b.eps)}` : '', b.eps <= 0 ? 'loss-making: no P/E' : '');
+    add('pb', 'Sector P/B', P.pb && b.bvps > 0 ? P.pb * b.bvps : null, P.pb ? `median ${P.pb.toFixed(2)}× × book ${f0(b.bvps)}` : '', '');
+    if (!b.fin) add('ev', 'Sector EV/EBITDA', P.ev && b.ebitda > 0 && b.netDebt != null ? (P.ev * b.ebitda - b.netDebt) / b.sh : null, P.ev && b.ebitda ? `median ${P.ev.toFixed(1)}× × EBITDA ${rpS(b.ebitda)}, minus net debt` : '', !(b.ebitda > 0) ? 'no positive EBITDA' : '');
+    const vals = out.filter(m => m.v).map(m => m.v), mid = med(vals);
+    // Reverse DCF: the 5-year growth the price already assumes (bisection).
+    let implied = null;
+    if (!b.fin && b.fcf > 0) { let lo = -0.3, hi = 0.6; for (let i = 0; i < 60; i++) { const m = (lo + hi) / 2, v = dcfPrice(b, r, gT, m); if (v == null) break; if (v > b.px) hi = m; else lo = m; } implied = (lo + hi) / 2; if (implied > 0.59 || implied < -0.29) implied = implied > 0 ? Infinity : -Infinity; }
+    return { b, models: out, mid, lo: vals.length ? Math.min(...vals) : null, hi: vals.length ? Math.max(...vals) : null, implied, g1 };
+  }
+  const pctS = x => (x == null ? '–' : (x * 100).toFixed(1) + '%');
+  const rpS = x => { if (x == null) return '–'; const a = Math.abs(x), s = x < 0 ? '−' : ''; return s + (a >= 1e12 ? 'Rp ' + (a / 1e12).toFixed(2) + ' T' : 'Rp ' + (a / 1e9).toFixed(1) + ' B'); };
+  function valuationHtml(p) {
+    const V = valModels(p);
+    if (!V) return `<div class="sp-sec"><h3>Valuation: what is it worth?</h3><p class="muted">No share count or annual results for this stock in the data yet (Yahoo), so no model can run. It fills in on a later rebuild if Yahoo adds it.</p></div>`;
+    const { b, models, mid } = V, px = b.px, up = mid ? mid / px - 1 : null;
+    const lo = Math.min(px, ...models.filter(m => m.v).map(m => m.v)) * 0.9, hi = Math.max(px, ...models.filter(m => m.v).map(m => m.v)) * 1.05;
+    const W = 100, X = v => ((v - lo) / (hi - lo)) * W;
+    const bar = m => m.v ? `<div class="vrow"><span>${esc(m.name)}</span><div class="vtrack"><i class="vnow" style="left:${X(px)}%"></i><b class="vdot ${m.v >= px ? 'up' : 'down'}" style="left:${X(m.v)}%"></b></div><span class="n"><b>${f0(m.v)}</b> <span class="${m.v >= px ? 'up' : 'down'}">${m.v >= px ? '+' : ''}${((m.v / px - 1) * 100).toFixed(0)}%</span></span></div>`
+      : `<div class="vrow off"><span>${esc(m.name)}</span><div class="muted" style="font-size:12px">${esc(m.why || 'not available')}</div><span></span></div>`;
+    const sens = !b.fin && b.fcf > 0 ? (() => { const rs = [-0.02, -0.01, 0, 0.01, 0.02].map(d => VOPT.r + d), gs = [0.03, 0.04, 0.05];
+      return `<details><summary class="muted">DCF sensitivity: discount rate × terminal growth</summary><div class="scroll"><table><thead><tr><th>Terminal growth \\ discount</th>${rs.map(r => `<th class="n">${pctS(r)}</th>`).join('')}</tr></thead><tbody>${gs.map(g => `<tr><td>${pctS(g)}</td>${rs.map(r => { const v = dcfPrice(b, r, g, V.g1); return `<td class="n ${v && v >= px ? 'up' : 'down'}">${v ? f0(v) : '–'}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div></details>`; })() : '';
+    const imp = V.implied == null ? '' : !isFinite(V.implied) ? (V.implied > 0 ? 'The price assumes more than 60% a year of cash-flow growth: far beyond what the DCF can justify.' : 'Even shrinking cash flow would justify today\'s price: the DCF sees it as cheap.') : `<b>What the price already assumes:</b> free cash flow growing <b>${pctS(V.implied)} a year</b> for 5 years (then fading to ${pctS(VOPT.gT)}), at a ${pctS(VOPT.r)} discount rate. ${b.cagr != null ? `Revenue grew ${pctS(b.cagr)} a year over the last ${b.years - 1} years. ` : ''}${b.cagr != null ? (V.implied > b.cagr + 0.05 ? 'The market expects a lot more than the past: it needs the catalyst to deliver.' : V.implied < b.cagr - 0.05 ? 'The market expects less than the past: if the business just keeps going, there is room.' : 'Roughly in line with the past.') : ''}`;
+    const inp = (k, l, v) => `<label class="vin"><span>${l}</span><input type="number" step="0.5" data-vopt="${k}" value="${v == null ? '' : (v * 100).toFixed(1)}" placeholder="auto"><i>%</i></label>`;
+    const warn = [b.usd ? `Reported in US$, converted at Rp ${f0(DATA.meta.usdIdr)} per US$.` : '', b.fcfNeg ? `Free cash flow was negative in ${b.fcfNeg} of the last ${b.fcfAll.length} years: the DCF is fragile.` : '', b.eps <= 0 ? 'Loss-making over the last 12 months: earnings models do not apply.' : '', b.years < 3 ? 'Fewer than 3 years of results.' : ''].filter(Boolean);
+    return `<div class="sp-sec"><h3>Valuation: what is it worth? <span class="ev context">model, untested</span></h3>
+      <div class="kv">
+        <div><small>Central estimate</small><b class="${up >= 0 ? 'up' : 'down'}">${mid ? f0(mid) : '–'}</b><div class="muted">median of ${models.filter(m => m.v).length} models</div></div>
+        <div><small>Upside / downside</small><b class="${up >= 0 ? 'up' : 'down'}">${up == null ? '–' : (up >= 0 ? '+' : '') + (up * 100).toFixed(0) + '%'}</b><div class="muted">vs ${f0(px)} now</div></div>
+        <div><small>Model range</small><b>${V.lo ? f0(V.lo) + ' – ' + f0(V.hi) : '–'}</b><div class="muted">${V.lo && V.hi / V.lo > 2.5 ? 'very wide: the models disagree' : 'lowest to highest'}</div></div>
+        <div><small>Today's multiples</small><b>${b.eps > 0 ? (px / b.eps).toFixed(1) + '× P/E' : 'no P/E'}</b><div class="muted">${b.bvps > 0 ? (px / b.bvps).toFixed(2) + '× book' : ''}${b.roe != null ? ` · ROE ${pctS(b.roe)}` : ''}</div></div>
+      </div>
+      <div class="vfield">${models.map(bar).join('')}<div class="vrow"><span></span><div class="muted" style="font-size:11px;position:relative;height:14px"><span style="position:absolute;left:${X(px)}%;transform:translateX(-50%)">▲ now ${f0(px)}</span></div><span></span></div></div>
+      <p>${imp}</p>
+      <details><summary class="muted">How each number is built</summary><ul class="hl-list">${models.filter(m => m.v).map(m => `<li><span class="tag">${esc(m.name)}</span><span>${esc(m.how)}</span></li>`).join('')}</ul></details>
+      ${sens}
+      <div class="vins">${inp('r', 'Discount rate (DCF)', VOPT.r)}${inp('coe', 'Cost of equity', VOPT.coe)}${inp('gT', 'Long-run growth', VOPT.gT)}${inp('g1', 'Growth, years 1–5', VOPT.g1 ?? null)}<button class="chip" data-vreset>Reset</button></div>
+      <p class="muted">${warn.map(esc).join(' ')} Defaults: discount rate 11.5% (Indonesian 10-year bond ≈ 6.5% plus an equity premium), cost of equity 12.5%, long-run growth 4% (below nominal GDP), growth for years 1–5 = the last ${b.years - 1} years' revenue growth, kept between 0% and 15% (now ${pctS(V.g1)}). Data: Yahoo annual results to ${esc(b.lastY)}; the catalyst is <b>not</b> in these numbers: if the filings above change earnings, change the growth input. Sector medians ignore quality: a premium franchise (a top bank, a market leader) looks expensive against them, a weak one cheap. A model is a way to ask what the price assumes, not a target. Untested here.</p></div>`;
+  }
+
   function catFacts(p) {
     const o = p.ownership, f = p.fundamentals, Q = (f && f.quarters) || [], cats = (p.filings || []).filter(x => CAT_Q[x[1]]);
     const ctrl = o && o.holders && o.holders[0], free = o && o.listedPct != null ? Math.max(0, 100 - o.listedPct) : null;
@@ -1567,6 +1676,28 @@
     if (!qs.length) qs.push('Why would the price re-rate in the next 6-12 months? Without a named catalyst, there is no thesis in this method.');
     return { o, f, Q, cats, ctrl, free, eqChg, revYoY, qs };
   }
+  // What the filings say (data/filing-digest.json, read by Claude from the IDX PDFs): the big story first, then every
+  // read filing ranked by how much it matters.
+  const IMP = { 3: ['BIG', 'down'], 2: ['Notable', 'warn'], 1: ['Minor', 'mute'], 0: ['Routine', 'mute'] };
+  const DIRS = { up: ['▲ good for holders', 'up'], down: ['▼ bad for holders', 'down'], mixed: ['◆ mixed', 'warn'], '?': ['? unclear', 'mute'] };
+  const bigOf = p => (p.digest && p.digest.items ? p.digest.items.filter(x => x.impact >= 3 && x.d >= new Date(Date.now() - 45 * 864e5).toISOString().slice(0, 10)) : []);
+  function digestItemHtml(x) {
+    const im = IMP[x.impact] || IMP[0], dr = DIRS[x.dir] || DIRS['?'];
+    return `<li class="dg dg${x.impact}"><div class="dg-top"><span class="tag ${im[1] === 'down' ? 'RISK' : ''}">${im[0]}</span> <span class="${dr[1]}" style="font-size:12px;font-weight:650">${dr[0]}</span> <span class="muted">${esc(x.d.slice(0, 10))}</span></div>
+      <b class="dg-h">${esc(x.head)}</b>
+      ${x.what ? `<div><b>What's new:</b> ${esc(x.what)}</div>` : ''}${x.size ? `<div><b>How big:</b> ${esc(x.size)}</div>` : ''}${x.why ? `<div><b>Why it could matter:</b> ${esc(x.why)}</div>` : ''}${x.watch ? `<div><b>Watch:</b> ${esc(x.watch)}</div>` : ''}
+      <div class="muted">${x.url ? `<a href="${safeUrl(x.url)}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a>` : esc(x.title)}</div></li>`;
+  }
+  function digestHtml(p) {
+    const D = p.digest, its = D && D.items ? D.items.slice().sort((a, b) => b.impact - a.impact || b.d.localeCompare(a.d)) : [];
+    const shown = its.filter(x => x.impact >= 1), routine = its.filter(x => x.impact < 1);
+    if (!D) return `<div class="sp-sec"><h3>What's going on</h3><p class="muted">No filing of ${esc(p.ticker)} has been read yet${DATA.meta.digestAsOf ? ` (filings read up to ${esc(DATA.meta.digestAsOf)})` : ''}. Either it filed nothing beyond routine reports in the last 60 days, or it is in the next reading batch.</p></div>`;
+    return `<div class="sp-sec dg-box"><h3>What's going on</h3>
+      ${D.story ? `<p class="dg-story">${esc(D.story.text)}</p><p class="muted" style="margin-top:-4px">From the filings read up to ${esc(D.story.at)}.</p>` : ''}
+      ${shown.length ? `<ul class="dg-list">${shown.map(digestItemHtml).join('')}</ul>` : '<p>Nothing beyond routine filings in the last 120 days.</p>'}
+      ${routine.length ? `<details><summary class="muted">${routine.length} routine filing${routine.length === 1 ? '' : 's'} read, nothing new</summary><ul class="hl-list">${routine.map(x => `<li><span class="muted">${esc(x.d.slice(0, 10))}</span><span>${esc(x.head)}</span></li>`).join('')}</ul></details>` : ''}
+      <p class="muted">Each filing's PDF is read from IDX and summarised by Claude: what is new, how big it is against the company, and what it could trigger. "Good / bad for holders" is a first read, not a forecast. Check the original (link) before acting.</p></div>`;
+  }
   function catalystHtml(p) {
     const C = catFacts(p), { o, f, Q, cats, ctrl, free } = C, px = p.live ? p.live.price : p.close;
     // Results come in full units of the report currency: rupiah, or US$ for some miners and energy names (TOBA, ADRO,
@@ -1580,12 +1711,12 @@
     if (free != null && free < 25) riskBits.push(`thin float (at most ${free.toFixed(0)}% outside the ≥1% holders)`);
     if (p.thin) riskBits.push('trades under Rp 5 B a day: hard to exit');
     if ((p.filings || []).some(x => x[1] === 'idxQuery')) riskBits.push('IDX has queried unusual trading');
-    return `<div class="sp-sec"><h3>Catalyst thesis <span class="ev context">untested</span></h3>
-        <p class="muted">A filings-first way to build a months-long thesis (the method @dojjunn describes): start from a corporate action, map who controls and who pays, project the effect on earnings, price it with one simple multiple, then list the risks. It is a different horizon from the 15-session bounce trade and has not been tested here. The site fills what its data can answer; ☐ lines need you to read the filing.</p></div>
-      <div class="sp-sec"><h3>1. Catalysts in the last 45 days (IDX filings)</h3>
+    return `${digestHtml(p)}
+      ${valuationHtml(p)}
+      <div class="sp-sec"><h3>Filing types in the last 45 days, and what to ask</h3>
         ${cats.length ? `<ul class="hl-list">${cats.map(x => `<li><span class="tag ${x[1] === 'dilution' || x[1] === 'idxQuery' ? 'RISK' : ''}">${esc(CAT_Q[x[1]][0])}</span><span>${x[4] ? `<a href="${safeUrl(x[4])}" target="_blank" rel="noopener noreferrer">${esc(x[3])}</a>` : esc(x[3])}<div class="muted">${esc(x[0])} · <b>Ask:</b> ${esc(CAT_Q[x[1]][1])}</div></span></li>`).join('')}</ul>` : '<p>No corporate-action filing in the last 45 days. This method starts from one, so there is <b>no catalyst thesis</b> for this stock right now. That is a valid answer.</p>'}
         <p class="muted">Full filings: <a href="https://www.idx.co.id/id/perusahaan-tercatat/keterbukaan-informasi/" target="_blank" rel="noopener noreferrer">IDX Keterbukaan Informasi</a> (search ${esc(p.ticker)}).</p></div>
-      <div class="sp-sec"><h3>2. Who controls it, who pays</h3>
+      <div class="sp-sec"><h3>Who controls it, who pays</h3>
         ${o && o.holders ? `<div class="kv">
           <div><small>Controller</small><b>${esc(ctrl ? ctrl.name : '–')}</b><div class="muted">${ctrl ? `${ctrl.pct.toFixed(2)}%${ctrl.foreign ? ' · foreign' : ''}${ctrl.domicile ? ' · ' + esc(ctrl.domicile) : ''}` : ''}</div></div>
           <div><small>Top 3 holders</small><b>${o.top3Pct != null ? o.top3Pct.toFixed(1) + '%' : '–'}</b><div class="muted">${o.count} holders own ≥1%</div></div>
@@ -1593,12 +1724,12 @@
           <div><small>Foreign holders</small><b>${o.foreignPct != null ? o.foreignPct.toFixed(1) + '%' : '–'}</b><div class="muted">${p.group ? 'group: ' + esc(p.group.name) : 'no conglomerate group'}</div></div>
         </div>
         <div class="scroll"><table><thead><tr><th>Holder (≥1%)</th><th>Type</th><th class="n">%</th></tr></thead><tbody>${o.holders.slice(0, 8).map(h => `<tr><td>${esc(h.name)}</td><td>${h.type === 'CP' ? 'company' : h.type === 'ID' ? 'individual' : esc(h.type || '')}${h.foreign ? ' · foreign' : ''}</td><td class="n">${h.pct.toFixed(2)}</td></tr>`).join('')}</tbody></table></div>` : '<p class="muted">No KSEI ownership data for this stock.</p>'}</div>
-      <div class="sp-sec"><h3>3. Earnings: what the catalyst has to change</h3>
+      <div class="sp-sec"><h3>Earnings: what the catalyst has to change</h3>
         ${Q.length ? `<div class="scroll"><table><thead><tr><th>Quarter</th><th class="n">Revenue</th><th class="n">Net profit</th><th class="n">Equity</th></tr></thead><tbody>${Q.slice(-5).reverse().map(q => `<tr><td>${esc(q.date)}</td><td class="n">${rp(q.rev)}</td><td class="n ${q.ni < 0 ? 'down' : ''}">${rp(q.ni)}</td><td class="n">${rp(q.equity)}</td></tr>`).join('')}</tbody></table></div>
         <p>Last 12 months' profit: <b class="${f.niTtm < 0 ? 'down' : 'up'}">${rp(f.niTtm)}</b>${f.margin != null ? `, net margin ${(f.margin * 100).toFixed(1)}%` : ''}.${(f.flags || []).length ? ' ' + f.flags.map(esc).join('; ') + '.' : ''}</p>
         <p class="muted">${usd ? 'Reported in US$. ' : ''} Simple valuation: PE = market cap ÷ the profit you expect after the catalyst, or EV/EBITDA for asset-heavy and mining names. The share count is not in the site's data, so take market cap from Stockbit (price now ${f0(px)}).</p>` : '<p class="muted">No quarterly results in the data.</p>'}</div>
-      <div class="sp-sec"><h3>4. Second-level questions</h3><ol class="watchlist">${C.qs.map(q => `<li><span>${esc(q)}</span><span></span></li>`).join('')}</ol></div>
-      <div class="sp-sec"><h3>5. Risks</h3><p>${riskBits.length ? 'Structure: ' + riskBits.map(esc).join('; ') + '. Concentrated ownership makes a stock easy to push up and hard to sell: size it small and expect "sell on news".' : 'No structural red flag in the data (control, float, liquidity, IDX queries). Still check debt terms and sell-on-news risk.'}</p></div>
+      <div class="sp-sec"><h3>Second-level questions</h3><ol class="watchlist">${C.qs.map(q => `<li><span>${esc(q)}</span><span></span></li>`).join('')}</ol></div>
+      <div class="sp-sec"><h3>Risks</h3><p>${riskBits.length ? 'Structure: ' + riskBits.map(esc).join('; ') + '. Concentrated ownership makes a stock easy to push up and hard to sell: size it small and expect "sell on news".' : 'No structural red flag in the data (control, float, liquidity, IDX queries). Still check debt terms and sell-on-news risk.'}</p></div>
       <div class="sp-sec"><h3>Checklist</h3><ul class="ck">
         ${ck(cats.length, 'Start from a filing, not a screener', cats.length ? `${cats.length} found above` : 'none in 45 days')}
         ${ck(false, 'Name the 1-2 measurable catalysts', 'needs the filing: how big, by when')}

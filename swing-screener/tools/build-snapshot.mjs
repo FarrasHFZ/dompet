@@ -6,6 +6,7 @@ import { loadEngine, universe, loadPrices, ROOT, expansionTickers } from './lib.
 import { refreshNewsStore, newsCoverage, archiveForWeb } from './news.mjs';
 import { buildOwnership } from './ownership.mjs';
 import { fetchFundamentals } from './fundamentals.mjs';
+import { loadDigest } from './filing-digest.mjs';
 import { runAlerts } from './alerts.mjs';
 import { writeOhlc } from './ohlc.mjs';
 import { stockSignals, callStats } from './signals.mjs';
@@ -81,6 +82,10 @@ try { ownership = await buildOwnership(uni.map(u => u.ticker)); } catch (e) { co
 
 let fundamentals = {};
 try { fundamentals = await fetchFundamentals(uni.map(u => u.ticker)); } catch (e) { console.error('fundamentals failed', e.message); }
+const DIGEST = loadDigest(), DIG_FROM = new Date(Date.now() - 120 * 864e5).toISOString().slice(0, 10);
+// US$ -> rupiah for issuers that report in dollars (the Catalyst tab's valuation converts with it).
+let usdIdr = null;
+try { const r = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/IDR=X?range=5d&interval=1d', { headers: { 'User-Agent': 'Mozilla/5.0' } }); const c = (await r.json()).chart.result[0].indicators.quote[0].close.filter(Boolean); usdIdr = c.length ? Math.round(c.at(-1)) : null; } catch (e) { console.error('usd/idr failed', e.message); }
 
 const nbd = loadNeobdm();
 // IDX company filings, last 45 days, meaningful types only (tools/ann-import.mjs; pulled in a browser, IDX blocks scripts).
@@ -144,6 +149,9 @@ uni.forEach(u => {
   const own = ownership && ownership.byTicker ? ownership.byTicker[u.ticker] : null;
   const pk = api.buildPick_(u, b, a, nw, own, cfg);
   pk.fundamentals = fundamentals[u.ticker] || null;
+  // What the filings say (tools/filing-digest.mjs): the stock's story and its read filings of the last 120 days.
+  { const its = DIGEST.items.filter(x => x.t === u.ticker && x.d >= DIG_FROM), st = DIGEST.stories[u.ticker];
+    pk.digest = its.length || st ? { story: st || null, items: its.slice(0, 25) } : null; }
   pk.live = live[u.ticker + '.JK'] || null;
   const m = b.c.length;
   pk.confirm = b.c[m - 1] > b.h[m - 2] || (b.c[m - 1] > b.o[m - 1] && b.c[m - 1] > b.c[m - 2]);
@@ -257,7 +265,7 @@ const readJson = f => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 
 const out = {
   meta: {
     dataCoverage,
-    generatedAt: new Date().toISOString(), asOf,
+    generatedAt: new Date().toISOString(), asOf, usdIdr, digestAsOf: DIGEST.asOf,
     session: { state: sessionOpen ? 'open' : 'closed', note: sessionOpen ? "IDX is open: scores use the last completed close; live quotes are today's partial bar." : 'IDX is closed: scores use the latest close.' }, engine: 'oversold-v2', commit: (process.env.GITHUB_SHA || '').slice(0, 7), actScore: api.ACT_SCORE,
     params: cfg, universe: uni.length, ranked: picks.length, skipped, newsCount: newsRows.length, newsStatus, newsCoverage: coverage, sample: false,
     sources: { prices: 'Yahoo Finance daily bars (.JK)', news: 'Google News RSS (Indonesian)', ownership: ownership ? `${ownership.source} (as of ${ownership.asOf})` : null, fundamentals: 'Yahoo Finance fundamentals-timeseries (unofficial, last ~5 quarters)', neobdm: nbd ? 'NeoBDM Market Summary, ' + nbd.asOf + (nbStale ? ' (stale: not used for tiers)' : '') + ' (pulled from a logged-in browser; forward test running)' : null },
