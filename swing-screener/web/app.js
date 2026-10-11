@@ -246,6 +246,9 @@
       ['Volume peaks (4× usual volume): candle type, bandar side, foreign side, filings', 'forward test', L.volume ? `${L.volume.spikes} spikes. Candle type: no signal (UP ${pc(L.volume.types.UP.x10)}, DOWN ${pc(L.volume.types.DOWN.x10)}, CHURN ${pc(L.volume.types.CHURN.x10)}). Bandar side: none. Foreign net buyer on the spike day ${pc(L.volume.foreign.buy)} vs seller ${pc(L.volume.foreign.sell)} (t ${L.volume.foreign.t.toFixed(1)}, 2024-26)${L.volumeStress ? `; IDX data 2022-24: ${pc(L.volumeStress.replication.gap)} gap, did not replicate; without the best 5%: ${pc(L.volumeStress.stress.s5)}` : ''}. Filings: within a day of ${L.volume.triggers ? pc(L.volume.triggers.spikesWithFiling, 0) : '–'} of spikes vs ${L.volume.triggers ? pc(L.volume.triggers.ordinaryDays, 0) : '–'} of ordinary days. Forward test needs 100 foreign-buy spikes${L.volumeForward ? ` (${L.volumeForward.buy} so far)` : ''}` : ''],
       ['Bandarmetrics LPM (60-session change)', 'failed', L.flow2 ? `${pc(L.flow2.H3.spread, 1)}, p ${L.flow2.H3.p.toFixed(2)}` : ''],
       ['NeoBDM flow tags, 2-year replay', 'failed', 'FLOW+ minus FLOW− −0.13% per 5 sessions'],
+      ['Payoff: 80 exits (stop, target, hold, early exit) on the bounce entries, picked on 2017-22', 'failed', DATA.payoff && DATA.payoff.study ? `Pick ${DATA.payoff.study.pick} fell apart out of sample; capped stops were the worst; the +8% target was the weak part` : ''],
+      ['Confirmation on 613 never-used stocks: wide stop + 20-day-average target', 'failed', DATA.payoff && DATA.payoff.confirm ? `${pc(DATA.payoff.confirm.A.mean, 2)} a trade (live exit ${pc(DATA.payoff.confirm.B.mean, 2)}): the bounce entry loses outside the stocks it was built on` : ''],
+      ['Survivorship audit: delisted (2020-26) and frozen stocks, hindsight universe', 'measured', DATA.payoff && DATA.payoff.surv ? `Delisting bias small since 2020; hindsight universe large: all liquid stocks ${pc(DATA.payoff.surv.universe.pitMean, 2)} a trade` : ''],
       ['Stock picking in bear months (IHSG under its 200-day average): 12-month winners, 3-month winners, calmest stocks, calm winners', 'failed', L.bear ? `None beat 10 random stocks (best: 3-month winners ${pc(L.bear.results.B2_MOM3.mean)} a month, p ${L.bear.results.B2_MOM3.p.toFixed(2)}). Surprise: in those ${L.bear.bearMonths} months the average liquid stock still made ${pc(L.bear.ewBear)} a month and the IHSG ${pc(L.bear.ihsgBear)}; the 200-day line did not predict a falling next month` : ''],
     ];
     return `<h2>Signal lab: every idea tested, and where it stands</h2>
@@ -572,6 +575,11 @@
       <div class="sec-head"><h2>Convinced ACT today</h2><button class="linkbtn" data-goto="CONV">Open in screener →</button></div>
       ${conv.length ? `<div class="conv">${conv.map(convCardHtml).join('')}</div>` : `<div class="card empty">No convinced ACT setup today. ${wait.length ? `${wait.length} oversold stock${wait.length === 1 ? ' is' : 's are'} waiting for a bounce candle: ${wait.slice(0, 6).map(p => `<a href="#" data-open="${esc(p.ticker)}">${esc(p.ticker)}</a>`).join(', ')}.` : ''}</div>`}
       ${wait.length && conv.length ? `<div class="sec-head"><h2>Next in line: oversold, waiting for a bounce candle</h2><button class="linkbtn" data-goto="OVS">All oversold →</button></div><div class="conv">${wait.slice(0, 4).map(convCardHtml).join('')}</div>` : ''}
+      ${(() => { const M = DATA.momentum, H = M && M.holdings || [], P = M && M.pit && M.pit.top100; if (!H.length) return '';
+        const by = Object.fromEntries(DATA.picks.map(p => [p.ticker, p]));
+        return `<div class="sec-head"><h2>Momentum 10: the one rule that passed a no-hindsight test</h2><button class="linkbtn" data-tabgo="mom">Momentum tab →</button></div>
+        <div class="note" style="border-left-color:var(--up)">The 10 strongest stocks of the past year, held to the month-end rebalance${P ? `: ${pc(P.MOM10.cagr, 1)} a year against ${pc(P.EW.cagr, 1)} for holding every liquid stock, with each month's universe rebuilt from what was known then` : ''}. Small edge, big swings (worst drawdown about −57%), so size it as one part of the account. The bounce ACT above failed the same kind of test (Track record, Reality check).</div>
+        <div class="movers">${[H.slice(0, 4), H.slice(4, 7), H.slice(7, 10)].map((g, i) => `<div class="mlist"><h4>${['#1-4', '#5-7', '#8-10'][i]}</h4>${g.map(h => `<div class="mrow" data-open="${esc(h.t)}">${avatar(h.t)}<div class="mid"><b>${esc(h.t)}</b> <span class="muted">#${h.rank}</span><div>${esc(h.name)}</div></div><div class="r"><b>${f0(by[h.t] ? pxOf(by[h.t]) : h.now)}</b><div>${pc(h.ret, 1)} <span class="muted">since entry</span></div></div></div>`).join('')}</div>`).join('')}</div>`; })()}
       <div class="sec-head"><h2>Market map</h2><div class="seg" role="group" aria-label="Change over">${[['1d', 'Today'], ['5d', '5 days'], ['20d', '20 days']].map(([v, l]) => `<button data-map="${v}" aria-pressed="${MAPBY === v}">${l}</button>`).join('')}</div></div>
       <div class="tmapbox" id="tmap"></div>
       <div class="tm-legend"><span>Box size = traded value (√Rp/day), grouped by sector · colour = change</span><i style="background:${heatCol(-0.05)}"></i><i style="background:${heatCol(-0.01)}"></i><i style="background:var(--card2)"></i><i style="background:${heatCol(0.01)}"></i><i style="background:${heatCol(0.05)}"></i><span>tap a box to open the stock</span></div>
@@ -584,6 +592,7 @@
     if (renderHome.ro) { renderHome.ro.disconnect(); const b = $('#tmap', el); if (b) renderHome.ro.observe(b); }
     el.querySelectorAll('[data-map]').forEach(b => b.onclick = () => { MAPBY = b.dataset.map; LS.set('mapBy', MAPBY); el.querySelectorAll('[data-map]').forEach(x => x.setAttribute('aria-pressed', x === b)); draw(); });
     el.querySelectorAll('[data-goto]').forEach(b => b.onclick = () => { FILTER = b.dataset.goto; LS.set('pfilter', FILTER); go('picks'); });
+    el.querySelectorAll('[data-tabgo]').forEach(b => b.onclick = () => go(b.dataset.tabgo));
     bindOpen(el);
   }
   const bindOpen = el => el && el.querySelectorAll('[data-open]').forEach(n => n.onclick = e => { e.preventDefault(); openStock(n.dataset.open); });
@@ -1067,8 +1076,12 @@
   function sizeCalc(price, stop, target) {
     const budget = acctM() * 1e6 / POS(), lots = Math.max(0, Math.floor(budget / (price * 100)));
     const cost = lots * 100 * price, fee = cost * 0.004;
-    return { budget, lots, cost, loss: lots * 100 * (price - stop) + fee, gain: lots * 100 * (target - price) - fee };
+    const per = price - stop, capLots = per > 0 ? Math.max(0, Math.floor(acctM() * 1e6 * RISKCAP / (per * 100))) : 0;
+    return { budget, lots, cost, loss: lots * 100 * (price - stop) + fee, gain: lots * 100 * (target - price) - fee, capLots: Math.min(lots, capLots), stopFar: per / price };
   }
+  const RISKCAP = 0.02; // a single stop-out should cost at most ~2% of the account
+  const riskNote = (c, stop) => (stop <= 0 ? `<div class="risknote down"><b>No usable stop.</b> The wide-stop formula (3.5 daily ranges below the close) lands at ${f0(stop)} on a stock this volatile: in practice there is no stop. Skip it, or set your own and size for it.</div>`
+    : c.loss / (acctM() * 1e6) > RISKCAP ? `<div class="risknote warn"><b>Stop is ${(c.stopFar * 100).toFixed(0)}% away:</b> one full slot would lose ${(c.loss / (acctM() * 1e6) * 100).toFixed(1)}% of the account if it is hit. To keep a stop-out to ${RISKCAP * 100}% of the account, buy <b>${c.capLots.toLocaleString()} lots</b> instead.</div>` : '');
   function sizerHtml(p, stop, px) {
     const c = sizeCalc(px, stop, p.target), rp = v => 'Rp ' + f0(v), N = POS();
     return `<div class="sizer" data-sizer="${esc(p.ticker)}" data-px="${px}" data-stop="${stop}" data-tg="${p.target}">
@@ -1078,6 +1091,7 @@
         <div><small>If the stop is hit</small><b class="down" data-o="loss">−${rp(c.loss)}</b><span class="muted" data-o="lossp">${(c.loss / (acctM() * 1e6) * 100).toFixed(1)}% of the account</span></div>
         <div><small>At the target</small><b class="up" data-o="gain">+${rp(c.gain)}</b><span class="muted" data-o="gainp">${(c.gain / (acctM() * 1e6) * 100).toFixed(1)}% of the account</span></div>
         <div><button class="chip" data-paper="${esc(p.ticker)}">${paperBook().some(t => t.tk === p.ticker && !t.closed) ? 'In paper journal ✓' : 'Paper-trade this'}</button></div></div>
+      <div data-o="risk">${riskNote(c, stop)}</div>
       <p class="muted">Why ${N} positions: in a walk-forward test (picked on 2022-24, confirmed on 2024-26) spreading over ${N} positions beat 5 on both return and drawdown. Whole lots of 100 shares, 0.4% fees. Your account size is saved only in this browser.</p></div>`;
   }
   // Paper-trade journal (this browser only): entries from the stock page, marked against the latest close each load.
@@ -1092,6 +1106,7 @@
         const set = (k, t) => { const n = box.querySelector('[data-o=' + k + ']'); if (n) n.textContent = t; };
         set('lots', c.lots.toLocaleString() + ' lots'); set('cost', rp(c.cost)); set('loss', '−' + rp(c.loss)); set('gain', '+' + rp(c.gain)); set('budget', '1 of ' + POS() + ' positions = ' + rp(c.budget));
         set('lossp', (c.loss / (v * 1e6) * 100).toFixed(1) + '% of the account'); set('gainp', (c.gain / (v * 1e6) * 100).toFixed(1) + '% of the account');
+        const rk = box.querySelector('[data-o=risk]'); if (rk) rk.innerHTML = riskNote(c, +box.dataset.stop);
       };
     });
     el.querySelectorAll('[data-paper]').forEach(b => b.onclick = e => {
@@ -1259,10 +1274,10 @@
     const BU = [], BE = [], add = (side, ev, s, txt, k = 1) => (side > 0 ? BU : BE).push({ ev, s, txt, w: EVL[ev][1] * k });
     const rank = DATA.picks.filter(x => x.score > p.score).length + 1;
     if (act) add(1, 'fact', `${depth} (RSI ${p.rsi == null ? '–' : p.rsi.toFixed(0)})`, `Stretched: RSI ${p.rsi == null ? '–' : p.rsi.toFixed(0)}, ${Math.abs(p.dist20Atr).toFixed(1)} daily ranges below its 20-day average, the #${rank} most oversold of ${DATA.picks.length} today.`);
-    if (act) add(-1, 'tested', 'no proven edge in the bounce rule', `The bounce rule itself has no proven edge: over 2017-26 it averaged about −0.3% a trade, inside the range of random noise.`, 0.7);
+    if (act) add(-1, 'tested', 'no proven edge in the bounce rule', `The bounce rule itself has no proven edge: over 2017-26 it averaged about −0.3% a trade, inside the range of random noise${DATA.payoff && DATA.payoff.confirm ? `, and on ${DATA.payoff.confirm.stocks} stocks it was never built on it lost ${pctA(DATA.payoff.confirm.B.mean)} a trade` : ''}.`, 0.7);
     if (angle === 'live') add(1, 'fact', 'the bounce candle is in', `The bounce candle is in: the last session closed ${p.confirm ? 'up, above the previous high or the previous close' : 'up'}. Buying only after it is what separated the bounce from catching a falling knife in the backtest.`);
     if (angle === 'wait') add(-1, 'tested', 'no bounce candle yet', `No bounce candle yet. In the backtest, buying oversold stocks before the first up day did not make money.`);
-    if (act && stopD < -0.1) add(-1, 'fact', `a ${pctA(stopD)} stop for a ${pctA(tgtD)} target`, `The stop is ${pctA(stopD)} away for a ${pctA(tgtD)} target: one stop-out wipes out about ${(Math.abs(stopD) / tgtD).toFixed(1)} winning trades. This payoff gap is why the replayed record sits near zero despite a 64% win rate.`);
+    if (act && stopD < -0.1) add(-1, 'fact', `a ${pctA(stopD)} stop for a ${pctA(tgtD)} target`, `The stop is ${pctA(stopD)} away for a ${pctA(tgtD)} target: one stop-out wipes out about ${(Math.abs(stopD) / tgtD).toFixed(1)} winning trades. This payoff gap is why the replayed record sits near zero despite a 64% win rate. Tighter stops were tested and did worse (oversold stocks shake them out); the fixed +8% target is the weak part.`);
     if (act && p.atrPct) { const k = tgtD / p.atrPct; if (k <= 2.5) add(1, 'fact', 'the target is within normal swings', `The target is only ${k.toFixed(1)} normal days' moves away (it swings about ${pctA(p.atrPct)} a day).`); else if (k > 4) add(-1, 'fact', 'a slow mover for this target', `The target needs ${k.toFixed(1)}× its normal daily move (${pctA(p.atrPct)}); slow stocks often time out after ${H} sessions instead.`); }
     if (act && p.resistance && p.resistance > px && p.resistance < p.target) add(-1, 'fact', `resistance at ${f0(p.resistance)} before the target`, `Resistance at ${f0(p.resistance)} (${sgnP(p.resistance / px - 1)}) sits before the target${p.resistanceTouches ? `, tested ${p.resistanceTouches} times` : ''}.`);
     if (act && p.targetMR && p.targetMR > p.target) add(1, 'fact', 'room back to its 20-day average', `Its 20-day average (${f0(p.targetMR)}, ${sgnP(p.targetMR / px - 1)}) is above the target, so an ordinary reversion would carry past it.`);
@@ -1414,7 +1429,7 @@
         </div>
         ${tradeMapSvg(p, stop, px, stretch)}
         ${act && p.tier !== 'SUSP' ? sizerHtml(p, stop, px) : ''}
-        <p class="t-odds"><b>Honest odds:</b> over 10 years (2017-26) trades like this averaged about −0.3% after costs, and a permutation test put that inside random noise. Replayed over the past year: ${DATA.callStats && DATA.callStats.all ? `${Math.round(DATA.callStats.all.winRate * 100)}% winners, but an average loss ${(Math.abs(DATA.callStats.all.avgLoss) / DATA.callStats.all.avgWin).toFixed(1)}× the average win` : 'no edge either'}. Paper-trade it; a stop-out here costs about ${pctA(M.stopD)}.</p>
+        <p class="t-odds"><b>Honest odds:</b> over 10 years (2017-26) trades like this averaged about −0.3% after costs, and a permutation test put that inside random noise. Replayed over the past year: ${DATA.callStats && DATA.callStats.all ? `${Math.round(DATA.callStats.all.winRate * 100)}% winners, but an average loss ${(Math.abs(DATA.callStats.all.avgLoss) / DATA.callStats.all.avgWin).toFixed(1)}× the average win` : 'no edge either'}. ${DATA.payoff && DATA.payoff.confirm ? ` On ${DATA.payoff.confirm.stocks} stocks it was never built on, the same trade lost ${pctA(DATA.payoff.confirm.B.mean)} a trade (Track record, Reality check).` : ''} Paper-trade it; a stop-out here costs about ${pctA(M.stopD)}.</p>
       </div>` : '';
     const row = (ok, label, detail) => `<li class="${ok === true ? 'ok' : ok === false ? 'no' : ok === 'warn' ? 'wn' : 'na'}"><span>${ok === true ? '✓' : ok === false ? '✗' : ok === 'warn' ? '!' : '○'}</span><div><b>${label}</b> <span class="muted">${detail}</span></div></li>`;
     const tier = p.tier || (act ? 'ACT' : 'WATCH');
@@ -1645,6 +1660,43 @@
       <p class="muted">Why the earlier "real but relative edge" was wrong: it came from 2022-26, the period the rule was designed on, and from a test (beat other stocks on the same day) that also "passes" on shuffled prices, because it rewards picking volatile stocks and counts overlapping trades on one stock as separate evidence. Kelly sizing on 10 years of trades comes out at zero or below. The market filter still keeps the account mostly in cash during downtrends, and the live ledger below keeps running as a forward test.</p>`;
   }
 
+  // Reality check (2026-10-11): can a better exit save the bounce trade, does it hold on stocks never used, and how much
+  // do survivorship and hindsight flatter the numbers? tools/experiment-payoff.mjs, experiment-payoff-confirm.mjs, survivorship.mjs.
+  function realityHtml(X) {
+    if (!X || !X.study) return '';
+    const S = X.study, C = X.confirm, V = X.surv, R = id => S.rows.find(r => r.id === id) || {};
+    const SN = { W: 'Wide (live)', A2: '2 ATR', A3: '3 ATR', C10: 'Wide, max 10%', C15: 'Wide, max 15%' }, TN = { P8: '+8% (live)', R15: '+1.5 ATR', R25: '+2.5 ATR', MA: '20-day avg' };
+    const col = v => (v == null ? 'transparent' : `color-mix(in srgb, ${v >= 0 ? 'var(--up)' : 'var(--down)'} ${Math.min(70, Math.abs(v) * 4500).toFixed(0)}%, transparent)`);
+    const cell = r => `<td class="hm" style="background:${col(r.hold)}" title="${esc(r.id)}: in-sample ${pc(r.is, 2).replace(/<[^>]+>/g, '')}, out-of-sample ${pc(r.oos, 2).replace(/<[^>]+>/g, '')}, holdout ${pc(r.hold, 2).replace(/<[^>]+>/g, '')}"><b>${pc(r.hold, 2)}</b><div class="muted">${pc(r.is, 1)} · ${pc(r.oos, 1)}</div></td>`;
+    const grid = `<div class="card scroll"><table class="hmap"><thead><tr><th>Stop ↓ · target →</th>${Object.values(TN).map(t => `<th>${t}</th>`).join('')}</tr></thead><tbody>
+      ${Object.keys(SN).map(sk => `<tr><td><b>${SN[sk]}</b></td>${Object.keys(TN).map(tk => cell(R(`${sk}-${tk}-15`))).join('')}</tr>`).join('')}</tbody></table></div>`;
+    const ck = (S.checks || []).map(c => `<li class="${c.ok ? 'up' : 'mute'}">${c.ok ? '✓' : '✗'} ${esc(c.id)} ${esc(c.rule)}</li>`).join('');
+    const sr = (l, x, a) => `<tr><td>${l}</td><td class="n">${x.n}</td><td class="n"><b>${pc(x.mean, 2)}</b></td><td class="n">${Math.round(x.win * 100)}%</td><td class="n">${x.payoff.toFixed(2)}</td><td class="n">${x.pf.toFixed(2)}</td><td class="n">${x.kelly.toFixed(2)}</td><td class="n">${a ? pc(a.cagr, 1) + ' / yr' : '–'}</td><td class="n">${a ? pc(a.mdd, 0) : '–'}</td></tr>`;
+    const U = V && V.universe, F = V && V.freezes, yrs = F ? Object.entries(F.byYear).sort() : [], mx = Math.max(1, ...yrs.map(y => y[1]));
+    return `<h2>Reality check: will the bounce trade make money?</h2>
+      <div class="note warnnote"><b>Not on the evidence, whatever the exit.</b> 80 exits were tested on 10 years of prices with the rules fixed in advance: the pick from 2017-22 failed out of sample (${esc(S.pick)}: ${pc(R(S.pick).oos, 2)} vs ${pc(R(S.live).oos, 2)} for the live exit). The one family that looked good everywhere, keeping the wide stop and aiming for the 20-day average, was then tried on ${C ? C.stocks : 613} stocks never used for the rule: there the bounce trade <b>lost ${C ? pc(C.B.mean, 2) : '–'} a trade with the live exit and ${C ? pc(C.A.mean, 2) : '–'} with the 20-day target</b>${C ? `, an account falling ${pc(C.account.B.cagr, 1)} a year with a ${pc(C.account.B.mdd, 0)} drawdown` : ''}. Its good numbers on the tested 100 come largely from picking today's most traded stocks with hindsight. Keep ACT on paper. The one rule that passed a no-hindsight test is Momentum 10 (Momentum tab).</div>
+      <h3>1. Payoff: 80 exits on the same entries (holding 15 sessions shown)</h3>
+      ${grid}
+      <p class="muted">Each cell: <b>holdout</b> (the 200 added stocks) mean net return per trade, then in-sample (2017-22) · out-of-sample (2022-26) on the tested 100; colour = holdout. One trade per stock at a time, 0.4% fees, gaps fill at the open. What it shows: <b>capping the stop makes it worse</b> (the 10% cap is the worst row: oversold stocks shake out tight stops), and the fixed +8% target is the weak part (letting winners run to the 20-day average or +2.5 ATR helps). Pass bar, written before the run:</p>
+      <ul class="checks">${ck}</ul>
+      ${C ? `<h3>2. Confirmation on ${C.stocks} stocks never used for this rule</h3>
+      <div class="card scroll"><table><thead><tr><th>Exit (wide stop kept)</th><th class="n">Trades</th><th class="n">Avg / trade</th><th class="n">Win</th><th class="n">Payoff</th><th class="n">PF</th><th class="n">Kelly</th><th class="n">Account</th><th class="n">Worst DD</th></tr></thead><tbody>
+        ${sr('20-day average target', C.A, C.account.A)}${sr('+8% target (live)', C.B, C.account.B)}${sr('+2.5 ATR target', C.R25)}</tbody></table></div>
+      <ul class="checks">${C.checks.map(c => `<li class="${c.ok ? 'up' : 'mute'}">${c.ok ? '✓' : '✗'} ${esc(c.id)} ${esc(c.rule)}</li>`).join('')}</ul>
+      <p class="muted">Kelly below zero means the best bet size is nothing. Same entry rule as the site (oversold score ≥ 65, bounce candle, Rp 5 B a day at the time), 2017-26.</p>` : ''}
+      ${V ? `<h3>3. Survivorship and hindsight</h3>
+      <div class="two">
+        <div class="card pad"><b>Same trade, different stock lists</b>${U.sets.map(x => `<div class="srow"><span>${esc(x.set)}</span><b class="${x.mean >= 0 ? 'up' : 'down'}">${pc(x.mean, 2)}</b><span class="muted">${x.n} trades</span></div>`).join('')}
+          <div class="srow" style="border-top:1px solid var(--line);padding-top:6px"><span><b>All ${U.sets.length ? '913' : ''} stocks, liquid at the time</b></span><b class="${U.pitMean >= 0 ? 'up' : 'down'}">${pc(U.pitMean, 2)}</b><span class="muted">${U.trades} trades</span></div>
+          <p class="muted">Picking today's most traded stocks favours companies that did well: the rule's home turf. Counting every stock that was liquid on the day gives the honest number.</p></div>
+        <div class="card pad"><b>Delisted and frozen stocks</b>
+          <p class="muted" style="margin-top:6px"><b>Delisted:</b> since 2020, ${V.delisting.codesGone} IDX codes that traded are gone; all but one traded under Rp 5 B a day, and that one (${esc(V.delisting.liquidGone[0])}). So the missing dead stocks hardly matter for a Rp 5 B rule since 2020; before 2020 there is no data.</p>
+          <p class="muted"><b>Frozen while liquid</b> (10+ sessions without trading: suspension or the call-auction board): ${F.count} times in ${F.stocks} stocks; median first move after reopening ${pc(F.medianGap, 0)}. A stop cannot be hit while a stock is frozen.</p>
+          <div class="bars" style="height:40px" title="Freezes per year">${yrs.map(([y, n]) => `<i style="height:${Math.max(3, n / mx * 40)}px;background:var(--warn)" title="${y}: ${n}"></i>`).join('')}</div>
+          <div class="muted" style="display:flex;justify-content:space-between"><span>${yrs.length ? yrs[0][0] : ''}</span><span>freezes per year</span><span>${yrs.length ? yrs[yrs.length - 1][0] : ''}</span></div></div>
+      </div>` : ''}`;
+  }
+
   // Every recent call, one row each, with how many sessions it took to hit TP or SL (tools/signals.mjs callStats.recent).
   let CALLF = 'all';
   function recentCallsHtml(cs) {
@@ -1695,7 +1747,7 @@
     const el = $('#tab-score'), bt = DATA.backtest, na = DATA.newsAccuracy;
     if (!bt) { el.innerHTML = '<div class="empty">No backtest summary in this data source.</div>'; return; }
     loadTrack();
-    el.innerHTML = `<div class="ph-head"><div><h1>Track record</h1><p>Every call the rules made, what it returned, and how long it took to hit TP or SL.</p></div></div>${callStatsHtml(DATA.callStats)}${tenYearHtml(DATA.tenYear)}
+    el.innerHTML = `<div class="ph-head"><div><h1>Track record</h1><p>Every call the rules made, what it returned, and how long it took to hit TP or SL.</p></div></div>${realityHtml(DATA.payoff)}${callStatsHtml(DATA.callStats)}${tenYearHtml(DATA.tenYear)}
       <h2>Does the score predict anything? Walk-forward backtest</h2>
       <p class="muted">${esc(bt.params.source)}, ${esc(bt.params.from)} to ${esc(bt.params.to)}. Each day the score uses only data up to that day; outcome = next 15 trading days with the plan's stop and +${bt.params.targetPct}% target.</p>
       <div class="two"><div class="card"><div class="pad"><b>Out-of-sample (2024-10 →)</b></div>${bucketTable(bt.outOfSample)}</div>
