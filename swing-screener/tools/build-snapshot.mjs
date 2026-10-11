@@ -294,7 +294,14 @@ try {
   const liveFrom = fs.readdirSync(HIST).filter(f => /^\d{4}-\d\d-\d\d\.json$/.test(f)).sort()[0];
   console.log(`signals: ${Object.values(signals).flat().filter(e => e.k === 'call').length} calls replayed in ${Date.now() - t0} ms`);
   // Scorecard of the replayed calls, added to latest.json (written above) for the Track record tab.
-  try { const cs = callStats(signals), lp = path.join(OUT, 'latest.json'), L = JSON.parse(fs.readFileSync(lp, 'utf8')); L.callStats = cs; fs.writeFileSync(lp, JSON.stringify(L)); console.log(`call stats: ${cs.all.closed} closed, win ${(cs.all.winRate * 100).toFixed(0)}%, expectancy ${(cs.all.expectancy * 100).toFixed(2)}%, PF ${cs.all.profitFactor && cs.all.profitFactor.toFixed(2)}, account ${(cs.account.total * 100).toFixed(1)}% maxDD ${(cs.account.maxDD * 100).toFixed(1)}%`); } catch (e) { console.error('call stats failed', e.message); }
+  try { const cs = callStats(signals), lp = path.join(OUT, 'latest.json'), L = JSON.parse(fs.readFileSync(lp, 'utf8')); L.callStats = { ...cs, liveFrom: liveFrom ? liveFrom.slice(0, 10) : null };
+    // Per stock: replayed ACT calls, closed, win rate, average net (for the screener's sort and filter). A win rate on
+    // a handful of calls is noise; the app shows the count next to it and only ranks stocks with 3+ closed calls.
+    for (const p of L.picks) {
+      const cl = (signals[p.ticker] || []).filter(e => e.k === 'call'), done = cl.filter(e => e.x && e.ret != null);
+      p.calls = { n: cl.length, closed: done.length, win: done.length ? +(done.filter(e => e.ret > 0).length / done.length).toFixed(3) : null, avg: done.length ? +(done.reduce((s, e) => s + e.ret, 0) / done.length).toFixed(4) : null };
+    }
+    fs.writeFileSync(lp, JSON.stringify(L)); console.log(`call stats: ${cs.all.closed} closed, win ${(cs.all.winRate * 100).toFixed(0)}%, expectancy ${(cs.all.expectancy * 100).toFixed(2)}%, PF ${cs.all.profitFactor && cs.all.profitFactor.toFixed(2)}, account ${(cs.account.total * 100).toFixed(1)}% maxDD ${(cs.account.maxDD * 100).toFixed(1)}%`); } catch (e) { console.error('call stats failed', e.message); }
   await writeOhlc(rawPx, uni.map(u => u.ticker), { useCache: process.env.USE_CACHE === '1', spikes: flowRead ? Object.fromEntries(Object.entries(flowRead.by).map(([t, v]) => [t, v.sp || []])) : {}, signals, liveFrom: liveFrom ? liveFrom.slice(0, 10) : null });
 } catch (e) { console.error('ohlc failed', e.message); }
 

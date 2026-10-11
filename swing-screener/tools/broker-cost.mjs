@@ -64,6 +64,42 @@ export function costRead(rec, t) {
   return out;
 }
 
+// Broker positions now: how much each broker holds that it built inside the data window, at what average cost, and
+// whether that position is in profit. Per broker, the running net (lots bought - lots sold) is walked from the session
+// where it was LOWEST (its inventory low) to today: the lots built since then are still held. Their cost is a running
+// average: a day with net buying adds those lots at that day's average buy price; a day with net selling removes lots
+// at the current average (the cost of what is left does not change). Days are netted, so intraday round trips are not
+// a position. Only brokers among the stock's most active ~20 are seen, and only since the first day of data: a
+// position built before that is invisible ('fromStart' marks a low on the first day: the real position may be bigger).
+// A broker code is a trading desk for many clients, not one owner. Context only, not a tested signal.
+export function posRead(rec, t = rec.d.length - 1, min = 0.002) {
+  if (!rec || !rec.d || t < 20) return null;
+  const close = rec.c[t], lo60 = Math.max(0, t - 59);
+  const adv = rec.v.slice(lo60, t + 1).reduce((s, x) => s + (x || 0), 0) / (t - lo60 + 1) / 100; // avg lots a day
+  const rows = [];
+  for (const [code, [bl, bv, sl]] of Object.entries(rec.b)) {
+    let cum = 0, low = 0, kLow = -1, high = 0, kHigh = -1;
+    const net = [];
+    for (let k = 0; k <= t; k++) { cum += (bl[k] || 0) - (sl[k] || 0); net.push(cum); if (cum < low) { low = cum; kLow = k; } if (cum > high) { high = cum; kHigh = k; } }
+    const held = cum - low, sold = high - cum; // built since the low; unloaded since the high
+    let L = 0, A = 0;
+    for (let k = kLow + 1; k <= t; k++) {
+      const n = (bl[k] || 0) - (sl[k] || 0);
+      if (n > 0 && bl[k]) { const pb = (bv[k] * 1e6) / (bl[k] * 100); A = (L * A + n * pb) / (L + n); L += n; } else if (n < 0) L = Math.max(0, L + n);
+    }
+    rows.push({ code, name: NAMES[code] || null, type: brokerType(code), lots: held, avg: held > 0 && A ? A : null, since: rec.d[kLow + 1] || rec.d[0], fromStart: kLow < 0,
+      sold, soldSince: rec.d[Math.max(0, kHigh)], last5: net[t] - net[Math.max(0, t - 5)], last20: net[t] - net[Math.max(0, t - 20)] });
+  }
+  const tot = rows.reduce((s, r) => s + r.lots, 0) || 1;
+  const fmt = r => ({ code: r.code, name: r.name, type: r.type, lots: Math.round(r.lots), rpB: +((r.lots * 100 * close) / 1e9).toFixed(1), avg: r.avg && Math.round(r.avg),
+    pl: r.avg ? +(close / r.avg - 1).toFixed(4) : null, plB: r.avg ? +((r.lots * 100 * (close - r.avg)) / 1e9).toFixed(1) : null, since: r.since, fromStart: r.fromStart,
+    days: adv ? +(r.lots / adv).toFixed(1) : null, last5: Math.round(r.last5), last20: Math.round(r.last20) });
+  const holders = rows.filter(r => r.lots >= min * tot && r.avg).sort((a, b) => b.lots * 1 - a.lots * 1).slice(0, 8).map(fmt);
+  const sellers = rows.filter(r => r.sold > 0).sort((a, b) => b.sold - a.sold).slice(0, 3)
+    .map(r => ({ code: r.code, name: r.name, type: r.type, lots: Math.round(r.sold), rpB: +((r.sold * 100 * close) / 1e9).toFixed(1), since: r.soldSince }));
+  return { day: rec.d[t], from: rec.d[0], close, advLots: Math.round(adv), holders, sellers };
+}
+
 // The rule the study tests (and the site marks): meaningful accumulation, not being unloaded, price near their cost.
 export const supported = r => !!(r && !r.none && r.netShare >= 0.05 && r.status !== 'unloading' && r.gap != null && Math.abs(r.gap) <= 0.05);
 
@@ -79,6 +115,8 @@ if (process.argv[1] && path.basename(process.argv[1]) === 'broker-cost.mjs') {
       netShare: +r.netShare.toFixed(3), conc: r.conc, status: r.status, supported: supported(r), driver: r.driver, classShare: r.classShare,
       top: r.top.map(x => ({ code: x.code, name: x.name, type: x.type, share: +x.share.toFixed(2), avg: x.avg && Math.round(x.avg) })),
     };
+    const ps = posRead(rec);
+    if (ps) pub[tk].pos = ps;
   }
   fs.writeFileSync(path.join(ROOT, 'data', 'broker-cost-tags.json'), JSON.stringify({ asOf, by: pub }));
   fs.writeFileSync(path.join(ROOT, 'data', 'broker-cost-local.json'), JSON.stringify({ asOf, by: loc }, null, 1));

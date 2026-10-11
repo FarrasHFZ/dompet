@@ -129,9 +129,11 @@
   const toggleWatch = t => { WL.has(t) ? WL.delete(t) : WL.add(t); LS.set('watch', JSON.stringify([...WL])); };
   const starHtml = t => `<button class="star${WL.has(t) ? ' on' : ''}" data-star="${esc(t)}" aria-label="${WL.has(t) ? 'Remove from' : 'Add to'} watchlist" title="Watchlist">${WL.has(t) ? '★' : '☆'}</button>`;
   const bindStars = el => el.querySelectorAll('[data-star]').forEach(b => b.onclick = e => { e.stopPropagation(); toggleWatch(b.dataset.star); const on = WL.has(b.dataset.star); document.querySelectorAll(`[data-star="${b.dataset.star}"]`).forEach(x => { x.classList.toggle('on', on); x.textContent = on ? '★' : '☆'; }); });
-  // Ticker avatar: initials on a colour from the ticker (stable), like a broker app's logo slot.
+  // Ticker avatar: the company logo Stockbit shows (assets.stockbit.com, checked for all 300 on 2026-10-11), over
+  // initials on a stable colour that stay visible if the logo fails to load.
   const hue = s => { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
-  const avatar = (t, cls = '') => `<span class="av ${cls}" style="--h:${hue(t)}" aria-hidden="true">${esc(t.slice(0, 4))}</span>`;
+  const LOGO = t => `https://assets.stockbit.com/logos/companies/${encodeURIComponent(t)}.png`;
+  const avatar = (t, cls = '') => `<span class="av ${cls}" style="--h:${hue(t)}" aria-hidden="true">${esc(t.slice(0, 4))}<img src="${LOGO(t)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()"></span>`;
   const pxOf = p => (p.live ? p.live.price : p.close);
   const chOf = p => (p.live ? p.live.chg : p.chg1d);
   const chgPill = x => (x == null ? '<span class="cp flat">–</span>' : `<span class="cp ${x > 0 ? 'up' : x < 0 ? 'down' : 'flat'}">${x > 0 ? '+' : ''}${(x * 100).toFixed(2)}%</span>`);
@@ -140,7 +142,7 @@
   const MQ = window.matchMedia('(max-width: 760px)'), WIDE = window.matchMedia('(min-width: 1001px)');
   MQ.addEventListener('change', () => { if (DATA) { renderPicks(); if (OPEN) renderStock(); } });
   WIDE.addEventListener('change', () => { syncDock(); if (DATA && TAB === 'picks') renderPicks(); });
-  let DATA = null, PQ = '', FILTER = LS.get('pfilter') || 'CONV', SORT = LS.get('psort') || 'score', OPEN = null, SUB = 'thesis', NEWSCAT = 'ALL', NEWSQ = '', HIDEWRAP = true, PLIMIT = 80;
+  let DATA = null, PQ = '', FILTER = LS.get('pfilter') || 'CONV', SORT = LS.get('psort') || 'score', PGRP = LS.get('pgrp') || '', PSEC = LS.get('psec') || '', OPEN = null, SUB = 'thesis', NEWSCAT = 'ALL', NEWSQ = '', HIDEWRAP = true, PLIMIT = 80;
 
   async function load() {
     const url = LS.get('sheetUrl'), token = LS.get('sheetToken');
@@ -606,11 +608,21 @@
     ['MOM', 'Momentum 10', p => !!momOf(p.ticker)],
     ['ALL', 'All', () => true],
   ];
-  const SORTS = { score: ['Score', (a, b) => b.score - a.score], chg: ['Change today', (a, b) => (chOf(b) ?? -9) - (chOf(a) ?? -9)], chg20: ['20-day change', (a, b) => (a.chg20d ?? 9) - (b.chg20d ?? 9)], value: ['Traded value', (a, b) => b.valueB - a.valueB], tk: ['Ticker A–Z', (a, b) => a.ticker.localeCompare(b.ticker)] };
+  // Per-stock replayed ACT record (build-snapshot p.calls). Win rate and average only rank stocks with 3+ closed calls:
+  // below that one lucky trade would top the list.
+  // Win-rate ranking uses the lower end of the 90% Wilson interval, so 9 wins in 10 ranks above 3 in 3.
+  const CMIN = 3, cOk = p => p.calls && p.calls.closed >= CMIN;
+  const wLo = c => { const n = c.closed, ph = c.win, z = 1.645; return (ph + z * z / (2 * n) - z * Math.sqrt((ph * (1 - ph) + z * z / (4 * n)) / n)) / (1 + z * z / n); };
+  const SORTS = { score: ['Score', (a, b) => b.score - a.score],
+    calls: ['Most ACT calls', (a, b) => ((b.calls && b.calls.n) || 0) - ((a.calls && a.calls.n) || 0) || b.valueB - a.valueB],
+    win: [`Best ACT win rate (sample-adjusted)`, (a, b) => (cOk(b) ? wLo(b.calls) : -1) - (cOk(a) ? wLo(a.calls) : -1) || ((b.calls && b.calls.closed) || 0) - ((a.calls && a.calls.closed) || 0)],
+    avg: [`Best avg per ACT call (${CMIN}+ closed)`, (a, b) => (cOk(b) ? b.calls.avg : -9) - (cOk(a) ? a.calls.avg : -9)], chg: ['Change today', (a, b) => (chOf(b) ?? -9) - (chOf(a) ?? -9)], chg20: ['20-day change', (a, b) => (a.chg20d ?? 9) - (b.chg20d ?? 9)], value: ['Traded value', (a, b) => b.valueB - a.valueB], tk: ['Ticker A–Z', (a, b) => a.ticker.localeCompare(b.ticker)] };
   function pickList() {
-    const F = (FILTERS.find(f => f[0] === FILTER) || FILTERS[0])[2], q = PQ.trim().toLowerCase();
-    return DATA.picks.filter(F).filter(p => !q || p.ticker.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.sector.toLowerCase().includes(q) || (p.group && p.group.name.toLowerCase().includes(q)))
-      .sort((SORTS[SORT] || SORTS.score)[1]);
+    const F = (FILTERS.find(f => f[0] === FILTER) || FILTERS[0])[2], words = PQ.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    // Every word must match the ticker, name, sector or group ("barito energy" finds the Barito group's energy names).
+    const hay = p => [p.ticker, p.name, p.sector, p.group ? p.group.name : ''].join(' ').toLowerCase();
+    return DATA.picks.filter(F).filter(p => !PGRP || (p.group && p.group.name === PGRP)).filter(p => !PSEC || p.sector === PSEC)
+      .filter(p => !words.length || words.every(w => hay(p).includes(w))).sort((SORTS[SORT] || SORTS.score)[1]);
   }
   function sigDots(p) {
     const d = [];
@@ -621,6 +633,8 @@
     if (p.spec) d.push(['var(--down)', 'Speculative breakout']);
     return d.length ? `<span class="dots" title="${esc(d.map(x => x[1]).join(' · '))}">${d.map(x => `<i style="background:${x[0]}"></i>`).join('')}</span>` : '';
   }
+  const callTag = p => { const c = p.calls; if (!c) return ''; if (!c.n) return '<span class="tag">no ACT call in ~2 years</span> ';
+    return `<span class="tag" title="Replayed ACT calls in the chart window (about 2 years), with today's rules">${c.n} call${c.n === 1 ? '' : 's'}${c.closed ? ` · ${Math.round(c.win * 100)}% won · avg ${c.avg > 0 ? '+' : ''}${(c.avg * 100).toFixed(1)}%` : ''}${c.closed < CMIN ? ' · too few to rank' : ''}</span> `; };
   function rowHtml(p) {
     const a = sparkPts(p);
     return `<div class="prow ${OPEN === p.ticker ? 'open' : ''}" data-t="${esc(p.ticker)}" role="button" tabindex="0">
@@ -629,7 +643,7 @@
         <div class="t2">${esc(p.name)}</div></div></div>
       <div class="sp">${sparkSvg(a, 64, 26)}</div>
       <div class="px"><b>${f0(pxOf(p))}</b>${chgPill(chOf(p))}</div>
-      <div class="t3">${thesisShort(p)}</div>
+      <div class="t3">${['calls', 'win', 'avg'].includes(SORT) ? callTag(p) : ''}${thesisShort(p)}</div>
     </div>`;
   }
   function renderPicks() {
@@ -638,9 +652,12 @@
     el.innerHTML = `<div class="picks-split"><div class="plist">
       <div class="pl-tools">
         <div class="chips" role="group" aria-label="Filter">${FILTERS.map(f => `<button class="chip" data-f="${f[0]}" aria-pressed="${FILTER === f[0]}">${esc(f[1])} <span class="muted">${cnt(f)}</span></button>`).join('')}</div>
-        <input type="search" id="pq" placeholder="Filter ticker, name, sector" value="${esc(PQ)}">
+        <input type="search" id="pq" placeholder="Ticker, name, sector or group" value="${esc(PQ)}">
+        <select id="pgrp" aria-label="Conglomerate group"><option value="">All groups</option>${[...new Set(P.filter(p => p.group).map(p => p.group.name))].sort().map(g => `<option ${PGRP === g ? 'selected' : ''}>${esc(g)}</option>`).join('')}</select>
+        <select id="psec" aria-label="Sector"><option value="">All sectors</option>${[...new Set(P.map(p => p.sector))].sort().map(g => `<option ${PSEC === g ? 'selected' : ''}>${esc(g)}</option>`).join('')}</select>
         <select id="psort" aria-label="Sort">${Object.entries(SORTS).map(([k, v]) => `<option value="${k}" ${SORT === k ? 'selected' : ''}>${v[0]}</option>`).join('')}</select>
       </div>
+      ${PGRP || PSEC || PQ ? `<div class="pl-sum">${list.length} stock${list.length === 1 ? '' : 's'} in <b>${esc((FILTERS.find(f => f[0] === FILTER) || FILTERS[0])[1])}</b>${PGRP ? ` · group ${esc(PGRP)}` : ''}${PSEC ? ` · ${esc(PSEC)}` : ''}${PQ ? ` · "${esc(PQ)}"` : ''} <button class="chip" id="pclear">Clear</button>${FILTER !== 'ALL' && !list.length ? ' Try the <b>All</b> chip.' : ''}</div>` : ''}
       ${FILTER === 'CONV' ? `<div class="pl-sum">Oversold + bounce candle confirmed. Buy next open, +${DATA.meta.params.targetPct}% target, wide stop, ${DATA.meta.params.horizon} sessions. Paper only.</div>` : FILTER === 'SIG' ? `<div class="pl-sum">Watch-only signals, none passed its test: <span><i class="dot" style="background:var(--accent)"></i> foreign buying</span> · base / breakout · volume spike · speculative</div>` : ''}
       <div class="pl-head"><span>Stock</span><span>Trend</span><span>Price</span></div>
       <div class="pl-rows">${shown.length ? shown.map(rowHtml).join('') : `<div class="empty">${FILTER === 'STAR' ? 'Your watchlist is empty. Tap ☆ on any stock page to add it.' : FILTER === 'CONV' ? 'No convinced ACT setup today. "none today" is a valid answer: try Oversold.' : 'Nothing matches.'}</div>`}</div>
@@ -650,6 +667,9 @@
     el.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { FILTER = b.dataset.f; LS.set('pfilter', FILTER); PLIMIT = 80; renderPicks(); });
     const pm = $('#plmore', el); if (pm) pm.onclick = () => { PLIMIT += 100; renderPicks(); };
     $('#psort', el).onchange = e => { SORT = e.target.value; LS.set('psort', SORT); renderPicks(); };
+    $('#pgrp', el).onchange = e => { PGRP = e.target.value; LS.set('pgrp', PGRP); PLIMIT = 80; renderPicks(); };
+    $('#psec', el).onchange = e => { PSEC = e.target.value; LS.set('psec', PSEC); PLIMIT = 80; renderPicks(); };
+    const pc0 = $('#pclear', el); if (pc0) pc0.onclick = () => { PGRP = PSEC = PQ = ''; LS.set('pgrp', ''); LS.set('psec', ''); renderPicks(); };
     const pq = $('#pq', el); pq.oninput = e => { PQ = e.target.value; const pos = e.target.selectionStart; renderPicks(); const i = $('#pq'); i.focus(); i.setSelectionRange(pos, pos); };
     // Wide screen: the stock page docks beside the list, so there is always one open.
     if (TAB === 'picks' && WIDE.matches && (!OPEN || !DATA.picks.some(p => p.ticker === OPEN)) && list.length) openStock(list[0].ticker, { fromList: true, quiet: true });
@@ -693,7 +713,7 @@
   });
   $('#scrim').onclick = () => closeStock();
 
-  const SUBS = [['thesis', 'Thesis'], ['calls', 'Calls'], ['flow', 'Bandarmology'], ['fund', 'Key stats'], ['news', 'News']];
+  const SUBS = [['thesis', 'Thesis'], ['calls', 'Calls'], ['flow', 'Bandarmology'], ['cat', 'Catalyst'], ['fund', 'Key stats'], ['news', 'News']];
   function renderStock() {
     const p = DATA.picks.find(x => x.ticker === OPEN), st = $('#stock');
     if (!p) { hideStock(); return; }
@@ -738,8 +758,10 @@
     const b = $('#spBody'); if (!b) return;
     const j = OHLCR.get(p.ticker) || null;
     b.dataset.j = j ? '1' : '0';
-    b.innerHTML = SUB === 'thesis' ? thesisHtml(p, j) : SUB === 'calls' ? callsHtml(p, j) : SUB === 'flow' ? flowSubHtml(p, j) : SUB === 'fund' ? fundSubHtml(p) : newsSubHtml(p);
+    b.innerHTML = SUB === 'thesis' ? thesisHtml(p, j) : SUB === 'calls' ? callsHtml(p, j) : SUB === 'flow' ? flowSubHtml(p, j) : SUB === 'cat' ? catalystHtml(p) : SUB === 'fund' ? fundSubHtml(p) : newsSubHtml(p);
     bindSizer(b); bindOpen(b);
+    const cp = b.querySelector('[data-copy-prompt]');
+    if (cp) cp.onclick = async () => { const t = catalystPrompt(p); try { await navigator.clipboard.writeText(t); cp.textContent = 'Copied: paste it into Claude'; } catch { const ta = b.querySelector('#catPrompt'); ta.hidden = false; ta.select(); cp.textContent = 'Select all and copy the text below'; } };
     b.querySelectorAll('[data-news]').forEach(x => x.onclick = () => { NEWSPERIOD = '30d'; NEWSQ = x.dataset.news; NEWSCAT = 'ALL'; NEWSLIMIT = 120; renderNews(); go('news'); });
     b.querySelectorAll('[data-sub-go]').forEach(x => x.onclick = () => { SUB = x.dataset.subGo; renderStock(); });
   }
@@ -759,14 +781,23 @@
   function palRender() {
     const q = $('#palQ').value.trim().toLowerCase(), P = DATA.picks;
     let res;
-    if (!q) res = [['Watchlist', P.filter(p => WL.has(p.ticker))], ['Convinced ACT', P.filter(p => p.tier === 'ACT')], ['Most traded', P.slice().sort((a, b) => b.valueB - a.valueB).slice(0, 8)]].filter(x => x[1].length);
+    const byCalls = P.filter(p => p.calls && p.calls.n).sort(SORTS.calls[1]).slice(0, 6), byWin = P.filter(cOk).sort(SORTS.win[1]).slice(0, 6);
+    if (!q) res = [['Watchlist', P.filter(p => WL.has(p.ticker))], ['Convinced ACT today', P.filter(p => p.tier === 'ACT')], ['Most ACT calls (about 2 years, replayed)', byCalls], [`Best ACT win rate (${CMIN}+ closed calls)`, byWin], ['Most traded', P.slice().sort((a, b) => b.valueB - a.valueB).slice(0, 8)]].filter(x => x[1].length);
     else {
-      const sc = p => (p.ticker.toLowerCase() === q ? 0 : p.ticker.toLowerCase().startsWith(q) ? 1 : p.name.toLowerCase().startsWith(q) ? 2 : p.ticker.toLowerCase().includes(q) ? 3 : p.name.toLowerCase().includes(q) ? 4 : (p.group && p.group.name.toLowerCase().includes(q)) || p.sector.toLowerCase().includes(q) ? 5 : 9);
+      const sc = p => (p.ticker.toLowerCase() === q ? 0 : p.ticker.toLowerCase().startsWith(q) ? 1 : p.name.toLowerCase().startsWith(q) ? 2 : p.ticker.toLowerCase().includes(q) ? 3 : p.name.toLowerCase().includes(q) ? 4 : 9);
       res = [['Stocks', P.map(p => [sc(p), p]).filter(x => x[0] < 9).sort((a, b) => a[0] - b[0] || b[1].valueB - a[1].valueB).slice(0, 30).map(x => x[1])]];
+      // A group or sector name lists all its members, most ACT calls first; "act" / "calls" / "win" list the records.
+      const grp = [...new Set(P.filter(p => p.group && p.group.name.toLowerCase().includes(q)).map(p => p.group.name))];
+      grp.forEach(g => res.push([`Group: ${g}`, P.filter(p => p.group && p.group.name === g).sort(SORTS.calls[1])]));
+      const sec = [...new Set(P.filter(p => p.sector.toLowerCase().includes(q)).map(p => p.sector))];
+      sec.forEach(g => res.push([`Sector: ${g}`, P.filter(p => p.sector === g).sort(SORTS.calls[1]).slice(0, 20)]));
+      if (/^(act|call|most)/.test(q)) res.push(['Most ACT calls (about 2 years, replayed)', P.filter(p => p.calls && p.calls.n).sort(SORTS.calls[1]).slice(0, 20)]);
+      if (/^(win|best)/.test(q)) res.push([`Best ACT win rate (${CMIN}+ closed calls)`, P.filter(cOk).sort(SORTS.win[1]).slice(0, 20)]);
+      res = res.filter(x => x[1].length);
     }
     const flat = res.flatMap(r => r[1]); PALSEL = Math.max(0, Math.min(PALSEL, flat.length - 1));
     let i = 0;
-    $('#palList').innerHTML = flat.length ? res.map(([h, a]) => `<div class="pal-sec">${esc(h)}</div>${a.map(p => `<div class="pal-it ${i++ === PALSEL ? 'sel' : ''}" data-t="${esc(p.ticker)}" role="option">${avatar(p.ticker)}<div class="mid"><b>${esc(p.ticker)}</b> ${tierHtml(p)}<div>${esc(p.name)} · ${esc(p.sector)}</div></div><div class="r"><b>${f0(pxOf(p))}</b><div>${pc(chOf(p), 2)}</div></div></div>`).join('')}`).join('') : '<div class="empty">No stock matches.</div>';
+    $('#palList').innerHTML = flat.length ? res.map(([h, a]) => `<div class="pal-sec">${esc(h)}</div>${a.map(p => `<div class="pal-it ${i++ === PALSEL ? 'sel' : ''}" data-t="${esc(p.ticker)}" role="option">${avatar(p.ticker)}<div class="mid"><b>${esc(p.ticker)}</b> ${tierHtml(p)}<div>${esc(p.name)} · ${esc(p.sector)}${p.group ? ' · ' + esc(p.group.name) : ''}${p.calls && p.calls.n ? ` · ${p.calls.n} ACT call${p.calls.n === 1 ? '' : 's'}${p.calls.closed >= CMIN ? `, ${Math.round(p.calls.win * 100)}% won` : ''}` : ''}</div></div><div class="r"><b>${f0(pxOf(p))}</b><div>${pc(chOf(p), 2)}</div></div></div>`).join('')}`).join('') : '<div class="empty">No stock matches.</div>';
     $('#palList').querySelectorAll('.pal-it').forEach(n => n.onclick = () => { $('#palette').close(); openStock(n.dataset.t); });
     return flat;
   }
@@ -1146,8 +1177,31 @@
   const bchip = c => { const x = BCLS[c] || [c, '']; return `<span class="bchip ${x[1]}">${esc(x[0])}</span>`; };
   const splitBar = cs => !cs ? '' : `<div class="csplit" role="img" aria-label="Net buying by broker class">${['retail', 'mixed', 'local', 'foreign'].filter(k => cs[k] > 0.005).map(k => `<i class="c-${k}" style="flex:${cs[k]}" title="${k} ${Math.round(cs[k] * 100)}%"></i>`).join('')}</div><div class="muted csplit-l">${['retail', 'mixed', 'local', 'foreign'].filter(k => cs[k] > 0.005).map(k => `<span class="c-${k}">■</span> ${k} ${Math.round(cs[k] * 100)}%`).join(' · ')}</div>`;
   const BSTAT = { adding: ['still adding', 'up'], holding: ['holding', 'up'], unloading: ['unloading', 'down'] };
+  // Broker positions now (tools/broker-cost.mjs posRead): lots each broker built since its own inventory low and still
+  // holds, their running average cost, and the paper profit or loss at today's price.
+  const lotsTxt = n => (Math.abs(n) >= 1e6 ? (n / 1e6).toFixed(1) + 'M' : Math.abs(n) >= 1e3 ? Math.round(n / 1e3) + 'k' : String(n));
+  const rpB = b => (Math.abs(b) >= 1000 ? 'Rp ' + (b / 1000).toFixed(1) + ' T' : 'Rp ' + b.toFixed(1) + ' B');
+  function brokerPosHtml(p, c) {
+    const P = c && c.pos;
+    if (!P || !P.holders.length) return '';
+    const px = p.live ? p.live.price : p.close, H = P.holders.map(h => ({ ...h, pl: h.avg ? px / h.avg - 1 : null, plB: h.avg ? (h.lots * 100 * (px - h.avg)) / 1e9 : null }));
+    const big = H.filter(h => h.type !== 'retail'), inP = big.filter(h => h.pl > 0).length, lead = big[0];
+    const sum = lead ? `The biggest non-retail position built in the data is <b>${esc(lead.code)}</b>${lead.name ? ` (${esc(lead.name)})` : ''}: about ${lotsTxt(lead.lots)} lots (${rpB(lead.lots * 100 * px / 1e9)}) at an average ${f0(lead.avg)}, so <b class="${lead.pl >= 0 ? 'up' : 'down'}">${lead.pl >= 0 ? 'in profit' : 'at a loss'} ${pc(lead.pl, 1).replace(/<[^>]+>/g, '')}</b> today. ${inP} of ${big.length} non-retail holders shown are in profit.` : 'Only retail brokers hold a built-up position here.';
+    const sold = P.sellers.length ? `Biggest unloaders since their own peak: ${P.sellers.map(s => `<b>${esc(s.code)}</b> ${bchip(s.type)} ${lotsTxt(s.lots)} lots since ${esc(s.since)}`).join(' · ')}.` : '';
+    return `<h4>Broker positions now: how much they hold, at what cost, profit or loss</h4>
+      <div class="scroll"><table><thead><tr><th>Broker</th><th>Class</th><th class="n">Lots held</th><th class="n">Worth now</th><th class="n">Avg cost</th><th class="n">P/L</th><th class="n">Days of volume</th><th>Built since</th><th class="n">Last 20 sessions</th></tr></thead><tbody>
+      ${H.map(h => `<tr><td><b>${esc(h.code)}</b> <span class="muted">${esc(h.name || '')}</span></td><td>${bchip(h.type)}</td><td class="n">${lotsTxt(h.lots)}</td><td class="n">${rpB(h.lots * 100 * px / 1e9)}</td><td class="n">${f0(h.avg)}</td>
+        <td class="n"><b class="${h.pl >= 0 ? 'up' : 'down'}">${pc(h.pl, 1)}</b><div class="muted">${h.plB >= 0 ? '+' : '−'}${rpB(Math.abs(h.plB))}</div></td><td class="n">${h.days ?? '–'}</td><td>${h.fromStart ? `≤ ${esc(P.from)} <span class="muted" title="Its inventory low is the first day of data: the real position may be bigger">(maybe more)</span>` : esc(h.since)}</td>
+        <td class="n ${h.last20 > 0 ? 'up' : h.last20 < 0 ? 'down' : ''}">${h.last20 > 0 ? '+' : ''}${lotsTxt(h.last20)}</td></tr>`).join('')}</tbody></table></div>
+      <p>${sum} ${sold}</p>
+      <p class="muted"><b>How this is measured.</b> For each broker, its running net (lots bought − lots sold, day by day) from ${esc(P.from)} to ${esc(P.day)}. The position it holds now is what it built since that running net was at its <b>lowest</b>; its cost is a running average (a net-buying day adds lots at that day's average buy price; a net-selling day removes lots and leaves the average unchanged). "Days of volume" = position ÷ the average daily volume of the last 60 sessions (${lotsTxt(P.advLots)} lots), a sense of how long it would take to sell. Limits: only the stock's ~20 most active brokers, only since ${esc(P.from)}, and a broker code is a desk for many clients, not one owner. Context, not a tested signal.</p>`;
+  }
   function brokerCostHtml(p) {
     const c = p.brokerCost;
+    if (c && c.pos) return brokerPosHtml(p, c) + `<h4>Since the volume peak</h4>` + brokerCostCore(p, c);
+    return brokerCostCore(p, c);
+  }
+  function brokerCostCore(p, c) {
     if (!c) return '<p class="muted">No broker inventory for this stock yet (refreshed weekly on a rotation; new stocks fill in within a week).</p>';
     if (c.none) return `<p class="muted">No broker has been a net buyer since the volume peak of ${esc(c.peakDay)} among the 20 most active brokers. Nobody is accumulating.</p>`;
     const px = p.live ? p.live.price : p.close, gap = px / c.cost - 1, st = BSTAT[c.status] || [c.status, ''];
@@ -1157,7 +1211,7 @@
     const where = Math.abs(gap) <= 0.05 ? `Today's price is <b>near their cost</b> (${pc(gap, 1)}): the zone where accumulators usually defend.` : gap < 0 ? `Today's price is <b>${pc(-gap, 1).replace(/<[^>]+>/g, '')} below their cost</b>: they are under water, which either means they defend soon or are cutting.` : `Today's price is <b>${pc(gap, 1).replace(/<[^>]+>/g, '')} above their cost</b>: they are in profit, so their cost is a deeper support, not today's price.`;
     return `<div class="bcost">
       <div class="kv">
-        <div><small>Volume peak</small><b>${esc(c.peakDay)}</b><div class="muted">${c.peakX ? c.peakX + '× normal volume, ' : ''}${c.days} sessions ago</div></div>
+        <div><small>Volume peak</small><b>${esc(c.peakDay)}</b><div class="muted" title="The single session with the highest total volume (every lot has a buyer and a seller, so there is no separate buy or sell volume for the market) in the last 60 sessions. No minimum multiple: the number is how many times the 60-session average it was.">busiest of the last 60 sessions${c.peakX ? `, ${c.peakX}× avg` : ''}, ${c.days} sessions ago</div></div>
         <div><small>Big buyers' average cost</small><b>${f0(c.cost)}</b><div class="muted">top 3 net buyers since the peak</div></div>
         <div><small>Price vs their cost</small><b class="${Math.abs(gap) <= 0.05 ? 'up' : gap < 0 ? 'down' : ''}">${pc(gap, 1)}</b><div class="muted">now ${f0(px)}</div></div>
         <div><small>Are they still in?</small><b class="${st[1]}">${esc(st[0])}</b><div class="muted">their net over the last 5 sessions</div></div>
@@ -1463,6 +1517,111 @@
       ${tech}`;
   }
 
+  // Catalyst tab: a filings-first thesis in the style of @dojjunn (tools/dojjun-prompt.md). The site fills what its data
+  // can answer (corporate-action filings, KSEI owners and control, quarterly results) and names what only reading the
+  // filing can answer. A months-long fundamental thesis, NOT the 15-session bounce trade, and untested here.
+  const CAT_Q = {
+    material: ['Corporate action', 'Acquisition, asset sale or new business? Open the filing: what is bought or sold, for how much, and how is it paid (cash, debt, new shares)? For an acquisition, the Kombinasi Bisnis note later shows price vs net assets and the goodwill = the premium paid.'],
+    dilution: ['Capital raise', 'Rights issue / warrants / private placement: price vs market, who is the standby buyer, does anyone convert claims (notes, loans) instead of paying cash, and what is the money for? If retail supplies the only real cash, that is a red flag.'],
+    affiliate: ['Related-party deal', 'Who on the other side is related to the controller, and which way does the cash flow?'],
+    ownership: ['Holder / insider trade', 'Is the controller or an insider buying or selling, and at what price? A change of control can mean a tender offer.'],
+    egm: ['Shareholder meeting', 'Read the agenda: rights issue, asset deal, change of business or board?'],
+    mgmt: ['Board change', 'New owner bringing in their people, or someone leaving before bad news?'],
+    media: ['Reply to a media report', 'What rumour was the company forced to answer, and did it deny or confirm?'],
+    idxQuery: ['IDX query on unusual trading', 'The exchange saw a move it could not explain: was there a catalyst nobody filed?'],
+    dividend: ['Dividend', 'Paid from earnings or from a one-off sale?'],
+    report: ['Financial report', 'Read the notes (catatan atas LK), not just profit: debt terms, business combinations, related parties.'],
+  };
+  function catFacts(p) {
+    const o = p.ownership, f = p.fundamentals, Q = (f && f.quarters) || [], cats = (p.filings || []).filter(x => CAT_Q[x[1]]);
+    const ctrl = o && o.holders && o.holders[0], free = o && o.listedPct != null ? Math.max(0, 100 - o.listedPct) : null;
+    const eq0 = Q.length > 1 ? Q[0].equity : null, eq1 = Q.length ? Q[Q.length - 1].equity : null, eqChg = eq0 && eq1 ? eq1 / eq0 - 1 : null;
+    const rev0 = Q.length > 4 ? Q[Q.length - 5].rev : null, rev1 = Q.length ? Q[Q.length - 1].rev : null, revYoY = rev0 && rev1 ? rev1 / rev0 - 1 : null;
+    const qs = [];
+    const has = k => cats.some(x => x[1] === k);
+    if (f && f.niTtm < 0 && (has('material') || has('dilution'))) qs.push('It is losing money and doing a corporate action at the same time: what does management see that the trailing numbers do not show, and how is the deal funded?');
+    if (has('material') && eqChg != null && eqChg < -0.15) qs.push(`Equity fell ${Math.round(-eqChg * 100)}% over the quarters shown: is the deal funded by debt, and how is that debt serviced?`);
+    if (has('dilution')) qs.push('After the raise, how do the ownership percentages shift, and who ends up funding the asset?');
+    if (ctrl && ctrl.pct >= 50 && free != null && free < 25) qs.push(`One holder owns ${ctrl.pct.toFixed(0)}% and at most ${free.toFixed(0)}% trades freely: how much of any price move is real demand versus a thin float that is easy to push?`);
+    if (has('affiliate')) qs.push('Does the related-party deal move value toward the controller or toward the listed company?');
+    if (has('ownership') || has('mgmt')) qs.push('Is control changing hands? A new controller usually has a plan for the company: what is it?');
+    if (f && f.niTtm > 0 && revYoY != null && revYoY > 0.3) qs.push(`Revenue is up ${Math.round(revYoY * 100)}% on a year ago: is that one contract or a lasting step up?`);
+    if (!qs.length) qs.push('Why would the price re-rate in the next 6-12 months? Without a named catalyst, there is no thesis in this method.');
+    return { o, f, Q, cats, ctrl, free, eqChg, revYoY, qs };
+  }
+  function catalystHtml(p) {
+    const C = catFacts(p), { o, f, Q, cats, ctrl, free } = C, px = p.live ? p.live.price : p.close;
+    // Results come in full units of the report currency: rupiah, or US$ for some miners and energy names (TOBA, ADRO,
+    // CUAN...). No liquid rupiah issuer has equity under Rp 20 B, and no dollar one has more than $20 B, so equity tells.
+    const usd = Q.length && Math.abs(Q[Q.length - 1].equity || 0) < 2e10;
+    const rp = x => { if (x == null) return '–'; const a = Math.abs(x), s = x < 0 ? '−' : '';
+      return s + (usd ? (a >= 1e9 ? '$' + (a / 1e9).toFixed(2) + ' B' : '$' + (a / 1e6).toFixed(1) + ' M') : a >= 1e12 ? 'Rp ' + (a / 1e12).toFixed(2) + ' T' : 'Rp ' + (a / 1e9).toFixed(1) + ' B'); };
+    const ck = (ok, txt, how) => `<li><span class="ic ${ok ? 'up' : 'mute'}">${ok ? '✓' : '☐'}</span><div>${txt}${how ? ` <span class="muted">${how}</span>` : ''}</div></li>`;
+    const riskBits = [];
+    if (ctrl && ctrl.pct >= 50) riskBits.push(`controlled (${ctrl.pct.toFixed(0)}% by one holder)`);
+    if (free != null && free < 25) riskBits.push(`thin float (at most ${free.toFixed(0)}% outside the ≥1% holders)`);
+    if (p.thin) riskBits.push('trades under Rp 5 B a day: hard to exit');
+    if ((p.filings || []).some(x => x[1] === 'idxQuery')) riskBits.push('IDX has queried unusual trading');
+    return `<div class="sp-sec"><h3>Catalyst thesis <span class="ev context">untested</span></h3>
+        <p class="muted">A filings-first way to build a months-long thesis (the method @dojjunn describes): start from a corporate action, map who controls and who pays, project the effect on earnings, price it with one simple multiple, then list the risks. It is a different horizon from the 15-session bounce trade and has not been tested here. The site fills what its data can answer; ☐ lines need you to read the filing.</p></div>
+      <div class="sp-sec"><h3>1. Catalysts in the last 45 days (IDX filings)</h3>
+        ${cats.length ? `<ul class="hl-list">${cats.map(x => `<li><span class="tag ${x[1] === 'dilution' || x[1] === 'idxQuery' ? 'RISK' : ''}">${esc(CAT_Q[x[1]][0])}</span><span>${x[4] ? `<a href="${safeUrl(x[4])}" target="_blank" rel="noopener noreferrer">${esc(x[3])}</a>` : esc(x[3])}<div class="muted">${esc(x[0])} · <b>Ask:</b> ${esc(CAT_Q[x[1]][1])}</div></span></li>`).join('')}</ul>` : '<p>No corporate-action filing in the last 45 days. This method starts from one, so there is <b>no catalyst thesis</b> for this stock right now. That is a valid answer.</p>'}
+        <p class="muted">Full filings: <a href="https://www.idx.co.id/id/perusahaan-tercatat/keterbukaan-informasi/" target="_blank" rel="noopener noreferrer">IDX Keterbukaan Informasi</a> (search ${esc(p.ticker)}).</p></div>
+      <div class="sp-sec"><h3>2. Who controls it, who pays</h3>
+        ${o && o.holders ? `<div class="kv">
+          <div><small>Controller</small><b>${esc(ctrl ? ctrl.name : '–')}</b><div class="muted">${ctrl ? `${ctrl.pct.toFixed(2)}%${ctrl.foreign ? ' · foreign' : ''}${ctrl.domicile ? ' · ' + esc(ctrl.domicile) : ''}` : ''}</div></div>
+          <div><small>Top 3 holders</small><b>${o.top3Pct != null ? o.top3Pct.toFixed(1) + '%' : '–'}</b><div class="muted">${o.count} holders own ≥1%</div></div>
+          <div><small>Free float (upper bound)</small><b>${free != null ? free.toFixed(1) + '%' : '–'}</b><div class="muted">outside the ≥1% holders (KSEI)</div></div>
+          <div><small>Foreign holders</small><b>${o.foreignPct != null ? o.foreignPct.toFixed(1) + '%' : '–'}</b><div class="muted">${p.group ? 'group: ' + esc(p.group.name) : 'no conglomerate group'}</div></div>
+        </div>
+        <div class="scroll"><table><thead><tr><th>Holder (≥1%)</th><th>Type</th><th class="n">%</th></tr></thead><tbody>${o.holders.slice(0, 8).map(h => `<tr><td>${esc(h.name)}</td><td>${h.type === 'CP' ? 'company' : h.type === 'ID' ? 'individual' : esc(h.type || '')}${h.foreign ? ' · foreign' : ''}</td><td class="n">${h.pct.toFixed(2)}</td></tr>`).join('')}</tbody></table></div>` : '<p class="muted">No KSEI ownership data for this stock.</p>'}</div>
+      <div class="sp-sec"><h3>3. Earnings: what the catalyst has to change</h3>
+        ${Q.length ? `<div class="scroll"><table><thead><tr><th>Quarter</th><th class="n">Revenue</th><th class="n">Net profit</th><th class="n">Equity</th></tr></thead><tbody>${Q.slice(-5).reverse().map(q => `<tr><td>${esc(q.date)}</td><td class="n">${rp(q.rev)}</td><td class="n ${q.ni < 0 ? 'down' : ''}">${rp(q.ni)}</td><td class="n">${rp(q.equity)}</td></tr>`).join('')}</tbody></table></div>
+        <p>Last 12 months' profit: <b class="${f.niTtm < 0 ? 'down' : 'up'}">${rp(f.niTtm)}</b>${f.margin != null ? `, net margin ${(f.margin * 100).toFixed(1)}%` : ''}.${(f.flags || []).length ? ' ' + f.flags.map(esc).join('; ') + '.' : ''}</p>
+        <p class="muted">${usd ? 'Reported in US$. ' : ''} Simple valuation: PE = market cap ÷ the profit you expect after the catalyst, or EV/EBITDA for asset-heavy and mining names. The share count is not in the site's data, so take market cap from Stockbit (price now ${f0(px)}).</p>` : '<p class="muted">No quarterly results in the data.</p>'}</div>
+      <div class="sp-sec"><h3>4. Second-level questions</h3><ol class="watchlist">${C.qs.map(q => `<li><span>${esc(q)}</span><span></span></li>`).join('')}</ol></div>
+      <div class="sp-sec"><h3>5. Risks</h3><p>${riskBits.length ? 'Structure: ' + riskBits.map(esc).join('; ') + '. Concentrated ownership makes a stock easy to push up and hard to sell: size it small and expect "sell on news".' : 'No structural red flag in the data (control, float, liquidity, IDX queries). Still check debt terms and sell-on-news risk.'}</p></div>
+      <div class="sp-sec"><h3>Checklist</h3><ul class="ck">
+        ${ck(cats.length, 'Start from a filing, not a screener', cats.length ? `${cats.length} found above` : 'none in 45 days')}
+        ${ck(false, 'Name the 1-2 measurable catalysts', 'needs the filing: how big, by when')}
+        ${ck(!!ctrl, 'Snapshot: controller %, free float', ctrl ? 'filled from KSEI' : '')}
+        ${ck(false, 'Trace who puts in real cash vs who converts claims', 'prospectus / rights-issue terms')}
+        ${ck(false, 'For an acquisition: price vs net assets, goodwill', 'Kombinasi Bisnis note in the LK')}
+        ${ck(C.qs.length > 0, 'Ask why management is doing this, and how the debt is serviced', 'questions above')}
+        ${ck(false, 'One simple multiple, target price, upside %', 'needs market cap and your earnings estimate')}
+        ${ck(riskBits.length > 0 || !!o, 'Overlay risks: concentration, liquidity, pump risk, sell-on-news', '')}
+        ${ck(false, 'Make a clear call, then DYOR', '')}</ul></div>
+      <div class="sp-sec"><h3>Let Claude read the filings</h3>
+        <p class="muted">Copies a short research brief with this stock's facts already filled in. Paste it into Claude (with web search on) and it returns the thesis in the format above. Check every number it gives you against the filing.</p>
+        <button class="chip" data-copy-prompt>Copy research brief for ${esc(p.ticker)}</button>
+        <textarea id="catPrompt" hidden readonly rows="10" style="width:100%;margin-top:8px">${esc(catalystPrompt(p))}</textarea></div>`;
+  }
+  // The condensed instruction (tools/dojjun-prompt.md) with this stock's facts appended.
+  function catalystPrompt(p) {
+    const C = catFacts(p), { o, f, cats, ctrl, free } = C, px = p.live ? p.live.price : p.close;
+    return [
+      `Build a catalyst thesis for IDX:${p.ticker} (${p.name}, ${p.sector}), price ${px}, data as of ${DATA.meta.asOf}.`,
+      '',
+      'METHOD (filings first, no screening):',
+      '1. Read primary sources: IDX Keterbukaan Informasi (last 6 months), the latest Laporan Keuangan incl. notes, any prospectus / HMETD / warrant terms, RKAB if mining. Prefer them over news and broker research.',
+      '2. Find the 1-2 catalysts that can move earnings or cash flow in 6-12 months (corporate action, acquisition, asset sale, capacity / RKAB change, contract, change of control). Quantify each.',
+      '3. Map control and capital: controller and %, free float, who supplies real cash vs who converts notes, loans or related-party assets, and how ownership shifts after any raise.',
+      '4. For an acquisition: price paid vs net assets acquired, goodwill (Kombinasi Bisnis note), how it is funded and how the debt is serviced.',
+      '5. Second-level questions: why is management doing this now, what does it say about their conviction, what would make it fail?',
+      '6. Value it with ONE simple multiple (PE or EV/EBITDA on next year\'s estimate). Give target price and upside %, and the multiple peers trade at.',
+      '7. Risks: concentration / pump risk, liquidity, dilution, debt, sell-on-news, related parties.',
+      '',
+      'OUTPUT (max 300 words): Title (one punchy line) / Catalysts (1-2, measurable) / Snapshot (sector, market cap, controller %, free float) / Valuation (multiple, TP, upside %) / Call (BUY, HOLD or NO THESIS) / Supporting facts / Risks / Open questions. Cite the filing (title + date) for every number. If no catalyst is found, answer NO THESIS and say why. Do not invent numbers: write "not found" instead. End with DYOR.',
+      '',
+      'FACTS ALREADY KNOWN (from the screener; verify):',
+      ctrl ? `- Controller: ${ctrl.name} ${ctrl.pct}%${ctrl.foreign ? ' (foreign)' : ''}; top 3 hold ${o.top3Pct}%; free float at most ${free != null ? free.toFixed(1) : '?'}% (KSEI, holders >=1%).` : '- Ownership: not in the data.',
+      p.group ? `- Conglomerate group: ${p.group.name}.` : '',
+      f ? `- Last 12 months net profit ${f.niTtm} (full units, report currency); margin ${f.margin != null ? (f.margin * 100).toFixed(1) + '%' : '?'}; ${(f.flags || []).join('; ')}` : '',
+      cats.length ? '- Recent filings: ' + cats.map(x => `${x[0]} ${CAT_Q[x[1]][0]}: ${x[3]}`).join(' | ') : '- No corporate-action filing in the last 45 days in the screener data: check older ones.',
+      '- Questions to answer: ' + C.qs.join(' '),
+    ].filter(Boolean).join('\n');
+  }
+
   // Bandarmology tab: who trades it, at what cost, and what the flow tools say.
   function flowSubHtml(p, j) {
     const sec = (t, h) => `<div class="sp-sec"><h3>${t}</h3>${h}</div>`;
@@ -1697,6 +1856,27 @@
       </div>` : ''}`;
   }
 
+  // "Is this cherry-picked?": the checks a reader can do, computed from the call list itself. Calls bunch on market-wide
+  // bounce days, so the honest count of independent bets is the number of signal DAYS, not calls.
+  function honestyHtml(cs) {
+    const R = (cs.recent || []).filter(c => c.x && c.ret != null);
+    if (R.length < 10) return '';
+    const by = {}; R.forEach(c => (by[c.d] = by[c.d] || []).push(c.ret));
+    const days = Object.entries(by).map(([d, a]) => [d, a.length, a.reduce((s, x) => s + x, 0) / a.length]).sort((a, b) => b[1] - a[1]);
+    const m = days.reduce((s, x) => s + x[2], 0) / days.length, sd = Math.sqrt(days.reduce((s, x) => s + (x[2] - m) ** 2, 0) / Math.max(1, days.length - 1)), t = sd ? m / (sd / Math.sqrt(days.length)) : 0;
+    const top2 = days.slice(0, 2), top2n = top2.reduce((s, x) => s + x[1], 0);
+    const rest = R.filter(c => !top2.some(x => x[0] === c.d)), restAvg = rest.length ? rest.reduce((s, c) => s + c.ret, 0) / rest.length : null;
+    const live = cs.liveFrom || null;
+    return `<h3>Is this cherry-picked? What you can check yourself</h3>
+      <div class="card pad">
+        <p><b>1. Calls bunch on a few days.</b> ${R.length} closed calls came from only <b>${days.length} signal days</b>. The two busiest, ${top2.map(x => `${esc(x[0])} (${x[1]} calls, avg ${retTxt(x[2])})`).join(' and ')}, hold ${top2n} calls (${Math.round(top2n / R.length * 100)}%). Those were market-wide panic-then-rebound days: most of the 300 stocks were oversold at once and nearly all bounced the same morning, so ${top2[0][1]} calls on one day are really one bet on the market. Counting each day once, the average day made <b>${retTxt(m)}</b> (t ${t.toFixed(1)}; 2 or more would be evidence). Without the two busiest days, the other ${rest.length} calls averaged ${retTxt(restAvg)}.</p>
+        ${(() => { const q = Object.entries(cs.byMonth || {}).filter(([, s]) => s.n <= 5 && s.n > 0).map(([mo, s]) => `${mo} (${s.n})`); return q.length ? `<p><b>Why some months have so few calls:</b> ${q.join(', ')}. The rule only buys after a sharp drop, so in a rising market almost nothing is oversold. In July–August 2026 the median stock rose about 11% and 5%, and only about 25 oversold spells a month appeared across all 300 stocks (against about 290 in June). It is also one trade per stock at a time, so a stock bought on a crash day cannot be called again until that trade closes.</p>` : ''; })()}
+        <p><b>2. No peeking at the future.</b> Each call uses only bars up to its signal day, buys at the <i>next</i> open, and is scored by fixed rules (target, wide stop, ${DATA.meta.params.horizon} sessions, 0.4% fees, a bar touching both counts as a loss). The code is public: <a href="https://github.com/FarrasHFZ/dompet/blob/main/swing-screener/tools/signals.mjs" target="_blank" rel="noopener noreferrer">signals.mjs</a>.</p>
+        <p><b>3. But the replay is not live.</b> It uses today's 300 most traded stocks, chosen <i>after</i> they did well enough to be popular (survivorship), and today's rules, tuned on the same past. That flatters it. That is why the stricter tests below exist, and they failed: about −0.3% a trade over 10 years on all liquid stocks, −1.34% a trade on 613 stocks the rule never saw, and no exit that beat shuffled prices.</p>
+        <p><b>4. The only clean record is the live one.</b> From ${esc(live || 'the first ledger day')} the site saves every call before its outcome is known, and git timestamps each save: <a href="https://github.com/FarrasHFZ/dompet/commits/main/swing-screener/data/history" target="_blank" rel="noopener noreferrer">the ledger's commit history</a>. Calls made after a commit cannot be edited without it showing. Judge the method on that record once it has a few hundred calls across different markets.</p>
+      </div>`;
+  }
+
   // Every recent call, one row each, with how many sessions it took to hit TP or SL (tools/signals.mjs callStats.recent).
   let CALLF = 'all';
   function recentCallsHtml(cs) {
@@ -1738,6 +1918,7 @@
       </div>
       <div class="card scroll"><table><thead><tr><th>Calls</th><th class="n">Closed</th><th class="n">Win rate</th><th class="n">Avg win</th><th class="n">Avg loss</th><th class="n">Payoff</th><th class="n">Profit factor</th><th class="n">Expectancy</th><th class="n">Worst</th><th class="n">Losing streak</th></tr></thead><tbody>
         ${col('All', cs.all)}${col('IHSG above its 200-day average', cs.up)}${col('IHSG below it (downtrend)', cs.down)}</tbody></table></div>
+      ${honestyHtml(cs)}
       ${recentCallsHtml(cs)}
       ${months.length ? `<h3>By month</h3><div class="card scroll"><table><thead><tr><th>Month called</th><th class="n">Calls</th><th class="n">Win rate</th><th class="n">Expectancy</th><th class="n">Stops hit</th><th class="n">Worst</th></tr></thead><tbody>${months.reverse().map(([m, s]) => `<tr><td>${esc(m)}</td><td class="n">${s.n}${s.open ? ` <span class="muted">(${s.open} open)</span>` : ''}</td><td class="n">${wr(s.winRate)}</td><td class="n">${pc(s.expectancy, 2)}</td><td class="n">${s.sl}</td><td class="n">${pc(s.worst, 0)}</td></tr>`).join('')}</tbody></table></div>` : ''}
       <p class="muted"><b>How to read it.</b> Win rate alone misleads: a rule can win 6 trades in 10 and still lose money if each loss is three times a win. What decides money is <b>expectancy</b> (average result per trade = win rate × average win + loss rate × average loss), read with the <b>payoff</b> and <b>profit factor</b> (gross gains ÷ gross losses; above 1 makes money), and how deep the account falls on the way (<b>drawdown</b>), which sizing controls. Replayed with today's rules and neutral news, so before the live ledger these are not calls the site made at the time; the 200-day filter no longer gates calls (since 2026-10-10).</p>`;

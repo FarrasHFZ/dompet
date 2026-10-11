@@ -156,6 +156,8 @@ dialog label{display:block;margin:10px 0;font-size:12.5px;color:var(--mute)}
 /* ---------- avatar, sparkline, change pill ---------- */
 .av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;flex:none;font-weight:800;font-size:11.5px;letter-spacing:-.02em;color:#fff;background:hsl(var(--h) 55% 38%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
 [data-theme=light] .av{background:hsl(var(--h) 60% 46%)}
+.av{position:relative;overflow:hidden}
+.av img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff;border-radius:50%}
 .av.lg{width:46px;height:46px;font-size:14px}
 .cp{display:inline-block;min-width:66px;text-align:center;border-radius:7px;padding:3px 7px;font-weight:700;font-size:12.5px;font-variant-numeric:tabular-nums}
 .cp.up{background:var(--upbg)}.cp.down{background:var(--downbg)}.cp.flat{background:var(--card2);color:var(--mute)}
@@ -221,8 +223,8 @@ svg.spark{display:block}
 .pl-tools{display:flex;gap:8px;align-items:center;padding:12px 12px 10px;border-bottom:1px solid var(--line);flex-wrap:wrap;position:sticky;top:var(--top);background:var(--card);z-index:5}
 .pl-tools .chips{margin:0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;flex:1 1 100%}
 .pl-tools .chips::-webkit-scrollbar{display:none}
-.pl-tools input{flex:1;min-width:0;height:36px;padding:6px 12px}
-.pl-tools select{width:auto;height:36px;padding:4px 8px}
+.pl-tools input{flex:1 1 100%;min-width:0;height:36px;padding:6px 12px}
+.pl-tools select{flex:1 1 0;min-width:0;width:auto;height:36px;padding:4px 8px}
 .pl-head{display:grid;grid-template-columns:1fr 70px 96px;gap:10px;padding:7px 14px;font-size:10.5px;font-weight:700;color:var(--mute);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--line);background:var(--card2)}
 .pl-head span:nth-child(n+2){text-align:right}
 .prow{display:grid;grid-template-columns:1fr 70px 96px;gap:10px;align-items:center;padding:11px 14px;border-top:1px solid var(--line);cursor:pointer;-webkit-tap-highlight-color:transparent;position:relative}
@@ -519,3 +521,6 @@ html.noscroll,html.noscroll body{overflow:hidden}
 .risknote.warn{background:var(--warnbg);color:var(--ink)}.risknote.down{background:var(--downbg);color:var(--ink)}
 table.hmap td.hm{text-align:center;min-width:120px;font-variant-numeric:tabular-nums}table.hmap td.hm .muted{font-size:11px}
 .srow{display:grid;grid-template-columns:1fr auto 90px;gap:10px;align-items:baseline;padding:5px 0;font-size:13px}.srow .muted{text-align:right}
+.ck{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.ck li{display:flex;gap:8px;align-items:flex-start}
+.ck .ic{width:16px;flex:none;font-weight:700}
