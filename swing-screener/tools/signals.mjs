@@ -11,10 +11,13 @@ const dayOf = d => new Date(d.getTime() + 7 * 3600e3).toISOString().slice(0, 10)
 function resolve(b, k, nDone, stop, tp, horizon) {
   if (k + 1 >= b.c.length) return { res: 'pending', entry: null };
   const entry = b.o[k + 1], partial = b.c.length > nDone;
-  const out = (j, px, res) => ({ res, entry, x: dayOf(b.d[j]), xp: px, ret: px / entry - 1 - FEE, j, ...(partial && j === b.c.length - 1 ? { today: true } : {}) });
+  // n: the session the trade closed on, counting the buy (entry) session as day 1: "TP on day 3" = two sessions after buying.
+  const out = (j, px, res) => ({ res, entry, x: dayOf(b.d[j]), xp: px, ret: px / entry - 1 - FEE, n: j - k, j, ...(partial && j === b.c.length - 1 ? { today: true } : {}) });
   for (let j = k + 1; j < b.c.length && j <= k + horizon; j++) {
     if (b.o[j] <= stop) return out(j, b.o[j], 'sl'); // gap through the stop fills at the open
-    if (j > k + 1 && b.o[j] >= tp) return out(j, b.o[j], 'tp');
+    // A gap through the target fills at the open, the entry bar included (the open is the entry, so that trade nets -fee
+    // instead of being booked at a target below the price paid; same rule as tools/tracker.mjs).
+    if (b.o[j] >= tp) return out(j, b.o[j], 'tp');
     if (b.l[j] <= stop) return out(j, stop, 'sl'); // a bar touching both counts as a loss (tracker rule)
     if (b.h[j] >= tp) return out(j, tp, 'tp');
   }
@@ -72,7 +75,8 @@ export function callStats(signals) {
     let streak = 0, worstStreak = 0;
     cl.slice().sort((a, b) => (a.x < b.x ? -1 : 1)).forEach(c => { streak = c.ret <= 0 ? streak + 1 : 0; worstStreak = Math.max(worstStreak, streak); });
     const rets = cl.map(c => c.ret).sort((a, b) => a - b);
-    return { n: calls.length, closed: cl.length, open: calls.length - cl.length, tp: cl.filter(c => c.res === 'tp').length, sl: cl.filter(c => c.res === 'sl').length, time: cl.filter(c => c.res === 'time').length,
+    const days = r => { const a = cl.filter(c => c.res === r && c.n != null); return a.length ? a.reduce((s, c) => s + c.n, 0) / a.length : null; };
+    return { daysTp: days('tp'), daysSl: days('sl'), n: calls.length, closed: cl.length, open: calls.length - cl.length, tp: cl.filter(c => c.res === 'tp').length, sl: cl.filter(c => c.res === 'sl').length, time: cl.filter(c => c.res === 'time').length,
       winRate: cl.length ? w.length / cl.length : null, avgWin: avg(w), avgLoss: avg(l), payoff: avg(w) != null && avg(l) ? avg(w) / -avg(l) : null,
       profitFactor: gl ? gw / gl : null, expectancy: avg(cl), median: rets.length ? rets[rets.length >> 1] : null, worst: rets[0] ?? null, best: rets.at(-1) ?? null, worstStreak };
   };
@@ -86,5 +90,8 @@ export function callStats(signals) {
   const byMonth = {}; all.forEach(c => { const m = c.d.slice(0, 7); (byMonth[m] = byMonth[m] || []).push(c); });
   return { from: all.map(c => c.d).sort()[0] || null, all: sum(all), up: sum(all.filter(c => !c.dn)), down: sum(all.filter(c => c.dn)),
     account: { slots: 10, total: eq - 1, maxDD: dd, monthsUp: mret.filter(x => x[1] > 0).length, months: mret.length, worstMonth: mret.length ? Math.min(...mret.map(x => x[1])) : null },
-    byMonth: Object.fromEntries(Object.entries(byMonth).sort().map(([m, a]) => [m, sum(a)])) };
+    byMonth: Object.fromEntries(Object.entries(byMonth).sort().map(([m, a]) => [m, sum(a)])),
+    // Every replayed call, one row each, for the Track record table (newest first; ~200 rows a year).
+    recent: all.slice().sort((a, b) => (a.d < b.d ? 1 : a.d > b.d ? -1 : a.t < b.t ? -1 : 1)).slice(0, 400)
+      .map(c => ({ t: c.t, d: c.d, s: c.s, entry: c.entry ?? null, stop: c.stop, tp: c.tp, res: c.res, x: c.x || null, ret: c.ret ?? null, n: c.n ?? null, now: c.now ?? null, age: c.age ?? null, dn: c.dn || 0 })) };
 }
