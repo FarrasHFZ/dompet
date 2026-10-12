@@ -108,6 +108,14 @@
      "note": null,
      "since": null,
      "linkPct": 50.16
+    },
+    {
+     "tk": "UANG",
+     "evidence": "HAPSORO 19.35%; PT BASIS UTAMA PRIMA 16.24%",
+     "soft": false,
+     "note": "Happy Hapsoro 19% + Basis Utama Prima 16%",
+     "since": null,
+     "linkPct": 35.59
     }
    ]
   },
@@ -186,6 +194,38 @@
      "note": null,
      "since": null,
      "linkPct": 11.12
+    },
+    {
+     "tk": "FAST",
+     "evidence": "PT. INDORITEL MAKMUR INTERNASIONAL TBK 37.51%",
+     "soft": false,
+     "note": "Indoritel (Salim) 38% with Gelael",
+     "since": null,
+     "linkPct": 37.51
+    },
+    {
+     "tk": "ROTI",
+     "evidence": "PT. INDORITEL MAKMUR INTERNASIONAL TBK 25.77%; BONLIGHT INVESTMENTS LIMITED 20.79%",
+     "soft": false,
+     "note": "Indoritel 26% + Bonlight 21% (Salim)",
+     "since": null,
+     "linkPct": 46.56
+    },
+    {
+     "tk": "IMAS",
+     "evidence": "GALLANT VENTURE LTD 49.49%",
+     "soft": false,
+     "note": "Gallant Venture (Salim) 49%",
+     "since": null,
+     "linkPct": 49.49
+    },
+    {
+     "tk": "IMJS",
+     "evidence": "PT. INDOMOBIL SUKSES INTERNASIONAL TBK 91.97%",
+     "soft": false,
+     "note": "Indomobil (Salim) 92%",
+     "since": null,
+     "linkPct": 91.97
     }
    ]
   },
@@ -737,6 +777,14 @@
      "note": null,
      "since": null,
      "linkPct": 24.12
+    },
+    {
+     "tk": "DRMA",
+     "evidence": "TRIPUTRA INVESTINDO ARYA 14.16%",
+     "soft": false,
+     "note": "Triputra Investindo Arya 14% (Dharma group, Rachmat family)",
+     "since": null,
+     "linkPct": 14.16
     }
    ]
   },
@@ -927,6 +975,293 @@
      "note": null,
      "since": null,
      "linkPct": 91.11
+    },
+    {
+     "tk": "AGRO",
+     "evidence": "PT BANK RAKYAT INDONESIA (PERSERO), TBK 86.85%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 86.85
+    },
+    {
+     "tk": "SMBR",
+     "evidence": "PT SEMEN INDONESIA (PERSERO) TBK 75.51%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 75.51
+    },
+    {
+     "tk": "KAEF",
+     "evidence": "PT BIO FARMA (Persero) 89.82%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 89.82
+    },
+    {
+     "tk": "WTON",
+     "evidence": "PERUSAHAAN PERSEROAN (PERSERO) PT WIJAYA KARYA TBK 60.00%; PT TASPEN (PERSERO) 1.38%",
+     "soft": false,
+     "note": "Wijaya Karya (WIKA) holds 60%",
+     "since": null,
+     "linkPct": 61.38
+    },
+    {
+     "tk": "IPCC",
+     "evidence": "PELINDO MULTI TERMINAL 71.28%; PT. PELABUHAN INDONESIA INVESTAMA 5.54%",
+     "soft": false,
+     "note": "Pelindo (state port operator) subsidiary",
+     "since": null,
+     "linkPct": 76.82
+    },
+    {
+     "tk": "IPCM",
+     "evidence": "PT PELINDO JASA MARITIM 76.89%; PT. PELABUHAN INDONESIA INVESTAMA 10.78%",
+     "soft": false,
+     "note": "Pelindo (state port operator) subsidiary",
+     "since": null,
+     "linkPct": 87.67
+    }
+   ]
+  },
+  {
+   "id": "panin",
+   "name": "Panin (Mu'min Ali Gunawan)",
+   "alias": "saham Panin",
+   "members": [
+    {
+     "tk": "PNIN",
+     "evidence": "PANINKORP, PT 29.71%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 29.71
+    },
+    {
+     "tk": "PNLF",
+     "evidence": "PT PANINVEST Tbk 52.47%; PANINVEST TBK, PT 15.19%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 67.66
+    },
+    {
+     "tk": "PNBN",
+     "evidence": "PT. PANIN FINANCIAL Tbk 44.43%; PANIN FINANCIAL Tbk. 1.61%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 46.04
+    },
+    {
+     "tk": "CFIN",
+     "evidence": "BANK PAN INDONESIA TBK, PT 51.49%",
+     "soft": false,
+     "note": "Panin Bank 51%",
+     "since": null,
+     "linkPct": 51.49
+    },
+    {
+     "tk": "PANS",
+     "evidence": "PT. PATRIA NUSA ADAMAS 30.00%; BANK PAN INDONESIA TBK, PT 29.00%",
+     "soft": false,
+     "note": "Panin Bank 29%",
+     "since": null,
+     "linkPct": 59
+    }
+   ]
+  },
+  {
+   "id": "arthagraha",
+   "name": "Artha Graha (Tomy Winata)",
+   "alias": "saham TW",
+   "members": [
+    {
+     "tk": "INPC",
+     "evidence": "PT ARTHA GRAHA NETWORK 5.61%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 5.61
+    },
+    {
+     "tk": "ECII",
+     "evidence": "PT. Artha Graha Network 23.15%",
+     "soft": false,
+     "note": "Artha Graha Network 23%",
+     "since": null,
+     "linkPct": 23.15
+    },
+    {
+     "tk": "JIHD",
+     "evidence": "TT OTbMkY WINATA 13.15%",
+     "soft": false,
+     "note": "Tomy Winata 13%",
+     "since": null,
+     "linkPct": 13.15
+    }
+   ]
+  },
+  {
+   "id": "mufg",
+   "name": "MUFG (Danamon)",
+   "alias": "saham Danamon",
+   "members": [
+    {
+     "tk": "BDMN",
+     "evidence": "MUFG Bank Ltd 91.47%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 91.47
+    },
+    {
+     "tk": "ADMF",
+     "evidence": "BANK DANAMON INDONESIA Tbk, PT - REGISTRAR 74.50%; MUFG Bank Ltd 18.92%",
+     "soft": false,
+     "note": "Danamon 75% + MUFG 19%",
+     "since": null,
+     "linkPct": 93.42
+    }
+   ]
+  },
+  {
+   "id": "jaya",
+   "name": "Pembangunan Jaya",
+   "alias": "saham Jaya",
+   "members": [
+    {
+     "tk": "JRPT",
+     "evidence": "PT. PEMBANGUNAN JAYA 67.73%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 67.73
+    },
+    {
+     "tk": "JKON",
+     "evidence": "PT. PEMBANGUNAN JAYA 60.89%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 60.89
+    }
+   ]
+  },
+  {
+   "id": "bunda",
+   "name": "Bunda (Bundamedik)",
+   "alias": "saham Bunda",
+   "members": [
+    {
+     "tk": "BMHS",
+     "evidence": "PT. BUNDA INVESTAMA INDONESIA 57.37%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 57.37
+    },
+    {
+     "tk": "DGNS",
+     "evidence": "PT BUNDAMEDIK 39.20%; PT. BUNDA INVESTAMA INDONESIA 38.80%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 80
+    }
+   ]
+  },
+  {
+   "id": "hansen",
+   "name": "Hansen Jap",
+   "alias": "saham Hansen",
+   "members": [
+    {
+     "tk": "HALO",
+     "evidence": "HANSEN JAP 81.06%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 81.06
+    },
+    {
+     "tk": "SURI",
+     "evidence": "HANSEN JAP 85.40%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 85.4
+    }
+   ]
+  },
+  {
+   "id": "gdk",
+   "name": "Global Dinamika Kencana",
+   "alias": "saham GDK",
+   "members": [
+    {
+     "tk": "DGIK",
+     "evidence": "PT GLOBAL DINAMIKA KENCANA 52.30%; PT GLOBAL DINAMIKA KENCANA SINGAPORE PTE. LTD. 2.70%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 55
+    },
+    {
+     "tk": "IRRA",
+     "evidence": "PT GLOBAL DINAMIKA KENCANA 78.78%; PT GLOBAL DINAMIKA KENCANA SINGAPORE PTE. LTD. 2.17%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 80.95
+    }
+   ]
+  },
+  {
+   "id": "equity",
+   "name": "Equity Global (Equity Development)",
+   "alias": "saham Equity",
+   "members": [
+    {
+     "tk": "GSMF",
+     "evidence": "EQUITY GLOBAL INTERNATIONAL LIMITED 68.28%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 68.28
+    },
+    {
+     "tk": "BGTG",
+     "evidence": "EQUITY DEVELOPMENT INVESTMENT, PT. 33.53%; EQUITY GLOBAL INTERNATIONAL LIMITED 23.93%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 57.46
+    }
+   ]
+  },
+  {
+   "id": "surya",
+   "name": "Surya Pertiwi (Toto)",
+   "alias": "saham Surya",
+   "members": [
+    {
+     "tk": "SPTO",
+     "evidence": "Multifortuna Asindo, PT 30.00%; PT SURYAPARAMITRA ABADI 30.00%",
+     "soft": false,
+     "note": null,
+     "since": null,
+     "linkPct": 60
+    },
+    {
+     "tk": "TOTO",
+     "evidence": "SURYAPARAMITRA ABADI 24.10%; MULTIFORTUNA ASINDO 24.10%",
+     "soft": false,
+     "note": "with Toto Ltd (Japan) 37%",
+     "since": null,
+     "linkPct": 53.49
     }
    ]
   }
@@ -943,6 +1278,7 @@
   "RAJA": "happy",
   "RATU": "happy",
   "MINA": "happy",
+  "UANG": "happy",
   "PANI": "aguan",
   "CBDK": "aguan",
   "INDF": "salim",
@@ -951,6 +1287,10 @@
   "LSIP": "salim",
   "DNET": "salim",
   "DCII": "salim",
+  "FAST": "salim",
+  "ROTI": "salim",
+  "IMAS": "salim",
+  "IMJS": "salim",
   "DSSA": "sinarmas",
   "INKP": "sinarmas",
   "TKIM": "sinarmas",
@@ -1012,6 +1352,7 @@
   "BUKA": "emtek",
   "DSNG": "triputra",
   "TAPG": "triputra",
+  "DRMA": "triputra",
   "MEDC": "medco",
   "AMMN": "medco",
   "BMRI": "bumn",
@@ -1033,6 +1374,34 @@
   "KRAS": "bumn",
   "PTPP": "bumn",
   "WIKA": "bumn",
-  "GIAA": "bumn"
+  "GIAA": "bumn",
+  "AGRO": "bumn",
+  "SMBR": "bumn",
+  "KAEF": "bumn",
+  "WTON": "bumn",
+  "IPCC": "bumn",
+  "IPCM": "bumn",
+  "PNIN": "panin",
+  "PNLF": "panin",
+  "PNBN": "panin",
+  "CFIN": "panin",
+  "PANS": "panin",
+  "INPC": "arthagraha",
+  "ECII": "arthagraha",
+  "JIHD": "arthagraha",
+  "BDMN": "mufg",
+  "ADMF": "mufg",
+  "JRPT": "jaya",
+  "JKON": "jaya",
+  "BMHS": "bunda",
+  "DGNS": "bunda",
+  "HALO": "hansen",
+  "SURI": "hansen",
+  "DGIK": "gdk",
+  "IRRA": "gdk",
+  "GSMF": "equity",
+  "BGTG": "equity",
+  "SPTO": "surya",
+  "TOTO": "surya"
  }
 }
