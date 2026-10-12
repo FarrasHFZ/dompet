@@ -1,4 +1,4 @@
-// Grows the universe from the original 100 to 300 stocks (2026-10-10) and writes the new rows into
+// Grows the universe: 100 -> 300 stocks (2026-10-10), then 300 -> 500 (2026-10-12, owner's request; same rules) and writes the new rows into
 // apps-script/Code.gs (UNIVERSE_SEED stays the single source of truth for the Sheet, the build and every study).
 //
 // Selection rules, fixed before looking at any trading result of the new stocks:
@@ -14,7 +14,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { loadEngine, universe, ROOT, CACHE, sleep } from './lib.mjs';
 
-const ADD = 200, MAX_ZERO = 5, MIN_PRICE = 50;
+const ADD = 200, MAX_ZERO = 5, MIN_PRICE = 50, MARK = process.env.MARK || '2026-10-12';
 const SECTOR = [
   [/^Banks|Credit Services|Insurance|Capital Markets|Asset Management|Financial|Mortgage|Shell Companies/i, 'Banking'],
   [/Oil|Gas|Coal|Utilities|Solar|Uranium|Renewable/i, 'Energy'],
@@ -40,7 +40,7 @@ const mapSector = (industry, name) => {
 // Hand fixes where Yahoo's industry contradicts how the screener groups stocks (palm oil sits under Packaged Foods there;
 // feed mills are Poultry here), and names that would mis-tag news (PTPP's short name "PP" also means Prajogo Pangestu).
 const SECTOR_FIX = { BWPT: 'Plantation', SSMS: 'Plantation', SIMP: 'Plantation', TBLA: 'Plantation', GZCO: 'Plantation', MAIN: 'Poultry', AYAM: 'Poultry', TSPC: 'Healthcare', BNBR: 'Industrial', COIN: 'Banking' };
-const NAME_FIX = { PTPP: 'Pembangunan Perumahan', FILM: 'MD Entertainment', WIRG: 'WIR Asia', GMFI: 'Garuda Maintenance Facility', BJBR: 'Bank BJB', BJTM: 'Bank Jatim', KDTN: 'Puri Sentul Permai', DATA: 'Remala Abadi' };
+const NAME_FIX = { MERK: 'Merck Indonesia', PTPP: 'Pembangunan Perumahan', FILM: 'MD Entertainment', WIRG: 'WIR Asia', GMFI: 'Garuda Maintenance Facility', BJBR: 'Bank BJB', BJTM: 'Bank Jatim', KDTN: 'Puri Sentul Permai', DATA: 'Remala Abadi' };
 const clean = s => String(s || '').replace(/^PT\.?\s*/i, '').replace(/\s*,?\s*Tbk\.?$/i, '').replace(/\s*\(Persero\)\s*/i, ' ').replace(/\s+/g, ' ').trim();
 
 const api = loadEngine(), cur = new Set(universe(api).map(u => u.ticker));
@@ -63,14 +63,14 @@ for (const r of pick) {
 }
 const cnt = {}; rows.forEach(r => { cnt[r[2]] = (cnt[r[2]] || 0) + 1; });
 console.log('sectors of the new 200:', JSON.stringify(cnt));
-fs.writeFileSync(path.join(CACHE, 'universe-new200.json'), JSON.stringify(rows, null, 1));
+fs.writeFileSync(path.join(CACHE, `universe-new200-${MARK}.json`), JSON.stringify(rows, null, 1));
 
 if (process.argv.includes('--write')) {
   const f = path.join(ROOT, 'apps-script', 'Code.gs'), src = fs.readFileSync(f, 'utf8');
-  if (src.includes('// ---- expansion 2026-10-10')) throw new Error('already expanded');
+  if (src.includes(`// ---- expansion ${MARK}`)) throw new Error('already expanded');
   const lines = rows.map(r => `  ['${r[0]}', '${r[1]}', '${r[2]}', '', 'Y'], // ${r[5] || 'industry n/a'}`).join('\n');
   const at = src.indexOf('\n];', src.indexOf('const UNIVERSE_SEED = ['));
-  const out = src.slice(0, at) + `\n  // ---- expansion 2026-10-10: the next 200 by median traded value (tools/expand-universe.mjs) ----\n${lines}` + src.slice(at);
+  const out = src.slice(0, at) + `\n  // ---- expansion ${MARK}: the next 200 by median traded value (tools/expand-universe.mjs) ----\n${lines}` + src.slice(at);
   fs.writeFileSync(f, out);
   console.log('wrote', rows.length, 'rows into apps-script/Code.gs');
 }

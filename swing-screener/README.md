@@ -317,7 +317,7 @@ score. `node tools/ohlc-local.mjs` builds the files from cached prices for a loc
 `HOLDOUT=1 node tools/backtest.mjs` runs the same score on 40 IDX stocks that were not used to design it (`tools/holdout-universe.json`). The edge replicates but smaller (top bucket +0.9% vs 0.0% baseline, IC 0.08), and expectancy after stops and fees is about zero.
 
 ## Universe and news coverage
-- **Universe: 300 stocks** (`UNIVERSE_SEED` in `apps-script/Code.gs`). The score was designed on 27 of the original 100 (`tools/design-universe.json`); the other 73 are out-of-sample (`HOLDOUT=1 node tools/backtest.mjs`).
+- **Universe: 500 stocks** (`UNIVERSE_SEED` in `apps-script/Code.gs`): the original 100, +200 on 2026-10-10 and +200 on 2026-10-12 (next by median traded value, `tools/expand-universe.mjs`; stocks 301-500 trade mostly under Rp 1 B a day, so they show as THIN). The 400 added stocks are shown but never ACT (`expansionTickers()` in `tools/lib.mjs`). The score was designed on 27 of the original 100 (`tools/design-universe.json`); the other 73 are out-of-sample (`HOLDOUT=1 node tools/backtest.mjs`). Note: studies that use "the IDX stocks outside the universe" as a fresh sample (rank-all minus universe) now get 413 stocks instead of 613.
 - **The 200 added on 2026-10-10** (`tools/expand-universe.mjs`: next 200 by median traded value over 120 sessions, no stock with
   more than 5 zero-volume sessions or a price under Rp 50; sector from Yahoo's industry with hand fixes) were a clean holdout.
   Pre-registered test (`tools/experiment-expand.mjs`, commit e1018d8): live rule vs other stocks +0.83%/trade, t 1.4,

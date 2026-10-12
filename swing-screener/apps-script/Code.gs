@@ -317,6 +317,207 @@ const UNIVERSE_SEED = [
   ['ELIT', 'Data Sinergitama Jaya', 'Tech', '', 'Y'], // Information Technology Services
   ['TPMA', 'Trans Power Marine', 'Industrial', '', 'Y'], // Marine Shipping
   ['WOWS', 'Ginting Jaya Energi', 'Energy', '', 'Y'], // Oil & Gas Equipment & Services
+  // ---- expansion 2026-10-12: the next 200 by median traded value (tools/expand-universe.mjs) ----
+  ['VICI', 'Victoria Care Indonesia', 'Consumer', '', 'Y'], // Household & Personal Products
+  ['BINA', 'Bank Ina Perdana', 'Banking', '', 'Y'], // Banks—Regional
+  ['SQMI', 'Wilton Makmur Indonesia', 'Metals', '', 'Y'], // Gold
+  ['BANK', 'Bank Aladin Syariah', 'Banking', '', 'Y'], // Banks—Regional
+  ['DKHH', 'Cipta Sarana Medika', 'Healthcare', '', 'Y'], // Medical Care Facilities
+  ['ALII', 'Ancara Logistics Indonesia', 'Industrial', '', 'Y'], // Marine Shipping
+  ['IPCC', 'Indonesia Kendaraan Terminal', 'Industrial', '', 'Y'], // Integrated Freight & Logistics
+  ['AGRO', 'Bank Raya Indonesia', 'Banking', '', 'Y'], // Banks—Regional
+  ['FAST', 'Fast Food Indonesia', 'Consumer', '', 'Y'], // Restaurants
+  ['BRRC', 'Raja Roti Cemerlang', 'Consumer', '', 'Y'], // Packaged Foods
+  ['PTMP', 'Mitra Pack', 'Industrial', '', 'Y'], // Specialty Industrial Machinery
+  ['GRPM', 'Graha Prima Mentari', 'Consumer', '', 'Y'], // Beverages—Non-Alcoholic
+  ['MPIX', 'Mitra Pedagang Indonesia', 'Tech', '', 'Y'], // Software—Infrastructure
+  ['TAMA', 'Lancartama Sejati', 'Property', '', 'Y'], // Real Estate—Development
+  ['FIRE', 'Alfa Energi Investama', 'Energy', '', 'Y'], // Thermal Coal
+  ['SILO', 'Siloam International Hospitals', 'Healthcare', '', 'Y'], // Medical Care Facilities
+  ['ESTI', 'Ever Shine Tex', 'Chemicals', '', 'Y'], // Textile Manufacturing
+  ['IOTF', 'Sumber Sinergi Makmur', 'Telco', '', 'Y'], // Communication Equipment
+  ['POLA', 'Pool Advista Finance', 'Banking', '', 'Y'], // Credit Services
+  ['JTPE', 'Jasuindo Tiga Perkasa', 'Industrial', '', 'Y'], // Specialty Business Services
+  ['UANG', 'Pakuan', 'Property', '', 'Y'], // Real Estate—Development
+  ['CFIN', 'Clipan Finance Indonesia', 'Banking', '', 'Y'], // Credit Services
+  ['DOID', 'Buma Internasional Grup', 'Energy', '', 'Y'], // Thermal Coal
+  ['AGII', 'Samator Indo Gas', 'Chemicals', '', 'Y'], // Chemicals
+  ['GSMF', 'Equity Development Investment', 'Banking', '', 'Y'], // Insurance—Diversified
+  ['KLAS', 'Pelayaran Kurnia Lautan Semesta', 'Industrial', '', 'Y'], // Marine Shipping
+  ['STRK', 'Lovina Beach Brewery', 'Consumer', '', 'Y'], // Beverages—Brewers
+  ['DRMA', 'Dharma Polimetal', 'Automotive', '', 'Y'], // Auto Parts
+  ['BLES', 'Superior Prima Sukses', 'Construction', '', 'Y'], // Building Materials
+  ['TLDN', 'Teladan Prima Agro', 'Plantation', '', 'Y'], // Farm Products
+  ['IKAN', 'Era Mandiri Cemerlang', 'Plantation', '', 'Y'], // Farm Products
+  ['MPOW', 'Megapower Makmur', 'Energy', '', 'Y'], // Utilities—Independent Power Producers
+  ['OPMS', 'Optima Prima Metal Sinergi', 'Industrial', '', 'Y'], // Waste Management
+  ['MUTU', 'Mutuagung Lestari', 'Industrial', '', 'Y'], // Specialty Business Services
+  ['SMAR', 'Sinar Mas Agro Resources and Technology', 'Plantation', '', 'Y'], // Farm Products
+  ['MAHA', 'Mandiri Herindo Adiperkasa', 'Industrial', '', 'Y'], // Trucking
+  ['KKGI', 'Resource Alam Indonesia', 'Energy', '', 'Y'], // Thermal Coal
+  ['PRIM', 'Royal Prima', 'Healthcare', '', 'Y'], // Medical Care Facilities
+  ['SMGA', 'Sumber Mineral Global Abadi', 'Metals', '', 'Y'], // Other Industrial Metals & Mining
+  ['GEMS', 'Golden Energy Mines', 'Energy', '', 'Y'], // Thermal Coal
+  ['SMBR', 'Semen Baturaja', 'Construction', '', 'Y'], // Building Materials
+  ['APIC', 'Pacific Strategic Financial', 'Banking', '', 'Y'], // Insurance—Life
+  ['ASLC', 'Autopedia Sukses Lestari', 'Automotive', '', 'Y'], // Auto & Truck Dealerships
+  ['WEHA', 'WEHA Transportasi Indonesia', 'Industrial', '', 'Y'], // Railroads
+  ['INPC', 'Bank Artha Graha Internasional', 'Banking', '', 'Y'], // Banks—Regional
+  ['IBOS', 'Indo Boga Sukses', 'Consumer', '', 'Y'], // Restaurants
+  ['CGAS', 'Citra Nusantara Gemilang', 'Energy', '', 'Y'], // Oil & Gas Refining & Marketing
+  ['ISSP', 'Steel Pipe Industry of Indonesia', 'Metals', '', 'Y'], // Steel
+  ['JAST', 'Jasnita Telekomindo', 'Telco', '', 'Y'], // Telecom Services
+  ['ATAP', 'Trimitra Prawara Goldland', 'Construction', '', 'Y'], // Residential Construction
+  ['TMAS', 'Temas', 'Industrial', '', 'Y'], // Marine Shipping
+  ['BCIP', 'Bumi Citra Permai', 'Property', '', 'Y'], // Real Estate—Development
+  ['MLBI', 'Multi Bintang Indonesia', 'Consumer', '', 'Y'], // Beverages—Brewers
+  ['HALO', 'Haloni Jane', 'Chemicals', '', 'Y'], // Chemicals
+  ['BBRM', 'Pelayaran Nasional Bina Buana Raya', 'Industrial', '', 'Y'], // Marine Shipping
+  ['EMDE', 'Megapolitan Developments', 'Property', '', 'Y'], // Real Estate Services
+  ['BGTG', 'Bank Ganesha', 'Banking', '', 'Y'], // Banks—Regional
+  ['SOLA', 'Xolare RCR Energy', 'Construction', '', 'Y'], // Engineering & Construction
+  ['GRIA', 'Ingria Pratama Capitalindo', 'Property', '', 'Y'], // Real Estate—Development
+  ['CASH', 'Cashlez Worldwide Indonesia', 'Industrial', '', 'Y'], // Business Equipment & Supplies
+  ['IMJS', 'Indomobil Multi Jasa', 'Industrial', '', 'Y'], // Conglomerates
+  ['GOLF', 'Intra Golflink Resorts', 'Consumer', '', 'Y'], // Leisure
+  ['BEER', 'Jobubu Jarum Minahasa', 'Consumer', '', 'Y'], // Beverages—Wineries & Distilleries
+  ['INDS', 'Indospring', 'Automotive', '', 'Y'], // Auto Parts
+  ['HOMI', 'Grand House Mulia', 'Property', '', 'Y'], // Real Estate—Development
+  ['PBID', 'Panca Budi Idaman', 'Chemicals', '', 'Y'], // Packaging & Containers
+  ['DSFI', 'Dharma Samudera Fishing Industries', 'Plantation', '', 'Y'], // Farm Products
+  ['MITI', 'Mitra Investindo', 'Industrial', '', 'Y'], // Marine Shipping
+  ['DGIK', 'Nusa Konstruksi Enjiniring', 'Construction', '', 'Y'], // Engineering & Construction
+  ['ADMF', 'Adira Dinamika Multi Finance', 'Banking', '', 'Y'], // Credit Services
+  ['SPTO', 'Surya Pertiwi', 'Consumer', '', 'Y'], // Furnishings, Fixtures & Appliances
+  ['CARS', 'Industri dan Perdagangan Bintraco Dharma', 'Automotive', '', 'Y'], // Auto & Truck Dealerships
+  ['MHKI', 'Multi Hanna Kreasindo', 'Industrial', '', 'Y'], // Waste Management
+  ['MDIY', 'Daya Intiguna Yasa', 'Retail', '', 'Y'], // Department Stores
+  ['PJHB', 'Pelayaran Jaya Hidup Baru', 'Industrial', '', 'Y'], // Marine Shipping
+  ['AISA', 'FKS Food Sejahtera', 'Consumer', '', 'Y'], // Packaged Foods
+  ['CENT', 'Centratama Telekomunikasi Indonesia', 'Telco', '', 'Y'], // Telecom Services
+  ['JKON', 'Jaya Konstruksi Manggala Pratama', 'Industrial', '', 'Y'], // Conglomerates
+  ['WOOD', 'Integra Indocabinet', 'Consumer', '', 'Y'], // Furnishings, Fixtures & Appliances
+  ['YOII', 'Asuransi Digital Bersama', 'Banking', '', 'Y'], // Insurance—Diversified
+  ['UCID', 'Uni-Charm Indonesia', 'Consumer', '', 'Y'], // Household & Personal Products
+  ['HBAT', 'Minahasa Membangun Hebat', 'Property', '', 'Y'], // Real Estate—Development
+  ['ROTI', 'Nippon Indosari Corpindo', 'Consumer', '', 'Y'], // Packaged Foods
+  ['CASS', 'Cahaya Aero Services', 'Industrial', '', 'Y'], // Airports & Air Services
+  ['CSIS', 'Cahayasakti Investindo Sukses', 'Property', '', 'Y'], // Real Estate—Development
+  ['SURI', 'Maja Agung Latexindo', 'Healthcare', '', 'Y'], // Medical Instruments & Supplies
+  ['BABY', 'Multitrend Indo', 'Retail', '', 'Y'], // Apparel Retail
+  ['PPRI', 'Paperocks Indonesia', 'Chemicals', '', 'Y'], // Packaging & Containers
+  ['CITA', 'Cita Mineral Investindo', 'Metals', '', 'Y'], // Other Industrial Metals & Mining
+  ['SMKM', 'Sumber Mas Konstruksi', 'Construction', '', 'Y'], // Engineering & Construction
+  ['LUCK', 'Sentral Mitra Informatika', 'Tech', '', 'Y'], // Computer Hardware
+  ['KOBX', 'Kobexindo Tractors', 'Construction', '', 'Y'], // Farm & Heavy Construction Machinery
+  ['MBTO', 'Martina Berto', 'Consumer', '', 'Y'], // Household & Personal Products
+  ['AYLS', 'Arkayana Lestari Grup', 'Consumer', '', 'Y'], // Food Distribution
+  ['FWCT', 'Wijaya Cahaya Timber', 'Industrial', '', 'Y'], // Lumber & Wood Production
+  ['PAMG', 'Bima Sakti Pertiwi', 'Property', '', 'Y'], // Real Estate—Diversified
+  ['MGNA', 'Magna Investama Mandiri', 'Banking', '', 'Y'], // Credit Services
+  ['JRPT', 'Jaya Real Property', 'Property', '', 'Y'], // Real Estate—Development
+  ['KKES', 'Kusuma Kemindo Sentosa', 'Chemicals', '', 'Y'], // Specialty Chemicals
+  ['DWGL', 'Dwi Guna Laksana', 'Energy', '', 'Y'], // Thermal Coal
+  ['BOAT', 'Newport Marine Services', 'Energy', '', 'Y'], // Oil & Gas Drilling
+  ['NAIK', 'Adiwarna Anugerah Abadi', 'Construction', '', 'Y'], // Building Materials
+  ['JAYA', 'Armada Berjaya Trans', 'Industrial', '', 'Y'], // Trucking
+  ['SWID', 'Saraswanti Indoland Development', 'Property', '', 'Y'], // Real Estate—Development
+  ['KAEF', 'Kimia Farma', 'Healthcare', '', 'Y'], // Medical Distribution
+  ['SMMT', 'Golden Eagle Energy', 'Energy', '', 'Y'], // Thermal Coal
+  ['INOV', 'Inocycle Technology Group', 'Industrial', '', 'Y'], // Waste Management
+  ['GDST', 'Gunawan Dianjaya Steel', 'Metals', '', 'Y'], // Steel
+  ['OKAS', 'Ancora Indonesia Resources', 'Chemicals', '', 'Y'], // Specialty Chemicals
+  ['LOPI', 'Logisticsplus International', 'Industrial', '', 'Y'], // Integrated Freight & Logistics
+  ['SICO', 'Sigma Energy Compressindo', 'Energy', '', 'Y'], // Oil & Gas Equipment & Services
+  ['PTPS', 'Pulau Subur', 'Plantation', '', 'Y'], // Farm Products
+  ['IRRA', 'Itama Ranoraya', 'Healthcare', '', 'Y'], // Medical Distribution
+  ['ISEA', 'Indo American Seafoods', 'Consumer', '', 'Y'], // Packaged Foods
+  ['NASI', 'Wahana Inti Makmur', 'Plantation', '', 'Y'], // Farm Products
+  ['TIRA', 'Tira Austenite', 'Industrial', '', 'Y'], // Industrial Distribution
+  ['ACRO', 'Samcro Hyosung Adilestari', 'Consumer', '', 'Y'], // Apparel Manufacturing
+  ['UNIQ', 'Ulima Nitra', 'Energy', '', 'Y'], // Thermal Coal
+  ['BOBA', 'Formosa Ingredient Factory', 'Consumer', '', 'Y'], // Packaged Foods
+  ['SGRO', 'Prime Agri Resources', 'Plantation', '', 'Y'], // Farm Products
+  ['WTON', 'Wijaya Karya Beton', 'Construction', '', 'Y'], // Building Materials
+  ['PANS', 'Panin Sekuritas', 'Banking', '', 'Y'], // Capital Markets
+  ['JAWA', 'Jaya Agra Wattie', 'Plantation', '', 'Y'], // Farm Products
+  ['SOTS', 'Satria Mega Kencana', 'Industrial', '', 'Y'], // Lodging
+  ['PEVE', 'Penta Valent', 'Healthcare', '', 'Y'], // Pharmaceutical Retailers
+  ['AREA', 'Dunia Virtual Online', 'Tech', '', 'Y'], // Information Technology Services
+  ['FITT', 'Fortune Resources Investment', 'Metals', '', 'Y'], // Other Industrial Metals & Mining
+  ['MCAS', 'M Cash Integrasi', 'Industrial', '', 'Y'], // Business Equipment & Supplies
+  ['NICE', 'Adhi Kartiko Pratama', 'Metals', '', 'Y'], // Other Industrial Metals & Mining
+  ['MDLA', 'Medela Potentia', 'Healthcare', '', 'Y'], // Medical Distribution
+  ['SUNI', 'Sunindo Pratama', 'Energy', '', 'Y'], // Oil & Gas Equipment & Services
+  ['MINE', 'SINAR TERANG MANDIRI', 'Metals', '', 'Y'], // Other Industrial Metals & Mining
+  ['PMUI', 'Prima Multi Usaha Indonesia', 'Tech', '', 'Y'], // Electronics & Computer Distribution
+  ['DYAN', 'Dyandra Media International', 'Media', '', 'Y'], // Entertainment
+  ['GGRP', 'Gunung Raja Paksi', 'Metals', '', 'Y'], // Steel
+  ['IPCM', 'Jasa Armada Indonesia', 'Industrial', '', 'Y'], // Marine Shipping
+  ['SAME', 'Sarana Meditama Metropolitan', 'Healthcare', '', 'Y'], // Medical Care Facilities
+  ['BNBA', 'Bank Bumi Arta', 'Banking', '', 'Y'], // Banks—Regional
+  ['OLIV', 'Atlas Nexus Group', 'Consumer', '', 'Y'], // Furnishings, Fixtures & Appliances
+  ['PURI', 'Puri Global Sukses', 'Property', '', 'Y'], // Real Estate—Development
+  ['VAST', 'Vastland Indonesia', 'Property', '', 'Y'], // Real Estate Services
+  ['MERI', 'Merry Riana Edukasi', 'Industrial', '', 'Y'], // Education & Training Services
+  ['ESTA', 'Esta Multi Usaha', 'Industrial', '', 'Y'], // Lodging
+  ['BISI', 'BISI International', 'Chemicals', '', 'Y'], // Agricultural Inputs
+  ['MCOR', 'Bank China Construction Bank Indonesia', 'Banking', '', 'Y'], // Banks—Regional
+  ['HYGN', 'Ecocare Indo Pasifik', 'Industrial', '', 'Y'], // Specialty Business Services
+  ['CSRA', 'Cisadane Sawit Raya', 'Plantation', '', 'Y'], // Farm Products
+  ['KBLI', 'KMI Wire and Cable', 'Industrial', '', 'Y'], // Electrical Equipment & Parts
+  ['SULI', 'SLJ Global', 'Industrial', '', 'Y'], // Lumber & Wood Production
+  ['SPRE', 'Soraya Berjaya Indonesia', 'Consumer', '', 'Y'], // Furnishings, Fixtures & Appliances
+  ['AGRS', 'Bank IBK Indonesia', 'Banking', '', 'Y'], // Banks—Regional
+  ['PGUN', 'Pradiksi Gunatama', 'Plantation', '', 'Y'], // Farm Products
+  ['BNII', 'Bank Maybank Indonesia', 'Banking', '', 'Y'], // Banks—Regional
+  ['MMLP', 'Mega Manunggal Property', 'Property', '', 'Y'], // Real Estate Services
+  ['BELI', 'Global Digital Niaga', 'Retail', '', 'Y'], // Internet Retail
+  ['RICY', 'Ricky Putra Globalindo', 'Consumer', '', 'Y'], // Apparel Manufacturing
+  ['SATU', 'Kota Satu Properti', 'Property', '', 'Y'], // Real Estate—Development
+  ['LIVE', 'Homeco Victoria Makmur', 'Consumer', '', 'Y'], // Furnishings, Fixtures & Appliances
+  ['PNIN', 'Paninvest', 'Banking', '', 'Y'], // Insurance—Life
+  ['PGJO', 'Bahtera Bumi Raya', 'Industrial', '', 'Y'], // Marine Shipping
+  ['LPCK', 'Lippo Cikarang', 'Property', '', 'Y'], // Real Estate—Development
+  ['BACA', 'Bank Capital Indonesia', 'Banking', '', 'Y'], // Banks—Regional
+  ['PLAN', 'Planet Properindo Jaya', 'Industrial', '', 'Y'], // Lodging
+  ['CITY', 'Natura City Developments', 'Property', '', 'Y'], // Real Estate—Development
+  ['KICI', 'Kedaung Indah Can', 'Consumer', '', 'Y'], // Furnishings, Fixtures & Appliances
+  ['MAYA', 'Bank Mayapada Internasional', 'Banking', '', 'Y'], // Banks—Regional
+  ['GWSA', 'Greenwood Sejahtera', 'Property', '', 'Y'], // Real Estate—Development
+  ['ERTX', 'Eratex Djaja', 'Consumer', '', 'Y'], // Apparel Manufacturing
+  ['BLOG', 'Trimitra Trans Persada', 'Industrial', '', 'Y'], // Integrated Freight & Logistics
+  ['CARE', 'Metro Healthcare Indonesia', 'Healthcare', '', 'Y'], // Medical Care Facilities
+  ['CLPI', 'Colorpak Indonesia', 'Chemicals', '', 'Y'], // Specialty Chemicals
+  ['NATO', 'Olympus Strategic Indonesia', 'Industrial', '', 'Y'], // Lodging
+  ['DOSS', 'Global Sukses Digital', 'Retail', '', 'Y'], // Specialty Retail
+  ['JIHD', 'Jakarta International Hotels & Development', 'Industrial', '', 'Y'], // Lodging
+  ['SDRA', 'Bank Woori Saudara Indonesia 1906', 'Banking', '', 'Y'], // Banks—Regional
+  ['OBMD', 'OBM Drilchem', 'Chemicals', '', 'Y'], // Specialty Chemicals
+  ['PTSN', 'Sat Nusapersada', 'Tech', '', 'Y'], // Electronic Components
+  ['BVIC', 'Bank Victoria International', 'Banking', '', 'Y'], // Banks—Regional
+  ['MKAP', 'Multikarya Asia Pasifik Raya', 'Energy', '', 'Y'], // Oil & Gas Equipment & Services
+  ['LABS', 'UBC Medical Indonesia', 'Healthcare', '', 'Y'], // Medical Devices
+  ['HELI', 'Jaya Trishindo', 'Industrial', '', 'Y'], // Airports & Air Services
+  ['BMHS', 'Bundamedik', 'Healthcare', '', 'Y'], // Medical Care Facilities
+  ['ECII', 'Electronic City Indonesia', 'Retail', '', 'Y'], // Specialty Retail
+  ['DGNS', 'Diagnos Laboratorium Utama', 'Healthcare', '', 'Y'], // Diagnostics & Research
+  ['RAAM', 'Tripar Multivision Plus', 'Media', '', 'Y'], // Entertainment
+  ['CMNP', 'Citra Marga Nusaphala Persada', 'Construction', '', 'Y'], // Infrastructure Operations
+  ['SKBM', 'Sekar Bumi', 'Consumer', '', 'Y'], // Packaged Foods
+  ['IMAS', 'Indomobil Sukses Internasional', 'Automotive', '', 'Y'], // Auto & Truck Dealerships
+  ['NELY', 'Pelayaran Nelly Dwi Putri', 'Industrial', '', 'Y'], // Marine Shipping
+  ['BPTR', 'Batavia Prosperindo Trans', 'Industrial', '', 'Y'], // Rental & Leasing Services
+  ['PZZA', 'Sarimelati Kencana', 'Consumer', '', 'Y'], // Restaurants
+  ['INAI', 'Indal Aluminium Industry', 'Metals', '', 'Y'], // Aluminum
+  ['MERK', 'Merck Indonesia', 'Healthcare', '', 'Y'], // Drug Manufacturers—Specialty & Generic
+  ['BOLA', 'Bali Bintang Sejahtera', 'Media', '', 'Y'], // Entertainment
+  ['HGII', 'Hero Global Investment', 'Energy', '', 'Y'], // Utilities—Renewable
+  ['WINE', 'HATTEN BALI', 'Consumer', '', 'Y'], // Beverages—Wineries & Distilleries
+  ['TOTO', 'Surya Toto Indonesia', 'Construction', '', 'Y'], // Building Products & Equipment
+  ['BUAH', 'Segar Kumala Indonesia', 'Consumer', '', 'Y'], // Food Distribution
+  ['UNIC', 'Unggul Indah Cahaya', 'Chemicals', '', 'Y'], // Chemicals
+  ['DNAR', 'Bank Oke Indonesia', 'Banking', '', 'Y'], // Banks—Regional
 ];
 
 const SCREENER_HEADERS = ['Rank', 'Ticker', 'Name', 'Sector', 'Action', 'Score', 'Setup', 'Close', '1D %', '5D %', 'RSI',

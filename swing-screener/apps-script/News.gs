@@ -138,11 +138,15 @@ function fetchNews() {
 }
 
 // A headline counts as "about" a stock when it names the ticker, the company, or one of its aliases.
+// The ticker matches only in capitals (NAIK, BELI, UANG, BANK, JAYA are also everyday words: "saham naik" must not tag
+// NAIK); the company name and aliases match in any case.
 function buildAliasRes_(uni) {
-  return uni.map(u => ({
-    ticker: u.ticker,
-    re: new RegExp('\\b(' + [u.ticker, u.name].concat(u.aliases).filter(Boolean).map(escapeRe_).join('|') + ')\\b', 'i'),
-  }));
+  return uni.map(u => {
+    const tk = new RegExp('\\b' + escapeRe_(u.ticker) + '\\b');
+    const names = [u.name].concat(u.aliases).filter(Boolean).map(escapeRe_);
+    const nm = names.length ? new RegExp('\\b(' + names.join('|') + ')\\b', 'i') : null;
+    return { ticker: u.ticker, re: { test: s => tk.test(s) || (nm ? nm.test(s) : false) } };
+  });
 }
 
 // One RSS item -> sheet row, or null if it is not about anything we track.
