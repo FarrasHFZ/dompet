@@ -1626,7 +1626,7 @@
     add('pbj', 'Justified P/B (ROE)', pbJ && b.bvps > 0 ? pbJ * b.bvps : null, pbJ ? `ROE ${pctS(b.roe)} (3-year average) vs cost of equity ${pctS(coe)}: fair P/B ${pbJ.toFixed(2)}× book ${f0(b.bvps)}` : '', b.roe == null ? 'no ROE' : b.roe <= gT ? `ROE ${pctS(b.roe)} is below growth: it destroys value at book` : '');
     const peJ = b.roe != null && b.roe > gT ? ((1 - gT / b.roe) * (1 + gT)) / (coe - gT) : null;
     add('pej', 'Justified P/E (ROE)', peJ && b.eps > 0 ? peJ * b.eps : null, peJ ? `fair P/E ${peJ.toFixed(1)}× (pays out ${pctS(1 - gT / b.roe)} to grow ${pctS(gT)}) × EPS ${f0(b.eps)}` : '', b.eps <= 0 ? 'loss-making: no P/E' : '');
-    add('pe', 'Sector P/E', P.pe && b.eps > 0 ? P.pe * b.eps : null, P.pe ? `${p.sector}${P.wide ? ' (few peers: all 300 used)' : ''} median ${P.pe.toFixed(1)}× × EPS ${f0(b.eps)}` : '', b.eps <= 0 ? 'loss-making: no P/E' : '');
+    add('pe', 'Sector P/E', P.pe && b.eps > 0 ? P.pe * b.eps : null, P.pe ? `${p.sector}${P.wide ? ' (few peers: all stocks used)' : ''} median ${P.pe.toFixed(1)}× × EPS ${f0(b.eps)}` : '', b.eps <= 0 ? 'loss-making: no P/E' : '');
     add('pb', 'Sector P/B', P.pb && b.bvps > 0 ? P.pb * b.bvps : null, P.pb ? `median ${P.pb.toFixed(2)}× × book ${f0(b.bvps)}` : '', '');
     if (!b.fin) add('ev', 'Sector EV/EBITDA', P.ev && b.ebitda > 0 && b.netDebt != null ? (P.ev * b.ebitda - b.netDebt) / b.sh : null, P.ev && b.ebitda ? `median ${P.ev.toFixed(1)}× × EBITDA ${rpS(b.ebitda)}, minus net debt` : '', !(b.ebitda > 0) ? 'no positive EBITDA' : '');
     const vals = out.filter(m => m.v).map(m => m.v), mid = med(vals);
