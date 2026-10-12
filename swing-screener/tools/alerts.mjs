@@ -19,7 +19,7 @@ export function buildMessages({ api, picks, newsRows, meta, market, state, watch
   const out = { lines: [], seenAdd: [], first: !state.initialised };
   const interest = new Map(); // ticker -> pick
   // In a broad selloff dozens of stocks are ACT; only the 10 best (plus your watchlist) earn news alerts.
-  picks.filter(p => p.action === 'ACT' && !p.untested && !p.thin).slice(0, 10).forEach(p => interest.set(p.ticker, p));
+  picks.filter(p => p.action === 'ACT' && !p.thin).slice(0, 10).forEach(p => interest.set(p.ticker, p));
   picks.forEach(p => { if (watchlist.includes(p.ticker)) interest.set(p.ticker, p); });
   const sectors = new Set([...interest.values()].map(p => p.sector));
   const seen = new Set(state.seenNews || []);
@@ -64,14 +64,14 @@ export function buildMessages({ api, picks, newsRows, meta, market, state, watch
   if (kept.length > shown.length) out.lines.push(`<i>+${kept.length - shown.length} more in the News tab</i>`);
 
   // Signal-day change
-  const acts = picks.filter(p => p.action === 'ACT' && !p.untested && !p.thin).map(p => p.ticker); // the 200 untested stocks are never announced
+  const acts = picks.filter(p => p.action === 'ACT' && !p.thin).map(p => p.ticker); // added stocks included since 2026-10-12, marked * (unproven set)
   const dayChanged = state.lastSignalDay && state.lastSignalDay !== meta.asOf;
   const head = [];
   if (!out.first && dayChanged) {
     const added = acts.filter(t => !(state.lastActs || []).includes(t)), dropped = (state.lastActs || []).filter(t => !acts.includes(t));
     if (added.length || dropped.length || state.lastRegime !== market.regime) {
       head.push(`<b>Signals for ${esc(meta.asOf)} close</b> · ${esc(market.regime)} (${market.oversoldCount}/${market.of} oversold)` +
-        (added.length ? `\n➕ New ACT (${added.length}): ${added.slice(0, 10).map(t => `<b>${t}</b> ${picks.find(p => p.ticker === t).score}`).join(', ')}${added.length > 10 ? ', …' : ''}` : '') +
+        (added.length ? `\n➕ New ACT (${added.length}): ${added.slice(0, 10).map(t => `<b>${t}</b>${picks.find(p => p.ticker === t).untested ? '*' : ''} ${picks.find(p => p.ticker === t).score}`).join(', ')}${added.some(t => picks.find(p => p.ticker === t).untested) ? ' (* unproven set)' : ''}${added.length > 10 ? ', …' : ''}` : '') +
         (dropped.length ? `\n➖ Left ACT (${dropped.length}): ${dropped.slice(0, 10).join(', ')}${dropped.length > 10 ? ', …' : ''}` : ''));
     }
   }

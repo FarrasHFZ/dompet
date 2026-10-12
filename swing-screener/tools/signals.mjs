@@ -46,7 +46,7 @@ export function stockSignals(api, raw, nDone, idx, { cfg, untested = false, live
     let tier = isLast ? live.tier : null;
     if (!tier) {
       const confirm = raw.c[k] > raw.h[k - 1] || (raw.c[k] > raw.o[k] && raw.c[k] > raw.c[k - 1]);
-      tier = a.avgValue / 1e9 < cfg.minValueB ? 'THIN' : untested ? 'SKIP' : !confirm ? 'WAIT' : 'ACT'; // no market-filter gate since 2026-10-10 (owner's decision)
+      tier = a.avgValue / 1e9 < cfg.minValueB ? 'THIN' : !confirm ? 'WAIT' : 'ACT'; // added stocks get ACT too since 2026-10-12, flagged u // no market-filter gate since 2026-10-10 (owner's decision)
     }
     if (k <= busyUntil) { streak = true; continue; } // already holding this stock
     const d = dayOf(raw.d[k]);
@@ -55,7 +55,7 @@ export function stockSignals(api, raw, nDone, idx, { cfg, untested = false, live
       const r = resolve(raw, k, nDone, stop, a.target, cfg.horizon);
       busyUntil = r.j ?? Infinity;
       delete r.j;
-      ev.push({ d, k: 'call', s: score, stop, tp: a.target, ...(dn ? { dn: 1 } : {}), ...r });
+      ev.push({ d, k: 'call', s: score, stop, tp: a.target, ...(dn ? { dn: 1 } : {}), ...(untested ? { u: 1 } : {}), ...r });
     } else if (!streak) ev.push({ d, k: 'radar', s: score, tier });
     streak = true;
   }
@@ -67,7 +67,9 @@ export function stockSignals(api, raw, nDone, idx, { cfg, untested = false, live
 // the payoff ratio, profit factor and expectancy, and with an account: 10 equal slots (10% of equity each, the site's
 // sizing), each call taken if a slot is free on its signal day, realised at its exit, worst drawdown on closed trades.
 export function callStats(signals) {
-  const all = Object.entries(signals).flatMap(([t, ev]) => ev.filter(e => e.k === 'call').map(e => ({ t, ...e })));
+  // Calls on the added (unproven) stocks are kept out of the main scorecard and account, and summarised on their own.
+  const every = Object.entries(signals).flatMap(([t, ev]) => ev.filter(e => e.k === 'call').map(e => ({ t, ...e })));
+  const all = every.filter(c => !c.u), unp = every.filter(c => c.u);
   const sum = calls => {
     const cl = calls.filter(c => c.x && c.ret != null), w = cl.filter(c => c.ret > 0), l = cl.filter(c => c.ret <= 0);
     const avg = a => (a.length ? a.reduce((s, c) => s + c.ret, 0) / a.length : null);
@@ -88,7 +90,7 @@ export function callStats(signals) {
   close('9999');
   const mv = Object.entries(months).sort(), mret = mv.map(([m, v], i) => [m, v / (i ? mv[i - 1][1] : 1) - 1]);
   const byMonth = {}; all.forEach(c => { const m = c.d.slice(0, 7); (byMonth[m] = byMonth[m] || []).push(c); });
-  return { from: all.map(c => c.d).sort()[0] || null, all: sum(all), up: sum(all.filter(c => !c.dn)), down: sum(all.filter(c => c.dn)),
+  return { from: all.map(c => c.d).sort()[0] || null, all: sum(all), unproven: sum(unp), up: sum(all.filter(c => !c.dn)), down: sum(all.filter(c => c.dn)),
     account: { slots: 10, total: eq - 1, maxDD: dd, monthsUp: mret.filter(x => x[1] > 0).length, months: mret.length, worstMonth: mret.length ? Math.min(...mret.map(x => x[1])) : null },
     byMonth: Object.fromEntries(Object.entries(byMonth).sort().map(([m, a]) => [m, sum(a)])),
     // Every replayed call, one row each, for the Track record table (newest first; ~200 rows a year).

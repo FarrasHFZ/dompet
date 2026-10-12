@@ -167,7 +167,10 @@ export async function refreshNewsStore(api, uni, { storeFile, legacyFile, hot = 
   }
 
   const cutoff = Date.now() - KEEP_DAYS * DAY;
-  const reclass = r => { const cl = api.classify_(r[2]); return [r[0], r[1], r[2], r[3], cl.category, r[5], r[6], cl.sentiment, r[8]]; };
+  // Stored headlines are re-tagged with today's alias rules too, not only re-classified: a tag made by an older rule
+  // (e.g. the case-insensitive ticker match that tagged "peluang cuan" = profit to CUAN) must not survive in the store.
+  const retag = t => aliasRes.filter(a => a.re.test(t)).map(a => a.ticker).join(',');
+  const reclass = r => { const cl = api.classify_(r[2]); return [r[0], r[1], r[2], r[3], cl.category, retag(r[2]), r[6], cl.sentiment, r[8]]; };
   const rows = store.rows.map(reclass).concat(fresh).filter(r => new Date(r[0]).getTime() >= cutoff).sort((a, b) => new Date(b[0]) - new Date(a[0]));
   const ok = totals.requests - totals.fails;
   const state = totals.requests === 0 ? 'ok' : ok === 0 ? 'stale' : totals.fails > 0 ? 'partial' : 'ok';

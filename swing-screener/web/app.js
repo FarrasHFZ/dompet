@@ -13,11 +13,11 @@
   // News direction: +-0.5 deadband, so a stock with no real news reads neutral.
   const arrow = s => (s >= 0.5 ? '<span class="up">▲ supports</span>' : s <= -0.5 ? '<span class="down">▼ risk</span>' : '<span class="mute">• neutral</span>');
 
-  const TIER = { 'ACT+': 'Bounce candle + flow up', ACT: 'Bounce candle confirmed', 'ACT?': 'Bounce candle, but flow down', WAIT: 'Oversold, wait for a bounce candle', SKIP: 'Not traded: NeoBDM veto, or one of the 400 stocks added in October 2026 (the bounce edge was not confirmed', PAUSE: 'Market filter: IHSG below its 200-day average, no new bounce trades', THIN: 'Oversold, but trades under Rp 5 B a day: too thin to trade', SUSP: 'No trading in the last 3 sessions: suspended or halted' };
+  const TIER = { 'ACT+': 'Bounce candle + flow up', ACT: 'Bounce candle confirmed', 'ACT?': 'Bounce candle, but flow down', WAIT: 'Oversold, wait for a bounce candle', SKIP: 'Not traded: NeoBDM veto (the bounce edge was not confirmed', PAUSE: 'Market filter: IHSG below its 200-day average, no new bounce trades', THIN: 'Oversold, but trades under Rp 5 B a day: too thin to trade', SUSP: 'No trading in the last 3 sessions: suspended or halted' };
   const tierHtml = p => (p.tier && p.tier !== 'WATCH' ? '<span class="tier t' + (p.tier === 'ACT+' ? 'P' : p.tier === 'ACT?' ? 'Q' : p.tier) + '" title="' + esc(TIER[p.tier]) + '">' + esc(p.tier) + '</span>' : '');
   // Conglomerate group label (tools/groups.mjs): short name, rank on hover; a click opens the Groups tab.
   const groupTag = p => {
-    const nm = p.untested ? '<span class="newmark" title="One of the 400 stocks added in Oct 2026 (200 on the 10th, 200 on the 12th): shown, not traded (Track record)">new</span>' : '';
+    const nm = p.untested ? (p.unproven ? '<span class="newmark" title="ACT on one of the 400 stocks added in Oct 2026: the bounce rule failed its holdout on these stocks, so this call belongs to an unproven set with its own record (Track record)">unproven set</span>' : '<span class="newmark" title="One of the 400 stocks added in Oct 2026 (200 on the 10th, 200 on the 12th): gets ACT only when liquid, flagged as an unproven set (Track record)">new</span>') : '';
     const g = p.group; if (!g) return nm;
     const short = g.id === 'bumn' ? 'BUMN' : String(g.alias || g.name).replace(/^saham /, '');
     return `${nm}<button class="gtag${g.hot ? ' hot' : ''}" data-group="${esc(g.id)}" title="${esc(g.name)} group: #${g.rank || '–'} of ${g.of} by 20-day strength${g.hot ? ', jumped 10%+ in a week recently' : ''}. Click for the Groups tab.">${esc(short)}</button>`;
@@ -1338,7 +1338,7 @@
     const bc = p.brokerCost && !p.brokerCost.none && !p.brokerCost.stale ? p.brokerCost : null, fu = p.fundamentals, o = p.ownership;
     let title, sub;
     switch (angle) {
-      case 'live': title = `${T} has ${slide}${whereTo}, and buyers stepped in today.`; sub = tradeNote ? tradeNote + `The bet is unchanged: a short snap-back, not a turnaround.` : `We read it as a short snap-back trade, not a turnaround: paper-buy at the next open (around <b>${f0(px)}</b>), aim for <b>${f0(p.target)}</b> (${sgnP(tgtD)}) within ${H} sessions, and accept being wrong below <b>${f0(stop)}</b> (${sgnP(stopD)}).`; break;
+      case 'live': title = `${T} has ${slide}${whereTo}, and buyers stepped in today.`; sub = tradeNote ? tradeNote + `The bet is unchanged: a short snap-back, not a turnaround.` : `We read it as a short snap-back trade, not a turnaround: paper-buy at the next open (around <b>${f0(px)}</b>), aim for <b>${f0(p.target)}</b> (${sgnP(tgtD)}) within ${H} sessions, and accept being wrong below <b>${f0(stop)}</b> (${sgnP(stopD)}).`; if (p.unproven) sub += ` <b>Unproven set:</b> ${T} is one of the stocks added in October 2026, where this rule failed its holdout test; its calls are tracked separately.`; break;
       case 'wait': title = `${T} is ${depth} after it has ${slide}, but the bounce has not started.`; sub = tradeNote ? tradeNote : `It turns into a paper buy only after an up day${trigHi ? `: a close above <b>${f0(trigHi)}</b> (the last session's high), or a green candle closing above <b>${f0(p.close)}</b>` : ''}. Buying before that lost money in our backtest; then the plan is <b>${f0(p.target)}</b> target, <b>${f0(stop)}</b> stop.`; break;
       case 'skip': title = `${T} looks ${depth}, but we do not trade it.`; sub = p.untested ? `It is one of the 400 stocks added in October 2026. On them the bounce rule failed its pre-registered holdout test, and adding them cut the account's return, so it stays on the watch list only.` : `NeoBDM flags unusual activity (Pinky) or thin trading, which vetoes the trade.`; break;
       case 'thin': title = `${T} looks ${depth}, but it trades only about Rp ${p.valueB.toFixed(1)} B a day.`; sub = `Below Rp 5 B a day the entry, stop and exit prices in our tests are not reliable fills, and a few lots move the price. Shown, never traded.`; break;
@@ -2019,7 +2019,7 @@
     return `<h3>Why so few ACT calls? Each suspect, checked</h3>
       <div class="card pad">
         <p><b>1. The rule fights itself (the biggest cap).</b> ACT needs the oversold score ≥ 65 <i>and</i> a bounce candle on the same day, but a bounce lifts RSI and the 5-day return, so the score drops about 30 points that very day. Over the last two years only 1,116 of 2,879 bounce candles right after an oversold day still scored 65, and two thirds of oversold spells on the tested stocks never became ACT; most bounced 1-5 sessions later at a score near 29.</p>
-        <p><b>2. Most of the list can never be ACT.</b> The 400 stocks added in October 2026 are SKIP (the bounce failed its test on the first 200; the next 200 are mostly too thin to trade anyway).</p>
+        <p><b>2. The added stocks.</b> Until 12 Oct 2026 the 400 stocks added in October were SKIP (the bounce failed its test on the first 200). Since then the liquid ones get ACT too, flagged <i>unproven set</i> and scored in their own row; most of the latest 200 trade under Rp 1 B a day, so they stay THIN.</p>
         <p><b>3. The target is not it.</b> +8% decides the outcome, not the count: about half of ACT trades hit it. Smaller and ATR-based targets were tested in the 80-exit payoff study and did not help.</p>
         <p><b>Was fixing 1 and 2 the answer? Tested, pre-registered: no.</b> Allowing the bounce up to 5 sessions late gives about 2.4× the calls, but the late ones are worse: ${pc(S.RECENT.mX, 2)} a trade since 2022 against ${pc(S.RECENT.mL, 2)} for same-day calls, and ${pc(S.O613.mX, 2)} on the 613 never-used stocks. The 200 SKIP stocks made ${pc(S.N200.mW, 2)} a trade. So the strict same-day rule is not an accident: it filters out the bounces that fade. The real limit is the stocks themselves: on stocks the rule was not built on, every version loses (${pc(S.O613.mL, 2)} a trade), and the trait scans found that weakness on IDX tends to continue. More ACT badges would mean more losing calls, so the rule stays as it is and stays paper-only.</p>
       </div>`;
@@ -2086,7 +2086,7 @@
         <div class="stat"><small>Account, 10 positions of 10%</small><b>${pc(A.total, 1)}</b><div class="muted">worst drawdown ${pc(A.maxDD, 1)} · ${A.monthsUp} of ${A.months} months up</div></div>
       </div>
       <div class="card scroll"><table><thead><tr><th>Calls</th><th class="n">Closed</th><th class="n">Win rate</th><th class="n">Avg win</th><th class="n">Avg loss</th><th class="n">Payoff</th><th class="n">Profit factor</th><th class="n">Expectancy</th><th class="n">Worst</th><th class="n">Losing streak</th></tr></thead><tbody>
-        ${col('All', cs.all)}${col('IHSG above its 200-day average', cs.up)}${col('IHSG below it (downtrend)', cs.down)}</tbody></table></div>
+        ${col('All', cs.all)}${col('IHSG above its 200-day average', cs.up)}${col('IHSG below it (downtrend)', cs.down)}${cs.unproven && cs.unproven.n ? col('Added stocks (unproven set, kept out of the rows above)', cs.unproven) : ''}</tbody></table></div>
       ${fewActHtml()}
       ${honestyHtml(cs)}
       ${recentCallsHtml(cs)}

@@ -20,7 +20,10 @@ import { loadGroups, groupSeries, groupSummary, groupReadAt } from './groups.mjs
 const cfg = { targetPct: +(process.env.TARGET || 8), horizon: +(process.env.HORIZON || 15), stopMult: +(process.env.STOPMULT || 2.5), minValueB: 5 };
 const api = loadEngine();
 const uni = universe(api);
-const NEWSET = expansionTickers(); // 200 stocks added 2026-10-10: shown, never traded (tools/experiment-expand.mjs)
+// The 400 stocks added on 2026-10-10 / 12 (tools/experiment-expand.mjs: the bounce rule failed its holdout on the first 200).
+// Owner's decision 2026-10-12: they get ACT like the original 100 when liquid, flagged 'unproven set' (pk.unproven) and
+// kept apart in the scorecard, so their own record shows whether the rule works on them.
+const NEWSET = expansionTickers();
 const OUT = path.join(ROOT, 'web', 'data');
 const HIST = path.join(ROOT, 'data', 'history');
 fs.mkdirSync(OUT, { recursive: true });
@@ -181,7 +184,8 @@ uni.forEach(u => {
   pk.thin = thin;
   // No volume in the last 3 sessions: suspended (or halted). Shown, never traded.
   pk.suspended = b.v.slice(-3).every(v => !v);
-  pk.tier = pk.suspended ? 'SUSP' : thin ? (pk.score >= api.ACT_SCORE ? 'THIN' : 'WATCH') : tierOf(pk.score, api.ACT_SCORE, pk.confirm, ov, MARKET_FILTER_GATES_ACT ? marketOk : true, flowVeto, pk.untested);
+  pk.tier = pk.suspended ? 'SUSP' : thin ? (pk.score >= api.ACT_SCORE ? 'THIN' : 'WATCH') : tierOf(pk.score, api.ACT_SCORE, pk.confirm, ov, MARKET_FILTER_GATES_ACT ? marketOk : true, flowVeto, false);
+  pk.unproven = pk.untested && pk.tier === 'ACT';
   pk.filings = filings && filings.by[u.ticker] ? filings.by[u.ticker] : [];
   picks.push(pk);
 });
