@@ -70,10 +70,11 @@ for (const tk of U.concat(OTHER)) {
     const f = [breadth != null && breadth >= 0.30, breadth != null && breadth < 0.10, b.c[k - 20] / b.c[k - 250] - 1 > 0, b.c[k] > sma200, val >= 5 && val <= 20,
       b.c[k - 1] / b.c[k - 6] - 1 <= -0.10, av20 > 0 && b.v[k] >= 1.5 * av20, rng > 0 && (b.c[k] - b.l[k]) / rng >= 0.75, b.o[k] < b.c[k - 1] && b.c[k] > b.c[k - 1],
       b.c[k] > b.h[k - 1], ii != null && ii > 0 && idx.c[ii] > idx.c[ii - 1], rng > 0 && (Math.min(b.o[k], b.c[k]) - b.l[k]) / rng >= 0.5];
-    C.push({ tk, k, j1: x.j1, day, grp: set === 'other' ? 'A' : day < SPLIT ? 'D' : 'B', L, f, ret: x.ret });
+    C.push({ tk, k, j1: x.j1, day, b: breadth, grp: set === 'other' ? 'A' : day < SPLIT ? 'D' : 'B', L, f, ret: x.ret });
   }
 }
 console.log(`candidates ${C.length}`);
+if (process.env.DUMP) fs.writeFileSync(path.join(CACHE, 'act-refine-cands.json'), JSON.stringify(C));
 const take = rows => { const busy = {}, out = []; rows.sort((a, b) => (a.tk < b.tk ? -1 : a.tk > b.tk ? 1 : a.k - b.k)).forEach(r => { if (busy[r.tk] != null && r.k <= busy[r.tk]) return; busy[r.tk] = r.j1; out.push(r); }); return out; };
 const st = tr => { const by = new Map(); tr.forEach(t => { const m = t.day.slice(0, 7); if (!by.has(m)) by.set(m, []); by.get(m).push(t.ret); }); const xs = [...by.values()].map(mean);
   return { n: tr.length, mean: mean(tr.map(t => t.ret)), t: xs.length > 1 ? mean(xs) / (sd(xs) / Math.sqrt(xs.length)) : 0, win: tr.filter(t => t.ret > 0).length / (tr.length || 1) }; };
@@ -84,7 +85,7 @@ P(`base           D: W5 ${base.D.W5.n} ${pct(base.D.W5.mean)} | L ${base.D.L.n} 
 FN.forEach((name, i) => {
   const r = Object.fromEntries(['D', 'A', 'B'].map(g => [g, st(take(C.filter(c => c.grp === g && c.f[i])))]));
   const D = r.D.mean > base.D.W5.mean && r.D.mean > 0 && r.D.t >= 2.9, A = r.A.mean > 0 && r.A.t >= 2, B = r.B.mean > 0 && r.B.mean >= base.B.L.mean, M = r.B.n >= base.B.L.n;
-  res[name] = { ...r, D, A, B, M, pass: D && A && B && M };
+  res[name] = { stats: r, D, A, B, M, pass: D && A && B && M };
   P(`${name.padEnd(17)} D n ${String(r.D.n).padStart(4)} ${pct(r.D.mean).padStart(7)} t ${r.D.t.toFixed(2).padStart(5)} | A n ${String(r.A.n).padStart(4)} ${pct(r.A.mean).padStart(7)} t ${r.A.t.toFixed(2).padStart(5)} | B n ${String(r.B.n).padStart(4)} ${pct(r.B.mean).padStart(7)} t ${r.B.t.toFixed(2).padStart(5)}  ${[D && 'D', A && 'A', B && 'B', M && 'M'].filter(Boolean).join('') || '-'}${res[name].pass ? '  PASS' : ''}`);
 });
 const winners = Object.entries(res).filter(([, v]) => v.pass).map(([k]) => k);
