@@ -1,0 +1,10 @@
+{
+  "_note": "Handles are best guesses; run `node tools/kol.mjs verify` flow (agent opens each profile) and fix any marked verified:false.",
+  "kols": [
+    { "name": "Awkarin",          "instagram": "awkarin",         "tiktok": "awkarin",         "verified": { "instagram": true,  "tiktok": false } },
+    { "name": "Natalie Holscher", "instagram": "nathalieholscher","tiktok": "nathalieholscher","verified": { "instagram": true, "tiktok": false } },
+    { "name": "Amanda Zahra",     "instagram": "amandazahra",     "tiktok": "amandazahra",     "verified": { "instagram": false, "tiktok": false } },
+    { "name": "Iranandha",        "instagram": "iranandha",       "tiktok": "iranandha",       "verified": { "instagram": false, "tiktok": false } },
+    { "name": "Molita Lin",       "instagram": "molitalin",       "tiktok": "molitalin",       "verified": { "instagram": false, "tiktok": false } }
+  ]
+}
