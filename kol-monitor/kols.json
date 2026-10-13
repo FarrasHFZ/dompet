@@ -1,10 +1,52 @@
 {
   "_note": "Handles are best guesses; run `node tools/kol.mjs verify` flow (agent opens each profile) and fix any marked verified:false.",
   "kols": [
-    { "name": "Awkarin",          "instagram": "awkarin",         "tiktok": "awkarin",         "verified": { "instagram": true,  "tiktok": false } },
-    { "name": "Natalie Holscher", "instagram": "nathalieholscher","tiktok": "nathalieholscher","verified": { "instagram": true, "tiktok": false } },
-    { "name": "Amanda Zahra",     "instagram": "amandazahra",     "tiktok": "amandazahra",     "verified": { "instagram": false, "tiktok": false } },
-    { "name": "Iranandha",        "instagram": "iranandha",       "tiktok": "iranandha",       "verified": { "instagram": false, "tiktok": false } },
-    { "name": "Molita Lin",       "instagram": "molitalin",       "tiktok": "molitalin",       "verified": { "instagram": false, "tiktok": false } }
+    {
+      "name": "Awkarin",
+      "instagram": "awkarin",
+      "tiktok": "datkarin",
+      "verified": {
+        "instagram": true,
+        "tiktok": true
+      },
+      "notes": "IG @awkarin = business/brand account; personal @narinkovilda. TikTok @datkarin verified badge."
+    },
+    {
+      "name": "Natalie Holscher",
+      "instagram": "nathalieholscher",
+      "tiktok": "nathalieholscher14",
+      "verified": {
+        "instagram": true,
+        "tiktok": false
+      },
+      "notes": "TikTok candidate @nathalieholscher14 (search says ~11.9M); profile did not load logged-out (code 209002). Owner to confirm."
+    },
+    {
+      "name": "Amanda Zahra",
+      "instagram": "amandazahra",
+      "tiktok": "amandazahra",
+      "verified": {
+        "instagram": false,
+        "tiktok": false
+      }
+    },
+    {
+      "name": "Iranandha",
+      "instagram": "iranandha",
+      "tiktok": "iranandha",
+      "verified": {
+        "instagram": false,
+        "tiktok": false
+      }
+    },
+    {
+      "name": "Molita Lin",
+      "instagram": "molitalin",
+      "tiktok": "molitalin",
+      "verified": {
+        "instagram": false,
+        "tiktok": false
+      }
+    }
   ]
 }
