@@ -1,84 +1,7500 @@
 {
-  "_note": "Handles are best guesses; run `node tools/kol.mjs verify` flow (agent opens each profile) and fix any marked verified:false.",
-  "kols": [
-    {
-      "name": "Awkarin",
-      "instagram": "awkarin",
-      "tiktok": "datkarin",
-      "verified": {
-        "instagram": true,
-        "tiktok": true
-      },
-      "notes": "IG @awkarin = business/brand account; personal @narinkovilda. TikTok @datkarin verified badge."
-    },
-    {
-      "name": "Natalie Holscher",
-      "instagram": "nathalieholscher",
-      "tiktok": "nathalieholscher14",
-      "verified": {
-        "instagram": true,
-        "tiktok": false
-      },
-      "notes": "TikTok candidate @nathalieholscher14 (search says ~11.9M); profile did not load logged-out (code 209002). Owner to confirm."
-    },
-    {
-      "name": "Amanda Zahra",
-      "instagram": "aamandazahra",
-      "tiktok": null,
-      "verified": {
-        "instagram": true,
-        "tiktok": false
-      },
-      "twitter": "amndzahra",
-      "notes": "Owner-supplied IG @aamandazahra (1.23M, verified by size/posts). Twitter @amndzahra supplied but not tracked (no collector). TikTok handle still unknown."
-    },
-    {
-      "name": "Iranandha",
-      "instagram": "iranandha",
-      "tiktok": "iranandha",
-      "verified": {
-        "instagram": false,
-        "tiktok": false
-      }
-    },
-    {
-      "name": "Molita Lin",
-      "instagram": "molitalin",
-      "tiktok": "molitalin",
-      "verified": {
-        "instagram": false,
-        "tiktok": false
-      }
-    },
-    {
-      "name": "Hanum Mega",
-      "instagram": "real.hanummegaa",
-      "tiktok": "real.hanummegaa",
-      "verified": {
-        "instagram": true,
-        "tiktok": false
-      },
-      "notes": "Owner-supplied. IG 4.38M ok. TikTok @real.hanummegaa failed the check (0 followers, nickname Angellina), so it needs the right TikTok handle."
-    },
-    {
-      "name": "Jerome Polin",
-      "instagram": "jeromepolin",
-      "tiktok": null,
-      "verified": {
-        "instagram": true,
-        "tiktok": false
-      },
-      "notes": "Owner-supplied IG @jeromepolin (9.67M). Not in the original list: confirm if this is a new KOL."
-    },
-    {
-      "name": "Titan Tyra",
-      "instagram": "titantyra",
-      "tiktok": null,
-      "verified": {
-        "instagram": true,
-        "tiktok": false
-      },
-      "notes": "Owner-supplied IG @titantyra (795K). Not in the original list: confirm if this is a new KOL."
-    }
-  ]
+ "kols": [
+  {
+   "name": "nindy sasmita",
+   "row": 1,
+   "instagram": "nindysasmita",
+   "tiktok": "nindysasmith",
+   "youtube": "nindysasmitaa",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [
+     "ourhomeca"
+    ],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Pak Apud | DIY Crafter",
+   "row": 2,
+   "instagram": "pakapud_",
+   "tiktok": "pakapud_",
+   "youtube": "sujarwadiloed",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "sujarwadiloed",
+     "yetty.dd1"
+    ],
+    "tiktok": [],
+    "youtube": [
+     "c/galerisaturasi",
+     "belajarsendiri",
+     "pakapud"
+    ]
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "dr Shane Tuty Cornish (CBS, IBCLC)",
+   "row": 3,
+   "instagram": "breastfeedo.mom",
+   "tiktok": "konsultanlaktasi",
+   "youtube": "breastfeedomom882",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": false
+   },
+   "flags": {
+    "youtube": "not collected"
+   },
+   "altHandles": {
+    "instagram": [
+     "stopbahlul",
+     "dokterspesialiscinta"
+    ],
+    "tiktok": [
+     "dokterspesialiscinta"
+    ],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Eci fresh",
+   "row": 4,
+   "instagram": "eci.fresh",
+   "tiktok": "ecifresh",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": false
+   },
+   "flags": {
+    "tiktok": "profile not found or unavailable"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Khansa Mariska Firdausi Azizy",
+   "row": 5,
+   "instagram": "khansa_mariska",
+   "tiktok": "khansamariskaa",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ida Wida",
+   "row": 6,
+   "instagram": "idawidareal__",
+   "tiktok": "scorpiogirl04111",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Rumah.Kamali",
+   "row": 7,
+   "instagram": "rumah.kamali",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "RARA CEBUM",
+   "row": 8,
+   "instagram": "tiranissya",
+   "tiktok": "tiranissya",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "Anastasia Siantar",
+   "row": 9,
+   "instagram": "anazsiantar",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Crystabelle Ingrid Zhuo",
+   "row": 10,
+   "instagram": "babybellezhuo",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Wafiq Azizah Malik",
+   "row": 11,
+   "instagram": "pipicaannn",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Andena Surya Zabrina",
+   "row": 12,
+   "instagram": "zabrinadena",
+   "tiktok": "zabrinadena",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Alexander Thian",
+   "row": 13,
+   "instagram": "amrazing",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Kamila Asy Syifa",
+   "row": 14,
+   "instagram": "cutkamilasyifa",
+   "tiktok": "pastperfectense",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "farahkamilasyifa"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Hazelnutspill",
+   "row": 15,
+   "instagram": "hazelnut_spill",
+   "tiktok": "hazelnut_spill",
+   "youtube": "npprnti",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "spill_rnt"
+    ],
+    "tiktok": [
+     "spill_rnt",
+     "thedumppi"
+    ],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Jemima Livia",
+   "row": 16,
+   "instagram": "jemimalivia",
+   "tiktok": null,
+   "youtube": "c/JemimaLivia",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Asa Laily F 🦄",
+   "row": 17,
+   "instagram": "asakecil",
+   "tiktok": "asakecil",
+   "youtube": "asakecilofficial",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "KATIA ✨",
+   "row": 18,
+   "instagram": "katiadailycooking",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "CMS",
+   "row": 19,
+   "instagram": "cindymayasariii",
+   "tiktok": "itscimay",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "RESKI",
+   "row": 20,
+   "instagram": "reskiirai",
+   "tiktok": "reskiirai",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "eve",
+   "row": 21,
+   "instagram": "evelynchrestella",
+   "tiktok": "juanneve",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Elin Ivana",
+   "row": 22,
+   "instagram": "elinivana",
+   "tiktok": "elinivana",
+   "youtube": "c/elinivana",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "𝐊𝐢𝐫𝐚𝐧𝐚.",
+   "row": 23,
+   "instagram": "inikiranaaa__",
+   "tiktok": "inikiranaaa__",
+   "youtube": "inikiranaaa__",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Raudina Kasyfi",
+   "row": 24,
+   "instagram": "raudinakasyfi",
+   "tiktok": "raudinakasyfi",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ummi Khair",
+   "row": 25,
+   "instagram": "ummikhairizky",
+   "tiktok": "ummikhairizky",
+   "youtube": "ummikhairizky",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "byummikhairizky"
+    ],
+    "tiktok": [],
+    "youtube": [
+     "hastutijabir4474"
+    ]
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Liyan Zeftian",
+   "row": 26,
+   "instagram": "liyanzef",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Michael Rendy Wiyono",
+   "row": 27,
+   "instagram": "michaelrendyw",
+   "tiktok": "michaelrendyw",
+   "youtube": "michaelrendyw",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": false
+   },
+   "flags": {
+    "youtube": "not collected"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "Erna Wijayana 陈佛云",
+   "row": 28,
+   "instagram": "ernawijayana",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Audrey Teguh",
+   "row": 29,
+   "instagram": "audreyteguh",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Alifhia Fitri",
+   "row": 30,
+   "instagram": "alifhiafitri",
+   "tiktok": "alifhiaf",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "𝙑𝙖𝙡𝙚𝙧𝙞𝙚 𝘿𝙚𝙬𝙞",
+   "row": 31,
+   "instagram": "valeriedewiofficial",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Tara Erin Desyanti",
+   "row": 32,
+   "instagram": "taraerind",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Maudy Effrosina",
+   "row": 33,
+   "instagram": "maudyeffrosina",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "nt putri",
+   "row": 34,
+   "instagram": "onyah.pingky",
+   "tiktok": "onyah.pingky",
+   "youtube": "onyahpingkyy",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "maskala.home"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Lita Setia Asih 🇮🇩",
+   "row": 35,
+   "instagram": "paperflower_bylita",
+   "tiktok": "paperflower_bylita",
+   "youtube": "paperflower_bylita",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "MAK FRIDA",
+   "row": 36,
+   "instagram": "fridajoincoffee",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "vanillaaaice__",
+   "row": 37,
+   "instagram": "vanillaaaice__",
+   "tiktok": "vanillaaaice__",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": false
+   },
+   "flags": {
+    "tiktok": "under 1000 followers: check this is the right handle"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [
+     "_r3dvelvett"
+    ],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Dinda Alamanda",
+   "row": 38,
+   "instagram": "dindaalamanda_",
+   "tiktok": "dindaalamanda_",
+   "youtube": "dindaalamanda",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [
+     "dindaalamanda01"
+    ],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "nov",
+   "row": 39,
+   "instagram": "noviherdyy",
+   "tiktok": "novherr",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "agitha amanda ariawan",
+   "row": 40,
+   "instagram": "agitha",
+   "tiktok": "agithaamandaa",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Lalita Hutami Bangun",
+   "row": 41,
+   "instagram": "litahutami",
+   "tiktok": "lalitahutami",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "GisellaAnastasia",
+   "row": 42,
+   "instagram": null,
+   "tiktok": "gisel_laaa",
+   "youtube": null,
+   "verified": {
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "Devita Inggrit",
+   "row": 43,
+   "instagram": "devitainggrit",
+   "tiktok": "devitainggrit",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Mas Koko Dwiyanto",
+   "row": 44,
+   "instagram": "maskokoganteng",
+   "tiktok": "maskokoganteng",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "bukumaskoko"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "RICIS🧜‍♀️",
+   "row": 45,
+   "instagram": "riaricis1795",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "ricisofficial_mgmt",
+     "tokoricisofficial"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Vianty Alvia Novita",
+   "row": 46,
+   "instagram": "veyalvia22",
+   "tiktok": "veyalvia22",
+   "youtube": "veyalvia22",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "raisabila03"
+    ],
+    "tiktok": [
+     "itsveyalvia22"
+    ],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Dzawin Nur",
+   "row": 47,
+   "instagram": "dzawin_nur",
+   "tiktok": null,
+   "youtube": "dzawinnur",
+   "verified": {
+    "instagram": true,
+    "youtube": false
+   },
+   "flags": {
+    "youtube": "not collected"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Awkarin",
+   "row": 48,
+   "instagram": "narinkovilda",
+   "tiktok": "datkarin",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": "IG @narinkovilda is the personal account (owner's list). Brand IG @awkarin had 6.42M on 2026-10-13. TikTok @datkarin. · TikTok verified badge"
+  },
+  {
+   "name": "Nabilah L",
+   "row": 49,
+   "instagram": "nabilahcil",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "E R A F A Z I R A",
+   "row": 50,
+   "instagram": "erafaaaa",
+   "tiktok": "erafaaaa",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Vanessa C",
+   "row": 51,
+   "instagram": "vanessacandra",
+   "tiktok": "vanessacandraa",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "theauctus"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "aisy.",
+   "row": 52,
+   "instagram": "aisyafputri",
+   "tiktok": "aisyaffiliate",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Cindy Orchidia",
+   "row": 53,
+   "instagram": "cindyorchide",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Rachel Goddard",
+   "row": 54,
+   "instagram": "rachgoddard",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Nathasia Hendia",
+   "row": 55,
+   "instagram": "nathasiamilka",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Valerie Pola",
+   "row": 56,
+   "instagram": "valeriepola",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Naaja 🌵",
+   "row": 57,
+   "instagram": "isna.nurha",
+   "tiktok": "isnanurha",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Oina Salim",
+   "row": 58,
+   "instagram": "oinasalim",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Amelia Elle",
+   "row": 59,
+   "instagram": "ameliaelle",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Nabila Syabrina",
+   "row": 60,
+   "instagram": "nabilasybrn",
+   "tiktok": "nabilasybrn",
+   "youtube": "nabilasybrn",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "nbiyas"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Bidan Ony | Kriwilife",
+   "row": 61,
+   "instagram": "bidankriwil",
+   "tiktok": null,
+   "youtube": "c/kriwilife",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Kadam Sidik",
+   "row": 62,
+   "instagram": "basyasman",
+   "tiktok": "kadamsidik00",
+   "youtube": "c/BasyasMan",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "PRIZA // Rumah PS",
+   "row": 63,
+   "instagram": "dirumah.ps",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Bunga Deviani",
+   "row": 64,
+   "instagram": "bungadeviani",
+   "tiktok": "bungadeviani",
+   "youtube": "bungadeviani",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Defi Nugraheni",
+   "row": 65,
+   "instagram": "definugg",
+   "tiktok": "definugg",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "preloved.deff"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Tri Hartati",
+   "row": 66,
+   "instagram": "trihartati_18",
+   "tiktok": "linglinglieanti",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "ling2_lieanti"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Sri Rustiani",
+   "row": 67,
+   "instagram": "srirustiani",
+   "tiktok": "rumahezra",
+   "youtube": "srirustiani",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "beli.bunda"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Indyrach",
+   "row": 68,
+   "instagram": "indyrach",
+   "tiktok": "indyrach",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "Muhamad Sadam",
+   "row": 69,
+   "instagram": "sadam.jpg",
+   "tiktok": "sadamm.jpg",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "‎فنس‎",
+   "row": 70,
+   "instagram": "fanisa_fan",
+   "tiktok": "fanisa_fann",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "mama ell | elchia & elenio",
+   "row": 71,
+   "instagram": "elchiadreena_",
+   "tiktok": "mamawull_",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": false
+   },
+   "flags": {
+    "tiktok": "profile not found or unavailable"
+   },
+   "altHandles": {
+    "instagram": [
+     "elenioalsaki"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Olivia Tommy",
+   "row": 72,
+   "instagram": "olivia.mci8",
+   "tiktok": null,
+   "youtube": "oliviatommy13",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "gianlucalimanto"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "INIVINDY",
+   "row": 73,
+   "instagram": "inivindy",
+   "tiktok": "inivindy",
+   "youtube": "ini_vindy",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "Putri Nahari R. A.",
+   "row": 74,
+   "instagram": "putrinahari",
+   "tiktok": null,
+   "youtube": "c/RedyPutri",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Nadila Adiarni",
+   "row": 75,
+   "instagram": "nadiladrn",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Jennifer Hubner",
+   "row": 76,
+   "instagram": "jennifercoppenreal20",
+   "tiktok": "jennifer.coppen",
+   "youtube": "keluargabacil",
+   "verified": {
+    "instagram": false,
+    "tiktok": true,
+    "youtube": false
+   },
+   "flags": {
+    "instagram": "private account",
+    "youtube": "not collected"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "Rizky Aulia Nazlita",
+   "row": 77,
+   "instagram": "aulianaazzz",
+   "tiktok": "aulianaz_",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Chacha Thaib",
+   "row": 78,
+   "instagram": "chachathaib",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "smile safya",
+   "row": 79,
+   "instagram": "shofiakafa",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "ANAKJAJAN (Julia & Marius)",
+   "row": 80,
+   "instagram": "anakjajan",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Hirotada Radifan",
+   "row": 81,
+   "instagram": "hirotadaradifan",
+   "tiktok": null,
+   "youtube": "hirotadaradifan",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "putrii ✿",
+   "row": 82,
+   "instagram": "ptriiile",
+   "tiktok": "dywh000",
+   "youtube": "putrilee358",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Tara Ayu Cempaka",
+   "row": 83,
+   "instagram": "taraayucempaka",
+   "tiktok": null,
+   "youtube": "taraayucempaka",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Muhammad Fauzi",
+   "row": 84,
+   "instagram": "muhammadfauzi746",
+   "tiktok": "muhammadfauzi746",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Spall Spill Ijfina",
+   "row": 85,
+   "instagram": "spallspill.ijfina",
+   "tiktok": "ijfinaamalia",
+   "youtube": "c/ijfinaamalia",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "ijfinaamalia"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ikhda",
+   "row": 86,
+   "instagram": "ikhdaar",
+   "tiktok": "by.ikhda",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "tiktok : shedalighttt",
+   "row": 87,
+   "instagram": "shedalighttt",
+   "tiktok": "shedalighttt",
+   "youtube": "shedalighttt",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Sinta Wibisono",
+   "row": 88,
+   "instagram": "sinta.wibisono.5",
+   "tiktok": "sinta.wibisono7",
+   "youtube": "sintawibisono998",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "𝒅𝒂𝒍𝒂🪽",
+   "row": 89,
+   "instagram": "dayravvr",
+   "tiktok": null,
+   "youtube": "dayravirginia",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "daynavvr"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Byririe0",
+   "row": 90,
+   "instagram": "chatyrie.01",
+   "tiktok": "ririefairus0",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "ririe_fairus"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Diah Didi",
+   "row": 91,
+   "instagram": "bunda_didi",
+   "tiktok": null,
+   "youtube": "bundadidi",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Aurelie Hermansyah Atta",
+   "row": 92,
+   "instagram": "aurelie.hermansyah",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "EJAAK | RezaDwiYanda",
+   "row": 93,
+   "instagram": "ejaak15",
+   "tiktok": "ejaaak15",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Amy Nursifah",
+   "row": 94,
+   "instagram": "helminursifah",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Elkairos & Elkeant",
+   "row": 95,
+   "instagram": "kayandkent.gulo",
+   "tiktok": null,
+   "youtube": "kaymommy6334",
+   "verified": {
+    "instagram": true,
+    "youtube": false
+   },
+   "flags": {
+    "youtube": "not collected"
+   },
+   "altHandles": {
+    "instagram": [
+     "verafebrianthy"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Devi Nursitasari",
+   "row": 96,
+   "instagram": "devinursita",
+   "tiktok": "devinursitaa",
+   "youtube": "devinursitasari1545",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": false
+   },
+   "flags": {
+    "youtube": "not collected"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Risya Brabo",
+   "row": 97,
+   "instagram": "risyabrabo",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Angelica˖✧",
+   "row": 98,
+   "instagram": "angelillc",
+   "tiktok": "smallgirlbigcloset",
+   "youtube": "c/Angelillc",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "𝐕𝐢𝐚",
+   "row": 99,
+   "instagram": "lutvia.ra",
+   "tiktok": null,
+   "youtube": "lutviar",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "VIO ᝰ.ᐟ",
+   "row": 100,
+   "instagram": "alvionithagrandputri",
+   "tiktok": "alvionithaputri",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Dina",
+   "row": 101,
+   "instagram": "makaquarters",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ardina Putri",
+   "row": 102,
+   "instagram": "ardinhai",
+   "tiktok": "ardinhai",
+   "youtube": "c/dinadinoday",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "KHAILA DIAN",
+   "row": 103,
+   "instagram": "khailakk_",
+   "tiktok": "khailauwww",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": false
+   },
+   "flags": {
+    "tiktok": "under 1000 followers: check this is the right handle"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Molita Lin",
+   "row": 104,
+   "instagram": "molita_lin",
+   "tiktok": null,
+   "youtube": "molitalin",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Bundaule",
+   "row": 105,
+   "instagram": "bundaule",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ayuwuland4ri",
+   "row": 106,
+   "instagram": "aywulandar1",
+   "tiktok": "ayuwul4ndari",
+   "youtube": null,
+   "verified": {
+    "instagram": false,
+    "tiktok": true
+   },
+   "flags": {
+    "instagram": "profile not found or unavailable"
+   },
+   "altHandles": {
+    "instagram": [
+     "ayuuwulandar1"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Dikri Muldani",
+   "row": 107,
+   "instagram": "kang_mul18",
+   "tiktok": null,
+   "youtube": "channel/UCEj-gn1CfWMTuYw8Dj63ZZQ",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "kelly g",
+   "row": 108,
+   "instagram": "beautales__",
+   "tiktok": "beautales_",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ulan Noverti",
+   "row": 109,
+   "instagram": "ulanoverti",
+   "tiktok": "ulannoverti",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "M O N A",
+   "row": 110,
+   "instagram": "monna_julia",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Annisa Kayla Nadira",
+   "row": 111,
+   "instagram": "kayla.nadira",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Azkha Tegar",
+   "row": 112,
+   "instagram": "azkhategar",
+   "tiktok": null,
+   "youtube": "azkhategar",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ida & Lukman | Home Living & Family",
+   "row": 113,
+   "instagram": "asa_living",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Prima Oma",
+   "row": 114,
+   "instagram": "primaomma",
+   "tiktok": "primaomaaa",
+   "youtube": "primaoma",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Cyinta Riyanti",
+   "row": 115,
+   "instagram": "cyinta_riyanti",
+   "tiktok": "ayyara_salsabillah",
+   "youtube": "sinta_riyant1",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "putricaya",
+   "row": 116,
+   "instagram": "puchh",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Dwi Handayani Syah Putri",
+   "row": 117,
+   "instagram": "dwihandaanda",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Mirriam Eka",
+   "row": 118,
+   "instagram": "mariaeka_",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Noni Kurniasih",
+   "row": 119,
+   "instagram": "daily_mpasi",
+   "tiktok": "daily_mpasi",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": false
+   },
+   "flags": {
+    "tiktok": "profile not found or unavailable"
+   },
+   "altHandles": {
+    "instagram": [
+     "noni_zamnisa",
+     "mpasipertamabayi",
+     "mpasi.zamzami"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Arya Nara",
+   "row": 120,
+   "instagram": "priabernada",
+   "tiktok": "priabernadaa",
+   "youtube": "aryanara",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Andori",
+   "row": 121,
+   "instagram": "dorippu",
+   "tiktok": "buyoppu",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Tasya Farasya",
+   "row": 122,
+   "instagram": "tasyafarasya",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Yensun 🌻",
+   "row": 123,
+   "instagram": "yennisun",
+   "tiktok": "yennisun3",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Mega dwi cahyani",
+   "row": 124,
+   "instagram": "cahyanirynt",
+   "tiktok": "cahyanirynn",
+   "youtube": "c/cahyaniryn",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "Rumah Nano • Lusti",
+   "row": 125,
+   "instagram": "rumah_nano",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Purwakembar",
+   "row": 126,
+   "instagram": "purwakembar",
+   "tiktok": "purwakembar",
+   "youtube": "purwakembar_real",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Syafira haddad",
+   "row": 127,
+   "instagram": "syafira_hdd",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "𝐌 𝐢 𝐥 𝐚 𝐀 𝐥 𝐚 𝐰 𝐢 𝐲 𝐚 𝐡",
+   "row": 128,
+   "instagram": "milaalawiyahh",
+   "tiktok": null,
+   "youtube": "milaalawiyah",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "home_milaa"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "b",
+   "row": 129,
+   "instagram": "rklopperr",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Nadya Valerie",
+   "row": 130,
+   "instagram": "nadyavalerie",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Benazio | Muslim Traveler ✈️🌎",
+   "row": 131,
+   "instagram": "benakribo",
+   "tiktok": "benakribo",
+   "youtube": "benakribo",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "taudaribena"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Jourimanzky",
+   "row": 132,
+   "instagram": "jourimanzky_",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Danur Agnihotri",
+   "row": 133,
+   "instagram": "danuragnihotri",
+   "tiktok": null,
+   "youtube": "tanudanmonu",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "ItingsMeledak",
+   "row": 134,
+   "instagram": "nandasetyap_",
+   "tiktok": "itingsmeledax",
+   "youtube": "itingsmeledak",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "stings____"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Detri Angga Rita",
+   "row": 135,
+   "instagram": "anggarita4",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "sapatagak.id"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Zaskia Sungkar",
+   "row": 136,
+   "instagram": "zaskiasungkar15",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Yence Tan",
+   "row": 137,
+   "instagram": "newyence",
+   "tiktok": "yencetan",
+   "youtube": "keithxavierwinjaya",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": false
+   },
+   "flags": {
+    "youtube": "not collected"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Hadijah aljufri",
+   "row": 138,
+   "instagram": "ija_aljufri",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ryana Dea",
+   "row": 139,
+   "instagram": "ryana_dea",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Nana Mirdad",
+   "row": 140,
+   "instagram": "nanamirdad_",
+   "tiktok": "thewhitesjournal",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": false
+   },
+   "flags": {
+    "tiktok": "profile not found or unavailable"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "𝓣𝓮𝓽𝓲𝓪 𝓻𝓪𝓱𝓪𝔂𝓾 🦋",
+   "row": 141,
+   "instagram": "tetiarahayuu",
+   "tiktok": "tetiarhy",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [
+     "rumah.tetia"
+    ],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Elviani🌼",
+   "row": 142,
+   "instagram": "vivipihh",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Trisha Saraswati",
+   "row": 143,
+   "instagram": "trishasaraswati",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Rieta Amilia Beta",
+   "row": 144,
+   "instagram": "rieta_amilia",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Dinan Nurfajrina Salmanan",
+   "row": 145,
+   "instagram": "dinanfajrina",
+   "tiktok": "dinanfajrina",
+   "youtube": "channel/UC--5b6u2h57V_00avxmXFEA",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Rᴀғᴀᴇʟ Tᴀɴ",
+   "row": 146,
+   "instagram": "rafaell_16",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "dr. Dion Haryadi",
+   "row": 147,
+   "instagram": "dionharyadi",
+   "tiktok": "dionharyadi",
+   "youtube": "thedoctorsdiet",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": false
+   },
+   "flags": {
+    "youtube": "not collected"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Titan Tyra",
+   "row": 148,
+   "instagram": "titantyra",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Shilvia Ditania",
+   "row": 149,
+   "instagram": "shilviaditania",
+   "tiktok": "shilviaditania_",
+   "youtube": "shilviaditania",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [
+     "ditaplx"
+    ],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Fildza Hasnamudhia",
+   "row": 150,
+   "instagram": "odywoody",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Nina Zatulini",
+   "row": 151,
+   "instagram": "ninazatulini22",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Nanda Arsyinta ʕ •ᴥ•ʔ",
+   "row": 152,
+   "instagram": "nandaarsynt",
+   "tiktok": "nandaarsyinta",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "Vistra Septiyani",
+   "row": 153,
+   "instagram": "___vistra",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Irma Srie Wulandary",
+   "row": 154,
+   "instagram": "irmasrie",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Raden Rauf AM",
+   "row": 155,
+   "instagram": "radenrauf",
+   "tiktok": null,
+   "youtube": "radenrauf",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "indy ratna pratiwi",
+   "row": 156,
+   "instagram": "indyratnap",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "riricilll",
+   "row": 157,
+   "instagram": "riricilll",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "sabrinachairunnisa_",
+   "row": 158,
+   "instagram": "sabrinachairunnisa_",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "dayu hatmanti",
+   "row": 159,
+   "instagram": "dayuhatmanti",
+   "tiktok": "dayuhatmanti",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "belleblissssh",
+   "row": 160,
+   "instagram": "mommy_thaaa",
+   "tiktok": "belleblissssh",
+   "youtube": "mommytha3224",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Nadia Nur Aulya",
+   "row": 161,
+   "instagram": "nadianraulya",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "spilldongnay",
+     "mninay__"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Alfi Siregar",
+   "row": 162,
+   "instagram": "alfisrg",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Toni",
+   "row": 163,
+   "instagram": "toni_cu",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "tonicu_berkah",
+     "adianer54"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Lady Angelina Ismi Razan",
+   "row": 164,
+   "instagram": "ladyrazan",
+   "tiktok": "ladygarva",
+   "youtube": "razanlady",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [
+     "razanlady"
+    ],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Cindy Armedya",
+   "row": 165,
+   "instagram": "cindyarmedya",
+   "tiktok": "cindyarmdya",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": false
+   },
+   "flags": {
+    "tiktok": "profile not found or unavailable"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ardya Tridwantoro H",
+   "row": 166,
+   "instagram": "ardya.th",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "tokopapiya"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "TASYA SAYEED",
+   "row": 167,
+   "instagram": "tasyasayeed",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "tajirdaily",
+     "tasya_sayeed"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Fitri Siagian",
+   "row": 168,
+   "instagram": "fitrysiagian",
+   "tiktok": "fitrysiagian",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": false
+   },
+   "flags": {
+    "tiktok": "profile not found or unavailable"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [
+     "fitrysiagian24"
+    ],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Putri ⋆. 𐙚 ˚",
+   "row": 169,
+   "instagram": "darmaputrii",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Mahmudah",
+   "row": 170,
+   "instagram": "lailatulmahmudahh",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Meira.",
+   "row": 171,
+   "instagram": "meiraniap",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Arrum",
+   "row": 172,
+   "instagram": "arrumrahmaa",
+   "tiktok": "hnfharumrd",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "clay.cliff.hartono",
+   "row": 173,
+   "instagram": "clay.cliff.hartono",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": false
+   },
+   "flags": {
+    "instagram": "profile not found or unavailable"
+   },
+   "altHandles": {
+    "instagram": [
+     "thehartonos.family"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Novita Sari",
+   "row": 174,
+   "instagram": "novita._.sari",
+   "tiktok": "novita._.sari",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Yeniwa",
+   "row": 175,
+   "instagram": "yeniwa_",
+   "tiktok": "yeni.wa0",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": false
+   },
+   "flags": {
+    "tiktok": "under 1000 followers: check this is the right handle"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Jastitia Arifania Tauladani",
+   "row": 176,
+   "instagram": "jastiitia",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Yayuk Catur Anggraini",
+   "row": 177,
+   "instagram": "ayucatur1994",
+   "tiktok": null,
+   "youtube": "ayucatur",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "‎محمد فكريزة ابريل‎",
+   "row": 178,
+   "instagram": "pahyi",
+   "tiktok": "rizaeipril",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Marsha Aruan",
+   "row": 179,
+   "instagram": "aruanmarsha",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Riesvi Hafisa",
+   "row": 180,
+   "instagram": "ivikuu",
+   "tiktok": null,
+   "youtube": "c/ivikuuofficial",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Rismamuny",
+   "row": 181,
+   "instagram": "rismamuny",
+   "tiktok": "rismamuny",
+   "youtube": "rismamuny",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "regabagussetiah",
+     "rumahgama_"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Chintya Gabriella Panggabean",
+   "row": 182,
+   "instagram": "chintyagabriella",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Prilly Latuconsina",
+   "row": 183,
+   "instagram": "prillylatuconsina96",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "ntsana",
+   "row": 184,
+   "instagram": "ntsana",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Nadzira Shafa Askar",
+   "row": 185,
+   "instagram": "enazirashf_",
+   "tiktok": "zirashafa_",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Syifa Hadju Rumi",
+   "row": 186,
+   "instagram": "syifahadju",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "MPASI, REVIEW & SHARING",
+   "row": 187,
+   "instagram": "boemi.mpasi",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "nayakanirwania",
+     "bunanirwania"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Fujianti Utami Putri",
+   "row": 188,
+   "instagram": "fuji_an",
+   "tiktok": "fujiiian",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "Atikahhasna",
+   "row": 189,
+   "instagram": "tikahhasna",
+   "tiktok": "tikahhasna",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": false
+   },
+   "flags": {
+    "tiktok": "profile not found or unavailable"
+   },
+   "altHandles": {
+    "instagram": [
+     "2ndtikahhasna",
+     "artisa.official"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "One Shot, One Moment",
+   "row": 190,
+   "instagram": "dafikhape",
+   "tiktok": "thehasanvideo",
+   "youtube": "thehasanvideo",
+   "verified": {
+    "instagram": false,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {
+    "instagram": "under 1000 followers: check this is the right handle"
+   },
+   "altHandles": {
+    "instagram": [
+     "dapurdidowardah",
+     "thehasanvideo"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "▶️Fun cooking with Yackikuka",
+   "row": 191,
+   "instagram": "yackikuka",
+   "tiktok": "yackikuka",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "dapurumi",
+   "row": 192,
+   "instagram": "dapurumi_channel",
+   "tiktok": null,
+   "youtube": "dapurumi",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Toko Dimaw",
+   "row": 193,
+   "instagram": "tokodimaw",
+   "tiktok": "dimasramadhan_",
+   "youtube": "dimas.ramadhan",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "dimawhome",
+     "dimasramadhan"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "queenraisya10",
+   "row": 194,
+   "instagram": "queenraisya10",
+   "tiktok": "rinaraaa",
+   "youtube": "islamnet-ek8qv",
+   "verified": {
+    "instagram": false,
+    "tiktok": false,
+    "youtube": true
+   },
+   "flags": {
+    "instagram": "profile not found or unavailable",
+    "tiktok": "profile not found or unavailable"
+   },
+   "altHandles": {
+    "instagram": [
+     "rinaraaa",
+     "findsbyrin.id",
+     "perabot.rumahkyu"
+    ],
+    "tiktok": [],
+    "youtube": [
+     "rinaraafamily8929",
+     "resepdapuroma8028"
+    ]
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Rumah Kyfam | Yusnita",
+   "row": 195,
+   "instagram": "yusnitakyfam",
+   "tiktok": "yusnitanasar",
+   "youtube": "yusnitanasar",
+   "verified": {
+    "instagram": true,
+    "tiktok": false,
+    "youtube": true
+   },
+   "flags": {
+    "tiktok": "profile not found or unavailable"
+   },
+   "altHandles": {
+    "instagram": [
+     "spill_yusnitakyfam"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Amanda Zahra",
+   "row": 196,
+   "instagram": "aamandazahra",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": "Twitter @amndzahra supplied, not tracked."
+  },
+  {
+   "name": "Valerie Lee",
+   "row": 197,
+   "instagram": "valerielee__",
+   "tiktok": "curatedmess_",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Christina Han Immanuel",
+   "row": 198,
+   "instagram": "christinaimmanuel",
+   "tiktok": null,
+   "youtube": "christinaimmanuel",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "heyskinn.official"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Yazid Rizki Ramadhan",
+   "row": 199,
+   "instagram": "blogyazid",
+   "tiktok": "yazidrizkiramadhan",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "row 200",
+   "row": 200,
+   "instagram": null,
+   "tiktok": null,
+   "youtube": null,
+   "verified": {},
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Deasi Listiani",
+   "row": 201,
+   "instagram": "deasilistiani",
+   "tiktok": "deasilistiani",
+   "youtube": "deasilistiani",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "Seviqe Rahma Febinita",
+   "row": 202,
+   "instagram": "seviqfebinita",
+   "tiktok": "seviqfebinita",
+   "youtube": "seviqfebinita",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "casadesefa"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Gritte Agatha Hidayat",
+   "row": 203,
+   "instagram": "gritteagathaa",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "OLEVELOVE",
+   "row": 204,
+   "instagram": "olevelove",
+   "tiktok": "olevelove_tiktok",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Andika Ardyansyah",
+   "row": 205,
+   "instagram": "hobiterbang.id_",
+   "tiktok": "hobiterbang.id",
+   "youtube": "hobiterbang",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Rini Perdiyanti",
+   "row": 206,
+   "instagram": "riniperdiyanti",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Fitrop Fitrop",
+   "row": 207,
+   "instagram": "fitrop",
+   "tiktok": "fitropfitrop",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Trisha Hazianur",
+   "row": 208,
+   "instagram": "trishaazia",
+   "tiktok": "trishaaazia",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "vinaa",
+   "row": 209,
+   "instagram": "racunvinaa",
+   "tiktok": "racunvinaa",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [
+     "bymatchalatte7"
+    ],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Mavel Maven dan Mami",
+   "row": 210,
+   "instagram": "mavelmaven",
+   "tiktok": "mavelmaven",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Rikka Rafka",
+   "row": 211,
+   "instagram": "rikka.restie",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "rikka.restienew"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "outfitcantikkekinian",
+   "row": 212,
+   "instagram": "outfitcantikkekinian",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "ciellandcio"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "UCEY",
+   "row": 213,
+   "instagram": "suciirfr",
+   "tiktok": "uceeyyyyy",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "susi official",
+   "row": 214,
+   "instagram": "susizhuo",
+   "tiktok": "susioff",
+   "youtube": "channel/UCVRKwpqNdUrR7-zPlqUwNQQ",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "juan",
+   "row": 215,
+   "instagram": "juansennnnn",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Cindy Pins",
+   "row": 216,
+   "instagram": "pins.home",
+   "tiktok": "pinshome",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Yogi Hadi Wibowo",
+   "row": 217,
+   "instagram": "bobocu.id",
+   "tiktok": "bobocu.id",
+   "youtube": "bobocuchannel",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "WARDAH",
+   "row": 218,
+   "instagram": "wardahmaulina_",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Yanti Nugraha",
+   "row": 219,
+   "instagram": "itsyantinugraha",
+   "tiktok": "itsyantinugraha",
+   "youtube": "elshanummaryamnusaibah",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Filla",
+   "row": 220,
+   "instagram": "kimizhu_",
+   "tiktok": "jannafla",
+   "youtube": "jannafla",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "daybyfla",
+     "by.jannafla"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Inspirasi OOTD Berhijab",
+   "row": 221,
+   "instagram": "inspirasiootdberhijab",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "rizaisu"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Tasya Farasya (@tasyafarasya)",
+   "row": 222,
+   "instagram": "tasyafarasya",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Iranandha",
+   "row": 223,
+   "instagram": "iranndha",
+   "tiktok": "iranandha",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Fadly Faisal",
+   "row": 224,
+   "instagram": "fadlyfsl_",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "°´✿ haulbyghin | Review Try On ⊹ ‧̫‧",
+   "row": 225,
+   "instagram": "itsghinaabil",
+   "tiktok": null,
+   "youtube": "ghiratqifamily",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "mba.ghin",
+     "altasindhome"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "𝓢𝓾𝓬𝓲 𝓜𝓾𝓼𝓽𝓪𝓻𝓪𝓶",
+   "row": 226,
+   "instagram": "sucimustaram",
+   "tiktok": "sucimustaram",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [
+     "haulbyshopi"
+    ],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Julian Jacob",
+   "row": 227,
+   "instagram": "julianjacs",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Suhay Salim",
+   "row": 228,
+   "instagram": "suhaysalim",
+   "tiktok": null,
+   "youtube": "user/suhay12",
+   "verified": {
+    "instagram": true,
+    "youtube": false
+   },
+   "flags": {
+    "youtube": "not collected"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Eliza Perkasa",
+   "row": 229,
+   "instagram": "elizaperkasa",
+   "tiktok": "elizaperkasa2",
+   "youtube": "elizaperkasa",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Teresa Machel | your homecook Chef 💖",
+   "row": 230,
+   "instagram": "machelwie",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Day",
+   "row": 231,
+   "instagram": "dayanasshh",
+   "tiktok": "dayanasshh",
+   "youtube": "dayanasshh8231",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": false
+   },
+   "flags": {
+    "youtube": "not collected"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Sherina Apriliaa",
+   "row": 232,
+   "instagram": "cherryynaaprilia",
+   "tiktok": "cerryna.aprilia",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Clara Yenisaa",
+   "row": 233,
+   "instagram": "clarayenisaa",
+   "tiktok": "clrynsa",
+   "youtube": "clarayenisaa",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Alyssa Daguisé Ghazali",
+   "row": 234,
+   "instagram": "alyssadaguise",
+   "tiktok": "alyssadag1",
+   "youtube": "thealsfamily",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Meimeimecin",
+   "row": 235,
+   "instagram": "japmei",
+   "tiktok": "purplerainindonesia",
+   "youtube": "denimeimei3316",
+   "verified": {
+    "instagram": true,
+    "tiktok": false,
+    "youtube": true
+   },
+   "flags": {
+    "tiktok": "under 1000 followers: check this is the right handle"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "enay🌷 || @naypara_",
+   "row": 236,
+   "instagram": "enayfaradiba",
+   "tiktok": "akuenay",
+   "youtube": "naylaalfaradiba",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "____enays",
+     "naypara_"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Rizka Amelia",
+   "row": 237,
+   "instagram": "rizkaamelya_",
+   "tiktok": "rizkaamelya_",
+   "youtube": "rizkaamelya_",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "raneysha.adhiva"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Hanny Yolandha S.",
+   "row": 238,
+   "instagram": "hannysoegianto",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Aisha | Monica Sahara",
+   "row": 239,
+   "instagram": "monicasahr",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "nesyaaa.st19",
+   "row": 240,
+   "instagram": "nesyaa.st19",
+   "tiktok": "nesyaaast",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Alfina Nindiyani",
+   "row": 241,
+   "instagram": "nindiyaa__",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "mirahayunandaanindita",
+   "row": 242,
+   "instagram": "mirahayunandaanindita",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "bumannakeanukimora",
+     "bumannakeanukimorakiyomi"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Riri",
+   "row": 243,
+   "instagram": "rianarizki",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Dita",
+   "row": 244,
+   "instagram": "livingthebside",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Elizasifaa",
+   "row": 245,
+   "instagram": "elizasifaa",
+   "tiktok": "elizasifaa",
+   "youtube": null,
+   "verified": {
+    "instagram": false,
+    "tiktok": true
+   },
+   "flags": {
+    "instagram": "private account"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "Oceana Sky Gumilar",
+   "row": 246,
+   "instagram": "oceanaskygumilar",
+   "tiktok": "oceanasky_",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "bulandm"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Alena Vidia S",
+   "row": 247,
+   "instagram": "alenavidiasrn",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "𝐌𝐚𝐱𝐰𝐞𝐥𝐥 𝐒𝐚𝐥𝐯𝐚𝐝𝐨𝐫",
+   "row": 248,
+   "instagram": "maxwellsalvadorr",
+   "tiktok": "haloakumaxwell",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "ibumilenial__",
+   "row": 249,
+   "instagram": "ibumilenial__",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": false
+   },
+   "flags": {
+    "instagram": "profile not found or unavailable"
+   },
+   "altHandles": {
+    "instagram": [
+     "ibumilenial_",
+     "nesiabogita"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Muhamad Azman",
+   "row": 250,
+   "instagram": "muhammadazmann",
+   "tiktok": null,
+   "youtube": "c/AzmanAnnis",
+   "verified": {
+    "instagram": true,
+    "youtube": false
+   },
+   "flags": {
+    "youtube": "not collected"
+   },
+   "altHandles": {
+    "instagram": [
+     "azmanannis",
+     "annisaoy",
+     "serbaserbiannisaoy"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "FAHRIZA FAMILY",
+   "row": 251,
+   "instagram": "ayyara_azkayra",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Inspirasi Outfit Hijab",
+   "row": 252,
+   "instagram": "virgohaul",
+   "tiktok": "ayuvwxyz30",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Gendhis Momo",
+   "row": 253,
+   "instagram": "gendhismomodrl",
+   "tiktok": "gendhismo",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Nikita Kusuma",
+   "row": 254,
+   "instagram": "nikitakusuma",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Antik Arifani | Antikfurqan",
+   "row": 255,
+   "instagram": "antikarifani",
+   "tiktok": "antikfurqan",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "satusatunya.id",
+     "furqanhm"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ratri",
+   "row": 256,
+   "instagram": "kellyshirouchi",
+   "tiktok": null,
+   "youtube": "kellyshirouchi",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Fahiramira",
+   "row": 257,
+   "instagram": "theothersidefahiramira",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "fahiramira"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Alfiatul Hasanah",
+   "row": 258,
+   "instagram": "unialfi",
+   "tiktok": "unialfiofficial",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Astari Budi",
+   "row": 259,
+   "instagram": "astaririri",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "enje.ema",
+   "row": 260,
+   "instagram": "enje.ema",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Umma Acen | Parenting Enthusiast",
+   "row": 261,
+   "instagram": "mutiatreza",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Hassan Alaydrus",
+   "row": 262,
+   "instagram": "hassanalaydrus",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ratna Ningsih",
+   "row": 263,
+   "instagram": "rumah.atu",
+   "tiktok": "rumah.atu",
+   "youtube": "raturatnaatu5379",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": false
+   },
+   "flags": {
+    "youtube": "not collected"
+   },
+   "altHandles": {
+    "instagram": [
+     "diandraamartha_"
+    ],
+    "tiktok": [],
+    "youtube": [
+     "ratna.ningsih24"
+    ]
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Fiersa Besari",
+   "row": 264,
+   "instagram": "fiersabesari",
+   "tiktok": "fiersabesari",
+   "youtube": "c/fiersabesari",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": false
+   },
+   "flags": {
+    "youtube": "not collected"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "Verti Tri Wahyuni",
+   "row": 265,
+   "instagram": "ve.idn",
+   "tiktok": null,
+   "youtube": "shannonkurniawan",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "hello.ve.idn",
+     "shannon.idn"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Sarah Alana Gibson",
+   "row": 266,
+   "instagram": "sarahgibson21",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Merry🐝",
+   "row": 267,
+   "instagram": "itsmerry91",
+   "tiktok": "itsmerry91",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "babymoonella"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ocyella G Indirawnie Ketaren",
+   "row": 268,
+   "instagram": "ocyellaindirawnie",
+   "tiktok": "indirawnie",
+   "youtube": null,
+   "verified": {
+    "instagram": false,
+    "tiktok": true
+   },
+   "flags": {
+    "instagram": "private account"
+   },
+   "altHandles": {
+    "instagram": [
+     "indirawnie"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Isri Novita Lestari",
+   "row": 269,
+   "instagram": "isrickyfamily",
+   "tiktok": "isrickyfamily",
+   "youtube": "isrickyfamily1997",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": false
+   },
+   "flags": {
+    "youtube": "not collected"
+   },
+   "altHandles": {
+    "instagram": [
+     "rickyadrian.d"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Violenzia Jeanette",
+   "row": 270,
+   "instagram": "violenziajean",
+   "tiktok": "violenziajeanette",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "Ilham Suci Rahmadhani",
+   "row": 271,
+   "instagram": "hellodhanii",
+   "tiktok": "hellodhani",
+   "youtube": "hellodhanii",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "RUMAH SUMADI - Nico & Winny",
+   "row": 272,
+   "instagram": "rumahsmd",
+   "tiktok": "rumahsmd",
+   "youtube": "channel/UCBbkrBKh3LMPT5pFrsLE7VQ",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Jerome Polin",
+   "row": 273,
+   "instagram": "jeromepolin",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Amelia Andani",
+   "row": 274,
+   "instagram": "ameliandanii",
+   "tiktok": "itsandani",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Amelinda Sanjaya",
+   "row": 275,
+   "instagram": "mellindasn",
+   "tiktok": "mellindasn",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Regina Amalia Salim",
+   "row": 276,
+   "instagram": "regina_amalia",
+   "tiktok": "reginaamaliasalim",
+   "youtube": "reginaamaliasalim5984",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": false
+   },
+   "flags": {
+    "youtube": "not collected"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Stefani Horison",
+   "row": 277,
+   "instagram": "fanimci5",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Yoan Mardiana",
+   "row": 278,
+   "instagram": "febyoan",
+   "tiktok": "febyoan",
+   "youtube": "febyoan",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Kezia Gloria Christy",
+   "row": 279,
+   "instagram": "keziagc",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Dian Ayu Lestari",
+   "row": 280,
+   "instagram": "dianayulestari",
+   "tiktok": "dianayulestari__",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Fifit Fitrisari",
+   "row": 281,
+   "instagram": "fifit.fitrisari",
+   "tiktok": "fifit.fitrisari",
+   "youtube": "fifit.fitrisari",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Michelle (Hendra) Park 채미설",
+   "row": 282,
+   "instagram": "michimomo",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Lizzebeth",
+   "row": 283,
+   "instagram": "lizzebethmua",
+   "tiktok": "lizzebethmuaa",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "clara florentina",
+   "row": 284,
+   "instagram": "claraflorentina24",
+   "tiktok": "claraaflrn",
+   "youtube": null,
+   "verified": {
+    "instagram": false,
+    "tiktok": true
+   },
+   "flags": {
+    "instagram": "profile not found or unavailable"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Erwin",
+   "row": 285,
+   "instagram": "erwinphang",
+   "tiktok": null,
+   "youtube": "erwinphangg",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Bona | Food & Travel Vlogger Jkt 🇮🇩",
+   "row": 286,
+   "instagram": "jajanbeken",
+   "tiktok": "jajanbeken",
+   "youtube": "jajanbeken",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Dinda saputri",
+   "row": 287,
+   "instagram": "dindasaputt",
+   "tiktok": "dindasaputt",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Alwi fahry",
+   "row": 288,
+   "instagram": "alwifachry",
+   "tiktok": "alwifahry",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "Rossi",
+   "row": 289,
+   "instagram": "rossidatul.umami",
+   "tiktok": "rossiii____",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Audrey Jesslyn",
+   "row": 290,
+   "instagram": "audreyjesslyn",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "I Gede Agus Iwan Saputra Kori",
+   "row": 291,
+   "instagram": "sptrakori_",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ajeng Kesuma",
+   "row": 292,
+   "instagram": null,
+   "tiktok": "ajengkesumaa",
+   "youtube": null,
+   "verified": {
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Mega Iskanti ♡",
+   "row": 293,
+   "instagram": "megaiskanti",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "𝕴𝖓𝖉𝖎𝖗𝖆 𝕶𝖆𝖑𝖎𝖘𝖙𝖍𝖆",
+   "row": 294,
+   "instagram": "indirakalistha",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "row 295",
+   "row": 295,
+   "instagram": null,
+   "tiktok": null,
+   "youtube": null,
+   "verified": {},
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Putri Melati",
+   "row": 296,
+   "instagram": "putrimelatii",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "ARAPI - ArrafiAnugerahSaprudin",
+   "row": 297,
+   "instagram": "arrafy.az",
+   "tiktok": "arrafy.az",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Gladys Victory",
+   "row": 298,
+   "instagram": "gladysvctry",
+   "tiktok": "dyyssoo",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Zhajia",
+   "row": 299,
+   "instagram": "i.ziaaaa",
+   "tiktok": "ivo.zia",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ekida Rehan Firmansyah",
+   "row": 300,
+   "instagram": "ekidarehanf",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "𝐍𝐚𝐮𝐫𝐚 | 𝘔𝘰𝘮 𝘤𝘳𝘦𝘢𝘵𝘰𝘳",
+   "row": 301,
+   "instagram": "nynaura",
+   "tiktok": "nynauraa",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "atharrazka.alhusni"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "RIRI ROSALINA",
+   "row": 302,
+   "instagram": "riry_rosa",
+   "tiktok": "riry_rosa",
+   "youtube": "ririrosalina",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Amelia azzahra",
+   "row": 303,
+   "instagram": "ameliiazhr",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Vicky Alaydrus",
+   "row": 304,
+   "instagram": "vickyalaydrus",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "MEGAKENICHIRO_OFFICIAL",
+   "row": 305,
+   "instagram": "ernamegawati290",
+   "tiktok": "megakenichiro_official",
+   "youtube": "ueno_family",
+   "verified": {
+    "instagram": false,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {
+    "instagram": "profile not found or unavailable"
+   },
+   "altHandles": {
+    "instagram": [
+     "mas_natsuki"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "Hans Christian • Koko Kalori",
+   "row": 306,
+   "instagram": "hansboling",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Dilan Janiyar",
+   "row": 307,
+   "instagram": "dilanjaniyar",
+   "tiktok": "dilanjaniyar",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Clarissa Putri H 😽",
+   "row": 308,
+   "instagram": "clarissaputri_",
+   "tiktok": null,
+   "youtube": "clarissaputrih",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Gusti Gina",
+   "row": 309,
+   "instagram": "gustigina",
+   "tiktok": "gusti.gina",
+   "youtube": "c/GustiGina",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "storieswithgustigina"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "GABI",
+   "row": 310,
+   "instagram": "gabriellaekaputri",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Adzna",
+   "row": 311,
+   "instagram": "adznaadrr",
+   "tiktok": "naydxna",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Kelvin Steviano",
+   "row": 312,
+   "instagram": "kelvinstevianos",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Risa Saraswati",
+   "row": 313,
+   "instagram": "risa_saraswati",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "maria • casasakha",
+   "row": 314,
+   "instagram": "casasakha",
+   "tiktok": "casasakha",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Tengku Dewi Putri",
+   "row": 315,
+   "instagram": "tengkudewiputri_tdp",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ugiadam Farhan Firmansyah",
+   "row": 316,
+   "instagram": "farhanfirms",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "TASYA REVINA",
+   "row": 317,
+   "instagram": "tasyarevina",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "kaizenarasya"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Imas Fahriaty",
+   "row": 318,
+   "instagram": "imasfahriaty_",
+   "tiktok": "rumahamos",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": false
+   },
+   "flags": {
+    "tiktok": "profile not found or unavailable"
+   },
+   "altHandles": {
+    "instagram": [
+     "racunyaamos_"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Leonardo Edwin",
+   "row": 319,
+   "instagram": "leo_edw",
+   "tiktok": null,
+   "youtube": "channel/UCnNTNz5-uay303Zs-mALHcQ",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Angelinngel",
+   "row": 320,
+   "instagram": "angelinngel.hc",
+   "tiktok": null,
+   "youtube": "angelinngel",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "jastipcingelyuk"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Keke Eva Angelista",
+   "row": 321,
+   "instagram": "kekevaangelista",
+   "tiktok": "kekeevaangelista",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": false
+   },
+   "flags": {
+    "tiktok": "under 1000 followers: check this is the right handle"
+   },
+   "altHandles": {
+    "instagram": [
+     "zalineankeefa"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Salshadilla Juwita Indradjaja",
+   "row": 322,
+   "instagram": "salshaindradjaja",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Septi Arshila Saragih",
+   "row": 323,
+   "instagram": "septiarsaragih",
+   "tiktok": "septiarsaragih",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Rumah Rayya",
+   "row": 324,
+   "instagram": "arya_artamansa",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Rizkina Nazar",
+   "row": 325,
+   "instagram": "rizkinanazarr",
+   "tiktok": "rizkinanazarr",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Alsa Aqilah",
+   "row": 326,
+   "instagram": "alsaaql",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Elika Natania B",
+   "row": 327,
+   "instagram": "elikaboen",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Rina Mustika",
+   "row": 328,
+   "instagram": "erghenamustika",
+   "tiktok": "erghenamustika",
+   "youtube": "c/ErghenaMustika",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "sinta",
+   "row": 329,
+   "instagram": "sin.sr",
+   "tiktok": "sin.sr1",
+   "youtube": "channel/UCd-HePmbSEAjYkVr6EWfSxw",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Annisa Ajmalia",
+   "row": 330,
+   "instagram": "ajmaliaannisa",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Janisandbibu",
+   "row": 331,
+   "instagram": "janisandbibu",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Anisya Cahya | Mom&Baby Coach",
+   "row": 332,
+   "instagram": "anisyacahya",
+   "tiktok": "anisya_cahya",
+   "youtube": "anisyacahya",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "✨𝒜𝓈𝒽𝒶 𝒜𝓈𝓈𝓊𝓃𝒸𝒶𝑜✨",
+   "row": 333,
+   "instagram": "asha.assuncao",
+   "tiktok": "asha.assuncao",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "nazwa adinda",
+   "row": 334,
+   "instagram": "nazwaadinda_",
+   "tiktok": "nazwaadinda_02",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "MANDY EDENIA",
+   "row": 335,
+   "instagram": "edeniaaaaa",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Enggi Oktaria Monika",
+   "row": 336,
+   "instagram": "enji_monica",
+   "tiktok": "enji_monica",
+   "youtube": "enji_monica7928",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "sarah asyiffa",
+   "row": 337,
+   "instagram": "bebbisarah",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "kurasisarah"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Dini Anggraeni Djoemiko",
+   "row": 338,
+   "instagram": "dinidjoemiko",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "alsjeblief.id"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ayu Puspa.A.P",
+   "row": 339,
+   "instagram": "hallopuspa_",
+   "tiktok": "ayupuspaap",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Sukma Ningrum",
+   "row": 340,
+   "instagram": "sukmaningrum__",
+   "tiktok": "sukmaningrum__",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Mini Garden",
+   "row": 341,
+   "instagram": "mini_garden12",
+   "tiktok": "mini_garden12",
+   "youtube": "mini_garden12",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "ᴿᵁᶜᴱ ᴺᵁᴱᴺᴰᴬ ᴾᴱᴿᴹᴬᵀᴬ ᴰᴶ",
+   "row": 342,
+   "instagram": "rucenuenda",
+   "tiktok": null,
+   "youtube": "rucenuenda1",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "doknis 👩‍⚕️",
+   "row": 343,
+   "instagram": "rddenisa",
+   "tiktok": "nissaflorence",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Bianca Kartika | 비앙카",
+   "row": 344,
+   "instagram": "biancakartika",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "RIMA FITRI",
+   "row": 345,
+   "instagram": "rimaftrr",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "MAMI RUMAH TANGGA",
+   "row": 346,
+   "instagram": "jennifertahapary",
+   "tiktok": "jtthere",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [
+     "3princessmini"
+    ],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Namira Monda",
+   "row": 347,
+   "instagram": "namiramonda",
+   "tiktok": null,
+   "youtube": "namiramonda",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Annisa Steviani",
+   "row": 348,
+   "instagram": "annisast",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "mizha 𐙚",
+   "row": 349,
+   "instagram": "xx.zhay",
+   "tiktok": "xx.zhay",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ochaa ✨",
+   "row": 350,
+   "instagram": "rosalina.dj",
+   "tiktok": "rosalina.djatmika",
+   "youtube": "rosalina.djatmika",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Kalula Tisha A.",
+   "row": 351,
+   "instagram": "babykalula",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Mima Dina (mimanya Lulu Ua Laszlo)",
+   "row": 352,
+   "instagram": "dnnashabrina",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Sandro Fahdhipa Putra",
+   "row": 353,
+   "instagram": "sandrofahdhipa",
+   "tiktok": "dhip___",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": false
+   },
+   "flags": {
+    "tiktok": "profile not found or unavailable"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Dapoer Mama Shesa",
+   "row": 354,
+   "instagram": "dapoermamashesa",
+   "tiktok": null,
+   "youtube": "dapoermamashesa9666",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Melody Prima Ananda",
+   "row": 355,
+   "instagram": "melodyprima",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "paul partohap",
+   "row": 356,
+   "instagram": "partohaps",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "gitasav"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Intan Millenia",
+   "row": 357,
+   "instagram": "hoopllaa_",
+   "tiktok": null,
+   "youtube": "ho0plaa_",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "febrina vebriant",
+   "row": 358,
+   "instagram": "febrinavebriant",
+   "tiktok": "febrinavebriant",
+   "youtube": null,
+   "verified": {
+    "instagram": false,
+    "tiktok": true
+   },
+   "flags": {
+    "instagram": "under 1000 followers: check this is the right handle"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Yulita Intan Sari",
+   "row": 359,
+   "instagram": "yulitamci5real",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Hanum Mega",
+   "row": 360,
+   "instagram": "real.hanummegaa",
+   "tiktok": "real.hanummegaa",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": false
+   },
+   "flags": {
+    "tiktok": "private account"
+   },
+   "altHandles": {
+    "instagram": [
+     "tokoo.mamanum",
+     "aflyard"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": "TikTok @real.hanummegaa in the owner's list resolves to an empty account (0 followers). Needs the right TikTok handle."
+  },
+  {
+   "name": "Rotua Panjaitan",
+   "row": 361,
+   "instagram": "rotuaaa",
+   "tiktok": "rotuaaa",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Paula Verhoeven",
+   "row": 362,
+   "instagram": "paula_verhoeven",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Wawa | KULINER PADANG SUMBAR",
+   "row": 363,
+   "instagram": "awlaparr",
+   "tiktok": "awlaparr",
+   "youtube": "awlaparrofficial",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": false
+   },
+   "flags": {
+    "youtube": "not collected"
+   },
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Zsalsa Nadila",
+   "row": 364,
+   "instagram": "zsalsadil",
+   "tiktok": "zsalsadil1",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Sharena Delon",
+   "row": 365,
+   "instagram": "mrssharena",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Felicya Angelista",
+   "row": 366,
+   "instagram": "felicyangelista_",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Galyas",
+   "row": 367,
+   "instagram": "galyasgeulis",
+   "tiktok": "galyasgeulis",
+   "youtube": "c/GegeGalyass",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": "TikTok verified badge"
+  },
+  {
+   "name": "Kartini L",
+   "row": 368,
+   "instagram": "kar.loveee",
+   "tiktok": "kar.loveee",
+   "youtube": "kar.loveee",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Liony Firyal",
+   "row": 369,
+   "instagram": "lionyfaa",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Revina VT",
+   "row": 370,
+   "instagram": "revinavt",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Nasion Patriotik",
+   "row": 371,
+   "instagram": "nasionp",
+   "tiktok": null,
+   "youtube": "channel/UCfb_fl3zdu7v7Goku3xExvQ",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "nasionpkoi"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Firhan",
+   "row": 372,
+   "instagram": "firhanmci6",
+   "tiktok": "firhan_ashari",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Natya Shina",
+   "row": 373,
+   "instagram": "natyashina",
+   "tiktok": null,
+   "youtube": "c/NatyaShina",
+   "verified": {
+    "instagram": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "keracunatya"
+    ],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Elaine Alethea / Leinnns",
+   "row": 374,
+   "instagram": "elainealethea",
+   "tiktok": "leinnns",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "MBUU TIYI",
+   "row": 375,
+   "instagram": "tiyiapong",
+   "tiktok": "tiyiapong",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [
+     "rumah_mbuu"
+    ],
+    "tiktok": [
+     "tiyiapong_"
+    ],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Natalie Holscher",
+   "row": 376,
+   "instagram": "nathalieholscher",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": "TikTok handle not in the owner's list. Candidate @nathalieholscher14 would not load logged out."
+  },
+  {
+   "name": "Lupita Dewi Efendi",
+   "row": 377,
+   "instagram": "lupitadewief",
+   "tiktok": "lupitadewiefendi",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "EGI | Anggita Adistyas Yahya",
+   "row": 378,
+   "instagram": "anggitaadistyas",
+   "tiktok": "anggitaadistyas",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Sari Endah Pratiwi",
+   "row": 379,
+   "instagram": "saritiw",
+   "tiktok": "sariendahpratiwi",
+   "youtube": "saritiw",
+   "verified": {
+    "instagram": true,
+    "tiktok": true,
+    "youtube": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Yasmin Napper",
+   "row": 380,
+   "instagram": "yasminnapper",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Ulfah || Food Enthusiast",
+   "row": 381,
+   "instagram": "agakenyang",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  },
+  {
+   "name": "Fadil Jaidi",
+   "row": 382,
+   "instagram": "fadiljaidi",
+   "tiktok": null,
+   "youtube": null,
+   "verified": {
+    "instagram": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "A",
+   "notes": ""
+  },
+  {
+   "name": "Mona Pertiwi",
+   "row": 383,
+   "instagram": "monapertiwii",
+   "tiktok": "monapertiwii",
+   "youtube": null,
+   "verified": {
+    "instagram": true,
+    "tiktok": true
+   },
+   "flags": {},
+   "altHandles": {
+    "instagram": [],
+    "tiktok": [],
+    "youtube": []
+   },
+   "tier": "B",
+   "notes": ""
+  }
+ ]
 }

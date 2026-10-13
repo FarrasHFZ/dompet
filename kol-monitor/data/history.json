@@ -1,17 +1,677 @@
 [
  {
   "date": "2026-10-13",
-  "kol": "Awkarin",
+  "kol": "nindy sasmita",
   "platform": "instagram",
-  "handle": "awkarin",
-  "followers": 6418412
+  "handle": "nindysasmita",
+  "followers": 147574
  },
  {
   "date": "2026-10-13",
-  "kol": "Natalie Holscher",
+  "kol": "nindy sasmita",
+  "platform": "tiktok",
+  "handle": "nindysasmith",
+  "followers": 274500,
+  "likes": 3900000,
+  "videos": 1543
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "nindy sasmita",
+  "platform": "youtube",
+  "handle": "nindysasmitaa",
+  "followers": 58100
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Pak Apud | DIY Crafter",
   "platform": "instagram",
-  "handle": "nathalieholscher",
-  "followers": 6525068
+  "handle": "pakapud_",
+  "followers": 108953
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Pak Apud | DIY Crafter",
+  "platform": "tiktok",
+  "handle": "pakapud_",
+  "followers": 38300,
+  "likes": 621900,
+  "videos": 470
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Pak Apud | DIY Crafter",
+  "platform": "youtube",
+  "handle": "sujarwadiloed",
+  "followers": 885
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "dr Shane Tuty Cornish (CBS, IBCLC)",
+  "platform": "instagram",
+  "handle": "breastfeedo.mom",
+  "followers": 819325
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "dr Shane Tuty Cornish (CBS, IBCLC)",
+  "platform": "tiktok",
+  "handle": "konsultanlaktasi",
+  "followers": 249000,
+  "likes": 10800000,
+  "videos": 796
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Eci fresh",
+  "platform": "instagram",
+  "handle": "eci.fresh",
+  "followers": 147872
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Khansa Mariska Firdausi Azizy",
+  "platform": "instagram",
+  "handle": "khansa_mariska",
+  "followers": 677429
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Khansa Mariska Firdausi Azizy",
+  "platform": "tiktok",
+  "handle": "khansamariskaa",
+  "followers": 969500,
+  "likes": 51900000,
+  "videos": 86
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ida Wida",
+  "platform": "instagram",
+  "handle": "idawidareal__",
+  "followers": 252383
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ida Wida",
+  "platform": "tiktok",
+  "handle": "scorpiogirl04111",
+  "followers": 1700000,
+  "likes": 76200000,
+  "videos": 2024
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rumah.Kamali",
+  "platform": "instagram",
+  "handle": "rumah.kamali",
+  "followers": 155906
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "RARA CEBUM",
+  "platform": "instagram",
+  "handle": "tiranissya",
+  "followers": 465181
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "RARA CEBUM",
+  "platform": "tiktok",
+  "handle": "tiranissya",
+  "followers": 1900000,
+  "likes": 75400000,
+  "videos": 1074
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Anastasia Siantar",
+  "platform": "instagram",
+  "handle": "anazsiantar",
+  "followers": 546594
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Crystabelle Ingrid Zhuo",
+  "platform": "instagram",
+  "handle": "babybellezhuo",
+  "followers": 1121274
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Wafiq Azizah Malik",
+  "platform": "instagram",
+  "handle": "pipicaannn",
+  "followers": 553452
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Andena Surya Zabrina",
+  "platform": "instagram",
+  "handle": "zabrinadena",
+  "followers": 456634
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Andena Surya Zabrina",
+  "platform": "tiktok",
+  "handle": "zabrinadena",
+  "followers": 1300000,
+  "likes": 100800000,
+  "videos": 914
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Alexander Thian",
+  "platform": "instagram",
+  "handle": "amrazing",
+  "followers": 597383
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Kamila Asy Syifa",
+  "platform": "instagram",
+  "handle": "cutkamilasyifa",
+  "followers": 554402
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Kamila Asy Syifa",
+  "platform": "tiktok",
+  "handle": "pastperfectense",
+  "followers": 590600,
+  "likes": 43400000,
+  "videos": 431
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Hazelnutspill",
+  "platform": "instagram",
+  "handle": "hazelnut_spill",
+  "followers": 39008
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Hazelnutspill",
+  "platform": "tiktok",
+  "handle": "hazelnut_spill",
+  "followers": 28400,
+  "likes": 5800000,
+  "videos": 1004
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Hazelnutspill",
+  "platform": "youtube",
+  "handle": "npprnti",
+  "followers": 4800
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Jemima Livia",
+  "platform": "instagram",
+  "handle": "jemimalivia",
+  "followers": 160797
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Jemima Livia",
+  "platform": "youtube",
+  "handle": "c/JemimaLivia",
+  "followers": 19900
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Asa Laily F 🦄",
+  "platform": "instagram",
+  "handle": "asakecil",
+  "followers": 132791
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Asa Laily F 🦄",
+  "platform": "tiktok",
+  "handle": "asakecil",
+  "followers": 2200000,
+  "likes": 76600000,
+  "videos": 2740
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Asa Laily F 🦄",
+  "platform": "youtube",
+  "handle": "asakecilofficial",
+  "followers": 107000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "KATIA ✨",
+  "platform": "instagram",
+  "handle": "katiadailycooking",
+  "followers": 351878
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "CMS",
+  "platform": "instagram",
+  "handle": "cindymayasariii",
+  "followers": 126642
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "CMS",
+  "platform": "tiktok",
+  "handle": "itscimay",
+  "followers": 69000,
+  "likes": 2100000,
+  "videos": 2898
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "RESKI",
+  "platform": "instagram",
+  "handle": "reskiirai",
+  "followers": 12156
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "RESKI",
+  "platform": "tiktok",
+  "handle": "reskiirai",
+  "followers": 1775,
+  "likes": 4225,
+  "videos": 33
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "eve",
+  "platform": "instagram",
+  "handle": "evelynchrestella",
+  "followers": 2326410
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "eve",
+  "platform": "tiktok",
+  "handle": "juanneve",
+  "followers": 9700000,
+  "likes": 1100000000,
+  "videos": 2016
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Elin Ivana",
+  "platform": "instagram",
+  "handle": "elinivana",
+  "followers": 194221
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Elin Ivana",
+  "platform": "tiktok",
+  "handle": "elinivana",
+  "followers": 75900,
+  "likes": 3900000,
+  "videos": 178
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Elin Ivana",
+  "platform": "youtube",
+  "handle": "c/elinivana",
+  "followers": 107000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝐊𝐢𝐫𝐚𝐧𝐚.",
+  "platform": "instagram",
+  "handle": "inikiranaaa__",
+  "followers": 1095936
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝐊𝐢𝐫𝐚𝐧𝐚.",
+  "platform": "tiktok",
+  "handle": "inikiranaaa__",
+  "followers": 958400,
+  "likes": 36800000,
+  "videos": 1118
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝐊𝐢𝐫𝐚𝐧𝐚.",
+  "platform": "youtube",
+  "handle": "inikiranaaa__",
+  "followers": 134000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Raudina Kasyfi",
+  "platform": "instagram",
+  "handle": "raudinakasyfi",
+  "followers": 11483
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Raudina Kasyfi",
+  "platform": "tiktok",
+  "handle": "raudinakasyfi",
+  "followers": 3793,
+  "likes": 33800,
+  "videos": 55
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ummi Khair",
+  "platform": "instagram",
+  "handle": "ummikhairizky",
+  "followers": 242387
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ummi Khair",
+  "platform": "tiktok",
+  "handle": "ummikhairizky",
+  "followers": 2737,
+  "likes": 5384,
+  "videos": 325
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ummi Khair",
+  "platform": "youtube",
+  "handle": "ummikhairizky",
+  "followers": 8730
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Liyan Zeftian",
+  "platform": "instagram",
+  "handle": "liyanzef",
+  "followers": 1447361
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Michael Rendy Wiyono",
+  "platform": "instagram",
+  "handle": "michaelrendyw",
+  "followers": 1471350
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Michael Rendy Wiyono",
+  "platform": "tiktok",
+  "handle": "michaelrendyw",
+  "followers": 13100000,
+  "likes": 712400000,
+  "videos": 3481
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Erna Wijayana 陈佛云",
+  "platform": "instagram",
+  "handle": "ernawijayana",
+  "followers": 132982
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Audrey Teguh",
+  "platform": "instagram",
+  "handle": "audreyteguh",
+  "followers": 268050
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Alifhia Fitri",
+  "platform": "instagram",
+  "handle": "alifhiafitri",
+  "followers": 2288569
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Alifhia Fitri",
+  "platform": "tiktok",
+  "handle": "alifhiaf",
+  "followers": 6000000,
+  "likes": 447100000,
+  "videos": 3116
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝙑𝙖𝙡𝙚𝙧𝙞𝙚 𝘿𝙚𝙬𝙞",
+  "platform": "instagram",
+  "handle": "valeriedewiofficial",
+  "followers": 295855
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Tara Erin Desyanti",
+  "platform": "instagram",
+  "handle": "taraerind",
+  "followers": 216088
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Maudy Effrosina",
+  "platform": "instagram",
+  "handle": "maudyeffrosina",
+  "followers": 1296865
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "nt putri",
+  "platform": "instagram",
+  "handle": "onyah.pingky",
+  "followers": 197899
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "nt putri",
+  "platform": "tiktok",
+  "handle": "onyah.pingky",
+  "followers": 228200,
+  "likes": 3700000,
+  "videos": 275
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "nt putri",
+  "platform": "youtube",
+  "handle": "onyahpingkyy",
+  "followers": 15400
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Lita Setia Asih 🇮🇩",
+  "platform": "instagram",
+  "handle": "paperflower_bylita",
+  "followers": 816889
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Lita Setia Asih 🇮🇩",
+  "platform": "tiktok",
+  "handle": "paperflower_bylita",
+  "followers": 539900,
+  "likes": 14500000,
+  "videos": 127
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Lita Setia Asih 🇮🇩",
+  "platform": "youtube",
+  "handle": "paperflower_bylita",
+  "followers": 197000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "MAK FRIDA",
+  "platform": "instagram",
+  "handle": "fridajoincoffee",
+  "followers": 566970
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "vanillaaaice__",
+  "platform": "instagram",
+  "handle": "vanillaaaice__",
+  "followers": 86006
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dinda Alamanda",
+  "platform": "instagram",
+  "handle": "dindaalamanda_",
+  "followers": 1102628
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dinda Alamanda",
+  "platform": "tiktok",
+  "handle": "dindaalamanda_",
+  "followers": 962200,
+  "likes": 29500000,
+  "videos": 2261
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dinda Alamanda",
+  "platform": "youtube",
+  "handle": "dindaalamanda",
+  "followers": 104000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "nov",
+  "platform": "instagram",
+  "handle": "noviherdyy",
+  "followers": 315487
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "nov",
+  "platform": "tiktok",
+  "handle": "novherr",
+  "followers": 1400000,
+  "likes": 108800000,
+  "videos": 1194
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "agitha amanda ariawan",
+  "platform": "instagram",
+  "handle": "agitha",
+  "followers": 189094
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "agitha amanda ariawan",
+  "platform": "tiktok",
+  "handle": "agithaamandaa",
+  "followers": 16500,
+  "likes": 198200,
+  "videos": 115
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Lalita Hutami Bangun",
+  "platform": "instagram",
+  "handle": "litahutami",
+  "followers": 1984284
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Lalita Hutami Bangun",
+  "platform": "tiktok",
+  "handle": "lalitahutami",
+  "followers": 13000000,
+  "likes": 304000000,
+  "videos": 1154
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "GisellaAnastasia",
+  "platform": "tiktok",
+  "handle": "gisel_laaa",
+  "followers": 8500000,
+  "likes": 109100000,
+  "videos": 1509
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Devita Inggrit",
+  "platform": "instagram",
+  "handle": "devitainggrit",
+  "followers": 239354
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Devita Inggrit",
+  "platform": "tiktok",
+  "handle": "devitainggrit",
+  "followers": 41300,
+  "likes": 5500000,
+  "videos": 862
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Mas Koko Dwiyanto",
+  "platform": "instagram",
+  "handle": "maskokoganteng",
+  "followers": 203960
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Mas Koko Dwiyanto",
+  "platform": "tiktok",
+  "handle": "maskokoganteng",
+  "followers": 1100000,
+  "likes": 192300000,
+  "videos": 1164
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "RICIS🧜‍♀️",
+  "platform": "instagram",
+  "handle": "riaricis1795",
+  "followers": 36759941
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Vianty Alvia Novita",
+  "platform": "instagram",
+  "handle": "veyalvia22",
+  "followers": 233692
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Vianty Alvia Novita",
+  "platform": "tiktok",
+  "handle": "veyalvia22",
+  "followers": 458800,
+  "likes": 8700000,
+  "videos": 1735
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Vianty Alvia Novita",
+  "platform": "youtube",
+  "handle": "veyalvia22",
+  "followers": 21600
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dzawin Nur",
+  "platform": "instagram",
+  "handle": "dzawin_nur",
+  "followers": 1438756
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Awkarin",
+  "platform": "instagram",
+  "handle": "narinkovilda",
+  "followers": 1853376
  },
  {
   "date": "2026-10-13",
@@ -24,30 +684,4215 @@
  },
  {
   "date": "2026-10-13",
-  "kol": "Amanda Zahra",
+  "kol": "Nabilah L",
   "platform": "instagram",
-  "handle": "aamandazahra",
-  "followers": 1234082
+  "handle": "nabilahcil",
+  "followers": 785410
  },
  {
   "date": "2026-10-13",
-  "kol": "Hanum Mega",
+  "kol": "E R A F A Z I R A",
   "platform": "instagram",
-  "handle": "real.hanummegaa",
-  "followers": 4383163
+  "handle": "erafaaaa",
+  "followers": 152153
  },
  {
   "date": "2026-10-13",
-  "kol": "Jerome Polin",
+  "kol": "E R A F A Z I R A",
+  "platform": "tiktok",
+  "handle": "erafaaaa",
+  "followers": 293600,
+  "likes": 21000000,
+  "videos": 4102
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Vanessa C",
   "platform": "instagram",
-  "handle": "jeromepolin",
-  "followers": 9667103
+  "handle": "vanessacandra",
+  "followers": 2126
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Vanessa C",
+  "platform": "tiktok",
+  "handle": "vanessacandraa",
+  "followers": 51300,
+  "likes": 2200000,
+  "videos": 652
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "aisy.",
+  "platform": "instagram",
+  "handle": "aisyafputri",
+  "followers": 441829
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "aisy.",
+  "platform": "tiktok",
+  "handle": "aisyaffiliate",
+  "followers": 32500,
+  "likes": 2100000,
+  "videos": 910
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Cindy Orchidia",
+  "platform": "instagram",
+  "handle": "cindyorchide",
+  "followers": 502340
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rachel Goddard",
+  "platform": "instagram",
+  "handle": "rachgoddard",
+  "followers": 1092867
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Nathasia Hendia",
+  "platform": "instagram",
+  "handle": "nathasiamilka",
+  "followers": 226705
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Valerie Pola",
+  "platform": "instagram",
+  "handle": "valeriepola",
+  "followers": 364440
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Naaja 🌵",
+  "platform": "instagram",
+  "handle": "isna.nurha",
+  "followers": 217183
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Naaja 🌵",
+  "platform": "tiktok",
+  "handle": "isnanurha",
+  "followers": 1100000,
+  "likes": 25800000,
+  "videos": 2153
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Oina Salim",
+  "platform": "instagram",
+  "handle": "oinasalim",
+  "followers": 375847
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Amelia Elle",
+  "platform": "instagram",
+  "handle": "ameliaelle",
+  "followers": 494492
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Nabila Syabrina",
+  "platform": "instagram",
+  "handle": "nabilasybrn",
+  "followers": 75185
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Nabila Syabrina",
+  "platform": "tiktok",
+  "handle": "nabilasybrn",
+  "followers": 3247,
+  "likes": 105700,
+  "videos": 97
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Nabila Syabrina",
+  "platform": "youtube",
+  "handle": "nabilasybrn",
+  "followers": 39
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Bidan Ony | Kriwilife",
+  "platform": "instagram",
+  "handle": "bidankriwil",
+  "followers": 265695
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Bidan Ony | Kriwilife",
+  "platform": "youtube",
+  "handle": "c/kriwilife",
+  "followers": 9
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Kadam Sidik",
+  "platform": "instagram",
+  "handle": "basyasman",
+  "followers": 2540184
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Kadam Sidik",
+  "platform": "tiktok",
+  "handle": "kadamsidik00",
+  "followers": 6200000,
+  "likes": 432500000,
+  "videos": 1263
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Kadam Sidik",
+  "platform": "youtube",
+  "handle": "c/BasyasMan",
+  "followers": 276000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "PRIZA // Rumah PS",
+  "platform": "instagram",
+  "handle": "dirumah.ps",
+  "followers": 439631
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Bunga Deviani",
+  "platform": "instagram",
+  "handle": "bungadeviani",
+  "followers": 243468
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Bunga Deviani",
+  "platform": "tiktok",
+  "handle": "bungadeviani",
+  "followers": 106200,
+  "likes": 3400000,
+  "videos": 1616
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Bunga Deviani",
+  "platform": "youtube",
+  "handle": "bungadeviani",
+  "followers": 85200
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Defi Nugraheni",
+  "platform": "instagram",
+  "handle": "definugg",
+  "followers": 44590
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Defi Nugraheni",
+  "platform": "tiktok",
+  "handle": "definugg",
+  "followers": 421600,
+  "likes": 18800000,
+  "videos": 1088
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Tri Hartati",
+  "platform": "instagram",
+  "handle": "trihartati_18",
+  "followers": 510549
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Tri Hartati",
+  "platform": "tiktok",
+  "handle": "linglinglieanti",
+  "followers": 6000000,
+  "likes": 400200000,
+  "videos": 1183
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Sri Rustiani",
+  "platform": "instagram",
+  "handle": "srirustiani",
+  "followers": 200220
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Sri Rustiani",
+  "platform": "tiktok",
+  "handle": "rumahezra",
+  "followers": 34900,
+  "likes": 392700,
+  "videos": 587
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Sri Rustiani",
+  "platform": "youtube",
+  "handle": "srirustiani",
+  "followers": 13300
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Indyrach",
+  "platform": "instagram",
+  "handle": "indyrach",
+  "followers": 915576
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Indyrach",
+  "platform": "tiktok",
+  "handle": "indyrach",
+  "followers": 3800000,
+  "likes": 86400000,
+  "videos": 1410
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Muhamad Sadam",
+  "platform": "instagram",
+  "handle": "sadam.jpg",
+  "followers": 1644958
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Muhamad Sadam",
+  "platform": "tiktok",
+  "handle": "sadamm.jpg",
+  "followers": 374100,
+  "likes": 29200000,
+  "videos": 578
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "‎فنس‎",
+  "platform": "instagram",
+  "handle": "fanisa_fan",
+  "followers": 440438
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "‎فنس‎",
+  "platform": "tiktok",
+  "handle": "fanisa_fann",
+  "followers": 312100,
+  "likes": 15600000,
+  "videos": 2892
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "mama ell | elchia & elenio",
+  "platform": "instagram",
+  "handle": "elchiadreena_",
+  "followers": 37928
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Olivia Tommy",
+  "platform": "instagram",
+  "handle": "olivia.mci8",
+  "followers": 605543
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Olivia Tommy",
+  "platform": "youtube",
+  "handle": "oliviatommy13",
+  "followers": 63200
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "INIVINDY",
+  "platform": "instagram",
+  "handle": "inivindy",
+  "followers": 621385
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "INIVINDY",
+  "platform": "tiktok",
+  "handle": "inivindy",
+  "followers": 920700,
+  "likes": 26700000,
+  "videos": 967
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "INIVINDY",
+  "platform": "youtube",
+  "handle": "ini_vindy",
+  "followers": 1920000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Putri Nahari R. A.",
+  "platform": "instagram",
+  "handle": "putrinahari",
+  "followers": 578164
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Putri Nahari R. A.",
+  "platform": "youtube",
+  "handle": "c/RedyPutri",
+  "followers": 17700
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Nadila Adiarni",
+  "platform": "instagram",
+  "handle": "nadiladrn",
+  "followers": 492621
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Jennifer Hubner",
+  "platform": "tiktok",
+  "handle": "jennifer.coppen",
+  "followers": 18200000,
+  "likes": 2000000000,
+  "videos": 3334
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rizky Aulia Nazlita",
+  "platform": "instagram",
+  "handle": "aulianaazzz",
+  "followers": 819450
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rizky Aulia Nazlita",
+  "platform": "tiktok",
+  "handle": "aulianaz_",
+  "followers": 792200,
+  "likes": 20900000,
+  "videos": 1945
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Chacha Thaib",
+  "platform": "instagram",
+  "handle": "chachathaib",
+  "followers": 132671
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "smile safya",
+  "platform": "instagram",
+  "handle": "shofiakafa",
+  "followers": 213967
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "ANAKJAJAN (Julia & Marius)",
+  "platform": "instagram",
+  "handle": "anakjajan",
+  "followers": 639999
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Hirotada Radifan",
+  "platform": "instagram",
+  "handle": "hirotadaradifan",
+  "followers": 375303
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Hirotada Radifan",
+  "platform": "youtube",
+  "handle": "hirotadaradifan",
+  "followers": 4250000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "putrii ✿",
+  "platform": "instagram",
+  "handle": "ptriiile",
+  "followers": 60397
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "putrii ✿",
+  "platform": "tiktok",
+  "handle": "dywh000",
+  "followers": 20700,
+  "likes": 1400000,
+  "videos": 564
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "putrii ✿",
+  "platform": "youtube",
+  "handle": "putrilee358",
+  "followers": 5
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Tara Ayu Cempaka",
+  "platform": "instagram",
+  "handle": "taraayucempaka",
+  "followers": 96103
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Tara Ayu Cempaka",
+  "platform": "youtube",
+  "handle": "taraayucempaka",
+  "followers": 6420
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Muhammad Fauzi",
+  "platform": "instagram",
+  "handle": "muhammadfauzi746",
+  "followers": 24282
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Muhammad Fauzi",
+  "platform": "tiktok",
+  "handle": "muhammadfauzi746",
+  "followers": 192300,
+  "likes": 11200000,
+  "videos": 1880
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Spall Spill Ijfina",
+  "platform": "instagram",
+  "handle": "spallspill.ijfina",
+  "followers": 11073
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Spall Spill Ijfina",
+  "platform": "tiktok",
+  "handle": "ijfinaamalia",
+  "followers": 443800,
+  "likes": 8400000,
+  "videos": 1380
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Spall Spill Ijfina",
+  "platform": "youtube",
+  "handle": "c/ijfinaamalia",
+  "followers": 1410000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ikhda",
+  "platform": "instagram",
+  "handle": "ikhdaar",
+  "followers": 10130
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ikhda",
+  "platform": "tiktok",
+  "handle": "by.ikhda",
+  "followers": 11300,
+  "likes": 284700,
+  "videos": 93
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "tiktok : shedalighttt",
+  "platform": "instagram",
+  "handle": "shedalighttt",
+  "followers": 134852
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "tiktok : shedalighttt",
+  "platform": "tiktok",
+  "handle": "shedalighttt",
+  "followers": 161100,
+  "likes": 19200000,
+  "videos": 612
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "tiktok : shedalighttt",
+  "platform": "youtube",
+  "handle": "shedalighttt",
+  "followers": 54400
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Sinta Wibisono",
+  "platform": "instagram",
+  "handle": "sinta.wibisono.5",
+  "followers": 209841
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Sinta Wibisono",
+  "platform": "tiktok",
+  "handle": "sinta.wibisono7",
+  "followers": 303800,
+  "likes": 3800000,
+  "videos": 610
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Sinta Wibisono",
+  "platform": "youtube",
+  "handle": "sintawibisono998",
+  "followers": 133000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝒅𝒂𝒍𝒂🪽",
+  "platform": "instagram",
+  "handle": "dayravvr",
+  "followers": 749864
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝒅𝒂𝒍𝒂🪽",
+  "platform": "youtube",
+  "handle": "dayravirginia",
+  "followers": 225000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Byririe0",
+  "platform": "instagram",
+  "handle": "chatyrie.01",
+  "followers": 61847
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Byririe0",
+  "platform": "tiktok",
+  "handle": "ririefairus0",
+  "followers": 645100,
+  "likes": 24700000,
+  "videos": 738
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Diah Didi",
+  "platform": "instagram",
+  "handle": "bunda_didi",
+  "followers": 533140
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Diah Didi",
+  "platform": "youtube",
+  "handle": "bundadidi",
+  "followers": 27800
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Aurelie Hermansyah Atta",
+  "platform": "instagram",
+  "handle": "aurelie.hermansyah",
+  "followers": 34551158
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "EJAAK | RezaDwiYanda",
+  "platform": "instagram",
+  "handle": "ejaak15",
+  "followers": 1635480
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "EJAAK | RezaDwiYanda",
+  "platform": "tiktok",
+  "handle": "ejaaak15",
+  "followers": 4100000,
+  "likes": 227800000,
+  "videos": 1558
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Amy Nursifah",
+  "platform": "instagram",
+  "handle": "helminursifah",
+  "followers": 1132617
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Elkairos & Elkeant",
+  "platform": "instagram",
+  "handle": "kayandkent.gulo",
+  "followers": 111052
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Devi Nursitasari",
+  "platform": "instagram",
+  "handle": "devinursita",
+  "followers": 208800
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Devi Nursitasari",
+  "platform": "tiktok",
+  "handle": "devinursitaa",
+  "followers": 84100,
+  "likes": 2600000,
+  "videos": 369
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Risya Brabo",
+  "platform": "instagram",
+  "handle": "risyabrabo",
+  "followers": 572760
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Angelica˖✧",
+  "platform": "instagram",
+  "handle": "angelillc",
+  "followers": 99988
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Angelica˖✧",
+  "platform": "tiktok",
+  "handle": "smallgirlbigcloset",
+  "followers": 6064,
+  "likes": 143100,
+  "videos": 52
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Angelica˖✧",
+  "platform": "youtube",
+  "handle": "c/Angelillc",
+  "followers": 320000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝐕𝐢𝐚",
+  "platform": "instagram",
+  "handle": "lutvia.ra",
+  "followers": 27813
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝐕𝐢𝐚",
+  "platform": "youtube",
+  "handle": "lutviar",
+  "followers": 343
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "VIO ᝰ.ᐟ",
+  "platform": "instagram",
+  "handle": "alvionithagrandputri",
+  "followers": 29322
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "VIO ᝰ.ᐟ",
+  "platform": "tiktok",
+  "handle": "alvionithaputri",
+  "followers": 240500,
+  "likes": 12500000,
+  "videos": 2304
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dina",
+  "platform": "instagram",
+  "handle": "makaquarters",
+  "followers": 109412
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ardina Putri",
+  "platform": "instagram",
+  "handle": "ardinhai",
+  "followers": 205506
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ardina Putri",
+  "platform": "tiktok",
+  "handle": "ardinhai",
+  "followers": 18400,
+  "likes": 1300000,
+  "videos": 186
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ardina Putri",
+  "platform": "youtube",
+  "handle": "c/dinadinoday",
+  "followers": 253000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "KHAILA DIAN",
+  "platform": "instagram",
+  "handle": "khailakk_",
+  "followers": 124529
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Molita Lin",
+  "platform": "instagram",
+  "handle": "molita_lin",
+  "followers": 467900
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Molita Lin",
+  "platform": "youtube",
+  "handle": "molitalin",
+  "followers": 3340
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Bundaule",
+  "platform": "instagram",
+  "handle": "bundaule",
+  "followers": 338598
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ayuwuland4ri",
+  "platform": "tiktok",
+  "handle": "ayuwul4ndari",
+  "followers": 39900,
+  "likes": 777200,
+  "videos": 544
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dikri Muldani",
+  "platform": "instagram",
+  "handle": "kang_mul18",
+  "followers": 523803
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dikri Muldani",
+  "platform": "youtube",
+  "handle": "channel/UCEj-gn1CfWMTuYw8Dj63ZZQ",
+  "followers": 42300
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "kelly g",
+  "platform": "instagram",
+  "handle": "beautales__",
+  "followers": 4501
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "kelly g",
+  "platform": "tiktok",
+  "handle": "beautales_",
+  "followers": 10500,
+  "likes": 3200000,
+  "videos": 422
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ulan Noverti",
+  "platform": "instagram",
+  "handle": "ulanoverti",
+  "followers": 287423
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ulan Noverti",
+  "platform": "tiktok",
+  "handle": "ulannoverti",
+  "followers": 386900,
+  "likes": 15700000,
+  "videos": 633
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "M O N A",
+  "platform": "instagram",
+  "handle": "monna_julia",
+  "followers": 270374
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Annisa Kayla Nadira",
+  "platform": "instagram",
+  "handle": "kayla.nadira",
+  "followers": 1341341
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Azkha Tegar",
+  "platform": "instagram",
+  "handle": "azkhategar",
+  "followers": 1169464
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Azkha Tegar",
+  "platform": "youtube",
+  "handle": "azkhategar",
+  "followers": 2300000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ida & Lukman | Home Living & Family",
+  "platform": "instagram",
+  "handle": "asa_living",
+  "followers": 776761
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Prima Oma",
+  "platform": "instagram",
+  "handle": "primaomma",
+  "followers": 33641
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Prima Oma",
+  "platform": "tiktok",
+  "handle": "primaomaaa",
+  "followers": 364800,
+  "likes": 8200000,
+  "videos": 877
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Prima Oma",
+  "platform": "youtube",
+  "handle": "primaoma",
+  "followers": 50
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Cyinta Riyanti",
+  "platform": "instagram",
+  "handle": "cyinta_riyanti",
+  "followers": 28502
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Cyinta Riyanti",
+  "platform": "tiktok",
+  "handle": "ayyara_salsabillah",
+  "followers": 19900,
+  "likes": 1200000,
+  "videos": 2349
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Cyinta Riyanti",
+  "platform": "youtube",
+  "handle": "sinta_riyant1",
+  "followers": 937
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "putricaya",
+  "platform": "instagram",
+  "handle": "puchh",
+  "followers": 176343
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dwi Handayani Syah Putri",
+  "platform": "instagram",
+  "handle": "dwihandaanda",
+  "followers": 2182512
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Mirriam Eka",
+  "platform": "instagram",
+  "handle": "mariaeka_",
+  "followers": 608570
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Noni Kurniasih",
+  "platform": "instagram",
+  "handle": "daily_mpasi",
+  "followers": 111874
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Arya Nara",
+  "platform": "instagram",
+  "handle": "priabernada",
+  "followers": 826106
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Arya Nara",
+  "platform": "tiktok",
+  "handle": "priabernadaa",
+  "followers": 2100000,
+  "likes": 81900000,
+  "videos": 1625
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Arya Nara",
+  "platform": "youtube",
+  "handle": "aryanara",
+  "followers": 3420000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Andori",
+  "platform": "instagram",
+  "handle": "dorippu",
+  "followers": 570683
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Andori",
+  "platform": "tiktok",
+  "handle": "buyoppu",
+  "followers": 87400,
+  "likes": 6000000,
+  "videos": 711
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Tasya Farasya",
+  "platform": "instagram",
+  "handle": "tasyafarasya",
+  "followers": 7356602
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yensun 🌻",
+  "platform": "instagram",
+  "handle": "yennisun",
+  "followers": 260375
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yensun 🌻",
+  "platform": "tiktok",
+  "handle": "yennisun3",
+  "followers": 362200,
+  "likes": 17500000,
+  "videos": 1662
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Mega dwi cahyani",
+  "platform": "instagram",
+  "handle": "cahyanirynt",
+  "followers": 6434782
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Mega dwi cahyani",
+  "platform": "tiktok",
+  "handle": "cahyanirynn",
+  "followers": 21800000,
+  "likes": 2100000000,
+  "videos": 15000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Mega dwi cahyani",
+  "platform": "youtube",
+  "handle": "c/cahyaniryn",
+  "followers": 700000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rumah Nano • Lusti",
+  "platform": "instagram",
+  "handle": "rumah_nano",
+  "followers": 386841
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Purwakembar",
+  "platform": "instagram",
+  "handle": "purwakembar",
+  "followers": 410093
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Purwakembar",
+  "platform": "tiktok",
+  "handle": "purwakembar",
+  "followers": 5000000,
+  "likes": 96900000,
+  "videos": 2500
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Purwakembar",
+  "platform": "youtube",
+  "handle": "purwakembar_real",
+  "followers": 53100
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Syafira haddad",
+  "platform": "instagram",
+  "handle": "syafira_hdd",
+  "followers": 2282020
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝐌 𝐢 𝐥 𝐚 𝐀 𝐥 𝐚 𝐰 𝐢 𝐲 𝐚 𝐡",
+  "platform": "instagram",
+  "handle": "milaalawiyahh",
+  "followers": 701166
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝐌 𝐢 𝐥 𝐚 𝐀 𝐥 𝐚 𝐰 𝐢 𝐲 𝐚 𝐡",
+  "platform": "youtube",
+  "handle": "milaalawiyah",
+  "followers": 703000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "b",
+  "platform": "instagram",
+  "handle": "rklopperr",
+  "followers": 7122554
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Nadya Valerie",
+  "platform": "instagram",
+  "handle": "nadyavalerie",
+  "followers": 186088
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Benazio | Muslim Traveler ✈️🌎",
+  "platform": "instagram",
+  "handle": "benakribo",
+  "followers": 453666
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Benazio | Muslim Traveler ✈️🌎",
+  "platform": "tiktok",
+  "handle": "benakribo",
+  "followers": 72200,
+  "likes": 931500,
+  "videos": 159
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Benazio | Muslim Traveler ✈️🌎",
+  "platform": "youtube",
+  "handle": "benakribo",
+  "followers": 18200
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Jourimanzky",
+  "platform": "instagram",
+  "handle": "jourimanzky_",
+  "followers": 277393
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Danur Agnihotri",
+  "platform": "instagram",
+  "handle": "danuragnihotri",
+  "followers": 185743
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Danur Agnihotri",
+  "platform": "youtube",
+  "handle": "tanudanmonu",
+  "followers": 200
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "ItingsMeledak",
+  "platform": "instagram",
+  "handle": "nandasetyap_",
+  "followers": 1920904
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "ItingsMeledak",
+  "platform": "tiktok",
+  "handle": "itingsmeledax",
+  "followers": 5100000,
+  "likes": 322600000,
+  "videos": 829
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "ItingsMeledak",
+  "platform": "youtube",
+  "handle": "itingsmeledak",
+  "followers": 480000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Detri Angga Rita",
+  "platform": "instagram",
+  "handle": "anggarita4",
+  "followers": 314619
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Zaskia Sungkar",
+  "platform": "instagram",
+  "handle": "zaskiasungkar15",
+  "followers": 29960964
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yence Tan",
+  "platform": "instagram",
+  "handle": "newyence",
+  "followers": 250578
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yence Tan",
+  "platform": "tiktok",
+  "handle": "yencetan",
+  "followers": 1400000,
+  "likes": 85200000,
+  "videos": 995
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Hadijah aljufri",
+  "platform": "instagram",
+  "handle": "ija_aljufri",
+  "followers": 325612
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ryana Dea",
+  "platform": "instagram",
+  "handle": "ryana_dea",
+  "followers": 4521898
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Nana Mirdad",
+  "platform": "instagram",
+  "handle": "nanamirdad_",
+  "followers": 3759665
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝓣𝓮𝓽𝓲𝓪 𝓻𝓪𝓱𝓪𝔂𝓾 🦋",
+  "platform": "instagram",
+  "handle": "tetiarahayuu",
+  "followers": 185214
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝓣𝓮𝓽𝓲𝓪 𝓻𝓪𝓱𝓪𝔂𝓾 🦋",
+  "platform": "tiktok",
+  "handle": "tetiarhy",
+  "followers": 211000,
+  "likes": 15600000,
+  "videos": 3703
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Elviani🌼",
+  "platform": "instagram",
+  "handle": "vivipihh",
+  "followers": 310128
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Trisha Saraswati",
+  "platform": "instagram",
+  "handle": "trishasaraswati",
+  "followers": 175318
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rieta Amilia Beta",
+  "platform": "instagram",
+  "handle": "rieta_amilia",
+  "followers": 3953494
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dinan Nurfajrina Salmanan",
+  "platform": "instagram",
+  "handle": "dinanfajrina",
+  "followers": 1355693
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dinan Nurfajrina Salmanan",
+  "platform": "tiktok",
+  "handle": "dinanfajrina",
+  "followers": 1800000,
+  "likes": 74800000,
+  "videos": 1713
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dinan Nurfajrina Salmanan",
+  "platform": "youtube",
+  "handle": "channel/UC--5b6u2h57V_00avxmXFEA",
+  "followers": 6520
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rᴀғᴀᴇʟ Tᴀɴ",
+  "platform": "instagram",
+  "handle": "rafaell_16",
+  "followers": 2285577
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "dr. Dion Haryadi",
+  "platform": "instagram",
+  "handle": "dionharyadi",
+  "followers": 893068
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "dr. Dion Haryadi",
+  "platform": "tiktok",
+  "handle": "dionharyadi",
+  "followers": 503400,
+  "likes": 19300000,
+  "videos": 1412
  },
  {
   "date": "2026-10-13",
   "kol": "Titan Tyra",
   "platform": "instagram",
   "handle": "titantyra",
-  "followers": 795213
+  "followers": 795212
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Shilvia Ditania",
+  "platform": "instagram",
+  "handle": "shilviaditania",
+  "followers": 183931
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Shilvia Ditania",
+  "platform": "tiktok",
+  "handle": "shilviaditania_",
+  "followers": 128100,
+  "likes": 3500000,
+  "videos": 3105
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Shilvia Ditania",
+  "platform": "youtube",
+  "handle": "shilviaditania",
+  "followers": 4
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Fildza Hasnamudhia",
+  "platform": "instagram",
+  "handle": "odywoody",
+  "followers": 1580512
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Nina Zatulini",
+  "platform": "instagram",
+  "handle": "ninazatulini22",
+  "followers": 2972917
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Nanda Arsyinta ʕ •ᴥ•ʔ",
+  "platform": "instagram",
+  "handle": "nandaarsynt",
+  "followers": 3940814
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Nanda Arsyinta ʕ •ᴥ•ʔ",
+  "platform": "tiktok",
+  "handle": "nandaarsyinta",
+  "followers": 3200000,
+  "likes": 227400000,
+  "videos": 1121
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Vistra Septiyani",
+  "platform": "instagram",
+  "handle": "___vistra",
+  "followers": 294142
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Irma Srie Wulandary",
+  "platform": "instagram",
+  "handle": "irmasrie",
+  "followers": 404024
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Raden Rauf AM",
+  "platform": "instagram",
+  "handle": "radenrauf",
+  "followers": 2290127
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Raden Rauf AM",
+  "platform": "youtube",
+  "handle": "radenrauf",
+  "followers": 4430000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "indy ratna pratiwi",
+  "platform": "instagram",
+  "handle": "indyratnap",
+  "followers": 1773051
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "riricilll",
+  "platform": "instagram",
+  "handle": "riricilll",
+  "followers": 765877
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "sabrinachairunnisa_",
+  "platform": "instagram",
+  "handle": "sabrinachairunnisa_",
+  "followers": 1716181
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "dayu hatmanti",
+  "platform": "instagram",
+  "handle": "dayuhatmanti",
+  "followers": 223611
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "dayu hatmanti",
+  "platform": "tiktok",
+  "handle": "dayuhatmanti",
+  "followers": 134900,
+  "likes": 11300000,
+  "videos": 347
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "belleblissssh",
+  "platform": "instagram",
+  "handle": "mommy_thaaa",
+  "followers": 101364
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "belleblissssh",
+  "platform": "tiktok",
+  "handle": "belleblissssh",
+  "followers": 1585,
+  "likes": 4879,
+  "videos": 162
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "belleblissssh",
+  "platform": "youtube",
+  "handle": "mommytha3224",
+  "followers": 1750
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Nadia Nur Aulya",
+  "platform": "instagram",
+  "handle": "nadianraulya",
+  "followers": 989311
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Alfi Siregar",
+  "platform": "instagram",
+  "handle": "alfisrg",
+  "followers": 191004
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Toni",
+  "platform": "instagram",
+  "handle": "toni_cu",
+  "followers": 6632284
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Lady Angelina Ismi Razan",
+  "platform": "instagram",
+  "handle": "ladyrazan",
+  "followers": 116471
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Lady Angelina Ismi Razan",
+  "platform": "tiktok",
+  "handle": "ladygarva",
+  "followers": 18900,
+  "likes": 289900,
+  "videos": 245
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Lady Angelina Ismi Razan",
+  "platform": "youtube",
+  "handle": "razanlady",
+  "followers": 1400
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Cindy Armedya",
+  "platform": "instagram",
+  "handle": "cindyarmedya",
+  "followers": 490849
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ardya Tridwantoro H",
+  "platform": "instagram",
+  "handle": "ardya.th",
+  "followers": 895023
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "TASYA SAYEED",
+  "platform": "instagram",
+  "handle": "tasyasayeed",
+  "followers": 445505
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Fitri Siagian",
+  "platform": "instagram",
+  "handle": "fitrysiagian",
+  "followers": 23680
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Putri ⋆. 𐙚 ˚",
+  "platform": "instagram",
+  "handle": "darmaputrii",
+  "followers": 309899
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Mahmudah",
+  "platform": "instagram",
+  "handle": "lailatulmahmudahh",
+  "followers": 207332
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Meira.",
+  "platform": "instagram",
+  "handle": "meiraniap",
+  "followers": 456401
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Arrum",
+  "platform": "instagram",
+  "handle": "arrumrahmaa",
+  "followers": 159956
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Arrum",
+  "platform": "tiktok",
+  "handle": "hnfharumrd",
+  "followers": 38800,
+  "likes": 1100000,
+  "videos": 645
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Novita Sari",
+  "platform": "instagram",
+  "handle": "novita._.sari",
+  "followers": 591078
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Novita Sari",
+  "platform": "tiktok",
+  "handle": "novita._.sari",
+  "followers": 590200,
+  "likes": 10200000,
+  "videos": 609
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yeniwa",
+  "platform": "instagram",
+  "handle": "yeniwa_",
+  "followers": 268695
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Jastitia Arifania Tauladani",
+  "platform": "instagram",
+  "handle": "jastiitia",
+  "followers": 370615
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yayuk Catur Anggraini",
+  "platform": "instagram",
+  "handle": "ayucatur1994",
+  "followers": 123730
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yayuk Catur Anggraini",
+  "platform": "youtube",
+  "handle": "ayucatur",
+  "followers": 1270000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "‎محمد فكريزة ابريل‎",
+  "platform": "instagram",
+  "handle": "pahyi",
+  "followers": 33231
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "‎محمد فكريزة ابريل‎",
+  "platform": "tiktok",
+  "handle": "rizaeipril",
+  "followers": 47000,
+  "likes": 14300000,
+  "videos": 828
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Marsha Aruan",
+  "platform": "instagram",
+  "handle": "aruanmarsha",
+  "followers": 2724832
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Riesvi Hafisa",
+  "platform": "instagram",
+  "handle": "ivikuu",
+  "followers": 817848
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Riesvi Hafisa",
+  "platform": "youtube",
+  "handle": "c/ivikuuofficial",
+  "followers": 13500
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rismamuny",
+  "platform": "instagram",
+  "handle": "rismamuny",
+  "followers": 293662
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rismamuny",
+  "platform": "tiktok",
+  "handle": "rismamuny",
+  "followers": 184300,
+  "likes": 3200000,
+  "videos": 712
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rismamuny",
+  "platform": "youtube",
+  "handle": "rismamuny",
+  "followers": 9
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Chintya Gabriella Panggabean",
+  "platform": "instagram",
+  "handle": "chintyagabriella",
+  "followers": 1429433
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Prilly Latuconsina",
+  "platform": "instagram",
+  "handle": "prillylatuconsina96",
+  "followers": 54501216
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "ntsana",
+  "platform": "instagram",
+  "handle": "ntsana",
+  "followers": 1184366
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Nadzira Shafa Askar",
+  "platform": "instagram",
+  "handle": "enazirashf_",
+  "followers": 1668667
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Nadzira Shafa Askar",
+  "platform": "tiktok",
+  "handle": "zirashafa_",
+  "followers": 1200000,
+  "likes": 53300000,
+  "videos": 1066
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Syifa Hadju Rumi",
+  "platform": "instagram",
+  "handle": "syifahadju",
+  "followers": 22210628
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "MPASI, REVIEW & SHARING",
+  "platform": "instagram",
+  "handle": "boemi.mpasi",
+  "followers": 108447
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Fujianti Utami Putri",
+  "platform": "instagram",
+  "handle": "fuji_an",
+  "followers": 20579799
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Fujianti Utami Putri",
+  "platform": "tiktok",
+  "handle": "fujiiian",
+  "followers": 38900000,
+  "likes": -1613069304,
+  "videos": 548
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Atikahhasna",
+  "platform": "instagram",
+  "handle": "tikahhasna",
+  "followers": 114719
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "One Shot, One Moment",
+  "platform": "tiktok",
+  "handle": "thehasanvideo",
+  "followers": 42100,
+  "likes": 453800,
+  "videos": 684
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "One Shot, One Moment",
+  "platform": "youtube",
+  "handle": "thehasanvideo",
+  "followers": 3240000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "▶️Fun cooking with Yackikuka",
+  "platform": "instagram",
+  "handle": "yackikuka",
+  "followers": 1784728
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "▶️Fun cooking with Yackikuka",
+  "platform": "tiktok",
+  "handle": "yackikuka",
+  "followers": 1100000,
+  "likes": 15700000,
+  "videos": 445
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "dapurumi",
+  "platform": "instagram",
+  "handle": "dapurumi_channel",
+  "followers": 213637
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "dapurumi",
+  "platform": "youtube",
+  "handle": "dapurumi",
+  "followers": 1450000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Toko Dimaw",
+  "platform": "instagram",
+  "handle": "tokodimaw",
+  "followers": 1310
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Toko Dimaw",
+  "platform": "tiktok",
+  "handle": "dimasramadhan_",
+  "followers": 90600,
+  "likes": 3400000,
+  "videos": 396
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Toko Dimaw",
+  "platform": "youtube",
+  "handle": "dimas.ramadhan",
+  "followers": 2400
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "queenraisya10",
+  "platform": "youtube",
+  "handle": "islamnet-ek8qv",
+  "followers": 2
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rumah Kyfam | Yusnita",
+  "platform": "instagram",
+  "handle": "yusnitakyfam",
+  "followers": 33497
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rumah Kyfam | Yusnita",
+  "platform": "youtube",
+  "handle": "yusnitanasar",
+  "followers": 2200
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Amanda Zahra",
+  "platform": "instagram",
+  "handle": "aamandazahra",
+  "followers": 1234087
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Valerie Lee",
+  "platform": "instagram",
+  "handle": "valerielee__",
+  "followers": 53302
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Valerie Lee",
+  "platform": "tiktok",
+  "handle": "curatedmess_",
+  "followers": 152900,
+  "likes": 6800000,
+  "videos": 499
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Christina Han Immanuel",
+  "platform": "instagram",
+  "handle": "christinaimmanuel",
+  "followers": 984027
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Christina Han Immanuel",
+  "platform": "youtube",
+  "handle": "christinaimmanuel",
+  "followers": 1930000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yazid Rizki Ramadhan",
+  "platform": "instagram",
+  "handle": "blogyazid",
+  "followers": 1351782
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yazid Rizki Ramadhan",
+  "platform": "tiktok",
+  "handle": "yazidrizkiramadhan",
+  "followers": 1300000,
+  "likes": 63300000,
+  "videos": 499
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Deasi Listiani",
+  "platform": "instagram",
+  "handle": "deasilistiani",
+  "followers": 159982
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Deasi Listiani",
+  "platform": "tiktok",
+  "handle": "deasilistiani",
+  "followers": 3600000,
+  "likes": 189400000,
+  "videos": 561
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Deasi Listiani",
+  "platform": "youtube",
+  "handle": "deasilistiani",
+  "followers": 100000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Seviqe Rahma Febinita",
+  "platform": "instagram",
+  "handle": "seviqfebinita",
+  "followers": 413034
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Seviqe Rahma Febinita",
+  "platform": "tiktok",
+  "handle": "seviqfebinita",
+  "followers": 105900,
+  "likes": 4600000,
+  "videos": 561
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Seviqe Rahma Febinita",
+  "platform": "youtube",
+  "handle": "seviqfebinita",
+  "followers": 295000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Gritte Agatha Hidayat",
+  "platform": "instagram",
+  "handle": "gritteagathaa",
+  "followers": 3777727
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "OLEVELOVE",
+  "platform": "instagram",
+  "handle": "olevelove",
+  "followers": 437045
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "OLEVELOVE",
+  "platform": "tiktok",
+  "handle": "olevelove_tiktok",
+  "followers": 74800,
+  "likes": 1500000,
+  "videos": 450
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Andika Ardyansyah",
+  "platform": "instagram",
+  "handle": "hobiterbang.id_",
+  "followers": 340691
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Andika Ardyansyah",
+  "platform": "tiktok",
+  "handle": "hobiterbang.id",
+  "followers": 1100000,
+  "likes": 18700000,
+  "videos": 1545
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Andika Ardyansyah",
+  "platform": "youtube",
+  "handle": "hobiterbang",
+  "followers": 662000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rini Perdiyanti",
+  "platform": "instagram",
+  "handle": "riniperdiyanti",
+  "followers": 1551881
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Fitrop Fitrop",
+  "platform": "instagram",
+  "handle": "fitrop",
+  "followers": 1663843
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Fitrop Fitrop",
+  "platform": "tiktok",
+  "handle": "fitropfitrop",
+  "followers": 1500000,
+  "likes": 30600000,
+  "videos": 762
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Trisha Hazianur",
+  "platform": "instagram",
+  "handle": "trishaazia",
+  "followers": 568518
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Trisha Hazianur",
+  "platform": "tiktok",
+  "handle": "trishaaazia",
+  "followers": 9400000,
+  "likes": 509100000,
+  "videos": 4240
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "vinaa",
+  "platform": "instagram",
+  "handle": "racunvinaa",
+  "followers": 154382
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "vinaa",
+  "platform": "tiktok",
+  "handle": "racunvinaa",
+  "followers": 123000,
+  "likes": 8400000,
+  "videos": 1470
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Mavel Maven dan Mami",
+  "platform": "instagram",
+  "handle": "mavelmaven",
+  "followers": 95194
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Mavel Maven dan Mami",
+  "platform": "tiktok",
+  "handle": "mavelmaven",
+  "followers": 35800,
+  "likes": 626000,
+  "videos": 353
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rikka Rafka",
+  "platform": "instagram",
+  "handle": "rikka.restie",
+  "followers": 460438
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "outfitcantikkekinian",
+  "platform": "instagram",
+  "handle": "outfitcantikkekinian",
+  "followers": 189057
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "UCEY",
+  "platform": "instagram",
+  "handle": "suciirfr",
+  "followers": 114189
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "UCEY",
+  "platform": "tiktok",
+  "handle": "uceeyyyyy",
+  "followers": 181100,
+  "likes": 17300000,
+  "videos": 2343
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "susi official",
+  "platform": "instagram",
+  "handle": "susizhuo",
+  "followers": 181215
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "susi official",
+  "platform": "tiktok",
+  "handle": "susioff",
+  "followers": 294000,
+  "likes": 9700000,
+  "videos": 1733
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "susi official",
+  "platform": "youtube",
+  "handle": "channel/UCVRKwpqNdUrR7-zPlqUwNQQ",
+  "followers": 95700
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "juan",
+  "platform": "instagram",
+  "handle": "juansennnnn",
+  "followers": 1532373
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Cindy Pins",
+  "platform": "instagram",
+  "handle": "pins.home",
+  "followers": 997215
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Cindy Pins",
+  "platform": "tiktok",
+  "handle": "pinshome",
+  "followers": 434000,
+  "likes": 14200000,
+  "videos": 1338
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yogi Hadi Wibowo",
+  "platform": "instagram",
+  "handle": "bobocu.id",
+  "followers": 195828
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yogi Hadi Wibowo",
+  "platform": "tiktok",
+  "handle": "bobocu.id",
+  "followers": 4600000,
+  "likes": 167000000,
+  "videos": 2181
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yogi Hadi Wibowo",
+  "platform": "youtube",
+  "handle": "bobocuchannel",
+  "followers": 32400
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "WARDAH",
+  "platform": "instagram",
+  "handle": "wardahmaulina_",
+  "followers": 2106298
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yanti Nugraha",
+  "platform": "instagram",
+  "handle": "itsyantinugraha",
+  "followers": 170703
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yanti Nugraha",
+  "platform": "tiktok",
+  "handle": "itsyantinugraha",
+  "followers": 69500,
+  "likes": 3700000,
+  "videos": 1406
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yanti Nugraha",
+  "platform": "youtube",
+  "handle": "elshanummaryamnusaibah",
+  "followers": 3590
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Filla",
+  "platform": "instagram",
+  "handle": "kimizhu_",
+  "followers": 20736
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Filla",
+  "platform": "tiktok",
+  "handle": "jannafla",
+  "followers": 19600,
+  "likes": 234900,
+  "videos": 638
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Filla",
+  "platform": "youtube",
+  "handle": "jannafla",
+  "followers": 1740
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Inspirasi OOTD Berhijab",
+  "platform": "instagram",
+  "handle": "inspirasiootdberhijab",
+  "followers": 2183178
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Tasya Farasya (@tasyafarasya)",
+  "platform": "instagram",
+  "handle": "tasyafarasya",
+  "followers": 7356602
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Iranandha",
+  "platform": "instagram",
+  "handle": "iranndha",
+  "followers": 1730990
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Iranandha",
+  "platform": "tiktok",
+  "handle": "iranandha",
+  "followers": 2900000,
+  "likes": 365300000,
+  "videos": 2150
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Fadly Faisal",
+  "platform": "instagram",
+  "handle": "fadlyfsl_",
+  "followers": 6870630
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "°´✿ haulbyghin | Review Try On ⊹ ‧̫‧",
+  "platform": "instagram",
+  "handle": "itsghinaabil",
+  "followers": 58173
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "°´✿ haulbyghin | Review Try On ⊹ ‧̫‧",
+  "platform": "youtube",
+  "handle": "ghiratqifamily",
+  "followers": 250000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝓢𝓾𝓬𝓲 𝓜𝓾𝓼𝓽𝓪𝓻𝓪𝓶",
+  "platform": "instagram",
+  "handle": "sucimustaram",
+  "followers": 12837
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝓢𝓾𝓬𝓲 𝓜𝓾𝓼𝓽𝓪𝓻𝓪𝓶",
+  "platform": "tiktok",
+  "handle": "sucimustaram",
+  "followers": 8158,
+  "likes": 624700,
+  "videos": 264
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Julian Jacob",
+  "platform": "instagram",
+  "handle": "julianjacs",
+  "followers": 939934
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Suhay Salim",
+  "platform": "instagram",
+  "handle": "suhaysalim",
+  "followers": 656659
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Eliza Perkasa",
+  "platform": "instagram",
+  "handle": "elizaperkasa",
+  "followers": 342437
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Eliza Perkasa",
+  "platform": "tiktok",
+  "handle": "elizaperkasa2",
+  "followers": 252800,
+  "likes": 4400000,
+  "videos": 405
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Eliza Perkasa",
+  "platform": "youtube",
+  "handle": "elizaperkasa",
+  "followers": 1230000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Teresa Machel | your homecook Chef 💖",
+  "platform": "instagram",
+  "handle": "machelwie",
+  "followers": 909634
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Day",
+  "platform": "instagram",
+  "handle": "dayanasshh",
+  "followers": 655193
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Day",
+  "platform": "tiktok",
+  "handle": "dayanasshh",
+  "followers": 531600,
+  "likes": 22500000,
+  "videos": 2872
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Sherina Apriliaa",
+  "platform": "instagram",
+  "handle": "cherryynaaprilia",
+  "followers": 967091
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Sherina Apriliaa",
+  "platform": "tiktok",
+  "handle": "cerryna.aprilia",
+  "followers": 2300000,
+  "likes": 194500000,
+  "videos": 295
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Clara Yenisaa",
+  "platform": "instagram",
+  "handle": "clarayenisaa",
+  "followers": 11927
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Clara Yenisaa",
+  "platform": "tiktok",
+  "handle": "clrynsa",
+  "followers": 32700,
+  "likes": 789900,
+  "videos": 420
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Clara Yenisaa",
+  "platform": "youtube",
+  "handle": "clarayenisaa",
+  "followers": 195
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Alyssa Daguisé Ghazali",
+  "platform": "instagram",
+  "handle": "alyssadaguise",
+  "followers": 3963889
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Alyssa Daguisé Ghazali",
+  "platform": "tiktok",
+  "handle": "alyssadag1",
+  "followers": 1400000,
+  "likes": 66700000,
+  "videos": 274
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Alyssa Daguisé Ghazali",
+  "platform": "youtube",
+  "handle": "thealsfamily",
+  "followers": 315000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Meimeimecin",
+  "platform": "instagram",
+  "handle": "japmei",
+  "followers": 376957
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Meimeimecin",
+  "platform": "youtube",
+  "handle": "denimeimei3316",
+  "followers": 87800
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "enay🌷 || @naypara_",
+  "platform": "instagram",
+  "handle": "enayfaradiba",
+  "followers": 215391
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "enay🌷 || @naypara_",
+  "platform": "tiktok",
+  "handle": "akuenay",
+  "followers": 362100,
+  "likes": 43600000,
+  "videos": 2299
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "enay🌷 || @naypara_",
+  "platform": "youtube",
+  "handle": "naylaalfaradiba",
+  "followers": 68900
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rizka Amelia",
+  "platform": "instagram",
+  "handle": "rizkaamelya_",
+  "followers": 354955
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rizka Amelia",
+  "platform": "tiktok",
+  "handle": "rizkaamelya_",
+  "followers": 1800000,
+  "likes": 53400000,
+  "videos": 1676
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rizka Amelia",
+  "platform": "youtube",
+  "handle": "rizkaamelya_",
+  "followers": 258000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Hanny Yolandha S.",
+  "platform": "instagram",
+  "handle": "hannysoegianto",
+  "followers": 157096
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Aisha | Monica Sahara",
+  "platform": "instagram",
+  "handle": "monicasahr",
+  "followers": 744585
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "nesyaaa.st19",
+  "platform": "instagram",
+  "handle": "nesyaa.st19",
+  "followers": 529328
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "nesyaaa.st19",
+  "platform": "tiktok",
+  "handle": "nesyaaast",
+  "followers": 4800000,
+  "likes": 105200000,
+  "videos": 287
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Alfina Nindiyani",
+  "platform": "instagram",
+  "handle": "nindiyaa__",
+  "followers": 864092
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "mirahayunandaanindita",
+  "platform": "instagram",
+  "handle": "mirahayunandaanindita",
+  "followers": 163080
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Riri",
+  "platform": "instagram",
+  "handle": "rianarizki",
+  "followers": 887469
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dita",
+  "platform": "instagram",
+  "handle": "livingthebside",
+  "followers": 125323
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Elizasifaa",
+  "platform": "tiktok",
+  "handle": "elizasifaa",
+  "followers": 1900000,
+  "likes": 103800000,
+  "videos": 1639
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Oceana Sky Gumilar",
+  "platform": "instagram",
+  "handle": "oceanaskygumilar",
+  "followers": 121517
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Oceana Sky Gumilar",
+  "platform": "tiktok",
+  "handle": "oceanasky_",
+  "followers": 1400000,
+  "likes": 35700000,
+  "videos": 578
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Alena Vidia S",
+  "platform": "instagram",
+  "handle": "alenavidiasrn",
+  "followers": 71401
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝐌𝐚𝐱𝐰𝐞𝐥𝐥 𝐒𝐚𝐥𝐯𝐚𝐝𝐨𝐫",
+  "platform": "instagram",
+  "handle": "maxwellsalvadorr",
+  "followers": 1387616
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝐌𝐚𝐱𝐰𝐞𝐥𝐥 𝐒𝐚𝐥𝐯𝐚𝐝𝐨𝐫",
+  "platform": "tiktok",
+  "handle": "haloakumaxwell",
+  "followers": 1500000,
+  "likes": 75000000,
+  "videos": 679
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Muhamad Azman",
+  "platform": "instagram",
+  "handle": "muhammadazmann",
+  "followers": 291345
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "FAHRIZA FAMILY",
+  "platform": "instagram",
+  "handle": "ayyara_azkayra",
+  "followers": 70116
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Inspirasi Outfit Hijab",
+  "platform": "instagram",
+  "handle": "virgohaul",
+  "followers": 9193
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Inspirasi Outfit Hijab",
+  "platform": "tiktok",
+  "handle": "ayuvwxyz30",
+  "followers": 1902,
+  "likes": 76300,
+  "videos": 35
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Gendhis Momo",
+  "platform": "instagram",
+  "handle": "gendhismomodrl",
+  "followers": 539050
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Gendhis Momo",
+  "platform": "tiktok",
+  "handle": "gendhismo",
+  "followers": 2000000,
+  "likes": 42300000,
+  "videos": 3780
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Nikita Kusuma",
+  "platform": "instagram",
+  "handle": "nikitakusuma",
+  "followers": 496892
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Antik Arifani | Antikfurqan",
+  "platform": "instagram",
+  "handle": "antikarifani",
+  "followers": 541116
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Antik Arifani | Antikfurqan",
+  "platform": "tiktok",
+  "handle": "antikfurqan",
+  "followers": 1000000,
+  "likes": 33100000,
+  "videos": 536
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ratri",
+  "platform": "instagram",
+  "handle": "kellyshirouchi",
+  "followers": 519570
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ratri",
+  "platform": "youtube",
+  "handle": "kellyshirouchi",
+  "followers": 31400
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Fahiramira",
+  "platform": "instagram",
+  "handle": "theothersidefahiramira",
+  "followers": 85246
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Alfiatul Hasanah",
+  "platform": "instagram",
+  "handle": "unialfi",
+  "followers": 1210676
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Alfiatul Hasanah",
+  "platform": "tiktok",
+  "handle": "unialfiofficial",
+  "followers": 532900,
+  "likes": 14200000,
+  "videos": 1006
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Astari Budi",
+  "platform": "instagram",
+  "handle": "astaririri",
+  "followers": 851301
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "enje.ema",
+  "platform": "instagram",
+  "handle": "enje.ema",
+  "followers": 394197
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Umma Acen | Parenting Enthusiast",
+  "platform": "instagram",
+  "handle": "mutiatreza",
+  "followers": 1023728
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Hassan Alaydrus",
+  "platform": "instagram",
+  "handle": "hassanalaydrus",
+  "followers": 866253
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ratna Ningsih",
+  "platform": "instagram",
+  "handle": "rumah.atu",
+  "followers": 365211
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ratna Ningsih",
+  "platform": "tiktok",
+  "handle": "rumah.atu",
+  "followers": 807900,
+  "likes": 15500000,
+  "videos": 751
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Fiersa Besari",
+  "platform": "instagram",
+  "handle": "fiersabesari",
+  "followers": 4754018
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Fiersa Besari",
+  "platform": "tiktok",
+  "handle": "fiersabesari",
+  "followers": 2200000,
+  "likes": 59000000,
+  "videos": 560
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Verti Tri Wahyuni",
+  "platform": "instagram",
+  "handle": "ve.idn",
+  "followers": 515265
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Verti Tri Wahyuni",
+  "platform": "youtube",
+  "handle": "shannonkurniawan",
+  "followers": 191000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Sarah Alana Gibson",
+  "platform": "instagram",
+  "handle": "sarahgibson21",
+  "followers": 1890283
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Merry🐝",
+  "platform": "instagram",
+  "handle": "itsmerry91",
+  "followers": 448977
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Merry🐝",
+  "platform": "tiktok",
+  "handle": "itsmerry91",
+  "followers": 1100000,
+  "likes": 73400000,
+  "videos": 2081
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ocyella G Indirawnie Ketaren",
+  "platform": "tiktok",
+  "handle": "indirawnie",
+  "followers": 448800,
+  "likes": 20700000,
+  "videos": 267
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Isri Novita Lestari",
+  "platform": "instagram",
+  "handle": "isrickyfamily",
+  "followers": 141721
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Isri Novita Lestari",
+  "platform": "tiktok",
+  "handle": "isrickyfamily",
+  "followers": 33900,
+  "likes": 3300000,
+  "videos": 350
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Violenzia Jeanette",
+  "platform": "instagram",
+  "handle": "violenziajean",
+  "followers": 1434281
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Violenzia Jeanette",
+  "platform": "tiktok",
+  "handle": "violenziajeanette",
+  "followers": 1600000,
+  "likes": 77200000,
+  "videos": 1317
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ilham Suci Rahmadhani",
+  "platform": "instagram",
+  "handle": "hellodhanii",
+  "followers": 287825
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ilham Suci Rahmadhani",
+  "platform": "tiktok",
+  "handle": "hellodhani",
+  "followers": 2300000,
+  "likes": 103000000,
+  "videos": 4066
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ilham Suci Rahmadhani",
+  "platform": "youtube",
+  "handle": "hellodhanii",
+  "followers": 10300
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "RUMAH SUMADI - Nico & Winny",
+  "platform": "instagram",
+  "handle": "rumahsmd",
+  "followers": 489612
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "RUMAH SUMADI - Nico & Winny",
+  "platform": "tiktok",
+  "handle": "rumahsmd",
+  "followers": 452000,
+  "likes": 24100000,
+  "videos": 438
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "RUMAH SUMADI - Nico & Winny",
+  "platform": "youtube",
+  "handle": "channel/UCBbkrBKh3LMPT5pFrsLE7VQ",
+  "followers": 50500
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Jerome Polin",
+  "platform": "instagram",
+  "handle": "jeromepolin",
+  "followers": 9667148
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Amelia Andani",
+  "platform": "instagram",
+  "handle": "ameliandanii",
+  "followers": 1370194
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Amelia Andani",
+  "platform": "tiktok",
+  "handle": "itsandani",
+  "followers": 2000000,
+  "likes": 96500000,
+  "videos": 784
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Amelinda Sanjaya",
+  "platform": "instagram",
+  "handle": "mellindasn",
+  "followers": 472751
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Amelinda Sanjaya",
+  "platform": "tiktok",
+  "handle": "mellindasn",
+  "followers": 1200000,
+  "likes": 27800000,
+  "videos": 1123
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Regina Amalia Salim",
+  "platform": "instagram",
+  "handle": "regina_amalia",
+  "followers": 106062
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Regina Amalia Salim",
+  "platform": "tiktok",
+  "handle": "reginaamaliasalim",
+  "followers": 89000,
+  "likes": 3000000,
+  "videos": 586
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Stefani Horison",
+  "platform": "instagram",
+  "handle": "fanimci5",
+  "followers": 965410
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yoan Mardiana",
+  "platform": "instagram",
+  "handle": "febyoan",
+  "followers": 219452
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yoan Mardiana",
+  "platform": "tiktok",
+  "handle": "febyoan",
+  "followers": 212200,
+  "likes": 5000000,
+  "videos": 869
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yoan Mardiana",
+  "platform": "youtube",
+  "handle": "febyoan",
+  "followers": 1480
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Kezia Gloria Christy",
+  "platform": "instagram",
+  "handle": "keziagc",
+  "followers": 149061
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dian Ayu Lestari",
+  "platform": "instagram",
+  "handle": "dianayulestari",
+  "followers": 1720995
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dian Ayu Lestari",
+  "platform": "tiktok",
+  "handle": "dianayulestari__",
+  "followers": 54700,
+  "likes": 2300000,
+  "videos": 157
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Fifit Fitrisari",
+  "platform": "instagram",
+  "handle": "fifit.fitrisari",
+  "followers": 243708
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Fifit Fitrisari",
+  "platform": "tiktok",
+  "handle": "fifit.fitrisari",
+  "followers": 248000,
+  "likes": 4700000,
+  "videos": 811
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Fifit Fitrisari",
+  "platform": "youtube",
+  "handle": "fifit.fitrisari",
+  "followers": 1590
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Michelle (Hendra) Park 채미설",
+  "platform": "instagram",
+  "handle": "michimomo",
+  "followers": 350260
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Lizzebeth",
+  "platform": "instagram",
+  "handle": "lizzebethmua",
+  "followers": 1989811
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Lizzebeth",
+  "platform": "tiktok",
+  "handle": "lizzebethmuaa",
+  "followers": 11200000,
+  "likes": 663000000,
+  "videos": 3223
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "clara florentina",
+  "platform": "tiktok",
+  "handle": "claraaflrn",
+  "followers": 686300,
+  "likes": 47600000,
+  "videos": 1672
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Erwin",
+  "platform": "instagram",
+  "handle": "erwinphang",
+  "followers": 135275
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Erwin",
+  "platform": "youtube",
+  "handle": "erwinphangg",
+  "followers": 46300
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Bona | Food & Travel Vlogger Jkt 🇮🇩",
+  "platform": "instagram",
+  "handle": "jajanbeken",
+  "followers": 536065
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Bona | Food & Travel Vlogger Jkt 🇮🇩",
+  "platform": "tiktok",
+  "handle": "jajanbeken",
+  "followers": 1000000,
+  "likes": 47500000,
+  "videos": 1831
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Bona | Food & Travel Vlogger Jkt 🇮🇩",
+  "platform": "youtube",
+  "handle": "jajanbeken",
+  "followers": 1390000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dinda saputri",
+  "platform": "instagram",
+  "handle": "dindasaputt",
+  "followers": 213384
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dinda saputri",
+  "platform": "tiktok",
+  "handle": "dindasaputt",
+  "followers": 413300,
+  "likes": 15800000,
+  "videos": 4653
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Alwi fahry",
+  "platform": "instagram",
+  "handle": "alwifachry",
+  "followers": 2482586
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Alwi fahry",
+  "platform": "tiktok",
+  "handle": "alwifahry",
+  "followers": 13500000,
+  "likes": 611500000,
+  "videos": 1059
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rossi",
+  "platform": "instagram",
+  "handle": "rossidatul.umami",
+  "followers": 121579
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rossi",
+  "platform": "tiktok",
+  "handle": "rossiii____",
+  "followers": 347500,
+  "likes": 12800000,
+  "videos": 1974
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Audrey Jesslyn",
+  "platform": "instagram",
+  "handle": "audreyjesslyn",
+  "followers": 194955
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "I Gede Agus Iwan Saputra Kori",
+  "platform": "instagram",
+  "handle": "sptrakori_",
+  "followers": 2796762
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ajeng Kesuma",
+  "platform": "tiktok",
+  "handle": "ajengkesumaa",
+  "followers": 98000,
+  "likes": 3900000,
+  "videos": 704
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Mega Iskanti ♡",
+  "platform": "instagram",
+  "handle": "megaiskanti",
+  "followers": 923021
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝕴𝖓𝖉𝖎𝖗𝖆 𝕶𝖆𝖑𝖎𝖘𝖙𝖍𝖆",
+  "platform": "instagram",
+  "handle": "indirakalistha",
+  "followers": 1230940
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Putri Melati",
+  "platform": "instagram",
+  "handle": "putrimelatii",
+  "followers": 306104
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "ARAPI - ArrafiAnugerahSaprudin",
+  "platform": "instagram",
+  "handle": "arrafy.az",
+  "followers": 573632
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "ARAPI - ArrafiAnugerahSaprudin",
+  "platform": "tiktok",
+  "handle": "arrafy.az",
+  "followers": 2300000,
+  "likes": 143600000,
+  "videos": 1165
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Gladys Victory",
+  "platform": "instagram",
+  "handle": "gladysvctry",
+  "followers": 320019
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Gladys Victory",
+  "platform": "tiktok",
+  "handle": "dyyssoo",
+  "followers": 42100,
+  "likes": 4100000,
+  "videos": 646
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Zhajia",
+  "platform": "instagram",
+  "handle": "i.ziaaaa",
+  "followers": 105377
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Zhajia",
+  "platform": "tiktok",
+  "handle": "ivo.zia",
+  "followers": 246900,
+  "likes": 4100000,
+  "videos": 2812
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ekida Rehan Firmansyah",
+  "platform": "instagram",
+  "handle": "ekidarehanf",
+  "followers": 422560
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝐍𝐚𝐮𝐫𝐚 | 𝘔𝘰𝘮 𝘤𝘳𝘦𝘢𝘵𝘰𝘳",
+  "platform": "instagram",
+  "handle": "nynaura",
+  "followers": 121748
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "𝐍𝐚𝐮𝐫𝐚 | 𝘔𝘰𝘮 𝘤𝘳𝘦𝘢𝘵𝘰𝘳",
+  "platform": "tiktok",
+  "handle": "nynauraa",
+  "followers": 31500,
+  "likes": 907600,
+  "videos": 939
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "RIRI ROSALINA",
+  "platform": "instagram",
+  "handle": "riry_rosa",
+  "followers": 22157
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "RIRI ROSALINA",
+  "platform": "tiktok",
+  "handle": "riry_rosa",
+  "followers": 2948,
+  "likes": 75700,
+  "videos": 620
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "RIRI ROSALINA",
+  "platform": "youtube",
+  "handle": "ririrosalina",
+  "followers": 76800
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Amelia azzahra",
+  "platform": "instagram",
+  "handle": "ameliiazhr",
+  "followers": 743175
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Vicky Alaydrus",
+  "platform": "instagram",
+  "handle": "vickyalaydrus",
+  "followers": 1080846
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "MEGAKENICHIRO_OFFICIAL",
+  "platform": "tiktok",
+  "handle": "megakenichiro_official",
+  "followers": 9500000,
+  "likes": 752800000,
+  "videos": 1037
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "MEGAKENICHIRO_OFFICIAL",
+  "platform": "youtube",
+  "handle": "ueno_family",
+  "followers": 4170000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Hans Christian • Koko Kalori",
+  "platform": "instagram",
+  "handle": "hansboling",
+  "followers": 262427
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dilan Janiyar",
+  "platform": "instagram",
+  "handle": "dilanjaniyar",
+  "followers": 1903516
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dilan Janiyar",
+  "platform": "tiktok",
+  "handle": "dilanjaniyar",
+  "followers": 3800000,
+  "likes": 277500000,
+  "videos": 715
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Clarissa Putri H 😽",
+  "platform": "instagram",
+  "handle": "clarissaputri_",
+  "followers": 1299234
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Clarissa Putri H 😽",
+  "platform": "youtube",
+  "handle": "clarissaputrih",
+  "followers": 76000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Gusti Gina",
+  "platform": "instagram",
+  "handle": "gustigina",
+  "followers": 57713
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Gusti Gina",
+  "platform": "tiktok",
+  "handle": "gusti.gina",
+  "followers": 1300000,
+  "likes": 31500000,
+  "videos": 553
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Gusti Gina",
+  "platform": "youtube",
+  "handle": "c/GustiGina",
+  "followers": 466000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "GABI",
+  "platform": "instagram",
+  "handle": "gabriellaekaputri",
+  "followers": 1043567
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Adzna",
+  "platform": "instagram",
+  "handle": "adznaadrr",
+  "followers": 9616
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Adzna",
+  "platform": "tiktok",
+  "handle": "naydxna",
+  "followers": 15300,
+  "likes": 557300,
+  "videos": 533
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Kelvin Steviano",
+  "platform": "instagram",
+  "handle": "kelvinstevianos",
+  "followers": 2186333
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Risa Saraswati",
+  "platform": "instagram",
+  "handle": "risa_saraswati",
+  "followers": 2074406
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "maria • casasakha",
+  "platform": "instagram",
+  "handle": "casasakha",
+  "followers": 161031
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "maria • casasakha",
+  "platform": "tiktok",
+  "handle": "casasakha",
+  "followers": 14500,
+  "likes": 424400,
+  "videos": 143
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Tengku Dewi Putri",
+  "platform": "instagram",
+  "handle": "tengkudewiputri_tdp",
+  "followers": 1577995
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ugiadam Farhan Firmansyah",
+  "platform": "instagram",
+  "handle": "farhanfirms",
+  "followers": 272463
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "TASYA REVINA",
+  "platform": "instagram",
+  "handle": "tasyarevina",
+  "followers": 1211295
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Imas Fahriaty",
+  "platform": "instagram",
+  "handle": "imasfahriaty_",
+  "followers": 863681
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Leonardo Edwin",
+  "platform": "instagram",
+  "handle": "leo_edw",
+  "followers": 1641202
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Leonardo Edwin",
+  "platform": "youtube",
+  "handle": "channel/UCnNTNz5-uay303Zs-mALHcQ",
+  "followers": 1000000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Angelinngel",
+  "platform": "instagram",
+  "handle": "angelinngel.hc",
+  "followers": 253696
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Angelinngel",
+  "platform": "youtube",
+  "handle": "angelinngel",
+  "followers": 83400
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Keke Eva Angelista",
+  "platform": "instagram",
+  "handle": "kekevaangelista",
+  "followers": 708229
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Salshadilla Juwita Indradjaja",
+  "platform": "instagram",
+  "handle": "salshaindradjaja",
+  "followers": 1052973
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Septi Arshila Saragih",
+  "platform": "instagram",
+  "handle": "septiarsaragih",
+  "followers": 554839
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Septi Arshila Saragih",
+  "platform": "tiktok",
+  "handle": "septiarsaragih",
+  "followers": 857700,
+  "likes": 68000000,
+  "videos": 992
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rumah Rayya",
+  "platform": "instagram",
+  "handle": "arya_artamansa",
+  "followers": 669885
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rizkina Nazar",
+  "platform": "instagram",
+  "handle": "rizkinanazarr",
+  "followers": 1006726
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rizkina Nazar",
+  "platform": "tiktok",
+  "handle": "rizkinanazarr",
+  "followers": 205000,
+  "likes": 19700000,
+  "videos": 400
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Alsa Aqilah",
+  "platform": "instagram",
+  "handle": "alsaaql",
+  "followers": 277429
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Elika Natania B",
+  "platform": "instagram",
+  "handle": "elikaboen",
+  "followers": 533020
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rina Mustika",
+  "platform": "instagram",
+  "handle": "erghenamustika",
+  "followers": 198691
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rina Mustika",
+  "platform": "tiktok",
+  "handle": "erghenamustika",
+  "followers": 69900,
+  "likes": 1400000,
+  "videos": 810
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rina Mustika",
+  "platform": "youtube",
+  "handle": "c/ErghenaMustika",
+  "followers": 251
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "sinta",
+  "platform": "instagram",
+  "handle": "sin.sr",
+  "followers": 864129
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "sinta",
+  "platform": "tiktok",
+  "handle": "sin.sr1",
+  "followers": 41000,
+  "likes": 1100000,
+  "videos": 224
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "sinta",
+  "platform": "youtube",
+  "handle": "channel/UCd-HePmbSEAjYkVr6EWfSxw",
+  "followers": 42900
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Annisa Ajmalia",
+  "platform": "instagram",
+  "handle": "ajmaliaannisa",
+  "followers": 502524
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Janisandbibu",
+  "platform": "instagram",
+  "handle": "janisandbibu",
+  "followers": 1130435
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Anisya Cahya | Mom&Baby Coach",
+  "platform": "instagram",
+  "handle": "anisyacahya",
+  "followers": 617031
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Anisya Cahya | Mom&Baby Coach",
+  "platform": "tiktok",
+  "handle": "anisya_cahya",
+  "followers": 55100,
+  "likes": 685500,
+  "videos": 255
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Anisya Cahya | Mom&Baby Coach",
+  "platform": "youtube",
+  "handle": "anisyacahya",
+  "followers": 16400
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "✨𝒜𝓈𝒽𝒶 𝒜𝓈𝓈𝓊𝓃𝒸𝒶𝑜✨",
+  "platform": "instagram",
+  "handle": "asha.assuncao",
+  "followers": 1260536
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "✨𝒜𝓈𝒽𝒶 𝒜𝓈𝓈𝓊𝓃𝒸𝒶𝑜✨",
+  "platform": "tiktok",
+  "handle": "asha.assuncao",
+  "followers": 2100000,
+  "likes": 61700000,
+  "videos": 589
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "nazwa adinda",
+  "platform": "instagram",
+  "handle": "nazwaadinda_",
+  "followers": 1295244
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "nazwa adinda",
+  "platform": "tiktok",
+  "handle": "nazwaadinda_02",
+  "followers": 3700000,
+  "likes": 318700000,
+  "videos": 3538
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "MANDY EDENIA",
+  "platform": "instagram",
+  "handle": "edeniaaaaa",
+  "followers": 278326
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Enggi Oktaria Monika",
+  "platform": "instagram",
+  "handle": "enji_monica",
+  "followers": 114460
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Enggi Oktaria Monika",
+  "platform": "tiktok",
+  "handle": "enji_monica",
+  "followers": 195700,
+  "likes": 3700000,
+  "videos": 1583
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Enggi Oktaria Monika",
+  "platform": "youtube",
+  "handle": "enji_monica7928",
+  "followers": 10500
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "sarah asyiffa",
+  "platform": "instagram",
+  "handle": "bebbisarah",
+  "followers": 24140
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dini Anggraeni Djoemiko",
+  "platform": "instagram",
+  "handle": "dinidjoemiko",
+  "followers": 285168
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ayu Puspa.A.P",
+  "platform": "instagram",
+  "handle": "hallopuspa_",
+  "followers": 2009651
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ayu Puspa.A.P",
+  "platform": "tiktok",
+  "handle": "ayupuspaap",
+  "followers": 2600000,
+  "likes": 47200000,
+  "videos": 1260
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Sukma Ningrum",
+  "platform": "instagram",
+  "handle": "sukmaningrum__",
+  "followers": 210869
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Sukma Ningrum",
+  "platform": "tiktok",
+  "handle": "sukmaningrum__",
+  "followers": 580700,
+  "likes": 86400000,
+  "videos": 3651
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Mini Garden",
+  "platform": "instagram",
+  "handle": "mini_garden12",
+  "followers": 665408
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Mini Garden",
+  "platform": "tiktok",
+  "handle": "mini_garden12",
+  "followers": 1100000,
+  "likes": 27800000,
+  "videos": 329
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Mini Garden",
+  "platform": "youtube",
+  "handle": "mini_garden12",
+  "followers": 8
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "ᴿᵁᶜᴱ ᴺᵁᴱᴺᴰᴬ ᴾᴱᴿᴹᴬᵀᴬ ᴰᴶ",
+  "platform": "instagram",
+  "handle": "rucenuenda",
+  "followers": 2011173
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "ᴿᵁᶜᴱ ᴺᵁᴱᴺᴰᴬ ᴾᴱᴿᴹᴬᵀᴬ ᴰᴶ",
+  "platform": "youtube",
+  "handle": "rucenuenda1",
+  "followers": 110000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "doknis 👩‍⚕️",
+  "platform": "instagram",
+  "handle": "rddenisa",
+  "followers": 348567
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "doknis 👩‍⚕️",
+  "platform": "tiktok",
+  "handle": "nissaflorence",
+  "followers": 409700,
+  "likes": 6200000,
+  "videos": 1221
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Bianca Kartika | 비앙카",
+  "platform": "instagram",
+  "handle": "biancakartika",
+  "followers": 994865
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "RIMA FITRI",
+  "platform": "instagram",
+  "handle": "rimaftrr",
+  "followers": 21887
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "MAMI RUMAH TANGGA",
+  "platform": "instagram",
+  "handle": "jennifertahapary",
+  "followers": 406863
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "MAMI RUMAH TANGGA",
+  "platform": "tiktok",
+  "handle": "jtthere",
+  "followers": 1600000,
+  "likes": 178700000,
+  "videos": 1717
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Namira Monda",
+  "platform": "instagram",
+  "handle": "namiramonda",
+  "followers": 348281
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Namira Monda",
+  "platform": "youtube",
+  "handle": "namiramonda",
+  "followers": 361
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Annisa Steviani",
+  "platform": "instagram",
+  "handle": "annisast",
+  "followers": 341452
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "mizha 𐙚",
+  "platform": "instagram",
+  "handle": "xx.zhay",
+  "followers": 95668
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "mizha 𐙚",
+  "platform": "tiktok",
+  "handle": "xx.zhay",
+  "followers": 92600,
+  "likes": 11300000,
+  "videos": 1596
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ochaa ✨",
+  "platform": "instagram",
+  "handle": "rosalina.dj",
+  "followers": 12323
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ochaa ✨",
+  "platform": "tiktok",
+  "handle": "rosalina.djatmika",
+  "followers": 17600,
+  "likes": 105500,
+  "videos": 274
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ochaa ✨",
+  "platform": "youtube",
+  "handle": "rosalina.djatmika",
+  "followers": 29900
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Kalula Tisha A.",
+  "platform": "instagram",
+  "handle": "babykalula",
+  "followers": 80777
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Mima Dina (mimanya Lulu Ua Laszlo)",
+  "platform": "instagram",
+  "handle": "dnnashabrina",
+  "followers": 204436
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Sandro Fahdhipa Putra",
+  "platform": "instagram",
+  "handle": "sandrofahdhipa",
+  "followers": 107182
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dapoer Mama Shesa",
+  "platform": "instagram",
+  "handle": "dapoermamashesa",
+  "followers": 221393
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Dapoer Mama Shesa",
+  "platform": "youtube",
+  "handle": "dapoermamashesa9666",
+  "followers": 166000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Melody Prima Ananda",
+  "platform": "instagram",
+  "handle": "melodyprima",
+  "followers": 1710755
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "paul partohap",
+  "platform": "instagram",
+  "handle": "partohaps",
+  "followers": 221235
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Intan Millenia",
+  "platform": "instagram",
+  "handle": "hoopllaa_",
+  "followers": 1484
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Intan Millenia",
+  "platform": "youtube",
+  "handle": "ho0plaa_",
+  "followers": 468
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "febrina vebriant",
+  "platform": "tiktok",
+  "handle": "febrinavebriant",
+  "followers": 2800000,
+  "likes": 85500000,
+  "videos": 3807
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yulita Intan Sari",
+  "platform": "instagram",
+  "handle": "yulitamci5real",
+  "followers": 958794
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Hanum Mega",
+  "platform": "instagram",
+  "handle": "real.hanummegaa",
+  "followers": 4383466
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rotua Panjaitan",
+  "platform": "instagram",
+  "handle": "rotuaaa",
+  "followers": 150210
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Rotua Panjaitan",
+  "platform": "tiktok",
+  "handle": "rotuaaa",
+  "followers": 115500,
+  "likes": 4600000,
+  "videos": 667
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Paula Verhoeven",
+  "platform": "instagram",
+  "handle": "paula_verhoeven",
+  "followers": 7296837
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Wawa | KULINER PADANG SUMBAR",
+  "platform": "instagram",
+  "handle": "awlaparr",
+  "followers": 1044555
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Wawa | KULINER PADANG SUMBAR",
+  "platform": "tiktok",
+  "handle": "awlaparr",
+  "followers": 1300000,
+  "likes": 70500000,
+  "videos": 2217
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Zsalsa Nadila",
+  "platform": "instagram",
+  "handle": "zsalsadil",
+  "followers": 505498
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Zsalsa Nadila",
+  "platform": "tiktok",
+  "handle": "zsalsadil1",
+  "followers": 18400,
+  "likes": 262200,
+  "videos": 49
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Sharena Delon",
+  "platform": "instagram",
+  "handle": "mrssharena",
+  "followers": 6439450
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Felicya Angelista",
+  "platform": "instagram",
+  "handle": "felicyangelista_",
+  "followers": 21939110
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Galyas",
+  "platform": "instagram",
+  "handle": "galyasgeulis",
+  "followers": 1678532
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Galyas",
+  "platform": "tiktok",
+  "handle": "galyasgeulis",
+  "followers": 5500000,
+  "likes": 264800000,
+  "videos": 2064
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Galyas",
+  "platform": "youtube",
+  "handle": "c/GegeGalyass",
+  "followers": 224
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Kartini L",
+  "platform": "instagram",
+  "handle": "kar.loveee",
+  "followers": 925974
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Kartini L",
+  "platform": "tiktok",
+  "handle": "kar.loveee",
+  "followers": 505800,
+  "likes": 25800000,
+  "videos": 1041
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Kartini L",
+  "platform": "youtube",
+  "handle": "kar.loveee",
+  "followers": 4160
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Liony Firyal",
+  "platform": "instagram",
+  "handle": "lionyfaa",
+  "followers": 443596
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Revina VT",
+  "platform": "instagram",
+  "handle": "revinavt",
+  "followers": 594312
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Nasion Patriotik",
+  "platform": "instagram",
+  "handle": "nasionp",
+  "followers": 2149018
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Nasion Patriotik",
+  "platform": "youtube",
+  "handle": "channel/UCfb_fl3zdu7v7Goku3xExvQ",
+  "followers": 1440000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Firhan",
+  "platform": "instagram",
+  "handle": "firhanmci6",
+  "followers": 2732152
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Firhan",
+  "platform": "tiktok",
+  "handle": "firhan_ashari",
+  "followers": 3400000,
+  "likes": 101700000,
+  "videos": 894
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Natya Shina",
+  "platform": "instagram",
+  "handle": "natyashina",
+  "followers": 584569
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Natya Shina",
+  "platform": "youtube",
+  "handle": "c/NatyaShina",
+  "followers": 2140000
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Elaine Alethea / Leinnns",
+  "platform": "instagram",
+  "handle": "elainealethea",
+  "followers": 576214
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Elaine Alethea / Leinnns",
+  "platform": "tiktok",
+  "handle": "leinnns",
+  "followers": 474300,
+  "likes": 24800000,
+  "videos": 1101
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "MBUU TIYI",
+  "platform": "instagram",
+  "handle": "tiyiapong",
+  "followers": 140728
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "MBUU TIYI",
+  "platform": "tiktok",
+  "handle": "tiyiapong",
+  "followers": 2000,
+  "likes": 108800,
+  "videos": 186
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Natalie Holscher",
+  "platform": "instagram",
+  "handle": "nathalieholscher",
+  "followers": 6525625
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Lupita Dewi Efendi",
+  "platform": "instagram",
+  "handle": "lupitadewief",
+  "followers": 166273
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Lupita Dewi Efendi",
+  "platform": "tiktok",
+  "handle": "lupitadewiefendi",
+  "followers": 38400,
+  "likes": 1200000,
+  "videos": 223
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "EGI | Anggita Adistyas Yahya",
+  "platform": "instagram",
+  "handle": "anggitaadistyas",
+  "followers": 376356
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "EGI | Anggita Adistyas Yahya",
+  "platform": "tiktok",
+  "handle": "anggitaadistyas",
+  "followers": 78400,
+  "likes": 2700000,
+  "videos": 1325
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Sari Endah Pratiwi",
+  "platform": "instagram",
+  "handle": "saritiw",
+  "followers": 974350
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Sari Endah Pratiwi",
+  "platform": "tiktok",
+  "handle": "sariendahpratiwi",
+  "followers": 85200,
+  "likes": 3300000,
+  "videos": 287
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Sari Endah Pratiwi",
+  "platform": "youtube",
+  "handle": "saritiw",
+  "followers": 44300
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Yasmin Napper",
+  "platform": "instagram",
+  "handle": "yasminnapper",
+  "followers": 3048313
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Ulfah || Food Enthusiast",
+  "platform": "instagram",
+  "handle": "agakenyang",
+  "followers": 918084
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Fadil Jaidi",
+  "platform": "instagram",
+  "handle": "fadiljaidi",
+  "followers": 14410239
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Mona Pertiwi",
+  "platform": "instagram",
+  "handle": "monapertiwii",
+  "followers": 38525
+ },
+ {
+  "date": "2026-10-13",
+  "kol": "Mona Pertiwi",
+  "platform": "tiktok",
+  "handle": "monapertiwii",
+  "followers": 30900,
+  "likes": 1500000,
+  "videos": 1173
  }
 ]

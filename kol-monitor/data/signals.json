@@ -314,5 +314,19 @@
   "sources": [
    "tiktok discover"
   ]
+ },
+ {
+  "kol": "Iranandha",
+  "firstSeen": "2026-10-12",
+  "date": "2026-10-12",
+  "type": "content",
+  "sentiment": "positive",
+  "outlets": 1,
+  "coEntities": [],
+  "topic": "TikTok video: surprise reunion with her twin, about 457K likes (TikTok discover page updated 12 Oct)",
+  "note": "Known for exposing her husband's affair in 2023; later reconciled and expecting a second child. No fresh news-outlet coverage found.",
+  "sources": [
+   "tiktok discover"
+  ]
  }
 ]

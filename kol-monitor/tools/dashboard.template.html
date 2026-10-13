@@ -10,39 +10,57 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171716;--card:#201f1e;--ink:#ecebe7;--ink2:#a9a8a2;--ink3:#7d7c77;--line:#34332f;--soft:#292826;--ok:#7fcf9d;--okbg:#1d3326;--warn:#e6bd5c;--warnbg:#3a2f14;--bad:#f09a92;--badbg:#3d1f1c;--acc:#8fb4ee;--accbg:#1c2a42;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#171716;--card:#201f1e;--ink:#ecebe7;--ink2:#a9a8a2;--ink3:#7d7c77;--line:#34332f;--soft:#292826;--ok:#7fcf9d;--okbg:#1d3326;--warn:#e6bd5c;--warnbg:#3a2f14;--bad:#f09a92;--badbg:#3d1f1c;--acc:#8fb4ee;--accbg:#1c2a42;color-scheme:dark}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-.wrap{max-width:1080px;margin:0 auto;padding:20px 16px 48px}
+.wrap{max-width:1120px;margin:0 auto;padding:20px 16px 48px}
 h1{font-size:20px;font-weight:600;margin:0}h2{font-size:15px;font-weight:600;margin:0 0 10px}
 .sub{color:var(--ink2)}.muted{color:var(--ink3);font-size:12px}
 .top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;margin-bottom:14px}
 .chip{display:inline-block;font-size:12px;padding:2px 9px;border-radius:6px;white-space:nowrap}
 .ok{background:var(--okbg);color:var(--ok)}.warn{background:var(--warnbg);color:var(--warn)}.bad{background:var(--badbg);color:var(--bad)}.neu{background:var(--soft);color:var(--ink2)}.acc{background:var(--accbg);color:var(--acc)}
-.grid{display:grid;gap:10px}.kpis{grid-template-columns:repeat(auto-fit,minmax(130px,1fr));margin-bottom:14px}
+.grid{display:grid;gap:10px}.kpis{grid-template-columns:repeat(auto-fit,minmax(120px,1fr));margin-bottom:14px}
 .kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}.kpi b{display:block;font-size:22px;font-weight:600}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
-.tbl{padding:0;overflow:hidden}.row{display:grid;grid-template-columns:minmax(150px,1.6fr) 56px minmax(80px,1fr) minmax(80px,1fr) minmax(80px,1fr) 70px 110px;gap:10px;align-items:center;padding:11px 14px;border-bottom:1px solid var(--line);cursor:pointer}
-.row:last-child{border-bottom:0}.row:hover{background:var(--soft)}.row.sel{background:var(--accbg)}.row.hd{cursor:default;font-size:12px;color:var(--ink3);background:none}
-.sc{font-size:22px;font-weight:600}.bar{height:7px;border-radius:4px;background:var(--soft);overflow:hidden}.bar i{display:block;height:100%}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.ctl input,.ctl select{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 10px;min-width:0}
+.ctl input{flex:1 1 200px}
+.tw{overflow-x:auto}
+table.t{width:100%;border-collapse:collapse;min-width:720px}
+table.t th{font-size:12px;font-weight:500;color:var(--ink3);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.t td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+table.t tr.r{cursor:pointer}table.t tr.r:hover{background:var(--soft)}table.t tr.sel{background:var(--accbg)}
+.num{text-align:right;font-variant-numeric:tabular-nums}.sc{font-size:18px;font-weight:600}
+.bar{height:7px;border-radius:4px;background:var(--soft);overflow:hidden}.bar i{display:block;height:100%}
 .two{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
 .ev{display:grid;grid-template-columns:48px 1fr auto;gap:10px;padding:7px 0;border-top:1px solid var(--line);align-items:start}
 .tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:5px;margin:0 4px 4px 0}
 details summary{cursor:pointer;color:var(--acc)}code{background:var(--soft);padding:1px 5px;border-radius:4px;font-size:12px}
 table.m{width:100%;border-collapse:collapse;font-size:13px}table.m td,table.m th{padding:5px 6px;border-top:1px solid var(--line);text-align:left}table.m th{color:var(--ink3);font-weight:500}
-@media (max-width:760px){.row{grid-template-columns:1fr 50px 100px}.row>.hide{display:none}.row>.hide2{display:none}}
+.pg{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:10px}.pg button{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:5px 12px;cursor:pointer}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 </style></head><body><div class="wrap">
 <div class="top"><div><h1>KOL investment radar</h1><div class="sub" id="asof"></div></div><div id="conf"></div></div>
 <div class="grid kpis" id="kpis"></div>
-<div class="card tbl"><div class="row hd"><span>Creator</span><span>Invest</span><span class="hide">Momentum</span><span class="hide">Quality</span><span class="hide">Durability</span><span class="hide2">Safety</span><span>Verdict</span></div><div id="rows"></div></div>
 <div id="detail"></div>
+<div class="card">
+ <div class="ctl">
+  <input id="q" type="search" placeholder="Search name or handle" aria-label="Search creators">
+  <select id="f" aria-label="Filter"><option value="all">All creators</option><option value="scanned">Scored (event scan done)</option><option value="A">Daily priority tier</option><option value="flag">Handle needs checking</option><option value="Rising">Rising</option><option value="Cooling">Cooling</option></select>
+  <select id="s" aria-label="Sort"><option value="default">Sort: score, then reach</option><option value="reach">Sort: reach</option><option value="ig">Sort: Instagram</option><option value="tt">Sort: TikTok</option><option value="yt">Sort: YouTube</option><option value="name">Sort: name</option></select>
+ </div>
+ <div class="tw"><table class="t"><thead><tr><th>Creator</th><th class="num">Instagram</th><th class="num">TikTok</th><th class="num">YouTube</th><th>Status</th><th class="num">Invest</th></tr></thead><tbody id="rows"></tbody></table></div>
+ <div class="pg"><span class="muted" id="cnt"></span><button id="prev" type="button">Previous</button><button id="next" type="button">Next</button></div>
+</div>
 <div class="card"><details><summary>How the score works</summary>
+<p>Everyone is tracked on follower snapshots (Instagram, TikTok, YouTube). Only creators with an event scan get an Invest score, because the score needs news and event evidence that public follower counts cannot give.</p>
 <p><b>Invest = cube root of (momentum x quality x durability)</b>, capped at 59 if brand safety is flagged. Multiplying means one weak link drags the whole score down.</p>
 <table class="m"><tr><th>Part</th><th>Built from</th></tr>
-<tr><td>Momentum</td><td>Loudness of recent stories (outlets, up to 6) x freshness (14-day decay). Once 7+ days of follower snapshots exist, it is averaged with follower growth rate (full marks at 0.6% a day).</td></tr>
-<tr><td>Quality</td><td>Weighted by event type: content/collab 1.0, commercial 0.9, event 0.7, personal 0.4, conflict 0.2, legal 0.1.</td></tr>
+<tr><td>Momentum</td><td>Loudness of recent stories (outlets, up to 6) x freshness (14-day decay). Once 7+ days of snapshots exist, averaged with follower growth rate (full marks at 0.6% a day).</td></tr>
+<tr><td>Quality</td><td>Weighted by event type: content/collab 1.0, commercial 0.9, event 0.7, personal 0.4, conflict 0.2, legal 0.1. With no events found it sits at 50.</td></tr>
 <tr><td>Durability</td><td>25 base + 20 per dated catalyst in the next 14 days + 15 per recent content/collab/commercial event + 10 if 30-day growth is positive.</td></tr>
 <tr><td>Brand safety</td><td>Flag if there is a legal or conflict story with 3+ outlets in the last 90 days.</td></tr>
-<tr><td>Verdict</td><td>70+ and safe: Invest now. 50-69: Prepare. 35-49: Watch. Below 35: Hold. Falling followers on all platforms: Reduce.</td></tr>
+<tr><td>Verdict</td><td>70+ and safe: Invest now. 50-69: Prepare. 35-49: Watch. Below 35: Hold. Falling followers on every platform: Reduce.</td></tr>
+<tr><td>Follower status (everyone)</td><td>Rising: 7-day growth of 0.4%/day or more, or 2x the 30-day pace. Cooling: shrinking over 7 and 30 days. Collecting until 7 days of snapshots exist.</td></tr>
 <tr><td>Confidence</td><td>Low under 7 days of snapshots. Medium 7-13 days. High 14+ days and 3+ events.</td></tr></table>
-<p class="muted">These weights are first-pass heuristics, not fitted to outcomes. Tune them against real campaign results once conversion data is connected.</p></details></div>
+<p class="muted">Weights are first-pass heuristics, not fitted to outcomes. Instagram shows exact counts; TikTok and YouTube round to three digits. Tune against campaign results once sales data is connected.</p></details></div>
 </div>
 <script>
 const D=/*DATA*/null;
@@ -52,21 +70,41 @@ const pct=x=>x==null?'-':(x>=0?'+':'')+(x*100).toFixed(2)+'%';
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const colr=x=>x>=70?'var(--ok)':x>=45?'var(--warn)':'var(--bad)';
 const bar=x=>'<div class="bar"><i style="width:'+x+'%;background:'+colr(x)+'"></i></div>';
-const vcls={'Invest now':'ok',Prepare:'acc',Watch:'warn',Hold:'neu',Reduce:'bad','Needs handle':'neu'};
-const scored=D.kols.filter(k=>k.scored);
-$('asof').textContent='As of '+D.asOf+' · TikTok + Instagram public data and news scan';
-$('conf').innerHTML=scored.every(k=>k.confidence==='low')?'<span class="chip warn">Early data: under 7 days of snapshots, confidence low</span>':'';
-const cnt=v=>D.kols.filter(k=>k.verdict===v).length;
-$('kpis').innerHTML=[['Tracked',D.kols.length],['Trending now',scored.filter(k=>k.trendingNow).length],['Invest now',cnt('Invest now')],['Prepare / watch',cnt('Prepare')+cnt('Watch')],['Needs handle',cnt('Needs handle')]].map(a=>'<div class="kpi"><span class="muted">'+a[0]+'</span><b>'+a[1]+'</b></div>').join('');
-D.kols.forEach(function(k,i){var r=document.createElement('div');r.className='row';
- if(k.scored){
-  r.innerHTML='<span><b>'+esc(k.name)+'</b> '+(k.trendingNow?'<span class="chip bad">trending now</span>':'')+'<div class="muted">'+k.numeric.map(function(n){return (n.platform==='instagram'?'IG ':'TikTok ')+fmt(n.followers)}).join(' · ')+'</div></span><span class="sc">'+k.invest+'</span><span class="hide">'+bar(k.momentum)+'</span><span class="hide">'+bar(k.quality)+'</span><span class="hide">'+bar(k.durability)+'</span><span class="hide2"><span class="chip '+(k.safety==='pass'?'ok':'warn')+'">'+(k.safety==='pass'?'Pass':'Flag')+'</span></span><span><span class="chip '+vcls[k.verdict]+'">'+k.verdict+'</span></span>';
- } else {
-  r.innerHTML='<span><b>'+esc(k.name)+'</b><div class="muted">Handle not confirmed</div></span><span class="muted">-</span><span class="hide"></span><span class="hide"></span><span class="hide"></span><span class="hide2"></span><span><span class="chip neu">Needs handle</span></span>';
- }
- r.onclick=function(){show(i)};$('rows').appendChild(r)});
+const vcls={'Invest now':'ok',Prepare:'acc',Watch:'warn',Hold:'neu',Reduce:'bad','Needs handle':'neu',Tracking:'neu',Collecting:'neu',Rising:'ok',Steady:'neu',Cooling:'bad'};
+const plat=(k,p)=>k.numeric.find(n=>n.platform===p);
+const val=(k,p)=>{const n=plat(k,p);return n&&n.ok?n.followers:null};
+const flagged=k=>Object.keys(k.flags||{}).length>0;
+const scored=D.kols.filter(k=>k.scanned);
+$('asof').textContent='As of '+D.asOf+' · '+D.kols.length+' creators · Instagram, TikTok, YouTube counts and a news scan';
+$('conf').innerHTML=D.kols.every(k=>k.status==='Collecting'||!k.numeric.some(n=>n.r7!=null))?'<span class="chip warn">Day 1: follower trends start after 7 days of snapshots</span>':'';
+const cnt=f=>D.kols.filter(f).length;
+$('kpis').innerHTML=[['Creators',D.kols.length],['Scored',scored.length],['Trending now',scored.filter(k=>k.trendingNow).length],['Rising (followers)',cnt(k=>k.status==='Rising')],['Handles to check',cnt(flagged)]].map(a=>'<div class="kpi"><span class="muted">'+a[0]+'</span><b>'+a[1]+'</b></div>').join('');
+let page=0,PS=40,view=[],sel=null;
+function apply(){
+ const q=$('q').value.trim().toLowerCase(),f=$('f').value,s=$('s').value;
+ view=D.kols.filter(k=>{
+  if(q&&!(k.name.toLowerCase().includes(q)||Object.values(k.handles).some(h=>h&&h.toLowerCase().includes(q))))return false;
+  if(f==='scanned')return k.scanned;if(f==='A')return k.tier==='A';if(f==='flag')return flagged(k);if(f==='Rising'||f==='Cooling')return k.status===f;return true;});
+ const key={reach:k=>k.reach,ig:k=>val(k,'instagram')||0,tt:k=>val(k,'tiktok')||0,yt:k=>val(k,'youtube')||0};
+ if(s==='name')view.sort((a,b)=>a.name.localeCompare(b.name));else if(key[s])view.sort((a,b)=>key[s](b)-key[s](a));
+ page=0;draw();}
+function draw(){
+ const body=$('rows');body.innerHTML='';
+ view.slice(page*PS,page*PS+PS).forEach(k=>{
+  const tr=document.createElement('tr');tr.className='r'+(sel===k.name?' sel':'');tr.tabIndex=0;
+  const c=(p)=>{const n=plat(k,p);return !n?'<td class="num muted">-</td>':n.ok?'<td class="num">'+fmt(n.followers)+'</td>':'<td class="num"><span class="chip warn" title="'+esc(n.why||'')+'">check</span></td>'};
+  tr.innerHTML='<td><b>'+esc(k.name)+'</b>'+(k.trendingNow?' <span class="chip bad">trending now</span>':'')+(k.tier==='A'?' <span class="chip neu">daily</span>':'')+'<div class="muted">'+esc(k.handles.instagram?'@'+k.handles.instagram:(k.handles.tiktok?'@'+k.handles.tiktok:''))+'</div></td>'+c('instagram')+c('tiktok')+c('youtube')
+   +'<td><span class="chip '+(vcls[k.verdict]||'neu')+'">'+esc(k.verdict)+'</span>'+(!k.scanned&&k.statusNote?'<div class="muted">'+esc(k.statusNote)+'</div>':'')+'</td>'
+   +'<td class="num">'+(k.scanned?'<span class="sc">'+k.invest+'</span>':'<span class="muted">not scanned</span>')+'</td>';
+  const go=()=>{sel=k.name;show(k);draw();$('detail').scrollIntoView({behavior:'smooth',block:'start'})};
+  tr.onclick=go;tr.onkeydown=e=>{if(e.key==='Enter')go()};body.appendChild(tr)});
+ const pages=Math.max(1,Math.ceil(view.length/PS));
+ $('cnt').textContent=view.length+' creators · page '+(page+1)+' of '+pages;
+ $('prev').disabled=page===0;$('next').disabled=page>=pages-1;}
+$('prev').onclick=()=>{page--;draw()};$('next').onclick=()=>{page++;draw()};
+['q','f','s'].forEach(i=>$(i).addEventListener('input',apply));
 function spark(series){
- if(!series||series.length<2)return '<div class="muted" style="padding:14px 0">Trend line appears once 2+ daily snapshots exist.</div>';
+ if(!series||series.length<2)return '<div class="muted" style="padding:10px 0">Trend line appears once 2+ daily snapshots exist.</div>';
  var v=series.map(function(s){return s[1]}),mn=Math.min.apply(null,v),mx=Math.max.apply(null,v),sp=(mx-mn)||1;
  var pts=series.map(function(s,i){return (i/(series.length-1)*290).toFixed(1)+','+(70-((s[1]-mn)/sp)*60).toFixed(1)}).join(' ');
  return '<svg viewBox="0 0 290 76" width="100%" height="76" role="img" aria-label="follower trend"><polyline fill="none" stroke="var(--acc)" stroke-width="2" points="'+pts+'"/></svg>';}
@@ -75,32 +113,21 @@ const scls={negative:'bad',positive:'ok',mixed:'warn',unknown:'neu'};
 function dist(o,t){return '<div style="margin-bottom:8px"><div class="muted">'+t+'</div>'+Object.keys(o).map(function(a){return '<div style="display:grid;grid-template-columns:70px 1fr 38px;gap:8px;align-items:center;font-size:12px"><span>'+esc(a)+'</span>'+bar(o[a])+'<span>'+o[a]+'%</span></div>'}).join('')+'</div>';}
 function aud(k){
  var m=k.audience.measured,inf=k.audience.inferred,h='<h2>Audience</h2>';
- if(m){
-  h+='<div class="muted" style="margin-bottom:8px">Measured · '+esc(m.source)+' · '+esc(m.platform)+' · '+esc(m.asOf)+'</div>'+dist(m.gender,'Gender')+dist(m.age,'Age')
+ if(m){h+='<div class="muted" style="margin-bottom:8px">Measured · '+esc(m.source)+' · '+esc(m.platform)+' · '+esc(m.asOf)+'</div>'+dist(m.gender,'Gender')+dist(m.age,'Age')
    +'<div class="muted">Top countries</div><div>'+(m.topCountries||[]).map(function(c){return '<span class="tag neu">'+esc(c.name)+' '+c.pct+'%</span>'}).join('')+'</div>'
-   +'<div class="muted">Top cities</div><div>'+(m.topCities||[]).map(function(c){return '<span class="tag neu">'+esc(c.name)+' '+c.pct+'%</span>'}).join('')+'</div>';
- } else {
-  h+='<div class="chip warn" style="margin-bottom:8px">No measured demographics yet</div><div class="muted" style="margin-bottom:10px">Gender, age, country and city are not visible on public profiles. Put the creator\'s IG Insights / TikTok Analytics numbers in <code>data/audience/'+esc(k.name)+'.json</code> (see TEMPLATE.json) and this panel fills in.</div>';
- }
- if(inf){
-  h+='<div class="muted" style="margin:8px 0 4px">Inferred from public evidence (not measured)</div><div style="margin-bottom:6px"><b>Language:</b> '+esc(inf.language.value)+' <span class="muted">· '+esc(inf.language.evidence)+'</span></div>'
+   +'<div class="muted">Top cities</div><div>'+(m.topCities||[]).map(function(c){return '<span class="tag neu">'+esc(c.name)+' '+c.pct+'%</span>'}).join('')+'</div>';}
+ else h+='<div class="chip warn" style="margin-bottom:8px">No measured demographics yet</div><div class="muted" style="margin-bottom:10px">Gender, age, country and city are not visible on public profiles. Put the creator\'s IG Insights / TikTok Analytics numbers in <code>data/audience/'+esc(k.name)+'.json</code> (see TEMPLATE.json) and this panel fills in.</div>';
+ if(inf){h+='<div class="muted" style="margin:8px 0 4px">Inferred from public evidence (not measured)</div><div style="margin-bottom:6px"><b>Language:</b> '+esc(inf.language.value)+' <span class="muted">· '+esc(inf.language.evidence)+'</span></div>'
    +inf.contentAffinity.map(function(c){return '<div style="margin-bottom:4px"><span class="tag acc">'+esc(c.tag)+'</span><span class="muted">'+esc(c.evidence)+'</span></div>'}).join('')
-   +'<div style="margin-top:6px"><b>Reach:</b> '+esc(inf.reach)+'</div><div style="margin-top:4px" class="sub"><b>Watch:</b> '+esc(inf.watch)+'</div>';
- }
+   +'<div style="margin-top:6px"><b>Reach:</b> '+esc(inf.reach)+'</div><div style="margin-top:4px" class="sub"><b>Watch:</b> '+esc(inf.watch)+'</div>';}
  return h;}
-function show(i){
- document.querySelectorAll('#rows .row').forEach(function(r,j){r.classList.toggle('sel',j===i)});
- var k=D.kols[i],el=$('detail');
- if(!k.scored){el.innerHTML='<div class="card"><h2>'+esc(k.name)+'</h2><p class="sub">No verified TikTok or Instagram handle, so nothing is collected. The guessed handles failed the impostor check (tiny or private accounts). Send the real handles to start tracking.</p></div>';return;}
- var hs=k.numeric.map(function(n){return '<tr><td>'+n.platform+'</td><td>@'+esc(n.handle)+'</td><td>'+fmt(n.followers)+'</td><td>'+(n.likes!=null?fmt(n.likes):'-')+'</td><td>'+(n.videos!=null?n.videos:'-')+'</td><td>'+pct(n.r7)+'</td><td>'+pct(n.r30)+'</td></tr>'}).join('');
- var missing=['instagram','tiktok'].filter(function(p){return !k.verified[p]}).map(function(p){return p+' (@'+esc(k.handles[p])+' unverified)'});
- el.innerHTML='<div class="card"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><h2 style="margin:0 0 6px">'+esc(k.name)+'</h2><span class="chip '+vcls[k.verdict]+'">'+k.verdict+'</span> <span class="chip '+(k.safety==='pass'?'ok':'warn')+'">Brand safety: '+k.safety+'</span> <span class="chip neu">confidence '+k.confidence+'</span></div><div><span class="sc">'+k.invest+'</span><span class="muted"> / 100</span></div></div>'
- +(k.safetyReasons.length?'<p class="sub" style="margin:8px 0 0">Flag: '+k.safetyReasons.map(esc).join('; ')+'</p>':'')
- +'<div class="grid two" style="margin-top:12px"><div>'+[['Momentum',k.momentum],['Source quality',k.quality],['Durability',k.durability]].map(function(a){return '<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:12px"><span>'+a[0]+'</span><b>'+a[1]+'</b></div>'+bar(a[1])+'</div>'}).join('')+'<div class="muted">Conversion (sales per post): not connected</div></div>'
- +'<div>'+k.numeric.map(function(n){return '<div class="muted">'+n.platform+' followers · '+n.series.length+' snapshot(s)</div>'+spark(n.series)}).join('')+'</div></div>'
- +'<table class="m" style="margin-top:10px"><tr><th>Platform</th><th>Handle</th><th>Followers</th><th>Likes</th><th>Videos</th><th>7d</th><th>30d</th></tr>'+hs+'</table>'
- +(missing.length?'<p class="muted" style="margin:8px 0 0">Not tracked yet: '+missing.join(', ')+'. '+esc(k.notes)+'</p>':'')+'</div>'
- +'<div class="grid two"><div class="card"><h2>Events and catalysts</h2>'+k.events.map(function(e){return '<div class="ev"><span class="muted">'+esc((e.catalystDate||e.date).slice(5))+'</span><span>'+esc(e.topic)+'<div class="muted">'+e.outlets+' outlet(s)'+(e.coEntities.length?' · with '+e.coEntities.map(esc).join(', '):'')+'</div></span><span><span class="tag '+tcls[e.type]+'">'+e.type+'</span><span class="tag '+scls[e.sentiment]+'">'+e.sentiment+'</span></span></div>'}).join('')+'</div>'
- +'<div class="card">'+aud(k)+'</div></div>';}
-show(0);
+function show(k){
+ var el=$('detail'),hs=k.numeric.map(function(n){return '<tr><td>'+n.platform+'</td><td>@'+esc(n.handle)+'</td><td>'+(n.ok?fmt(n.followers):'<span class="chip warn">'+esc(n.why||'check')+'</span>')+'</td><td>'+(n.likes!=null?fmt(n.likes):'-')+'</td><td>'+(n.videos!=null?n.videos:'-')+'</td><td>'+pct(n.r7)+'</td><td>'+pct(n.r30)+'</td></tr>'}).join('');
+ var head='<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><h2 style="margin:0 0 6px">'+esc(k.name)+'</h2><span class="chip '+(vcls[k.verdict]||'neu')+'">'+esc(k.verdict)+'</span> '+(k.scanned?'<span class="chip '+(k.safety==='pass'?'ok':'warn')+'">Brand safety: '+k.safety+'</span> <span class="chip neu">confidence '+k.confidence+'</span>':'<span class="chip neu">event scan not run</span>')+'</div>'+(k.scanned?'<div><span class="sc" style="font-size:24px">'+k.invest+'</span><span class="muted"> / 100</span></div>':'')+'</div>';
+ var body=k.scanned?(k.safetyReasons.length?'<p class="sub" style="margin:8px 0 0">Flag: '+k.safetyReasons.map(esc).join('; ')+'</p>':'')+'<div class="grid two" style="margin-top:12px"><div>'+[['Momentum',k.momentum],['Source quality',k.quality],['Durability',k.durability]].map(function(a){return '<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:12px"><span>'+a[0]+'</span><b>'+a[1]+'</b></div>'+bar(a[1])+'</div>'}).join('')+'<div class="muted">Conversion (sales per post): not connected</div></div><div>'+k.numeric.filter(function(n){return n.ok}).map(function(n){return '<div class="muted">'+n.platform+' followers · '+n.series.length+' snapshot(s)</div>'+spark(n.series)}).join('')+'</div></div>'
+  :'<p class="sub" style="margin:8px 0 0">'+(k.status==='Needs handle'?'No working handle yet. Check the flagged links below.':'Tracked on follower counts only. '+(k.statusNote||'')+' An event scan (news, viral clips, who they are linked with) is needed before this creator gets an Invest score.')+'</p><div class="grid two" style="margin-top:8px">'+k.numeric.filter(function(n){return n.ok}).map(function(n){return '<div><div class="muted">'+n.platform+' followers · '+n.series.length+' snapshot(s)</div>'+spark(n.series)+'</div>'}).join('')+'</div>';
+ var tbl='<table class="m" style="margin-top:10px"><tr><th>Platform</th><th>Handle</th><th>Followers</th><th>Likes</th><th>Videos</th><th>7d</th><th>30d</th></tr>'+hs+'</table>'+(k.notes?'<p class="muted" style="margin:8px 0 0">'+esc(k.notes)+'</p>':'');
+ var ev=k.scanned?'<div class="grid two"><div class="card"><h2>Events and catalysts</h2>'+(k.events.length?k.events.map(function(e){return '<div class="ev"><span class="muted">'+esc((e.catalystDate||e.date).slice(5))+'</span><span>'+esc(e.topic)+'<div class="muted">'+e.outlets+' outlet(s)'+(e.coEntities.length?' · with '+e.coEntities.map(esc).join(', '):'')+'</div></span><span><span class="tag '+tcls[e.type]+'">'+e.type+'</span><span class="tag '+scls[e.sentiment]+'">'+e.sentiment+'</span></span></div>'}).join(''):'<div class="muted">Scan ran on '+esc(k.scanDate)+' and found no dated story.</div>')+'</div><div class="card">'+aud(k)+'</div></div>':'';
+ el.innerHTML='<div class="card">'+head+body+tbl+'</div>'+ev;}
+const first=scored[0]||D.kols[0];sel=first.name;show(first);apply();
 </script></body></html>
