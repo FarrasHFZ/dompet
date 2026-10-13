@@ -7,8 +7,9 @@ Goal: for each managed KOL in `kols.json`, say whether they are **trending now**
 2. Apply the impostor check in that file. If a handle fails, set it `verified:false` and flag it in the summary. Never record data from an unverified handle.
 3. Save each result: `node tools/kol.mjs add "<KOL name>" '<json>'` (writes `data/history.json`, one row per KOL/platform/day).
 4. `node tools/kol.mjs report` writes `reports/<date>.md`.
-5. Reply with a short brief: who is TRENDING / POTENTIAL / COOLING and why, in plain language, plus handles that need the owner's attention. Add a `web` look (news, viral clips) for any KOL flagged TRENDING or POTENTIAL, to explain the cause.
-6. Commit `data/` and `reports/`.
+5. EVENT SCAN FIRST-CLASS: follow `tools/trend-scan.md` for every KOL (all query templates, second-order names, calendar), append findings to `data/signals.json`.
+6. Reply with a short brief: who is TRENDING / POTENTIAL / COOLING and why, in plain language, plus handles that need the owner's attention. Lead with the event layer (what happened, who the other party is, how many outlets, how fresh), then the numeric layer; say whether numbers have confirmed the event yet.
+7. Commit `data/` and `reports/`.
 
 ## Limits (be honest in every brief)
 - Logged-out access only: no per-post likes/views on Instagram; TikTok gives totals (followers, likes, video count), not per-video stats.
