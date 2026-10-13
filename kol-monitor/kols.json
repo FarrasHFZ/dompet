@@ -23,12 +23,14 @@
     },
     {
       "name": "Amanda Zahra",
-      "instagram": "amandazahra",
-      "tiktok": "amandazahra",
+      "instagram": "aamandazahra",
+      "tiktok": null,
       "verified": {
-        "instagram": false,
+        "instagram": true,
         "tiktok": false
-      }
+      },
+      "twitter": "amndzahra",
+      "notes": "Owner-supplied IG @aamandazahra (1.23M, verified by size/posts). Twitter @amndzahra supplied but not tracked (no collector). TikTok handle still unknown."
     },
     {
       "name": "Iranandha",
@@ -47,6 +49,36 @@
         "instagram": false,
         "tiktok": false
       }
+    },
+    {
+      "name": "Hanum Mega",
+      "instagram": "real.hanummegaa",
+      "tiktok": "real.hanummegaa",
+      "verified": {
+        "instagram": true,
+        "tiktok": false
+      },
+      "notes": "Owner-supplied. IG 4.38M ok. TikTok @real.hanummegaa failed the check (0 followers, nickname Angellina), so it needs the right TikTok handle."
+    },
+    {
+      "name": "Jerome Polin",
+      "instagram": "jeromepolin",
+      "tiktok": null,
+      "verified": {
+        "instagram": true,
+        "tiktok": false
+      },
+      "notes": "Owner-supplied IG @jeromepolin (9.67M). Not in the original list: confirm if this is a new KOL."
+    },
+    {
+      "name": "Titan Tyra",
+      "instagram": "titantyra",
+      "tiktok": null,
+      "verified": {
+        "instagram": true,
+        "tiktok": false
+      },
+      "notes": "Owner-supplied IG @titantyra (795K). Not in the original list: confirm if this is a new KOL."
     }
   ]
 }
