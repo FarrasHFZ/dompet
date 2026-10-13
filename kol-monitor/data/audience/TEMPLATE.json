@@ -1,0 +1,12 @@
+{
+  "_how": "Copy to data/audience/<Creator name>.json. Fill from the creator's own IG Insights / TikTok Analytics (the manager can export or screenshot these). Percentages are shares of followers. Delete this _how line.",
+  "asOf": "2026-10-13",
+  "source": "IG Insights / TikTok Analytics export",
+  "platform": "instagram",
+  "gender": { "female": 0, "male": 0, "other": 0 },
+  "age": { "13-17": 0, "18-24": 0, "25-34": 0, "35-44": 0, "45+": 0 },
+  "topCountries": [ { "name": "Indonesia", "pct": 0 } ],
+  "topCities": [ { "name": "Jakarta", "pct": 0 } ],
+  "activeHours": "evening WIB",
+  "notes": ""
+}

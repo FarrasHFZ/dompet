@@ -1,0 +1,21 @@
+{
+ "_note": "INFERRED from public evidence only, not measured. Replace with measured data (see TEMPLATE.json) when available.",
+ "Awkarin": {
+   "language": {"value":"Indonesian (urban, informal)","evidence":"Indonesian-language press coverage, Stories and TikTok content addressed to Indonesian audience"},
+   "contentAffinity": [
+     {"tag":"Personal storytelling / relationships","evidence":"Breakup video (Dec 2025) and NZ road-trip Stories are the posts that drew coverage"},
+     {"tag":"Social causes / volunteering","evidence":"IG bio links a donation page; highlights Gempa Cianjur, Relawan, Banten 2019; feud itself is about her stance on karhutla"},
+     {"tag":"Entertainment-gossip followers","evidence":"News flow is dominated by gossip and legal-drama outlets"}],
+   "reach": "Large IG (6.4M) and mid TikTok (646K, 24.8M likes). Her TikTok is verified; the IG account is a brand account (personal is @narinkovilda).",
+   "watch": "Audience likely splits between long-time followers and drama-driven new viewers. That split is exactly what Insights data would confirm."
+ },
+ "Natalie Holscher": {
+   "language": {"value":"Indonesian (mass-market, informal)","evidence":"Indonesian entertainment press, DJ clips and trend dances"},
+   "contentAffinity": [
+     {"tag":"DJ / nightlife","evidence":"IG bio lists a DJ booking contact; regular Holywings club gigs through Oct 2026"},
+     {"tag":"Celebrity-family news","evidence":"Coverage centers on Sule, son Adzam, new husband"},
+     {"tag":"Trend dance and viral clips","evidence":"TikTok discover pages show dance compilations and clip-account reposts"}],
+   "reach": "IG 6.5M. TikTok handle unverified (candidate @nathalieholscher14, reportedly ~11.9M, not confirmed).",
+   "watch": "Club-circuit audience (older, event-driven) versus TikTok clip-account audience may be different people."
+ }
+}
