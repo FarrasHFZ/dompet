@@ -30,7 +30,7 @@ Only collect handles that exist in `kols.json`. Retry once if TikTok redirects t
 2. Event scan for tier A: follow `tools/trend-scan.md`, append to `data/signals.json`, update `data/scans.json`. Extend scans to the weekly top movers (biggest 7-day follower gain) and anyone the owner asks about.
 3. `node tools/build.mjs` scores everyone and rebuilds the dashboard.
 4. Republish the private page: Artifact tool, file_path `kol-monitor/web/artifact.html`, url `https://claude.ai/artifact/RkzS3Rsu8Jk6sZdaJXh1SC`.
-5. **Public site is paused.** `tools/publish-site.mjs` pushes to https://farrashfz.github.io/kol-radar/ (public, indexable). The owner approved that for the 8-creator version; the 383-creator roster is a bigger exposure, so do not run it until the owner confirms.
+5. Publish the public site: `node tools/publish-site.mjs` (https://farrashfz.github.io/kol-radar/, public and indexable). Owner approved the full 383-creator dashboard on 2026-10-13. Needs `gh` signed in (done in the app Terminal panel).
 6. Brief: lead with what happened (event layer), then the numbers; name handles that need the owner's input. State data limits.
 7. Commit `data/`, `reports/` and `web/` (do not push).
 
