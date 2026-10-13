@@ -1834,7 +1834,7 @@
     "tiktok": [],
     "youtube": []
    },
-   "tier": "B",
+   "tier": "A",
    "notes": ""
   },
   {
@@ -2399,7 +2399,10 @@
     "youtube": []
    },
    "tier": "A",
-   "notes": ""
+   "notes": "also listed at row 222",
+   "dupRows": [
+    222
+   ]
   },
   {
    "name": "Yensun 🌻",
@@ -4345,24 +4348,6 @@
     "youtube": []
    },
    "tier": "B",
-   "notes": ""
-  },
-  {
-   "name": "Tasya Farasya (@tasyafarasya)",
-   "row": 222,
-   "instagram": "tasyafarasya",
-   "tiktok": null,
-   "youtube": null,
-   "verified": {
-    "instagram": true
-   },
-   "flags": {},
-   "altHandles": {
-    "instagram": [],
-    "tiktok": [],
-    "youtube": []
-   },
-   "tier": "A",
    "notes": ""
   },
   {

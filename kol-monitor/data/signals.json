@@ -328,5 +328,619 @@
   "sources": [
    "tiktok discover"
   ]
+ },
+ {
+  "kol": "Prilly Latuconsina",
+  "firstSeen": "2026-09-02",
+  "date": "2026-09-05",
+  "type": "personal",
+  "sentiment": "positive",
+  "outlets": 2,
+  "coEntities": [],
+  "topic": "US holiday with partner Omara Esteghlal",
+  "sources": [
+   "detik"
+  ]
+ },
+ {
+  "kol": "Prilly Latuconsina",
+  "firstSeen": "2026-08-22",
+  "date": "2026-08-24",
+  "type": "content",
+  "sentiment": "positive",
+  "outlets": 3,
+  "coEntities": [],
+  "topic": "Passed master's thesis (LSPR) with summa cum laude; planted 270 coffee trees as a birthday gift for her partner",
+  "sources": [
+   "detik",
+   "fimela"
+  ]
+ },
+ {
+  "kol": "Prilly Latuconsina",
+  "firstSeen": "2026-05-10",
+  "date": "2026-05-20",
+  "type": "content",
+  "sentiment": "positive",
+  "outlets": 4,
+  "coEntities": [],
+  "topic": "Cannes Film Festival 2026 red carpet; Danur: The Last Chapter the top-grossing Indonesian film of the year so far",
+  "sources": [
+   "idntimes",
+   "jadwalnonton"
+  ],
+  "note": "date approximate"
+ },
+ {
+  "kol": "Prilly Latuconsina",
+  "firstSeen": "2026-10-13",
+  "date": "2026-10-15",
+  "type": "event",
+  "sentiment": "positive",
+  "outlets": 1,
+  "coEntities": [],
+  "topic": "Turns 30 on 15 Oct (birthday content moment)",
+  "sources": [
+   "wikipedia (birth date)"
+  ],
+  "catalystDate": "2026-10-15"
+ },
+ {
+  "kol": "Fujianti Utami Putri",
+  "firstSeen": "2026-07-01",
+  "date": "2026-08-15",
+  "type": "legal",
+  "sentiment": "negative",
+  "outlets": 4,
+  "coEntities": [],
+  "topic": "Former admin admitted embezzling nearly Rp1B; case at investigation stage (lawyer Sandy Arifin)",
+  "sources": [
+   "grid.id",
+   "detik"
+  ],
+  "note": "dates approximate; Fuji is the victim, not the accused"
+ },
+ {
+  "kol": "Fujianti Utami Putri",
+  "firstSeen": "2026-06-01",
+  "date": "2026-06-15",
+  "type": "content",
+  "sentiment": "positive",
+  "outlets": 3,
+  "coEntities": [],
+  "topic": "Won SEA Short-Video Creator of the Year at FastMoss Visionary Awards 2026; nominated for SCTV Infotainment Awards",
+  "sources": [
+   "grid.id",
+   "okezone"
+  ],
+  "note": "date approximate"
+ },
+ {
+  "kol": "Fujianti Utami Putri",
+  "firstSeen": "2026-03-28",
+  "date": "2026-03-28",
+  "type": "commercial",
+  "sentiment": "positive",
+  "outlets": 1,
+  "coEntities": [],
+  "topic": "Reported TikTok endorsement rate about Rp100M per post",
+  "sources": [
+   "okezone"
+  ]
+ },
+ {
+  "kol": "Fujianti Utami Putri",
+  "firstSeen": "2026-09-15",
+  "date": "2026-09-25",
+  "type": "personal",
+  "sentiment": "unknown",
+  "outlets": 2,
+  "coEntities": [
+   "Fadil Jaidi"
+  ],
+  "topic": "Reportedly getting closer to Fadil Jaidi",
+  "sources": [
+   "okezone"
+  ],
+  "note": "date approximate, unconfirmed by the two"
+ },
+ {
+  "kol": "RICIS🧜‍♀️",
+  "firstSeen": "2026-10-02",
+  "date": "2026-10-05",
+  "type": "conflict",
+  "sentiment": "mixed",
+  "outlets": 4,
+  "coEntities": [],
+  "topic": "Cancelled a Bali helicopter ride, said staff treated her differently from foreign tourists; operator apologised",
+  "sources": [
+   "rctiplus",
+   "youtube"
+  ]
+ },
+ {
+  "kol": "RICIS🧜‍♀️",
+  "firstSeen": "2026-10-10",
+  "date": "2026-10-12",
+  "type": "personal",
+  "sentiment": "mixed",
+  "outlets": 2,
+  "coEntities": [],
+  "topic": "Ex-husband Teuku Ryan reported with a new girlfriend; Ricis says she is not looking for a partner",
+  "sources": [
+   "youtube",
+   "grid.id"
+  ]
+ },
+ {
+  "kol": "RICIS🧜‍♀️",
+  "firstSeen": "2026-08-21",
+  "date": "2026-08-21",
+  "type": "collab",
+  "sentiment": "positive",
+  "outlets": 1,
+  "coEntities": [],
+  "topic": "Guest expert on the casting show Main Drama",
+  "sources": [
+   "wanitaindonesia"
+  ]
+ },
+ {
+  "kol": "Aurelie Hermansyah Atta",
+  "firstSeen": "2026-09-10",
+  "date": "2026-09-11",
+  "type": "personal",
+  "sentiment": "negative",
+  "outlets": 3,
+  "coEntities": [],
+  "topic": "Responded to a rumour of husband Atta Halilintar photographed with another woman",
+  "sources": [
+   "detik"
+  ]
+ },
+ {
+  "kol": "Aurelie Hermansyah Atta",
+  "firstSeen": "2026-06-10",
+  "date": "2026-06-15",
+  "type": "personal",
+  "sentiment": "negative",
+  "outlets": 2,
+  "coEntities": [],
+  "topic": "Daughter Azzura fell from a height; Aurel called it her worst day as a mother",
+  "sources": [
+   "detik"
+  ],
+  "note": "date approximate"
+ },
+ {
+  "kol": "Zaskia Sungkar",
+  "firstSeen": "2026-02-21",
+  "date": "2026-03-21",
+  "type": "personal",
+  "sentiment": "positive",
+  "outlets": 4,
+  "coEntities": [],
+  "topic": "Birth of second child with Irwansyah",
+  "sources": [
+   "okezone",
+   "detik"
+  ]
+ },
+ {
+  "kol": "Zaskia Sungkar",
+  "firstSeen": "2026-02-20",
+  "date": "2026-03-10",
+  "type": "commercial",
+  "sentiment": "positive",
+  "outlets": 2,
+  "coEntities": [],
+  "topic": "Ramadan collection \"Imperial Reverie\" from her fashion brand",
+  "sources": [
+   "antara"
+  ]
+ },
+ {
+  "kol": "Syifa Hadju Rumi",
+  "firstSeen": "2026-10-13",
+  "date": "2026-10-13",
+  "type": "commercial",
+  "sentiment": "negative",
+  "outlets": 2,
+  "coEntities": [],
+  "topic": "Paid exclusive Instagram subscription (Rp68K/month) criticised by netizens as poor value",
+  "sources": [
+   "suara.com"
+  ]
+ },
+ {
+  "kol": "Syifa Hadju Rumi",
+  "firstSeen": "2026-09-28",
+  "date": "2026-10-11",
+  "type": "conflict",
+  "sentiment": "mixed",
+  "outlets": 5,
+  "coEntities": [
+   "Alyssa Daguisé Ghazali"
+  ],
+  "topic": "Drawn into the Alyssa Daguisé / Maia Estianty child-photo dispute; netizens mocked her looks, Deswita Maharani defended her",
+  "sources": [
+   "okezone",
+   "journalarta"
+  ]
+ },
+ {
+  "kol": "Syifa Hadju Rumi",
+  "firstSeen": "2026-09-12",
+  "date": "2026-09-12",
+  "type": "personal",
+  "sentiment": "mixed",
+  "outlets": 2,
+  "coEntities": [],
+  "topic": "Said there is no problem with her in-laws after a viral clip of her hand being brushed off by the Dhani family",
+  "sources": [
+   "jawapos"
+  ]
+ },
+ {
+  "kol": "Alyssa Daguisé Ghazali",
+  "firstSeen": "2026-09-27",
+  "date": "2026-10-11",
+  "type": "conflict",
+  "sentiment": "negative",
+  "outlets": 8,
+  "coEntities": [
+   "Syifa Hadju Rumi"
+  ],
+  "topic": "Baby Soso's face leaked in Maia Estianty's vlog; Alyssa and Al Ghazali now keep the child out of all vlogs, and Syifa Hadju's intervention drew pushback",
+  "sources": [
+   "okezone",
+   "popmama",
+   "mad.tv",
+   "nyatamedia",
+   "centrea",
+   "disway"
+  ]
+ },
+ {
+  "kol": "Felicya Angelista",
+  "firstSeen": "2026-10-06",
+  "date": "2026-10-06",
+  "type": "personal",
+  "sentiment": "positive",
+  "outlets": 1,
+  "coEntities": [],
+  "topic": "Saw the northern lights in Tromso, Norway with husband Hito",
+  "sources": [
+   "harapanrakyat"
+  ]
+ },
+ {
+  "kol": "Felicya Angelista",
+  "firstSeen": "2026-07-10",
+  "date": "2026-07-20",
+  "type": "conflict",
+  "sentiment": "mixed",
+  "outlets": 3,
+  "coEntities": [],
+  "topic": "Accused of plastic surgery over a new look; denied firmly",
+  "sources": [
+   "wolipop",
+   "posmetromedan"
+  ],
+  "note": "date approximate"
+ },
+ {
+  "kol": "Fadil Jaidi",
+  "firstSeen": "2026-10-03",
+  "date": "2026-10-05",
+  "type": "content",
+  "sentiment": "positive",
+  "outlets": 4,
+  "coEntities": [],
+  "topic": "New short-hair look after a social-media break, widely praised",
+  "sources": [
+   "liputan6",
+   "sumeks",
+   "radarnusantara"
+  ]
+ },
+ {
+  "kol": "Fadil Jaidi",
+  "firstSeen": "2026-09-13",
+  "date": "2026-09-13",
+  "type": "personal",
+  "sentiment": "unknown",
+  "outlets": 1,
+  "coEntities": [],
+  "topic": "Announced he would step away from social media",
+  "sources": [
+   "instagram story (via press)"
+  ]
+ },
+ {
+  "kol": "Alwi fahry",
+  "firstSeen": "2026-10-11",
+  "date": "2026-10-11",
+  "type": "personal",
+  "sentiment": "positive",
+  "outlets": 2,
+  "coEntities": [],
+  "topic": "Reported Saudi royal invitation to perform hajj",
+  "sources": [
+   "ujungjari"
+  ]
+ },
+ {
+  "kol": "Jennifer Hubner",
+  "firstSeen": "2026-10-09",
+  "date": "2026-10-13",
+  "type": "legal",
+  "sentiment": "negative",
+  "outlets": 17,
+  "coEntities": [],
+  "topic": "Named in a Rp25B gold-investment fraud case (PT Divine Gold Jewelry, 85 victims, Bareskrim) as former brand ambassador; says she was paid by contract, not commission, and ended the deal on 19 Jun after customer complaints",
+  "sources": [
+   "detik",
+   "sindonews",
+   "rctiplus",
+   "medcom",
+   "akurat",
+   "jawapos"
+  ],
+  "note": "Listed in the roster as \"Jennifer Hubner\"; public name Jennifer Coppen. Actress Kirana Larasati also named."
+ },
+ {
+  "kol": "Jennifer Hubner",
+  "firstSeen": "2026-10-12",
+  "date": "2026-10-12",
+  "type": "conflict",
+  "sentiment": "negative",
+  "outlets": 3,
+  "coEntities": [],
+  "topic": "Victims challenge her clarification: \"if she knew it was problematic she should have disclosed it\"",
+  "sources": [
+   "news"
+  ]
+ },
+ {
+  "kol": "Olivia Tommy",
+  "firstSeen": "2026-10-04",
+  "date": "2026-10-08",
+  "type": "conflict",
+  "sentiment": "mixed",
+  "outlets": 8,
+  "coEntities": [],
+  "topic": "Pushed a stroller in the Surabaya ISOPLUS Marathon (4 Oct) while rules barred them; apologised, shared a permit letter some call back-dated, then met runner Nikmahrafik and the organisers to settle",
+  "sources": [
+   "tirto",
+   "detik",
+   "liputan6",
+   "kapanlagi",
+   "kilat",
+   "gorajuara"
+  ]
+ },
+ {
+  "kol": "Mega dwi cahyani",
+  "firstSeen": "2026-04-27",
+  "date": "2026-04-27",
+  "type": "content",
+  "sentiment": "positive",
+  "outlets": 2,
+  "coEntities": [],
+  "topic": "Won a TikTok award; shared maternity-shoot content",
+  "sources": [
+   "tiktok discover"
+  ],
+  "note": "date from TikTok discover page"
+ },
+ {
+  "kol": "Tasya Farasya",
+  "firstSeen": "2026-10-12",
+  "date": "2026-10-13",
+  "type": "content",
+  "sentiment": "positive",
+  "outlets": 3,
+  "coEntities": [],
+  "topic": "Nominated for Beauty & Fashion Creator of the Year, TikTok Awards Indonesia 2026; public voting runs 12 to 26 Oct",
+  "sources": [
+   "kapanlagi"
+  ]
+ },
+ {
+  "kol": "Tasya Farasya (@tasyafarasya)",
+  "firstSeen": "2026-10-12",
+  "date": "2026-10-13",
+  "type": "content",
+  "sentiment": "positive",
+  "outlets": 3,
+  "coEntities": [],
+  "topic": "Nominated for Beauty & Fashion Creator of the Year, TikTok Awards Indonesia 2026; public voting runs 12 to 26 Oct",
+  "sources": [
+   "kapanlagi"
+  ]
+ },
+ {
+  "kol": "Tasya Farasya",
+  "firstSeen": "2026-10-13",
+  "date": "2026-10-26",
+  "type": "event",
+  "sentiment": "positive",
+  "outlets": 1,
+  "coEntities": [],
+  "topic": "TikTok Awards Indonesia voting closes",
+  "sources": [
+   "kapanlagi"
+  ],
+  "catalystDate": "2026-10-26"
+ },
+ {
+  "kol": "Tasya Farasya (@tasyafarasya)",
+  "firstSeen": "2026-10-13",
+  "date": "2026-10-26",
+  "type": "event",
+  "sentiment": "positive",
+  "outlets": 1,
+  "coEntities": [],
+  "topic": "TikTok Awards Indonesia voting closes",
+  "sources": [
+   "kapanlagi"
+  ],
+  "catalystDate": "2026-10-26"
+ },
+ {
+  "kol": "Tasya Farasya",
+  "firstSeen": "2026-12-01",
+  "date": "2025-12-15",
+  "type": "personal",
+  "sentiment": "negative",
+  "outlets": 3,
+  "coEntities": [],
+  "topic": "Divorce from Ahmad Assegaf reported (Nov/Dec 2025)",
+  "sources": [
+   "kompas"
+  ],
+  "note": "older story"
+ },
+ {
+  "kol": "Tasya Farasya (@tasyafarasya)",
+  "firstSeen": "2026-12-01",
+  "date": "2025-12-15",
+  "type": "personal",
+  "sentiment": "negative",
+  "outlets": 3,
+  "coEntities": [],
+  "topic": "Divorce from Ahmad Assegaf reported (Nov/Dec 2025)",
+  "sources": [
+   "kompas"
+  ],
+  "note": "older story"
+ },
+ {
+  "kol": "Paula Verhoeven",
+  "firstSeen": "2026-06-29",
+  "date": "2026-06-29",
+  "type": "legal",
+  "sentiment": "mixed",
+  "outlets": 3,
+  "coEntities": [],
+  "topic": "Questioned as a witness in the Hanania Group case; handed over evidence she had no link to the company",
+  "sources": [
+   "okezone"
+  ]
+ },
+ {
+  "kol": "Paula Verhoeven",
+  "firstSeen": "2026-07-03",
+  "date": "2026-07-05",
+  "type": "personal",
+  "sentiment": "mixed",
+  "outlets": 3,
+  "coEntities": [],
+  "topic": "Son Kiano hospitalised; both parents attended his kindergarten graduation",
+  "sources": [
+   "liputan6",
+   "sindonews"
+  ]
+ },
+ {
+  "kol": "Fadly Faisal",
+  "firstSeen": "2026-08-21",
+  "date": "2026-08-22",
+  "type": "personal",
+  "sentiment": "positive",
+  "outlets": 3,
+  "coEntities": [
+   "Maudy Effrosina"
+  ],
+  "topic": "Celebrated two years together with Maudy Effrosina despite different faiths; co-stars in the series OTW Halal",
+  "sources": [
+   "nyatamedia",
+   "radarmojokerto"
+  ]
+ },
+ {
+  "kol": "eve",
+  "firstSeen": "2026-03-22",
+  "date": "2026-03-23",
+  "type": "personal",
+  "sentiment": "positive",
+  "outlets": 3,
+  "coEntities": [],
+  "topic": "Welcomed first child with Juan (born 22 Mar)",
+  "sources": [
+   "popmama"
+  ]
+ },
+ {
+  "kol": "Sharena Delon",
+  "firstSeen": "2026-03-10",
+  "date": "2026-05-20",
+  "type": "conflict",
+  "sentiment": "negative",
+  "outlets": 3,
+  "coEntities": [],
+  "topic": "Viral accusation of selling unfit second-hand goods; no official clarification found",
+  "sources": [
+   "metrobogor"
+  ],
+  "note": "date approximate"
+ },
+ {
+  "kol": "GisellaAnastasia",
+  "firstSeen": "2026-07-23",
+  "date": "2026-08-10",
+  "type": "personal",
+  "sentiment": "mixed",
+  "outlets": 3,
+  "coEntities": [],
+  "topic": "Co-parenting stories with Gading Marten and daughter Gempi; plans a duet single with Gempi",
+  "sources": [
+   "detik",
+   "liputan6"
+  ]
+ },
+ {
+  "kol": "Fiersa Besari",
+  "firstSeen": "2026-09-25",
+  "date": "2026-09-28",
+  "type": "event",
+  "sentiment": "positive",
+  "outlets": 5,
+  "coEntities": [],
+  "topic": "Played Pestapora 2026 (25 Sep) with his daughter backstage while his wife trekked in the Himalaya; introduced the single \"ia\"",
+  "sources": [
+   "idntimes",
+   "popmama",
+   "inews",
+   "grid.id"
+  ]
+ },
+ {
+  "kol": "Fiersa Besari",
+  "firstSeen": "2026-09-28",
+  "date": "2026-10-10",
+  "type": "event",
+  "sentiment": "positive",
+  "outlets": 1,
+  "coEntities": [],
+  "topic": "Announced show at Laswi Heritage, Bandung on 10 Oct",
+  "sources": [
+   "X post"
+  ],
+  "catalystDate": "2026-10-10"
+ },
+ {
+  "kol": "Hirotada Radifan",
+  "firstSeen": "2026-09-29",
+  "date": "2026-09-29",
+  "type": "content",
+  "sentiment": "positive",
+  "outlets": 2,
+  "coEntities": [],
+  "topic": "Horror story about a viral Pekalongan carnival, with documents; netizens linked the carnival to satanic ritual, participants said it was a carnival act",
+  "sources": [
+   "inforadar.disway"
+  ]
  }
 ]

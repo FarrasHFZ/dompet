@@ -11,6 +11,10 @@ const kols = rd('kols.json', { kols: [] }).kols;
 const history = rd('data/history.json', []);
 const signals = rd('data/signals.json', []);
 const scans = rd('data/scans.json', {});
+const newsAuto = rd('data/news-auto.json', []);
+const newsRaw = rd('data/news-raw.json', {});
+const ytAct = rd('data/youtube-activity.json', {});
+const sigFor = k => (scans[k.name] ? signals.filter(s => s.kol === k.name) : newsAuto.filter(s => s.kol === k.name));
 const inferred = rd('data/audience/inferred.json', {});
 const NOW = new Date(process.env.AS_OF || new Date().toISOString().slice(0, 10));
 const day = s => new Date(s);
@@ -45,7 +49,7 @@ function numericStatus(nums) {
 }
 
 function eventScore(k, nums) {
-  const sig = signals.filter(s => s.kol === k.name);
+  const sig = sigFor(k);
   const live = sig.filter(s => s.type !== 'event').map(s => ({ ...s, w: Math.min(1, s.outlets / 6) * Math.exp(-age(s.date) / 14) }));
   const mEvents = clamp(100 * (1 - Math.exp(-1.2 * live.reduce((a, s) => a + s.w, 0))));
   const withNum = nums.filter(n => n.ok && n.r7 != null);
@@ -54,7 +58,8 @@ function eventScore(k, nums) {
 
   const qw = sig.map(s => ({ q: QW[s.type] ?? 0.5, w: Math.max(0.15, Math.min(1, s.outlets / 6)) * Math.exp(-age(s.date) / 30) }));
   const wsum = qw.reduce((a, x) => a + x.w, 0);
-  const quality = wsum ? Math.round(100 * qw.reduce((a, x) => a + x.q * x.w, 0) / wsum) : 50;
+  const PRIOR = 0.8;   // shrink toward the middle (50) when evidence is thin
+  const quality = Math.round((100 * qw.reduce((a, x) => a + x.q * x.w, 0) + 50 * PRIOR) / (wsum + PRIOR));
 
   const catalysts = sig.filter(s => s.catalystDate && day(s.catalystDate) >= NOW && (day(s.catalystDate) - NOW) / 864e5 <= 14);
   const contentRecent = sig.filter(s => ['content', 'collab', 'commercial'].includes(s.type) && age(s.date) <= 30).length;
@@ -84,12 +89,40 @@ export function build() {
       verified: k.verified, flags: k.flags || {}, notes: k.notes || '', reach, numeric: nums,
       events: signals.filter(s => s.kol === k.name).sort((a, b) => b.date.localeCompare(a.date)),
       audience: { measured: fs.existsSync(audPath) ? JSON.parse(fs.readFileSync(audPath, 'utf8')) : null, inferred: inferred[k.name] || null } };
-    const scanned = !!scans[k.name];
+    const manual = !!scans[k.name];
+    const rawRow = newsRaw[k.name];
+    const autoScanned = !manual && !!rawRow && !!rawRow.q;
+    const scanned = manual || autoScanned;
+    const scanType = manual ? 'manual' : autoScanned ? 'auto' : 'none';
+    const ya = ytAct[k.name];
+    base.events = sigFor(k).sort((a, b) => b.date.localeCompare(a.date));
+    base.scanType = scanType;
+    base.scanNote = rawRow && !rawRow.q ? rawRow.note : '';
+    base.youtubeActivity = ya && ya.ok ? { lastUpload: ya.lastUpload, uploads30d: ya.uploads30d, medianViews: ya.medianViews, outliers: ya.outliers.filter(o => o.ratio >= 4 && o.views >= 30000).length } : null;
     if (!okNums.length) { out.kols.push({ ...base, scanned: false, status: 'Needs handle', verdict: 'Needs handle' }); continue; }
     const ns = numericStatus(nums);
-    if (scanned) out.kols.push({ ...base, scanned: true, scanDate: scans[k.name], status: ns.status, statusNote: ns.note, ...eventScore(k, nums) });
+    if (scanned) {
+      const sc = eventScore(k, nums);
+      const quiet = scanType === 'auto' && sigFor(k).length === 0;
+      out.kols.push({ ...base, scanned: true, scanDate: manual ? scans[k.name] : (rawRow.fetched || '').slice(0, 10), status: ns.status, statusNote: ns.note, ...sc, ...(quiet ? { invest: null, verdict: 'Quiet', confidence: 'low' } : {}), ...(scanType === 'auto' ? { confidence: 'low' } : {}) });
+    }
     else out.kols.push({ ...base, scanned: false, status: ns.status, statusNote: ns.note, verdict: ns.status === 'Collecting' ? 'Tracking' : ns.status });
   }
+  const names = new Set(out.kols.map(k => k.name));
+  const today = out.asOf, in14 = new Date(Date.parse(today) + 14 * 864e5).toISOString().slice(0, 10);
+  const pairs = new Map();
+  for (const k of out.kols) for (const e of k.events || []) for (const o of e.coEntities || []) if (names.has(o) && o !== k.name) {
+    const key = [k.name, o].sort().join(' + ');
+    const p = pairs.get(key) || { a: k.name, b: o, topic: e.topic, date: e.date, outlets: 0 };
+    p.outlets = Math.max(p.outlets, e.outlets); if (e.date > p.date) { p.date = e.date; p.topic = e.topic; } pairs.set(key, p);
+  }
+  out.briefing = {
+    trending: out.kols.filter(k => k.trendingNow).map(k => ({ name: k.name, why: ((k.events || []).filter(e => e.outlets >= 3).sort((x, y) => y.date.localeCompare(x.date))[0] || {}).topic })),
+    flags: out.kols.filter(k => k.safety === 'flag').map(k => ({ name: k.name, why: k.safetyReasons[0] })),
+    catalysts: out.kols.flatMap(k => (k.events || []).filter(e => e.catalystDate && e.catalystDate >= today && e.catalystDate <= in14).map(e => ({ name: k.name, date: e.catalystDate, topic: e.topic }))).sort((x, y) => x.date.localeCompare(y.date)),
+    viral: out.kols.filter(k => k.youtubeActivity && k.youtubeActivity.outliers > 0).map(k => ({ name: k.name, n: k.youtubeActivity.outliers, median: k.youtubeActivity.medianViews })),
+    links: [...pairs.values()].sort((x, y) => y.outlets - x.outlets).slice(0, 8)
+  };
   out.kols.sort((a, b) => (b.scanned - a.scanned) || ((b.invest ?? -1) - (a.invest ?? -1)) || (b.reach - a.reach));
   fs.writeFileSync(path.join(root, 'data', 'scores.json'), JSON.stringify(out));
   return out;

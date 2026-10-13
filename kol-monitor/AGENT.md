@@ -27,7 +27,7 @@ Only collect handles that exist in `kols.json`. Retry once if TikTok redirects t
 
 ## After collecting
 1. `node tools/build-kols.mjs <YYYY-MM-DD>` merges the day's inbox into history and flags handles that are missing, private, or under 1,000 followers.
-2. Event scan for tier A: follow `tools/trend-scan.md`, append to `data/signals.json`, update `data/scans.json`. Extend scans to the weekly top movers (biggest 7-day follower gain) and anyone the owner asks about.
+2. Event scan, two layers (see `tools/trend-scan.md`): (a) automatic for everyone: `node tools/news-scan.mjs`, `node tools/scan-youtube.mjs`, `node tools/news-stories.mjs` (about 30 minutes, Bing News feed, paced, never hammer Google News); (b) hand checks with WebSearch for anyone who lights up (3+ outlets in a week, legal/conflict, trending search, 5M+ reach). Hand-checked creators go in `data/signals.json` and `data/scans.json`.
 3. `node tools/build.mjs` scores everyone and rebuilds the dashboard.
 4. Republish the private page: Artifact tool, file_path `kol-monitor/web/artifact.html`, url `https://claude.ai/artifact/RkzS3Rsu8Jk6sZdaJXh1SC`.
 5. Publish the public site: `node tools/publish-site.mjs` (https://farrashfz.github.io/kol-radar/, public and indexable). Owner approved the full 383-creator dashboard on 2026-10-13. Needs `gh` signed in (done in the app Terminal panel).

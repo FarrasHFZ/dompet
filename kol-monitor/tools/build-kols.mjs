@@ -34,10 +34,13 @@ function verdictFor(platform, r) {
 }
 
 const used = new Map();
+const seenPrimary = new Map();   // primary handle -> kol entry (to merge duplicate rows)
 const kols = [];
 const hist = [];
 for (const row of roster) {
   const ig = row.instagram[0] || null, tt = row.tiktok[0] || null, yt = row.youtube[0] || null;
+  const pk = (ig || tt || yt || '').toLowerCase();
+  if (pk && seenPrimary.has(pk)) { const f = seenPrimary.get(pk); f.dupRows = (f.dupRows || []).concat(row.row); f.notes = [f.notes, 'also listed at row ' + row.row].filter(Boolean).join(' · '); continue; }
   const rIg = ig && latest.get('instagram:' + ig.toLowerCase());
   const rTt = tt && latest.get('tiktok:' + tt.toLowerCase());
   const rYt = yt && latest.get('youtube:' + yt.toLowerCase());
@@ -55,11 +58,13 @@ for (const row of roster) {
     if (v.ok) hist.push({ date, kol: name, platform: p, handle: h, followers: r.followers, ...(p === 'tiktok' ? { likes: r.likes, videos: r.videos } : {}) });
   }
   if (rTt && rTt.verifiedBadge) notes.push('TikTok verified badge');
-  kols.push({
+  const entry = {
     name, row: row.row, instagram: ig, tiktok: tt, youtube: yt, verified, flags,
     altHandles: { instagram: row.instagram.slice(1), tiktok: row.tiktok.slice(1), youtube: row.youtube.slice(1) },
     tier: o.tier || 'B', notes: notes.filter(Boolean).join(' · ')
-  });
+  };
+  kols.push(entry);
+  if (pk) seenPrimary.set(pk, entry);
 }
 
 // Daily priority tier A: the owner's named creators + top 40 by biggest platform audience
