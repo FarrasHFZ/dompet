@@ -22,6 +22,8 @@ type Scene = {
   role: string;
   motion: string;
   layout?: "card" | "full";
+  startSec?: number;
+  bgPath?: string;
   narration: string;
   onScreen?: string;
   label?: string;
@@ -39,6 +41,7 @@ export type StoryboardProps = {
   scenes: Scene[];
   music?: string;
   productThumb?: string;
+  grain?: string;
 };
 
 // TikTok/Reels UI covers the top ~150px, the bottom ~420px and the right ~140px.
@@ -81,7 +84,7 @@ const Media: React.FC<{ scene: Scene; frames: number }> = ({ scene, frames }) =>
   const url = src(scene.assetPath);
   const el = (style: React.CSSProperties) =>
     scene.assetType === "video" ? (
-      <OffthreadVideo src={url} muted style={style} />
+      <OffthreadVideo src={url} muted startFrom={Math.round((scene.startSec ?? 0) * FPS)} style={style} />
     ) : (
       <Img src={url} style={style} />
     );
@@ -94,17 +97,22 @@ const Media: React.FC<{ scene: Scene; frames: number }> = ({ scene, frames }) =>
     );
   }
   // card: seller photos are square on white; float them over a blurred, darkened copy of themselves
+  // (pre-blurred by render.mjs; live CSS blur per frame is far too slow)
   return (
     <AbsoluteFill>
-      <AbsoluteFill style={{ transform: "scale(1.35)", filter: "blur(48px) brightness(0.55) saturate(1.2)" }}>
-        {el({ width: "100%", height: "100%", objectFit: "cover" })}
+      <AbsoluteFill style={{ transform: "scale(1.1)" }}>
+        {scene.bgPath ? (
+          <Img src={src(scene.bgPath)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        ) : (
+          <AbsoluteFill style={{ background: "#151515" }} />
+        )}
       </AbsoluteFill>
       <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", transform }}>
         <div
           style={{
-            width: 940,
-            height: 940,
-            marginTop: -120,
+            width: 820,
+            height: 820,
+            marginTop: -280, // card centred at y~820: hook box above, captions below
             borderRadius: 44,
             overflow: "hidden",
             background: "#fff",
@@ -123,7 +131,7 @@ const Captions: React.FC<{ text: string; frames: number }> = ({ text, frames }) 
   const f = useCurrentFrame();
   const words = text.split(/\s+/).filter(Boolean);
   if (!words.length) return null;
-  const lead = 4; // frames of silence the TTS adds before speech
+  const lead = 2; // voice files are silence-trimmed, speech starts almost at once
   const speech = Math.max(1, frames - lead - 8);
   const weights = words.map((w) => w.length + 2);
   const total = weights.reduce((a, b) => a + b, 0);
@@ -151,10 +159,10 @@ const Captions: React.FC<{ text: string; frames: number }> = ({ text, frames }) 
               key={idx}
               style={{
                 display: "inline-block",
-                margin: "0 10px",
+                margin: "0 18px",
                 color: isActive ? YELLOW : "#fff",
                 opacity: idx <= active ? 1 : 0.85,
-                transform: isActive ? `scale(${1 + 0.12 * pop})` : undefined,
+                transform: isActive ? `scale(${1 + 0.06 * pop})` : undefined,
                 WebkitTextStroke: "10px #000",
                 paintOrder: "stroke fill",
                 textShadow: "0 6px 18px rgba(0,0,0,.5)",
@@ -254,17 +262,21 @@ const CtaCard: React.FC<{ cta: StoryboardProps["cta"]; thumb?: string }> = ({ ct
   );
 };
 
-const Grain: React.FC = () => {
+/** Vignette + film grain: one pre-made noise tile, jumped to a random offset each frame. */
+const Grain: React.FC<{ tile?: string }> = ({ tile }) => {
   const f = useCurrentFrame();
   return (
     <AbsoluteFill style={{ pointerEvents: "none" }}>
       <AbsoluteFill style={{ background: "radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,.45) 100%)" }} />
-      <svg width="100%" height="100%" style={{ position: "absolute", opacity: 0.07, mixBlendMode: "overlay" }}>
-        <filter id="n">
-          <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed={f % 30} />
-        </filter>
-        <rect width="100%" height="100%" filter="url(#n)" />
-      </svg>
+      {tile ? (
+        <AbsoluteFill
+          style={{
+            backgroundImage: `url(${src(tile)})`,
+            backgroundPosition: `${Math.floor(random(`gx${f}`) * 512)}px ${Math.floor(random(`gy${f}`) * 512)}px`,
+            opacity: 0.03,
+          }}
+        />
+      ) : null}
     </AbsoluteFill>
   );
 };
@@ -281,7 +293,7 @@ export const UGC: React.FC<StoryboardProps> = (props) => {
         return (
           <Sequence key={sc.id} from={start} durationInFrames={frames} name={`${sc.role}:${sc.id}`}>
             <Media scene={sc} frames={frames} />
-            <Grain />
+            <Grain tile={props.grain} />
             {sc.label ? <Label text={sc.label} /> : null}
             {sc.onScreen ? <HookText text={sc.onScreen} /> : null}
             {sc.role === "cta" ? <CtaCard cta={props.cta} thumb={props.productThumb} /> : <Captions text={sc.narration} frames={frames} />}

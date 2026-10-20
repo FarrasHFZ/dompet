@@ -1,0 +1,311 @@
+{
+  "apple-iphone-18-pro-max-44518614733_ugc_day_in_life_v01_A": {
+    "id": "apple-iphone-18-pro-max-44518614733_ugc_day_in_life_v01_A",
+    "jobId": "20261020T004317_apple-iphone-18-pro-max-44518614733",
+    "requestId": "20261020T004317_apple-iphone-18-pro-max-44518614733",
+    "productId": "apple-iphone-18-pro-max-44518614733",
+    "recipeId": "ugc_day_in_life_v01",
+    "variant": "A",
+    "experiment": {
+      "variable": "hook",
+      "value": "pov_whole_day"
+    },
+    "title": "Satu hari, satu HP",
+    "caption": "Dari bangun sampai tidur, semua lewat satu HP. Spek & klaim dari halaman produk (cas cepat dengan adaptor yang kompatibel; hasil baterai bervariasi), link di keranjang kuning.\n#iphone18promax #dayinmylife #rutinitasharian #techindonesia #shopeehaul",
+    "status": "review",
+    "file": "20261020T004317_apple-iphone-18-pro-max-44518614733/A.mp4",
+    "poster": "20261020T004317_apple-iphone-18-pro-max-44518614733/A.jpg",
+    "qc": {
+      "ok": true,
+      "issues": [],
+      "durationSec": 28.3,
+      "lufs": -13.9,
+      "sizeMB": 21.8
+    },
+    "renderSec": 321,
+    "scenes": [
+      {
+        "id": "s1",
+        "role": "hook",
+        "narration": "Seharian, dari bangun sampai tidur, semua lewat satu HP.",
+        "onScreen": "POV: dari bangun sampai tidur, semua lewat HP ini",
+        "claimIds": [],
+        "assetId": "img_14",
+        "durationSec": 3.73
+      },
+      {
+        "id": "s2",
+        "role": "moment",
+        "narration": "Pagi, cek jadwal di layar 6,9 inci. Scroll-nya halus.",
+        "label": "06.30 · Pagi",
+        "claimIds": [
+          "c1"
+        ],
+        "assetId": "img_2",
+        "durationSec": 4.4
+      },
+      {
+        "id": "s3",
+        "role": "moment",
+        "narration": "Siang, foto makanan pakai kamera 48 MP. Zoom 8x juga bisa.",
+        "label": "12.30 · Siang",
+        "claimIds": [
+          "c3",
+          "c5"
+        ],
+        "assetId": "img_3",
+        "durationSec": 5.43
+      },
+      {
+        "id": "s4",
+        "role": "moment",
+        "narration": "Sore lowbat? Cas sekitar 15 menit, bisa hingga 50%.",
+        "label": "16.00 · Sore",
+        "claimIds": [
+          "c9"
+        ],
+        "assetId": "img_10",
+        "durationSec": 3.87
+      },
+      {
+        "id": "s5",
+        "role": "moment",
+        "narration": "Malam nongkrong, foto minim cahaya tetap lebih bagus.",
+        "label": "19.30 · Malam",
+        "claimIds": [
+          "c4"
+        ],
+        "assetId": "vid_1",
+        "durationSec": 3.2
+      },
+      {
+        "id": "s6",
+        "role": "moment",
+        "narration": "Pemakaian hingga 29 jam sekali cas. Pantas jadi pegangan utama.",
+        "label": "23.00 · Tidur",
+        "claimIds": [
+          "c8"
+        ],
+        "assetId": "img_7",
+        "durationSec": 4.83
+      },
+      {
+        "id": "s7",
+        "role": "cta",
+        "narration": "Ada 4 warna. Cek di keranjang kuning, ya.",
+        "claimIds": [
+          "c16"
+        ],
+        "assetId": "img_8",
+        "durationSec": 2.87
+      }
+    ],
+    "updatedAt": "2026-10-20T01:44:30.623Z"
+  },
+  "apple-iphone-18-pro-max-44518614733_ugc_day_in_life_v01_B": {
+    "id": "apple-iphone-18-pro-max-44518614733_ugc_day_in_life_v01_B",
+    "jobId": "20261020T004317_apple-iphone-18-pro-max-44518614733",
+    "requestId": "20261020T004317_apple-iphone-18-pro-max-44518614733",
+    "productId": "apple-iphone-18-pro-max-44518614733",
+    "recipeId": "ugc_day_in_life_v01",
+    "variant": "B",
+    "experiment": {
+      "variable": "hook",
+      "value": "relatable_question"
+    },
+    "title": "Satu hari, satu HP",
+    "caption": "Barang yang paling lama kamu pegang tiap hari? Spek & klaim dari halaman produk (cas cepat dengan adaptor yang kompatibel; hasil baterai bervariasi), link di keranjang kuning.\n#iphone18promax #dayinmylife #rutinitasharian #techindonesia #shopeehaul",
+    "status": "review",
+    "file": "20261020T004317_apple-iphone-18-pro-max-44518614733/B.mp4",
+    "poster": "20261020T004317_apple-iphone-18-pro-max-44518614733/B.jpg",
+    "qc": {
+      "ok": true,
+      "issues": [],
+      "durationSec": 27.2,
+      "lufs": -14,
+      "sizeMB": 20.9
+    },
+    "renderSec": 283,
+    "scenes": [
+      {
+        "id": "s1",
+        "role": "hook",
+        "narration": "Barang apa yang paling lama kamu pegang tiap hari?",
+        "onScreen": "Barang yang paling lama kamu pegang tiap hari?",
+        "claimIds": [],
+        "assetId": "img_13",
+        "durationSec": 2.58
+      },
+      {
+        "id": "s2",
+        "role": "moment",
+        "narration": "Pagi, cek jadwal di layar 6,9 inci. Scroll-nya halus.",
+        "label": "06.30 · Pagi",
+        "claimIds": [
+          "c1"
+        ],
+        "assetId": "img_2",
+        "durationSec": 4.4
+      },
+      {
+        "id": "s3",
+        "role": "moment",
+        "narration": "Siang, foto makanan pakai kamera 48 MP. Zoom 8x juga bisa.",
+        "label": "12.30 · Siang",
+        "claimIds": [
+          "c3",
+          "c5"
+        ],
+        "assetId": "img_3",
+        "durationSec": 5.43
+      },
+      {
+        "id": "s4",
+        "role": "moment",
+        "narration": "Sore lowbat? Cas sekitar 15 menit, bisa hingga 50%.",
+        "label": "16.00 · Sore",
+        "claimIds": [
+          "c9"
+        ],
+        "assetId": "img_10",
+        "durationSec": 3.87
+      },
+      {
+        "id": "s5",
+        "role": "moment",
+        "narration": "Malam nongkrong, foto minim cahaya tetap lebih bagus.",
+        "label": "19.30 · Malam",
+        "claimIds": [
+          "c4"
+        ],
+        "assetId": "vid_1",
+        "durationSec": 3.2
+      },
+      {
+        "id": "s6",
+        "role": "moment",
+        "narration": "Pemakaian hingga 29 jam sekali cas. Pantas jadi pegangan utama.",
+        "label": "23.00 · Tidur",
+        "claimIds": [
+          "c8"
+        ],
+        "assetId": "img_7",
+        "durationSec": 4.83
+      },
+      {
+        "id": "s7",
+        "role": "cta",
+        "narration": "Ada 4 warna. Cek di keranjang kuning, ya.",
+        "claimIds": [
+          "c16"
+        ],
+        "assetId": "img_8",
+        "durationSec": 2.87
+      }
+    ],
+    "updatedAt": "2026-10-20T02:01:10.978Z"
+  },
+  "apple-iphone-18-pro-max-44518614733_ugc_day_in_life_v01_C": {
+    "id": "apple-iphone-18-pro-max-44518614733_ugc_day_in_life_v01_C",
+    "jobId": "20261020T004317_apple-iphone-18-pro-max-44518614733",
+    "requestId": "20261020T004317_apple-iphone-18-pro-max-44518614733",
+    "productId": "apple-iphone-18-pro-max-44518614733",
+    "recipeId": "ugc_day_in_life_v01",
+    "variant": "C",
+    "experiment": {
+      "variable": "hook",
+      "value": "bold_observation"
+    },
+    "title": "Satu hari, satu HP",
+    "caption": "HP sekarang bukan cuma HP, tapi pusat rutinitas. Spek & klaim dari halaman produk (cas cepat dengan adaptor yang kompatibel; hasil baterai bervariasi), link di keranjang kuning.\n#iphone18promax #dayinmylife #rutinitasharian #techindonesia #shopeehaul",
+    "status": "review",
+    "file": "20261020T004317_apple-iphone-18-pro-max-44518614733/C.mp4",
+    "poster": "20261020T004317_apple-iphone-18-pro-max-44518614733/C.jpg",
+    "qc": {
+      "ok": true,
+      "issues": [],
+      "durationSec": 27.7,
+      "lufs": -13.8,
+      "sizeMB": 21.3
+    },
+    "renderSec": 343,
+    "scenes": [
+      {
+        "id": "s1",
+        "role": "hook",
+        "narration": "Bukan cuma HP. Ini pusat rutinitas seharian.",
+        "onScreen": "Bukan cuma HP. Ini pusat rutinitasmu.",
+        "claimIds": [],
+        "assetId": "img_12",
+        "durationSec": 3.13
+      },
+      {
+        "id": "s2",
+        "role": "moment",
+        "narration": "Pagi, cek jadwal di layar 6,9 inci. Scroll-nya halus.",
+        "label": "06.30 · Pagi",
+        "claimIds": [
+          "c1"
+        ],
+        "assetId": "img_2",
+        "durationSec": 4.4
+      },
+      {
+        "id": "s3",
+        "role": "moment",
+        "narration": "Siang, foto makanan pakai kamera 48 MP. Zoom 8x juga bisa.",
+        "label": "12.30 · Siang",
+        "claimIds": [
+          "c3",
+          "c5"
+        ],
+        "assetId": "img_3",
+        "durationSec": 5.43
+      },
+      {
+        "id": "s4",
+        "role": "moment",
+        "narration": "Sore lowbat? Cas sekitar 15 menit, bisa hingga 50%.",
+        "label": "16.00 · Sore",
+        "claimIds": [
+          "c9"
+        ],
+        "assetId": "img_10",
+        "durationSec": 3.87
+      },
+      {
+        "id": "s5",
+        "role": "moment",
+        "narration": "Malam nongkrong, foto minim cahaya tetap lebih bagus.",
+        "label": "19.30 · Malam",
+        "claimIds": [
+          "c4"
+        ],
+        "assetId": "vid_1",
+        "durationSec": 3.2
+      },
+      {
+        "id": "s6",
+        "role": "moment",
+        "narration": "Pemakaian hingga 29 jam sekali cas. Pantas jadi pegangan utama.",
+        "label": "23.00 · Tidur",
+        "claimIds": [
+          "c8"
+        ],
+        "assetId": "img_7",
+        "durationSec": 4.83
+      },
+      {
+        "id": "s7",
+        "role": "cta",
+        "narration": "Ada 4 warna. Cek di keranjang kuning, ya.",
+        "claimIds": [
+          "c16"
+        ],
+        "assetId": "img_8",
+        "durationSec": 2.87
+      }
+    ],
+    "updatedAt": "2026-10-20T01:55:44.101Z"
+  }
+}

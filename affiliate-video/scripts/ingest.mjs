@@ -6,7 +6,7 @@ import path from "node:path";
 import { Product } from "../src/schema.js";
 import { PRODUCTS, arg, claudeJson, durationSec, ledger, log, probe, readJson, rel, slug, writeJson } from "./lib.mjs";
 
-const MAX_IMAGES = 14;
+const MAX_IMAGES = 18;
 const MAX_VIDEOS = 3;
 
 const norm = (s) => s.toLowerCase().replace(/\s+/g, " ").trim();
@@ -17,7 +17,9 @@ async function download(url, dest) {
   fs.writeFileSync(dest, Buffer.from(await r.arrayBuffer()));
 }
 
-export async function ingest(ex, { affiliateUrl, id } = {}) {
+// facts: optional {category, claims, assets:[{id,note,usable}]} written by an agent session instead of the headless CLI.
+// mediaOnly: download and stop (so an agent can look at the files first).
+export async function ingest(ex, { affiliateUrl, id, facts, mediaOnly } = {}) {
   const productId = id || slug(`${ex.title}`.split(/[|,(]/)[0]) + (ex.itemId ? `-${ex.itemId}` : "");
   const dir = path.join(PRODUCTS, productId);
   const adir = path.join(dir, "assets");
@@ -49,6 +51,10 @@ export async function ingest(ex, { affiliateUrl, id } = {}) {
     }
   }
   if (!assets.length) throw new Error("no assets downloaded");
+  if (mediaOnly) {
+    log(`media in ${adir}: ${assets.map((a) => `${a.id}=${a.width}x${a.height}`).join(", ")}`);
+    return { id: productId, assets };
+  }
 
   // own footage dropped into assets/own/ is picked up too (real daily-life shots beat any generated b-roll)
   const own = path.join(adir, "own");
@@ -88,8 +94,12 @@ Return ONLY JSON:
 Rules: 8-16 claims, one fact each, most useful-in-daily-life facts first (camera, battery, durability, size, colour, what's in the box...). Never infer facts not in the text. The quote must be copied character-for-character. Mark an asset unusable if it is mostly a text banner, a size chart, a certificate, or a near-duplicate.`;
 
   const imagePaths = assets.filter((a) => a.type === "image");
-  const { json, cost } = await claudeJson(prompt, { tools: imagePaths.length ? ["Read"] : [] });
-  ledger("costs", { step: "ingest", productId, usd: cost });
+  let json = facts;
+  if (!json) {
+    const res = await claudeJson(prompt, { tools: imagePaths.length ? ["Read"] : [] });
+    json = res.json;
+    ledger("costs", { step: "ingest", productId, usd: res.cost });
+  }
 
   const claims = [];
   for (const c of json.claims || []) {
@@ -124,5 +134,10 @@ Rules: 8-16 claims, one fact each, most useful-in-daily-life facts first (camera
 if (process.argv[1] && process.argv[1].endsWith("ingest.mjs")) {
   const from = arg("from");
   if (!from) throw new Error("usage: npm run ingest -- --from extracted.json [--affiliate <link>] [--id <productId>]");
-  await ingest(readJson(from), { affiliateUrl: arg("affiliate"), id: arg("id") });
+  await ingest(readJson(from), {
+    affiliateUrl: arg("affiliate"),
+    id: arg("id"),
+    facts: arg("facts") && readJson(arg("facts")),
+    mediaOnly: process.argv.includes("--media-only"),
+  });
 }

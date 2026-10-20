@@ -1,0 +1,319 @@
+{
+  "id": "apple-iphone-18-pro-max-44518614733",
+  "name": "Apple iPhone 18 Pro Max",
+  "url": "https://shopee.co.id/Apple-iPhone-18-Pro-Max-i.241308147.44518614733",
+  "shopId": "241308147",
+  "itemId": "44518614733",
+  "price": 34999000,
+  "priceCheckedAt": "2026-10-20T00:42:17.707Z",
+  "category": "phone",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "layar 6,9 inci, ProMotion hingga 120 Hz",
+      "quote": "ProMotion hingga 120 Hz",
+      "source": "shopee_description"
+    },
+    {
+      "id": "c2",
+      "text": "layar lebih terang, antirefleksi lebih baik",
+      "quote": "Lebih terang. Antirefleksi yang lebih baik.",
+      "source": "shopee_description"
+    },
+    {
+      "id": "c3",
+      "text": "kamera utama Fusion 48 MP, aperture variabel",
+      "quote": "Kamera Utama Fusion 48 MP dengan aperture variabel",
+      "source": "shopee_description"
+    },
+    {
+      "id": "c4",
+      "text": "foto & video minim cahaya lebih bagus",
+      "quote": "untuk foto dan video berpencahayaan rendah yang berkualitas lebih baik",
+      "source": "shopee_description"
+    },
+    {
+      "id": "c5",
+      "text": "8x zoom kualitas optik",
+      "quote": "Dan 8x zoom kualitas optik.",
+      "source": "shopee_description"
+    },
+    {
+      "id": "c6",
+      "text": "kamera depan Center Stage 18 MP",
+      "quote": "KAMERA DEPAN CENTER STAGE 18 MP",
+      "source": "shopee_description"
+    },
+    {
+      "id": "c7",
+      "text": "rekam kamera depan & belakang barengan",
+      "quote": "Video Dual Capture depan dan belakang.",
+      "source": "shopee_description"
+    },
+    {
+      "id": "c8",
+      "text": "penggunaan hingga 29 jam sekali cas",
+      "quote": "Penggunaan hingga 29 jam dalam sekali pengisian daya.",
+      "source": "shopee_description"
+    },
+    {
+      "id": "c9",
+      "text": "cas hingga 50% dalam sekitar 15 menit",
+      "quote": "hingga 50% dalam sekitar 15 menit dengan adaptor yang kompatibel",
+      "source": "shopee_description"
+    },
+    {
+      "id": "c10",
+      "text": "Ceramic Shield depan dan belakang",
+      "quote": "bagian belakang Ceramic Shield — dan bagian depan Ceramic Shield 2",
+      "source": "shopee_description"
+    },
+    {
+      "id": "c11",
+      "text": "chip A20 Pro",
+      "quote": "chip A20 Pro",
+      "source": "shopee_description"
+    },
+    {
+      "id": "c12",
+      "text": "desain unibody aluminium",
+      "quote": "desain unibody aluminium",
+      "source": "shopee_description"
+    },
+    {
+      "id": "c13",
+      "text": "Face ID buat buka kunci & bayar",
+      "quote": "Gunakan Face ID untuk membuka kunci, masuk, dan membayar secara aman.",
+      "source": "shopee_description"
+    },
+    {
+      "id": "c14",
+      "text": "eSIM, pas buat ke luar negeri",
+      "quote": "sesuai untuk bepergian ke luar negeri",
+      "source": "shopee_description"
+    },
+    {
+      "id": "c15",
+      "text": "Deteksi Tabrakan bisa panggil bantuan",
+      "quote": "Dengan Deteksi Tabrakan, iPhone bisa mendeteksi tabrakan mobil yang parah dan memanggil bantuan",
+      "source": "shopee_description"
+    },
+    {
+      "id": "c16",
+      "text": "4 warna: Black, Silver, Burgundy, Glacier",
+      "quote": "Warna: Black, Silver, Burgundy, Glacier",
+      "source": "shopee_variation"
+    },
+    {
+      "id": "c17",
+      "text": "garansi resmi 12 bulan",
+      "quote": "Masa Garansi: 12 Bulan",
+      "source": "shopee_attributes"
+    }
+  ],
+  "assets": [
+    {
+      "id": "img_1",
+      "type": "image",
+      "path": "products/apple-iphone-18-pro-max-44518614733/assets/img_01.jpg",
+      "origin": "seller",
+      "note": "Burgundy, back and front side by side, white background, iBox logo bottom right",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "img_2",
+      "type": "image",
+      "path": "products/apple-iphone-18-pro-max-44518614733/assets/img_02.jpg",
+      "origin": "seller",
+      "note": "Burgundy front, screen with wallpaper, white background, iBox logo",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "img_3",
+      "type": "image",
+      "path": "products/apple-iphone-18-pro-max-44518614733/assets/img_03.jpg",
+      "origin": "seller",
+      "note": "Extreme macro of main camera lens on burgundy body; top text 'Kamera Utama Fusion 48 MP dengan aperture variabel'",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "img_4",
+      "type": "image",
+      "path": "products/apple-iphone-18-pro-max-44518614733/assets/img_04.jpg",
+      "origin": "seller",
+      "note": "Apple sample portrait (woman, teal sky) with camera control icons; text 'Sistem kamera Pro paling maksimal dengan kontrol Pro khusus'",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "img_6",
+      "type": "image",
+      "path": "products/apple-iphone-18-pro-max-44518614733/assets/img_06.jpg",
+      "origin": "seller",
+      "note": "Glowing A20 Pro chip on black; text 'Chip A20 Pro. Didinginkan secara termal untuk tenaga lebih besar.'",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "img_7",
+      "type": "image",
+      "path": "products/apple-iphone-18-pro-max-44518614733/assets/img_07.jpg",
+      "origin": "seller",
+      "note": "Glacier (light blue) back and front, black background; text 'Ceramic Shield depan dan belakang. Kokoh sedari awal.'",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "img_8",
+      "type": "image",
+      "path": "products/apple-iphone-18-pro-max-44518614733/assets/img_08.jpg",
+      "origin": "seller",
+      "note": "All four colours lined up (black, silver, glacier, burgundy) on black; text 'Empat warna memukau.'",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "img_10",
+      "type": "image",
+      "path": "products/apple-iphone-18-pro-max-44518614733/assets/img_10.jpg",
+      "origin": "seller",
+      "note": "'Isi Kotak' box contents: burgundy iPhone 18 Pro Max and USB-C charging cable, light grey background",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "img_12",
+      "type": "image",
+      "path": "products/apple-iphone-18-pro-max-44518614733/assets/img_12.jpg",
+      "origin": "seller",
+      "note": "Black colour, back and front, white background, iBox logo",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "img_13",
+      "type": "image",
+      "path": "products/apple-iphone-18-pro-max-44518614733/assets/img_13.jpg",
+      "origin": "seller",
+      "note": "Silver colour, back and front, white background, iBox logo",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "img_14",
+      "type": "image",
+      "path": "products/apple-iphone-18-pro-max-44518614733/assets/img_14.jpg",
+      "origin": "seller",
+      "note": "Burgundy colour, back and front, white background, iBox logo (same angle as img_1)",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "vid_1",
+      "type": "video",
+      "path": "products/apple-iphone-18-pro-max-44518614733/assets/vid_1.mp4",
+      "origin": "seller",
+      "note": "45 s 16:9 Apple-style film, mostly black backgrounds. Text-free: 3-6 s burgundy lens macro; 6.5-10 s phone silhouette with rim light; 28-29 s burgundy camera bump. Other parts carry English captions.",
+      "width": 1280,
+      "height": 720,
+      "durationSec": 45.04
+    }
+  ],
+  "raw": {
+    "url": "https://shopee.co.id/Apple-iPhone-18-Pro-Max-i.241308147.44518614733",
+    "shopId": "241308147",
+    "itemId": "44518614733",
+    "via": "api+page_text",
+    "extractedAt": "2026-10-20",
+    "shop": "iBox Official Shop",
+    "title": "Apple iPhone 18 Pro Max",
+    "price": 34999000,
+    "category": "Handphone & Aksesoris > Handphone > Apple",
+    "description": "iPhone 18 Pro Max. Layar ProMotion 6,9 inci,(1) kamera Utama Fusion 48 MP dengan aperture variabel, lompatan besar dalam kekuatan baterai, dan chip A20 Pro.\n\nPoin-poin fitur utama\n\n- EMPAT WARNA MEMUKAU. SATU DESAIN KOKOH. — Dibuat untuk lebih tahan lama dengan desain unibody aluminium dilengkapi kaca belakang berwarna senada sehingga terlihat lebih serasi.\n\n- LAYAR PRO YANG MENGHANYUTKAN — Layar Super Retina XDR 6,9 inci.(1) Lebih terang. Antirefleksi yang lebih baik. ProMotion hingga 120 Hz.\n\n- CERAMIC SHIELD TANGGUH. DEPAN DAN BELAKANG. — Dibuat untuk lebih tahan lama dengan bagian belakang Ceramic Shield — dan bagian depan Ceramic Shield 2, yang 3x lipat lebih tahan gores dibandingkan iPhone 16 Pro.(2)\n\n- SISTEM KAMERA PRO PALING MAKSIMAL — Kamera Utama Fusion 48 MP dengan aperture variabel untuk foto dan video berpencahayaan rendah yang berkualitas lebih baik dan kedalaman bidang yang mengagumkan. Kontrol Pro khusus. Dan 8x zoom kualitas optik.\n\n- KAMERA DEPAN CENTER STAGE 18 MP — Berbagai cara fleksibel untuk mengatur framing. Lebih banyak orang masuk dalam frame. Video Dual Capture depan dan belakang. Dan banyak lagi.\n\n- CHIP A20 PRO. TOTALITAS AI BERTENAGA SUPER. — Dengan ruang uap generasi selanjutnya dan Dual Neural Engine 16-core. Performa GPU hingga 40% lebih baik dibandingkan iPhone 17 Pro Max.(2) Sengaja dibuat untuk AI.\n\n- LOMPATAN BESAR DALAM KEKUATAN BATERAI — Pemutaran video hingga 6 jam lebih lama dibandingkan iPhone 17 Pro Max.(2)Penggunaan hingga 29 jam dalam sekali pengisian daya.(3)Pengisian daya berkabel lebih cepat, hingga 50% dalam sekitar 15 menit dengan adaptor yang kompatibel.(4)\n\n- FITUR KESELAMATAN PENTING — Dengan Deteksi Tabrakan, iPhone bisa mendeteksi tabrakan mobil yang parah dan memanggil bantuan saat Anda tak bisa.(5)\n\n- TETAP TERHUBUNG HAMPIR DARI MANA SAJA — Tetap terhubung lebih cepat dengan koneksi aman ke Wi-Fi 7,(6) jaringan 5G,(7) dan Bluetooth 6.\n\n- ESIM. FLEKSIBEL. AMAN. LANCAR. — eSIM bawaan menghadirkan konektivitas aman tanpa kartu SIM fisik — sesuai untuk bepergian ke luar negeri.(8)\n\n- PRIVASI — Gunakan Face ID untuk membuka kunci, masuk, dan membayar secara aman.\n\nLegal\n\n1. Layar memiliki sudut melengkung yang mengikuti desain lekukan yang indah, dan semua sudut ini berada di dalam bidang persegi standar. Jika diukur sebagai bentuk persegi standar, layarnya memiliki ukuran diagonal 6,27 inci (iPhone 18 Pro) atau 6,86 inci (iPhone 18 Pro Max). Area bidang layar aktual berukuran lebih kecil.\n\n2. Dibandingkan dengan iPhone generasi sebelumnya.\n\n3. Semua klaim baterai bergantung pada jaringan seluler, lokasi, kekuatan sinyal, konfigurasi fitur, penggunaan, dan banyak faktor lainnya; hasil aktual bervariasi. Baterai memiliki siklus pengisian daya yang terbatas dan pada akhirnya perlu diganti.\n\n4. Pengujian dilakukan oleh Apple pada bulan Juli 2026 menggunakan unit dan perangkat lunak iPhone 18 Pro dan iPhone 18 Pro Max praproduksi. Pengisian daya cepat berkabel didukung dengan kabel USB-C berkemampuan 60 W dan adaptor daya USB PD 3.1 (atau lebih tinggi). Waktu isi daya bervariasi berdasarkan adaptor, pengaturan, penggunaan, dan faktor lingkungan; hasil aktual bervariasi.\n\n5. iPhone 14 dan yang lebih baru bisa mendeteksi tabrakan mobil yang parah dan memanggil bantuan. Memerlukan panggilan Wi-Fi atau koneksi seluler.\n\n6. Wi-Fi 7 tersedia di negara dan wilayah yang mendukung.\n\n7. Memerlukan paket data. 5G tersedia di pasar tertentu dan melalui operator tertentu.\n\n8. Penggunaan eSIM memerlukan operator yang mendukung eSIM dan paket layanan nirkabel.",
+    "attributes": [
+      {
+        "name": "Merek",
+        "value": "Apple"
+      },
+      {
+        "name": "Masa Garansi",
+        "value": "12 Bulan"
+      },
+      {
+        "name": "Jenis Garansi",
+        "value": "Garansi Resmi"
+      },
+      {
+        "name": "Kondisi",
+        "value": "baru"
+      },
+      {
+        "name": "Build-in Battery",
+        "value": "Ya"
+      },
+      {
+        "name": "Asal Produk",
+        "value": "Indonesia"
+      },
+      {
+        "name": "No.Sertifikat (POSTEL)",
+        "value": "126749/DJID/2026"
+      },
+      {
+        "name": "Dikirim Dari",
+        "value": "KOTA JAKARTA BARAT"
+      }
+    ],
+    "variations": [
+      {
+        "name": "Warna",
+        "options": [
+          "Black",
+          "Silver",
+          "Burgundy",
+          "Glacier"
+        ],
+        "images": [
+          "https://down-id.img.susercontent.com/file/id-11134207-81zte-mtrsbpwjy1ombb",
+          "https://down-id.img.susercontent.com/file/id-11134207-81ztd-mtrsbpwjzg92e3",
+          "https://down-id.img.susercontent.com/file/id-11134207-81ztk-mtrsbpwk0uti34",
+          "https://down-id.img.susercontent.com/file/id-11134207-81ztl-mtrsbpwk29dy0f"
+        ]
+      },
+      {
+        "name": "Kapasitas",
+        "options": [
+          "256GB",
+          "512GB",
+          "1TB",
+          "2TB"
+        ],
+        "images": []
+      }
+    ],
+    "images": [
+      "https://down-id.img.susercontent.com/file/id-11134207-81zte-mtrsbpwjilfq72",
+      "https://down-id.img.susercontent.com/file/id-11134207-81ztk-mtrsbpwjk0063b",
+      "https://down-id.img.susercontent.com/file/id-11134207-81ztp-mtrru41kxssi4c",
+      "https://down-id.img.susercontent.com/file/id-11134207-81ztc-mtrru41kz7cy45",
+      "https://down-id.img.susercontent.com/file/id-11134207-81zte-mtrsbpwjo7pi0d",
+      "https://down-id.img.susercontent.com/file/id-11134207-81ztk-mtrru41l20hu86",
+      "https://down-id.img.susercontent.com/file/id-11134207-81ztm-mtrru41l3f2afe",
+      "https://down-id.img.susercontent.com/file/id-11134207-81ztl-mtrsbpwjsfeu19",
+      "https://down-id.img.susercontent.com/file/id-11134207-81ztf-mtrsbpwjttza35",
+      "https://down-id.img.susercontent.com/file/id-11134207-81ztg-mtrsbpwjv8jq7b",
+      "https://down-id.img.susercontent.com/file/id-11134207-81ztq-mtrsbpwjwn460f"
+    ],
+    "videos": [
+      {
+        "url": "https://down-ws-id.vod.susercontent.com/api/v4/11110105/mms/id-11110105-6vhq9-mtzyp1zu4rurf5.16000081791333298.mp4",
+        "duration": 45,
+        "width": 1280,
+        "height": 720
+      }
+    ]
+  }
+}

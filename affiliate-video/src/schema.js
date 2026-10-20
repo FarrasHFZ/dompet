@@ -62,6 +62,8 @@ export const Scene = z.object({
   assetId: z.string(),
   motion: z.enum(MOTIONS),
   layout: z.enum(LAYOUTS).default("card"),
+  startSec: z.number().optional(), // where to cut into a video asset
+  bgPath: z.string().optional(), // pre-blurred background, made by render.mjs
   narration: z.string(), // spoken line (Bahasa)
   onScreen: z.string().optional(), // big overlay text (hook / callout); captions come from narration
   label: z.string().optional(), // small chip, e.g. "07.00 · Pagi"
@@ -94,6 +96,7 @@ export const Request = z.object({
   productUrl: z.string().optional(),
   productId: z.string().optional(),
   extractFile: z.string().optional(), // Shopee extraction JSON, ingested on first run
+  storyboardsFile: z.string().optional(), // pre-written storyboards (agent mode) instead of the headless writer
   affiliateUrl: z.string().optional(),
   brief:z.string().default(""),
   recipes: z.array(z.string()).default([]), // empty = let the matcher pick

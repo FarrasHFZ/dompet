@@ -51,6 +51,17 @@ A request for a product that hasn't been ingested waits in `requests/waiting/` a
 
 Real daily-life footage beats everything. Drop your own clips or photos into `public/products/<id>/assets/own/` and re-ingest. They get `origin: own_footage`, and the writer can use them as "full" layout scenes.
 
+## Agent mode (no headless CLI)
+
+When `claude -p` is unavailable, a Claude Code session can take over the two Claude steps. The same checks still run:
+
+```
+npm run ingest -- --from x.json --media-only          # download, then the agent looks at the files
+npm run ingest -- --from x.json --facts x.facts.json  # agent-written claims; quotes still verified
+npm run request -- --product <id> --storyboards x.storyboards.json --recipes <recipe>
+npm run watch -- --once                               # guard, voice, render, QC as usual
+```
+
 ## Inspiration → recipe
 
 ```

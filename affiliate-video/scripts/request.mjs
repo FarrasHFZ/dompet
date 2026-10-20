@@ -14,6 +14,7 @@ const req = Request.parse({
   productId,
   extractFile: arg("extract") && path.resolve(arg("extract")),
   affiliateUrl: arg("affiliate"),
+  storyboardsFile: arg("storyboards") && path.resolve(arg("storyboards")),
   brief: arg("brief", ""),
   variants: Number(arg("variants", 3)),
   experiment: arg("experiment", "hook"),

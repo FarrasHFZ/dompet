@@ -108,7 +108,7 @@ Return ONLY JSON: {"storyboard": ${SHAPE}, "altHooks": [{"mechanism":"...","asse
   return out;
 }
 
-function finalize(raw, { product, recipe, request, variant }) {
+export function finalize(raw, { product, recipe, request, variant }) {
   const assets = Object.fromEntries(product.assets.map((a) => [a.id, a]));
   return Storyboard.parse({
     id: `${product.id}_${recipe.id}_${variant}`,

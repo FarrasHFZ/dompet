@@ -8,9 +8,10 @@ import { ingest } from "./ingest.mjs";
 import { JOBS, OUT, PRODUCTS, ledger, loadProduct, loadRecipes, log, readJson, writeJson } from "./lib.mjs";
 import { pickRecipes } from "./perf.mjs";
 import { poster, qc, renderStoryboard } from "./render.mjs";
-import { buildReview, setVideo } from "./registry.mjs";
+import { buildReview, loadVideos, setVideo } from "./registry.mjs";
 import { voiceStoryboard } from "./voice.mjs";
-import { writeStoryboards } from "./writer.mjs";
+import { checkStoryboard } from "./guard.mjs";
+import { finalize, writeStoryboards } from "./writer.mjs";
 
 export class NeedsExtraction extends Error {}
 
@@ -41,7 +42,14 @@ export async function runRequest(raw) {
 
   const jobId = `${req.id}`;
   const jobDir = path.join(OUT, jobId);
-  const boards = await writeStoryboards({ product, recipes, request: req });
+  // storyboardsFile: written by an agent session (e.g. when the headless CLI is unavailable); same guard applies
+  const boards = req.storyboardsFile
+    ? readJson(req.storyboardsFile).map((raw, i) => {
+        const recipe = all.find((r) => r.id === raw.recipeId) ?? recipes[0];
+        const sb = finalize(raw, { product, recipe, request: req, variant: raw.variant ?? "ABCDEF"[i] });
+        return { storyboard: sb, problems: checkStoryboard(sb, product) };
+      })
+    : await writeStoryboards({ product, recipes, request: req });
   const results = [];
   for (const { storyboard: sb, problems } of boards) {
     const recipe = recipes.find((r) => r.id === sb.recipeId);
@@ -54,8 +62,15 @@ export async function runRequest(raw) {
       continue;
     }
     await voiceStoryboard(sb, recipe, path.join(JOBS, jobId, sb.variant));
-    writeJson(path.join(jobDir, `${sb.variant}.storyboard.json`), sb);
+    const sbFile = path.join(jobDir, `${sb.variant}.storyboard.json`);
     const file = path.join(jobDir, `${sb.variant}.mp4`);
+    // retry after a crash: an MP4 already rendered from the identical storyboard is kept
+    if (fs.existsSync(file) && fs.existsSync(sbFile) && JSON.stringify(readJson(sbFile)) === JSON.stringify(sb) && loadVideos()[sb.id]?.qc) {
+      log(`${sb.id}: already rendered from this storyboard, skipping`);
+      results.push({ id: sb.id, status: loadVideos()[sb.id].status });
+      continue;
+    }
+    writeJson(sbFile, sb);
     const t0 = Date.now();
     await renderStoryboard(sb, product, file);
     const check = await qc(file, sb);

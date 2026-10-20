@@ -23,8 +23,16 @@
       out.attributes = ((d.product_attributes && d.product_attributes.attrs) || it.attributes || []).map((a) => ({ name: a.name, value: a.value }));
       out.variations = (it.tier_variations || []).map((t) => ({ name: t.name, options: t.options, images: (t.images || []).map(img) }));
       out.models = (it.models || []).map((x) => ({ name: x.name, price: x.price ? x.price / 100000 : null, stock: x.stock }));
-      out.images = (it.images || []).map(img);
-      out.videos = (it.video_info_list || []).map((v) => ({ url: (v.default_format && v.default_format.url) || (v.formats && v.formats[0] && v.formats[0].url), thumb: v.thumb_url, duration: v.duration })).filter((v) => v.url);
+      // gallery + video live under data.product_images on current PDP responses; item.* kept as fallback
+      const pi = d.product_images || {};
+      out.images = (pi.images || it.images || []).map(img);
+      const vids = [pi.video, ...(it.video_info_list || [])].filter(Boolean);
+      out.videos = vids
+        .map((v) => {
+          const best = [...(v.formats || [])].sort((a, b) => (b.width || 0) - (a.width || 0))[0];
+          return { url: (best && best.url) || (v.default_format && v.default_format.url), width: best && best.width, height: best && best.height, duration: v.duration };
+        })
+        .filter((v, i, arr) => v.url && arr.findIndex((x) => x.url === v.url) === i);
       out.rating = it.item_rating && it.item_rating.rating_star;
       out.sold = it.historical_sold || it.sold;
     }

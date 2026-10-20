@@ -15,10 +15,39 @@ async function getBundle() {
   return serveUrl;
 }
 
+/**
+ * Precompute the expensive looks once with ffmpeg instead of per frame in Chrome:
+ * a blurred, darkened 9:16 background per scene asset, and a film-grain tile.
+ * (CSS blur(48px) + SVG feTurbulence per frame rendered at ~1 fps.)
+ */
+async function prepareLooks(sb) {
+  const fx = path.join(ROOT, "public", "fx");
+  fs.mkdirSync(fx, { recursive: true });
+  const grain = path.join(fx, "grain.png");
+  if (!fs.existsSync(grain))
+    await run(FFMPEG, ["-y", "-f", "lavfi", "-i", "color=c=gray:s=512x512", "-vf", "noise=alls=70:allf=t", "-frames:v", "1", grain]);
+  for (const sc of sb.scenes) {
+    if (!sc.assetPath) continue;
+    const src = path.join(ROOT, "public", sc.assetPath);
+    const at = sc.assetType === "video" ? (sc.startSec ?? 0) + 0.5 : 0;
+    const bg = src.replace(/\.(\w+)$/, `.bg${at ? "_" + at.toFixed(1) : ""}.jpg`);
+    if (!fs.existsSync(bg)) {
+      serveUrl = undefined; // the bundle holds a copy of public/, so new files need a re-bundle
+      const pre = sc.assetType === "video" ? ["-ss", String(at)] : [];
+      await run(FFMPEG, ["-y", ...pre, "-i", src, "-frames:v", "1", "-vf",
+        "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,scale=270:480,gblur=sigma=14,eq=brightness=-0.2:saturation=1.25", bg]);
+    }
+    sc.bgPath = path.relative(path.join(ROOT, "public"), bg).split(path.sep).join("/");
+  }
+  return { grain: "fx/grain.png" };
+}
+
 export async function renderStoryboard(sb, product, outFile) {
+  const looks = await prepareLooks(sb);
+  serveUrl = undefined; // each storyboard brings new voice files into public/; the bundle only has a snapshot
   const url = await getBundle();
   const thumb = product.assets.find((a) => a.type === "image")?.path;
-  const inputProps = { ...sb, productThumb: thumb };
+  const inputProps = { ...sb, productThumb: thumb, grain: looks.grain };
   const composition = await selectComposition({ serveUrl: url, id: "UGC", inputProps });
   fs.mkdirSync(path.dirname(outFile), { recursive: true });
   let last = -1;
@@ -27,7 +56,7 @@ export async function renderStoryboard(sb, product, outFile) {
     composition,
     inputProps,
     codec: "h264",
-    crf: 20,
+    videoBitrate: "6M", // grain is incompressible; cap size (~20 MB per 25 s)
     audioBitrate: "192k",
     outputLocation: outFile,
     concurrency: Number(process.env.AV_CONCURRENCY || 0) || null,
