@@ -1,0 +1,25 @@
+{
+  "id": "ugc_day_in_life_v01",
+  "name": "Day in my life (product as the thread)",
+  "style": "ugc",
+  "mechanism": "Show the product at 4-5 ordinary moments of one day; each moment pairs one real routine with one verified feature, so the product reads as part of how the day works.",
+  "hook": {
+    "maxSec": 2.5,
+    "pattern": "POV / first-person statement about the whole day revolving around one object, phrased as a confession, not an ad",
+    "examples": ["POV: satu hari full, semua urusanku lewat HP ini", "Ternyata yang paling sering kupegang seharian ya ini"]
+  },
+  "beats": [
+    { "role": "hook", "guidance": "Strongest product shot, on-screen POV line, narration a casual confession.", "motion": ["push_in", "handheld"] },
+    { "role": "moment", "guidance": "Morning moment (wake up / commute). Label like '06.30 · Pagi'. One feature only.", "motion": ["handheld", "pan_right"] },
+    { "role": "moment", "guidance": "Midday moment (work / lunch / errands). Label with time. One feature only.", "motion": ["handheld", "tilt_up"] },
+    { "role": "moment", "guidance": "Afternoon/evening moment (sunset, hangout, content). Label with time. One feature only.", "motion": ["macro_zoom", "pan_left"] },
+    { "role": "moment", "guidance": "Night moment (wind down / charging). Label with time. Ties the day together.", "motion": ["pull_out", "handheld"] },
+    { "role": "cta", "guidance": "Soft recommendation, no hard sell, point to the product link.", "motion": ["static"] }
+  ],
+  "pacing": { "targetSec": 22, "minSceneSec": 2.2, "maxSceneSec": 5 },
+  "captionStyle": "karaoke",
+  "cta": "Soft: 'aku taruh linknya di bawah' style",
+  "fits": ["electronics", "phone", "gadget", "beauty", "home", "fashion_accessory", "kitchen"],
+  "source": "seed",
+  "version": 1
+}

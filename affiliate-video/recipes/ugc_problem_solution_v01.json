@@ -1,0 +1,25 @@
+{
+  "id": "ugc_problem_solution_v01",
+  "name": "Daily annoyance -> fixed",
+  "style": "ugc",
+  "mechanism": "Open on a relatable everyday frustration, then show 2-3 verified features that remove it, ending on how the day feels now.",
+  "hook": {
+    "maxSec": 2,
+    "pattern": "Name a specific, common frustration in the viewer's own words",
+    "examples": ["Capek nggak sih HP lowbat pas lagi di jalan?", "Foto malam selalu burem? Sama, dulu."]
+  },
+  "beats": [
+    { "role": "hook", "guidance": "The frustration, said plainly. On-screen text = the frustration as a question.", "motion": ["handheld"] },
+    { "role": "demo", "guidance": "First verified feature that addresses it.", "motion": ["push_in"] },
+    { "role": "demo", "guidance": "Second verified feature.", "motion": ["macro_zoom", "pan_right"] },
+    { "role": "demo", "guidance": "Optional third verified feature or a detail shot.", "motion": ["tilt_up", "handheld"] },
+    { "role": "moment", "guidance": "Life after: one sentence on how the routine is easier now. No new claims.", "motion": ["pull_out"] },
+    { "role": "cta", "guidance": "Point to the product link.", "motion": ["static"] }
+  ],
+  "pacing": { "targetSec": 18, "minSceneSec": 2, "maxSceneSec": 4.5 },
+  "captionStyle": "karaoke",
+  "cta": "Direct but friendly: 'cek di keranjang/link bawah'",
+  "fits": ["electronics", "phone", "gadget", "home", "kitchen", "beauty"],
+  "source": "seed",
+  "version": 1
+}

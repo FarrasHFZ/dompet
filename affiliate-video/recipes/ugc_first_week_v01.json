@@ -1,0 +1,25 @@
+{
+  "id": "ugc_first_week_v01",
+  "name": "First week with it (honest first impressions)",
+  "style": "ugc",
+  "mechanism": "Arrival/first-look energy, then the 3 things noticed first, each tied to a verified spec, closing with who it is for.",
+  "hook": {
+    "maxSec": 2.5,
+    "pattern": "Curiosity about a first impression, numbered list promise",
+    "examples": ["3 hal yang langsung kerasa beda", "Seminggu pakai ini, ini yang paling kerasa"]
+  },
+  "beats": [
+    { "role": "hook", "guidance": "Hero shot, numbered promise on screen.", "motion": ["push_in"] },
+    { "role": "detail", "guidance": "#1 thing noticed (design/feel), label '#1'.", "motion": ["macro_zoom", "pan_left"] },
+    { "role": "detail", "guidance": "#2 thing noticed, label '#2'.", "motion": ["handheld", "tilt_up"] },
+    { "role": "detail", "guidance": "#3 thing noticed, label '#3'.", "motion": ["pan_right", "push_in"] },
+    { "role": "moment", "guidance": "Who this suits in daily life (student, commuter, creator...). No new claims.", "motion": ["pull_out"] },
+    { "role": "cta", "guidance": "Point to the product link.", "motion": ["static"] }
+  ],
+  "pacing": { "targetSec": 20, "minSceneSec": 2.2, "maxSceneSec": 4.5 },
+  "captionStyle": "karaoke",
+  "cta": "Friendly: 'link di bawah kalau mau lihat varian & harganya'",
+  "fits": ["electronics", "phone", "gadget", "beauty", "fashion_accessory", "home"],
+  "source": "seed",
+  "version": 1
+}

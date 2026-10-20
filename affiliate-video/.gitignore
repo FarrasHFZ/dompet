@@ -1,0 +1,8 @@
+node_modules/
+out/
+public/jobs/
+public/products/*/assets/
+data/inspiration/
+requests/
+*.mp4
+*.mp3
