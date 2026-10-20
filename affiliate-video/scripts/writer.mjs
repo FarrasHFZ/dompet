@@ -29,6 +29,11 @@ function rules(recipe, request) {
 - motion one of: handheld, push_in, pull_out, pan_left, pan_right, tilt_up, macro_zoom, static. layout "card" for white-background product photos, "full" for lifestyle shots or 9:16 videos.
 - Last scene role "cta", narration a soft pointer to the link (platform: ${request.platform}).
 
+SCENE TYPES
+- kind "clip" (preferred for people and daily moments): footage the owner generates in ChatGPT/Sora. Give a snake_case clipId (reuse the same clipId across variants when the shot is identical) and an English "prompt" describing ONE shot: who (age, look, outfit), where (specific Indonesian place), what they do with the phone, camera move. People act naturally and do not talk to camera; the creator voice-over (narration) carries the words. No numbers, specs, text or logos in the prompt.
+- kind "product": a real seller asset (assetId) for close-ups, colours, box contents and the cta.
+- Use clip scenes for hook and moments, product scenes for at most one detail beat and the cta.
+
 RECIPE ${recipe.id}: ${recipe.name}
 Mechanism: ${recipe.mechanism}
 Hook pattern (<= ${recipe.hook.maxSec}s): ${recipe.hook.pattern}. Examples: ${recipe.hook.examples.join(" | ")}
@@ -38,7 +43,8 @@ Target length ~${recipe.pacing.targetSec}s.`;
 }
 
 const SHAPE = `{"title": "...", "caption": "post caption in Bahasa, 1-2 lines + 4-6 hashtags, no prices",
- "scenes": [{"id":"s1","role":"hook","assetId":"img_1","motion":"push_in","layout":"card","narration":"...","onScreen":"...","label":"","claimIds":[]}, ...]}`;
+ "scenes": [{"id":"s1","role":"hook","kind":"clip","clipId":"morning_bed","prompt":"...","motion":"handheld","narration":"...","onScreen":"...","label":"","claimIds":[]},
+            {"id":"s6","role":"cta","kind":"product","assetId":"img_1","motion":"static","layout":"card","narration":"...","claimIds":[]}, ...]}`;
 
 /**
  * Hook experiment: one body, N hooks (only scene 1 changes) so the result says which hook works.
@@ -118,6 +124,8 @@ export function finalize(raw, { product, recipe, request, variant }) {
     experiment: raw.experiment,
     title: raw.title || product.name,
     voice: raw.voice || request.voice,
+    phoneColor: raw.phoneColor,
+    characters: raw.characters,
     cta: { text: PLATFORM_CTA[request.platform], sub: "Cek varian & harga terbaru di sana" },
     caption: raw.caption,
     scenes: raw.scenes.map((s, i) => ({

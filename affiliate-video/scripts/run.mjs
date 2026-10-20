@@ -12,8 +12,10 @@ import { buildReview, loadVideos, setVideo } from "./registry.mjs";
 import { voiceStoryboard } from "./voice.mjs";
 import { checkStoryboard } from "./guard.mjs";
 import { finalize, writeStoryboards } from "./writer.mjs";
+import { resolveClips, writePromptPack } from "./clips.mjs";
 
 export class NeedsExtraction extends Error {}
+export class NeedsClips extends Error {}
 
 function findProduct(req) {
   if (req.productId && fs.existsSync(path.join(PRODUCTS, req.productId, "product.json"))) return loadProduct(req.productId);
@@ -50,6 +52,14 @@ export async function runRequest(raw) {
         return { storyboard: sb, problems: checkStoryboard(sb, product) };
       })
     : await writeStoryboards({ product, recipes, request: req });
+  // generated footage comes from the owner's ChatGPT/Sora: stop with a prompt pack until every clip is in place
+  const missing = resolveClips(boards.filter((b) => !b.problems.length).map((b) => b.storyboard), product);
+  if (missing.length) {
+    const colourOf = (hex) => ({ "#6b2433": "Burgundy", "#1c1c1e": "Black", "#d9d9d6": "Silver", "#a9c3d6": "Glacier" })[hex];
+    const ref = product.assets.find((a) => a.type === "image" && /burgundy/i.test(a.note ?? ""))?.path;
+    const pack = writePromptPack(missing, product, jobDir, { colour: colourOf(boards[0].storyboard.phoneColor), refImage: ref });
+    throw new NeedsClips(`${missing.length} Sora clip(s) needed, prompt pack: ${pack}`);
+  }
   const results = [];
   for (const { storyboard: sb, problems } of boards) {
     const recipe = recipes.find((r) => r.id === sb.recipeId);

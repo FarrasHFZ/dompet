@@ -5,7 +5,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { REQUESTS, ledger, log, readJson, writeJson } from "./lib.mjs";
-import { NeedsExtraction, runRequest } from "./run.mjs";
+import { NeedsClips, NeedsExtraction, runRequest } from "./run.mjs";
 
 const dirs = Object.fromEntries(["inbox", "done", "failed", "waiting"].map((d) => [d, path.join(REQUESTS, d)]));
 Object.values(dirs).forEach((d) => fs.mkdirSync(d, { recursive: true }));
@@ -32,7 +32,10 @@ async function tick() {
       move(file, "done", { result });
       ledger("jobs", { request: f, ok: true, result });
     } catch (e) {
-      if (e instanceof NeedsExtraction) {
+      if (e instanceof NeedsClips) {
+        log(`${f}: ${e.message} -> waiting for clips`);
+        move(file, "waiting", { waitingFor: "sora_clips", detail: e.message });
+      } else if (e instanceof NeedsExtraction) {
         log(`${f}: ${e.message} -> waiting (run the Shopee extraction, see README)`);
         move(file, "waiting", { waitingFor: "shopee_extraction" });
       } else {

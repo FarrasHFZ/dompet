@@ -34,9 +34,20 @@ export function checkStoryboard(sb, product) {
   if (sb.scenes.at(-1)?.role !== "cta") v.push("last scene must be the cta");
 
   for (const sc of sb.scenes) {
-    if (!assetIds.has(sc.assetId)) v.push(`${sc.id}: unknown assetId ${sc.assetId}`);
-    for (const c of sc.claimIds || []) if (!claimIds.has(c)) v.push(`${sc.id}: unknown claim ${c}`);
-    const fields = { narration: sc.narration, onScreen: sc.onScreen || "", label: sc.label || "" };
+    const kind = sc.kind ?? "product";
+    if (kind === "product" && !assetIds.has(sc.assetId)) v.push(`${sc.id}: unknown assetId ${sc.assetId}`);
+    if (kind === "clip") {
+      if (!sc.clipId || !/^[a-z0-9_]+$/.test(sc.clipId)) v.push(`${sc.id}: clip scene needs a snake_case clipId`);
+      if (!sc.prompt) v.push(`${sc.id}: clip scene needs a Sora prompt`);
+      // the generated picture must not carry claims: numbers, specs or text belong in the checked narration
+      if (/\d/.test(sc.prompt || "")) v.push(`${sc.id}.prompt: no numbers in the video prompt (specs go in the narration)`);
+      if (/\b(text|caption|logo|subtitle|tulisan)\b/i.test(sc.prompt || "")) v.push(`${sc.id}.prompt: do not ask for on-screen text or logos`);
+    }
+    if (kind === "cartoon" && !(sc.lines || []).length) v.push(`${sc.id}: cartoon scene needs dialogue lines`);
+    const lineClaims = (sc.lines || []).flatMap((l) => l.claimIds || []);
+    for (const c of [...(sc.claimIds || []), ...lineClaims]) if (!claimIds.has(c)) v.push(`${sc.id}: unknown claim ${c}`);
+    const fields = { narration: sc.narration || "", onScreen: sc.onScreen || "", label: sc.label || "" };
+    (sc.lines || []).forEach((l, i) => (fields[`line${i + 1}`] = l.text));
     for (const [field, text] of Object.entries(fields)) {
       for (const [re, why] of BANNED) if (re.test(text)) v.push(`${sc.id}.${field}: ${why}: "${text}"`);
       for (const { n, after } of numbersIn(text)) {
@@ -47,10 +58,10 @@ export function checkStoryboard(sb, product) {
     }
     if ((sc.narration || "").split(/\s+/).length > 26) v.push(`${sc.id}: narration too long for one scene`);
     if ((sc.onScreen || "").length > 70) v.push(`${sc.id}: on-screen text too long`);
-    if (["moment", "demo", "detail"].includes(sc.role) && !(sc.claimIds || []).length)
+    if (["moment", "demo", "detail"].includes(sc.role) && !(sc.claimIds || []).length && !lineClaims.length)
       v.push(`${sc.id}: ${sc.role} scene must cite at least one claimId`);
   }
-  const used = sb.scenes.map((s) => s.assetId);
+  const used = sb.scenes.map((s) => s.assetId ?? s.clipId ?? `${s.kind}:${s.id}`);
   const dupes = used.filter((a, i) => used.indexOf(a) !== i && a === used[i - 1]);
   if (dupes.length) v.push(`same asset in back-to-back scenes: ${[...new Set(dupes)].join(", ")}`);
   for (const [re, why] of BANNED) if (re.test(sb.cta.text + " " + (sb.cta.sub || ""))) v.push(`cta: ${why}`);

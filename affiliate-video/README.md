@@ -51,6 +51,17 @@ A request for a product that hasn't been ingested waits in `requests/waiting/` a
 
 Real daily-life footage beats everything. Drop your own clips or photos into `public/products/<id>/assets/own/` and re-ingest. They get `origin: own_footage`, and the writer can use them as "full" layout scenes.
 
+## Real-looking people: Sora clips from your ChatGPT (no API key)
+
+Storyboards can use `kind: "clip"` scenes: a person living the moment, generated in ChatGPT/Sora on your subscription. The creator voice-over, captions, labels and the closing product shot are layered on by the pipeline.
+
+1. Queue a request. When clips are missing, it stops and writes `out/<job>/sora-prompts.md`, then waits in `requests/waiting/`.
+2. For each prompt: attach `_reference.jpg` (the real product photo), paste the prompt, choose 9:16, generate, download.
+3. Save the clips to `public/products/<id>/assets/generated/` as `<clipId>.mp4`. Or drop them in pack order and run `npm run clips -- --product <id> --assign`.
+4. `npm run watch` picks the request up again and renders. `npm run clips -- --product <id>` shows what is still missing.
+
+Prompts never carry numbers, specs or on-screen text; facts stay in the narration, where the guard checks them. Clips are reused across hook variants, so a 3-variant hook test needs only the body clips plus one hook clip per variant.
+
 ## Agent mode (no headless CLI)
 
 When `claude -p` is unavailable, a Claude Code session can take over the two Claude steps. The same checks still run:

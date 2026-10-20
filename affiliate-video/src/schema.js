@@ -85,7 +85,10 @@ export const Line = z.object({
 export const Scene = z.object({
   id: z.string(),
   role: z.string(), // hook | moment | demo | detail | cta ...
-  kind: z.enum(["product", "cartoon"]).default("product"),
+  kind: z.enum(["product", "cartoon", "clip"]).default("product"),
+  // clip scenes: footage you generate in ChatGPT/Sora from `prompt` and save as assets/generated/<clipId>.mp4
+  clipId: z.string().optional(),
+  prompt: z.string().optional(),
   // cartoon scenes: people in a drawn set, talking; product scenes: real seller media
   set: z.enum(SETS).optional(),
   cast: z.array(z.object({ who: z.string(), pose: z.enum(POSES), screen: z.enum(SCREENS).optional() })).optional(),
