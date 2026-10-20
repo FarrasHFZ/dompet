@@ -56,15 +56,46 @@ export const Recipe = z.object({
 });
 
 // ---------- storyboard (one concrete video; what the composition renders) ----------
+export const SETS = ["bedroom", "commute", "cafe", "night", "desk", "street"];
+export const POSES = ["idle", "hold", "show", "ear", "selfie", "point"];
+export const SCREENS = ["lock", "food", "chat", "camera", "calendar", "charging", "map", "videocall", "music"];
+
+// Illustrated characters (drawn by the composition, no generated pixels). voice = Edge neural voice.
+export const Character = z.object({
+  name: z.string(),
+  voice: z.string(),
+  skin: z.string(),
+  hair: z.enum(["short", "long", "hijab", "bun"]),
+  hairColor: z.string(),
+  shirt: z.string(),
+  accent: z.string().optional(),
+});
+
+export const Line = z.object({
+  speaker: z.string(),
+  text: z.string(),
+  claimIds: z.array(z.string()).default([]),
+  // filled by voice.mjs
+  audio: z.string().optional(),
+  startSec: z.number().optional(),
+  durationSec: z.number().optional(),
+  env: z.array(z.number()).optional(),
+});
+
 export const Scene = z.object({
   id: z.string(),
   role: z.string(), // hook | moment | demo | detail | cta ...
-  assetId: z.string(),
-  motion: z.enum(MOTIONS),
+  kind: z.enum(["product", "cartoon"]).default("product"),
+  // cartoon scenes: people in a drawn set, talking; product scenes: real seller media
+  set: z.enum(SETS).optional(),
+  cast: z.array(z.object({ who: z.string(), pose: z.enum(POSES), screen: z.enum(SCREENS).optional() })).optional(),
+  lines: z.array(Line).optional(),
+  assetId: z.string().optional(),
+  motion: z.enum(MOTIONS).default("handheld"),
   layout: z.enum(LAYOUTS).default("card"),
   startSec: z.number().optional(), // where to cut into a video asset
   bgPath: z.string().optional(), // pre-blurred background, made by render.mjs
-  narration: z.string(), // spoken line (Bahasa)
+  narration: z.string().default(""), // spoken line for product scenes (cartoon scenes use lines)
   onScreen: z.string().optional(), // big overlay text (hook / callout); captions come from narration
   label: z.string().optional(), // small chip, e.g. "07.00 · Pagi"
   claimIds: z.array(z.string()).default([]),
@@ -83,6 +114,8 @@ export const Storyboard = z.object({
   experiment: z.object({ variable: z.string(), value: z.string() }).optional(),
   title: z.string(),
   voice: z.string().default("id-ID-GadisNeural"),
+  characters: z.record(z.string(), Character).optional(),
+  phoneColor: z.string().optional(), // body colour of the drawn phone (product variant)
   disclosure: z.string().default("Konten dibuat dengan AI · Link afiliasi"),
   cta: z.object({ text: z.string(), sub: z.string().optional() }),
   scenes: z.array(Scene).min(3).max(12),

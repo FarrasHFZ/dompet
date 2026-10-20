@@ -14,12 +14,19 @@ import {
 } from "remotion";
 import { loadFont } from "@remotion/google-fonts/PlusJakartaSans";
 import { FPS } from "./schema.js";
+import { CartoonScene, CastMember, Line } from "./cartoon/CartoonScene";
+import { Look } from "./cartoon/Character";
+import { SetName } from "./cartoon/Sets";
 
 const { fontFamily } = loadFont("normal", { weights: ["500", "800"], subsets: ["latin"] });
 
 type Scene = {
   id: string;
   role: string;
+  kind?: "product" | "cartoon";
+  set?: SetName;
+  cast?: CastMember[];
+  lines?: Line[];
   motion: string;
   layout?: "card" | "full";
   startSec?: number;
@@ -41,6 +48,8 @@ export type StoryboardProps = {
   scenes: Scene[];
   music?: string;
   productThumb?: string;
+  characters?: Record<string, Look & { name: string; voice: string }>;
+  phoneColor?: string;
   grain?: string;
 };
 
@@ -292,11 +301,23 @@ export const UGC: React.FC<StoryboardProps> = (props) => {
         from += frames;
         return (
           <Sequence key={sc.id} from={start} durationInFrames={frames} name={`${sc.role}:${sc.id}`}>
-            <Media scene={sc} frames={frames} />
+            {sc.kind === "cartoon" ? (
+              <CartoonScene
+                set={sc.set ?? "cafe"}
+                cast={sc.cast ?? []}
+                lines={sc.lines ?? []}
+                looks={props.characters ?? {}}
+                phoneColor={props.phoneColor ?? "#6b2433"}
+                sceneId={sc.id}
+                captions={(text, f) => <Captions text={text} frames={f} />}
+              />
+            ) : (
+              <Media scene={sc} frames={frames} />
+            )}
             <Grain tile={props.grain} />
             {sc.label ? <Label text={sc.label} /> : null}
             {sc.onScreen ? <HookText text={sc.onScreen} /> : null}
-            {sc.role === "cta" ? <CtaCard cta={props.cta} thumb={props.productThumb} /> : <Captions text={sc.narration} frames={frames} />}
+            {sc.role === "cta" ? <CtaCard cta={props.cta} thumb={props.productThumb} /> : sc.kind === "cartoon" ? null : <Captions text={sc.narration} frames={frames} />}
             {sc.audio ? <Audio src={src(sc.audio)} /> : null}
           </Sequence>
         );
